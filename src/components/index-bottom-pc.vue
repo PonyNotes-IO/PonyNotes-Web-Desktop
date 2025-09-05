@@ -48,7 +48,7 @@
     data() {
       return {
         showEmail: false, // 控制邮箱悬浮提示的显示/隐藏
-        email: 'your-email@example.com' // 替换为实际邮箱地址
+        email: 'ponynotes-service@ponynotes.com' // 替换为实际邮箱地址
       }
     },
     methods: {
