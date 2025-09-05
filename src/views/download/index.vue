@@ -1,6 +1,6 @@
 <template>
     <div class="scale-root">
-        <div class="page flex-col justify-between">
+        <div class="page flex-col ">
             <div class="group_1 flex-col xm-center">
                     <xm-nav-bar></xm-nav-bar>
                 <div class="group_3 flex-row">
@@ -113,7 +113,39 @@ export default {
             constants: {}
         };
     },
-    methods: {}
+    mounted() {
+        this.handleResize();
+        window.addEventListener('resize', this.handleResize);
+        this.initIntersectionObserver(); // 调用方法
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.handleResize);
+        if (this.observer) this.observer.disconnect();
+    },
+    methods: {
+        handleResize() {
+        // 以1920为设计稿宽度
+        const baseWidth = 1920;
+        const scale = window.innerWidth / baseWidth;
+        document.querySelector('.scale-root').style.transform = `scale(${scale})`;
+        document.querySelector('.scale-root').style.transformOrigin = 'top left';
+        // 可选：设置根容器宽高，避免溢出
+        document.querySelector('.scale-root').style.width = baseWidth + 'px';
+        document.querySelector('.scale-root').style.height = '120%';
+        },
+        initIntersectionObserver() {
+            const items = document.querySelectorAll('.list-items_1');
+            const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                observer.unobserve(entry.target);
+                }
+            });
+            }, { threshold: 0.5 });
+            items.forEach(item => observer.observe(item));
+        }
+    }
 };
 </script>
 <style scoped lang="less" src="./assets/index.less" />
@@ -124,7 +156,7 @@ p, h1, h2, h3, h4, h5, h6, span, a {
 }
 .scale-root {
   width: 100%; 
-  height: 3168px;
+  height: 100%;
   overflow: hidden;
 }
 .group_2 {

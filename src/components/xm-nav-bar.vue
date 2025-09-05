@@ -36,7 +36,9 @@ export default {
   height: 85px;
   padding-top: 25px;
   background-color: #000000dd;
-  border-bottom: 1px solid #999;
+  // border-bottom: 1px solid #999;
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.5);
+  z-index: 999;
 
       /* 全局覆盖所有文本元素（p、h1~h6、span 等） */
   p, h1, h2, h3, h4, h5, h6, span, a {

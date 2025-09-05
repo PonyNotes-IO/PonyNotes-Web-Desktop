@@ -147,7 +147,7 @@
                     </div>
                 </div>
             </div>
-            <div class="box_22 flex-col xm-center">
+            <!-- <div class="box_22 flex-col xm-center">
                 <div class="text-wrapper_17 flex-row">
                     <span class="text_50">产品</span>
                     <span class="text_51">资源</span>
@@ -182,6 +182,9 @@
                     <span class="text_63">用户协议</span>
                     <span class="text_64">邮箱</span>
                 </div>
+            </div> -->
+            <div class="group_13 flex-col">
+                <index-bottom-pc></index-bottom-pc> 
             </div>
             <!-- <div class="box_23 flex-row xm-center">
                 <img class="label_8" referrerpolicy="no-referrer"
@@ -199,10 +202,10 @@
 import IndexPic from '@/components/index-pic-tab.vue';
 import XmNavBar from '@/components/xm-nav-bar.vue';
 import IndexText from '@/components/index-text.vue';
-
+import IndexBottomPC from '@/components/index-bottom-pc.vue';
 export default {
     components: {
-        IndexPic,XmNavBar,IndexText,
+        IndexPic,XmNavBar,IndexText,'index-bottom-pc': IndexBottomPC
     },
     data() {
         return {
@@ -318,8 +321,6 @@ export default {
         document.querySelector('.scale-root').style.width = baseWidth + 'px';
         document.querySelector('.scale-root').style.height = '8449px';
         },
-
-
         initIntersectionObserver() {
             const items = document.querySelectorAll('.list-items_1');
             const observer = new IntersectionObserver((entries) => {
@@ -345,5 +346,14 @@ p, h1, h2, h3, h4, h5, h6, span, a {
   width: 100%; 
   height: 8449px;
   overflow: hidden;
+}
+.group_13 {
+  position: relative;
+  bottom: 0;
+  width:  100%;
+  display: flex;            
+  justify-content: center;  /* 水平居中 */
+  align-items: center;      /* 垂直居中（若导航栏高度>内容高度时生效） */
+
 }
 </style>
