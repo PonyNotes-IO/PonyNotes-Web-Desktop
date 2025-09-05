@@ -3,7 +3,7 @@
         <div class="page flex-col ">
             <div class="group_1 flex-col xm-center">
                     <xm-nav-bar></xm-nav-bar>
-                <div class="group_3 flex-row">
+                <div class="group_3 flex-row xm-center">
                     <div class="text-group_1 flex-col justify-between">
                         <span class="text_7">AI&nbsp;工具赋能内容创作</span>
                         <span class="text_8">简化工作流程，做事效率倍增</span>
