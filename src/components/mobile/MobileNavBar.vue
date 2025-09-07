@@ -281,7 +281,7 @@ export default {
   .icon_1 {
     width: 18px;
     height: 4px;
-    margin: 9px 0 6px 6px;
+    margin: 6px 0 6px 6px;
   }
 }
 </style>

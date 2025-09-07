@@ -262,7 +262,7 @@
         <div class="text-group_12 flex-col">
           <span class="text_35">自然书写</span>
           <div class="text-wrapper_15">
-            <span class="text_36">兼容&nbsp;Apple&nbsp;Pencil&nbsp;和各类手写笔</span>
+            <span class="text_36">兼容&nbsp;Apple&nbsp;Pencil&nbsp;和各类手写笔<br /></span>
             <span class="text_37">支持压感与笔迹粗细调节，体验接近真实书写</span>
           </div>
         </div>
@@ -370,8 +370,22 @@
       </div>
       <div class="box_24 flex-col"><div class="box_25 flex-col"></div></div>
     </div>
+    <div class="section_36 flex-col">
+      <span class="text_73">专为重视隐私的人打造</span>
+      <div class="list_1 flex-col">
+        <div class="list-items_1 flex-row justify-between" v-for="(item, index) in loopData0" :key="index">
+          <img class="image_5" referrerpolicy="no-referrer" :src="item.image0" />
+          <div class="text-group_27 flex-col">
+            <span class="text_74" v-html="item.text0"></span>
+            <span class="text_75" v-html="item.text1"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <div class="section_34 flex-col">
-      <div class="block_7 flex-row">
+      <!-- <div class="block_7 flex-row">
         <div class="image-text_1 flex-row justify-between">
           <img
             class="label_1"
@@ -387,7 +401,8 @@
             </span>
           </div>
         </div>
-      </div>
+      </div> -->
+
       <span class="text_54">利用API让笔记进行联动</span>
       <span class="text_55">XIAOMABIJI&nbsp;&nbsp;&gt;_API</span>
       <span class="paragraph_25">
@@ -456,51 +471,11 @@
         src="./assets/img/SketchPngc3cc6a7ca75372f0f6467730d8d155adbb9873dbeda987761f1d805e761d1909.png"
       />
     </div>
-    <div class="section_35 flex-col">
-      <div class="text-wrapper_23 flex-row justify-between">
-        <span class="text_57">产品</span>
-        <span class="text_58">资源</span>
-        <span class="text_59">联系我们</span>
-      </div>
-      <div class="text-wrapper_24 flex-row">
-        <span class="text_60">桌面端</span>
-        <span class="text_61">使用教程</span>
-        <span class="text_62">B站</span>
-      </div>
-      <div class="text-wrapper_25 flex-row">
-        <span class="text_63">手机端</span>
-        <span class="text_64">快速上手</span>
-        <span class="text_65">抖音</span>
-      </div>
-      <div class="text-wrapper_26 flex-row justify-between">
-        <span class="text_66">隐私协议</span>
-        <span class="text_67">常见问题</span>
-        <span class="text_68">小红书</span>
-      </div>
-      <span class="text_69">邮箱</span>
-      <img
-        class="image_4"
-        referrerpolicy="no-referrer"
-        src="./assets/img/SketchPngc3cc6a7ca75372f0f6467730d8d155adbb9873dbeda987761f1d805e761d1909.png"
-      />
-      <div class="text-wrapper_27">
-        <span class="text_70">小马笔记</span>
-        <span class="text_71">&nbsp;|</span>
-        <span class="text_72">&nbsp;京ICP备2025131868号</span>
-      </div>
-    </div>
-    <div class="section_36 flex-col">
-      <span class="text_73">专为重视隐私的人打造</span>
-      <div class="list_1 flex-col">
-        <div class="list-items_1 flex-row justify-between" v-for="(item, index) in loopData0" :key="index">
-          <img class="image_5" referrerpolicy="no-referrer" :src="item.lanhuimage0" />
-          <div class="text-group_27 flex-col">
-            <span class="text_74" v-html="item.lanhutext0"></span>
-            <span class="text_75" v-html="item.lanhutext1"></span>
-          </div>
-        </div>
-      </div>
-    </div>
+
+
+    <MobileBottom />
+  
+
   </div>
 </template>
 <script>
@@ -526,16 +501,19 @@ export default {
       ],
       loopData0: [
         {
-          lanhuimage0:
-            'https://lanhu-oss-proxy.lanhuapp.com/SketchPngce11e58bdb88fec8c977ec50bf05c513e1a28869930a7361845d70d67c8219bd',
-          lanhutext0: '全程加密传输',
-          lanhutext1: '采用行业标准&nbsp;HTTPS&nbsp;+加密协议，保障笔记在云<br/>同步过程中的数据安全'
+          image0:require('./assets/img/icon_a1.png'),
+          text0: '全程加密传输',
+          text1: '采用行业标准&nbsp;HTTPS&nbsp;+加密协议，保障笔记在云同步过程中的数据安全'
         },
         {
-          lanhuimage0:
-            'https://lanhu-oss-proxy.lanhuapp.com/SketchPngfd54c13a8aad4ef5fcebd26fd739ff1cabe02fd78d2e8d539cb17147e63d8297',
-          lanhutext0: '开源透明，拒绝黑箱',
-          lanhutext1: '核心模块开源，代码可查，技术透明，真正做<br/>到“你看得见的安全“'
+          image0: require('./assets/img/icon_a2.png'),
+          text0: '开源透明，拒绝黑箱',
+          text1: '核心模块开源，代码可查，技术透明，真正做到“你看得见的安全“'
+        },
+        {
+          image0: require('./assets/img/icon_a3.png'),
+          text0: '数据可随时导出',
+          text1: '笔记支持&nbsp;Markdown、PDF、HTML&nbsp;等格式导出，避免平台锁定，随时迁移无负担'
         }
       ],
       constants: {}
@@ -564,5 +542,5 @@ export default {
   }
 };
 </script>
-<style scoped lang="less" src="./assets/index.rem.less" />
+<style scoped lang="less" src="./assets/index.response.less" />
 

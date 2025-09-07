@@ -95,4 +95,4 @@ export default {
   }
 };
 </script>
-<style scoped lang="less" src="./assets/index.less" />
+<style scoped lang="less" src="./assets/index.response.less" />

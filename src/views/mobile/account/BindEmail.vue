@@ -60,13 +60,13 @@
       </div>
     </div>
     
-    <MobileFooter />
+    <MobileBottom />
   </div>
 </template>
 
 <script>
 import MobileNavBar from '@/components/mobile/MobileNavBar.vue'
-import MobileFooter from '@/components/mobile/MobileFooter.vue'
+import MobileBottom from '@/components/mobile/MobileBottom.vue'
 import MobileInput from '@/components/mobile/MobileInput.vue'
 import MobileButton from '@/components/mobile/MobileButton.vue'
 import { validatePhone, countDown } from '@/util/mobile'
@@ -75,7 +75,7 @@ export default {
   name: 'BindEmail',
   components: {
     MobileNavBar,
-    MobileFooter,
+    MobileBottom,
     MobileInput,
     MobileButton
   },

@@ -24,19 +24,19 @@
       </div>
     </div>
     
-    <MobileFooter />
+    <MobileBottom />
   </div>
 </template>
 
 <script>
 import MobileNavBar from '@/components/mobile/MobileNavBar.vue'
-import MobileFooter from '@/components/mobile/MobileFooter.vue'
+import MobileBottom from '@/components/mobile/MobileBottom.vue'
 
 export default {
   name: 'MobileFeatures',
   components: {
     MobileNavBar,
-    MobileFooter
+    MobileBottom
   },
   methods: {
     handleClose() {

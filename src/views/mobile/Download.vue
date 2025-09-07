@@ -21,20 +21,20 @@
       </div>
     </div>
     
-    <MobileFooter />
+    <MobileBottom />
   </div>
 </template>
 
 <script>
 import MobileNavBar from '@/components/mobile/MobileNavBar.vue'
-import MobileFooter from '@/components/mobile/MobileFooter.vue'
+import MobileBottom from '@/components/mobile/MobileBottom.vue'
 import MobileButton from '@/components/mobile/MobileButton.vue'
 
 export default {
   name: 'MobileDownload',
   components: {
     MobileNavBar,
-    MobileFooter,
+    MobileBottom,
     MobileButton
   },
   methods: {

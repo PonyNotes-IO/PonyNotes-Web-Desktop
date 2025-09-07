@@ -68,7 +68,7 @@
         <div class="list_1 flex-row">
           <div
             class="list-items_1 flex-col"
-            :style="{ background: item.lanhuBg0 }"
+            :style="{ background: `url(${item.lanhuBg0})` }"
             v-for="(item, index) in loopData0"
             :key="index"
           >
@@ -526,15 +526,13 @@ export default {
     return {
       loopData0: [
         {
-          lanhuBg0:
-            'url(https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/a5e7c08deac648feb33e422c8243aca7_mergeImage.png)',
+          lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '开始使用',
           slot1: 1,
           slot2: 2
         },
         {
-          lanhuBg0:
-            'url(https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/96b664017dbc411db5d4bfa5a95298c4_mergeImage.png)',
+          lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '开始使用',
           specialSlot3: { lanhutext0: '学生版', lanhutext1: '每月2G存储空间' },
           slot3: 3,
@@ -545,8 +543,7 @@ export default {
           slot4: 4
         },
         {
-          lanhuBg0:
-            'url(https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/4cd252c347224a60ac63de3d0dc347af_mergeImage.png)',
+          lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '开始使用',
           specialSlot3: { lanhutext0: '标准版', lanhutext1: '每月10G存储空间' },
           slot3: 3,
@@ -556,9 +553,8 @@ export default {
           },
           slot4: 4
         },
-        {
-          lanhuBg0:
-            'url(https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com/merge_image/imgs/a6388b70759149dbaa8ee6abc2d4dab6_mergeImage.png)',
+        { 
+          lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '开始使用',
           specialSlot3: { lanhutext0: '团队版', lanhutext1: '每月10G存储空间' },
           slot3: 3,

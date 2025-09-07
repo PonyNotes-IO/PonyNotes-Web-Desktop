@@ -1,3 +1,4 @@
+const path = require('path');
 module.exports = {
   pages: {
     desktop: {
@@ -9,6 +10,6 @@ module.exports = {
       entry: 'src/main-mobile.js',
       template: 'public/index.html',
       filename: 'mobile.html'
-    }
-  },
+  }
+},
 }

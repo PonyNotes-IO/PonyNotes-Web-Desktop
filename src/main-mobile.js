@@ -8,8 +8,10 @@ import './assets/common.less'
 // src/main.js
 import Carousel from '@/components/mobile/carousel/index.vue'
 import MobileNavBar from '@/components/mobile/MobileNavBar.vue'
+import MobileBottom from '@/components/mobile/MobileBottom.vue'
 Vue.component('MobileCarousel', Carousel)
 Vue.component('MobileNavBar', MobileNavBar)
+Vue.component('MobileBottom', MobileBottom)
 Vue.use(Vant)
 
 Vue.config.productionTip = false
