@@ -1,0 +1,254 @@
+.page {
+  background-color: rgba(3, 3, 0, 1);
+  position: relative;
+  width: 900px;
+  height: 1440px;
+  overflow: hidden;
+  padding: 5px 21px 474px 21px;
+}
+
+.box_1 {
+}
+
+.text_14 {
+  height: 14px;
+  overflow-wrap: break-word;
+  color: rgba(0, 0, 0, 1);
+  font-size: 12px;
+  font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 15px;
+}
+
+.text_15 {
+  height: 14px;
+  overflow-wrap: break-word;
+  color: rgba(0, 0, 0, 1);
+  font-size: 12px;
+  font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 15px;
+  margin-left: 8px;
+}
+
+.image_8 {
+  width: 36px;
+  height: 10px;
+  margin: 2px 0 2px 654px;
+}
+
+.text_16 {
+  overflow-wrap: break-word;
+  color: rgba(0, 0, 0, 1);
+  font-size: 12px;
+  font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
+  font-weight: NaN;
+  text-align: right;
+  white-space: nowrap;
+  line-height: 14px;
+  margin-left: 4px;
+}
+
+.image_9 {
+  width: 27px;
+  height: 12px;
+  margin: 1px 0 1px 3px;
+}
+
+.image-wrapper_3 {
+  margin: 191px 374px 0 384px;
+}
+
+.image_3 {
+  width: 100px;
+  height: 100px;
+}
+
+.text-wrapper_3 {
+  margin: 30px 304px 0 314px;
+}
+
+.text_4 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 30px;
+  font-family: DingTalk-JinBuTi;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 36px;
+}
+
+.box_2 {
+  width: 380px;
+  align-self: center;
+  margin-top: 50px;
+}
+
+.text_7 {
+  overflow-wrap: break-word;
+  color: rgba(153, 153, 153, 1);
+  font-size: 20px;
+  font-family: PingFangSC-Medium;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 28px;
+  padding: 0 0 0 0px;
+  background: none;
+  border: 0;
+  flex: auto;
+}
+.input_1 {
+  background-color: rgba(35, 35, 35, 1);
+  border-radius: 8px;
+  border: 1px solid rgba(69, 69, 69, 1);
+  padding-left: 20px;
+  width: 380px;
+  height: 56px;
+  padding-right: 20px;
+}
+.input_1>>>.van-field__body {
+  height: 56px;
+}
+
+.box_3 {
+  width: 380px;
+  align-self: center;
+  margin-top: 20px;
+}
+
+.button_1 {
+  background-color: rgba(248, 149, 117, 1);
+  border-radius: 8px;
+  padding: 13px 139px 13px 149px;
+}
+
+.text_8 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 20px;
+  font-family: PingFangSC-Medium;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 28px;
+}
+
+.box_4 {
+  margin: 20px 271px 0 239px;
+}
+
+.image-text_2 {
+  width: 348px;
+}
+
+.checkbox_1 {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(151, 151, 151, 1);
+  margin: 1px 0 1px 0;
+}
+
+.text-group_1 {
+  width: 320px;
+  height: 22px;
+  overflow-wrap: break-word;
+  font-size: 0;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 22px;
+}
+
+.text_9 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 16px;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 22px;
+}
+
+.text_10 {
+  overflow-wrap: break-word;
+  color: rgba(248, 149, 117, 1);
+  font-size: 16px;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 22px;
+}
+
+.text_11 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 16px;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 22px;
+}
+
+.text_12 {
+  overflow-wrap: break-word;
+  color: rgba(248, 149, 117, 1);
+  font-size: 16px;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 22px;
+}
+
+.box_5 {
+  width: 380px;
+  align-self: center;
+  margin-top: 231px;
+}
+
+.image_6 {
+  width: 120px;
+  height: 1px;
+  margin: 13px 0 11px 0;
+}
+
+.text_13 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 18px;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 25px;
+  margin-left: 17px;
+}
+
+.image_7 {
+  width: 120px;
+  height: 1px;
+  margin: 13px 0 11px 15px;
+}
+
+.box_6 {
+  width: 360px;
+  align-self: center;
+  margin-top: 40px;
+}
+
+.image-wrapper_4 {
+  width: 360px;
+  height: 70px;
+  justify-content: space-between;
+}
+
+.icon_1 {
+  width: 70px;
+  height: 70px;
+  margin-right: 75px;
+}
