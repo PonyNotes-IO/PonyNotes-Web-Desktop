@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MobileHome from '@/views/mobile/home/Home.vue'
+import MobilePrice from '@/views/mobile/price/Price.vue'
 import MobileFeatures from '@/views/mobile/Features.vue'
 import MobilePricingYear from '@/views/mobile/price-year/index.vue'
 import MobilePricingMonth from '@/views/mobile/price-month/index.vue'
@@ -23,6 +24,12 @@ const routes = [
     name: 'MobileHome',
     component: MobileHome,
     meta: { title: '小马笔记 - 首页' }
+  },
+  {
+    path: '/mobile/price',
+    name: 'MobilePrice',
+    component: MobilePrice,
+    meta: { title: '小马笔记 - 价格' }
   },
   {
     path: '/mobile/features',

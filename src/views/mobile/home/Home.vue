@@ -521,17 +521,8 @@ export default {
   },
   methods: {
     onClick_1() {
-      alert(1);
-      // this.$router.push('/mobile/download');
-
-      // 方案2：直接跳转并捕获错误
-      this.$router.push('/mobile/download').catch(err => {
-        if (err.name === 'NavigationDuplicated') {
-          console.warn('重复导航已忽略');
-        } else {
-          console.error('跳转失败:', err);
-        }
-      });
+      // alert(1);
+     this.$router.push('/mobile/download');  
 
     },
     

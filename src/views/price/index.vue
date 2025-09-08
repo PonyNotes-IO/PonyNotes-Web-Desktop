@@ -87,7 +87,10 @@
               <span class="text_11" v-html="item.specialSlot3.lanhutext1"></span>
             </div>
             <span v-if="item.slot4 === 4" class="text_12" v-html="item.specialSlot4.lanhutext0"></span>
-            <div class="text-wrapper_5 flex-col"><span class="text_13" v-html="item.lanhutext0"></span></div>
+            <div class="text-wrapper_5 flex-col">
+              <span  class="text_13"> {{ payType === 1 ? item.price_month : item.price_year }}</span>
+              <!-- <span  class="text_13"  v-html="item.price_month"></span> -->
+            </div>
           </div>
         </div>
         <span class="text_14 ">方案与功能</span>
@@ -528,12 +531,16 @@ export default {
         {
           lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '开始使用',
+          price_month: '0元/月/人',
+          price_year: '0元/年/人',
           slot1: 1,
           slot2: 2
         },
         {
           lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '开始使用',
+          price_month: '3元/月/人',
+          price_year: '30元/年/人',
           specialSlot3: { lanhutext0: '学生版', lanhutext1: '每月2G存储空间' },
           slot3: 3,
           specialSlot4: {
@@ -545,6 +552,8 @@ export default {
         {
           lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '开始使用',
+          price_month: '8元/月/人',
+          price_year: '80元/年/人',
           specialSlot3: { lanhutext0: '标准版', lanhutext1: '每月10G存储空间' },
           slot3: 3,
           specialSlot4: {
@@ -556,6 +565,8 @@ export default {
         { 
           lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '开始使用',
+          price_month: '18元/月/人',
+          price_year: '180元/年/人',
           specialSlot3: { lanhutext0: '团队版', lanhutext1: '每月10G存储空间' },
           slot3: 3,
           specialSlot4: {

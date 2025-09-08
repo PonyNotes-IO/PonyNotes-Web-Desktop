@@ -64,14 +64,15 @@ export default {
           break;
         case 'price': // 产品、资源、联系我们、使用教程、快速上手  跳转「价格页面」
           // window.location.href = '/price'; 
-          this.$router.push('/price');
+          // alert(this.$router)
+          this.$router.push('/mobile/price');
           break;
         case 'home': // 产品、资源、联系我们、使用教程、快速上手  跳转「价格页面」
-          this.$router.push('/index'); 
+          this.$router.push('/mobile/home'); 
           break;
         case 'download': // 产品、资源、联系我们、使用教程、快速上手  跳转「价格页面」
           // window.location.href = '/download';
-          this.$router.push('/download');  
+          this.$router.push('/mobile/download');  
           break;    
         case 'bilibili': // B站 → 跳转官网
           window.location.href = 'https://www.bilibili.com/';
