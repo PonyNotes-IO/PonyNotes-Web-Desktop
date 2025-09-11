@@ -8,6 +8,8 @@ import { CheckboxGroup, Checkbox } from 'vant';
 import { Tab, Tabs } from 'vant';
 import { Tabbar, TabbarItem } from 'vant';
 import { NavBar, Icon, Tag,  Sticky, Swipe , SwipeItem } from 'vant';
+import { Popup } from 'vant' 
+import { Toast } from 'vant' 
 
 Vue.component('van-field', Field)
 Vue.component('van-button', Button)
@@ -29,6 +31,8 @@ Vue.component('van-tag', Tag)
 Vue.component('van-sticky',  Sticky)
 Vue.component('van-swipe',  Swipe)
 Vue.component('van-swipe-item',  SwipeItem)
+Vue.component('van-popup', Popup)
+Vue.use(Toast)
 Vue.config.productionTip = false
 
 new Vue({

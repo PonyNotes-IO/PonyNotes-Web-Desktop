@@ -10,17 +10,53 @@ import lanhu_shouye5 from '../views/lanhu_shouye5/index.vue'
 import lanhu_zhanghaoguanlidanchuang from '../views/lanhu_zhanghaoguanlidanchuang/index.vue'
 import lanhu_shouye4 from '../views/lanhu_shouye4/index.vue'
 import lanhu_shouye3 from '../views/lanhu_shouye3/index.vue'
-import Index from '@/views/index/index.vue'
-import Download from '@/views/download/index.vue'
-import Price from '@/views/price/index.vue'
+import Index from '../views/index/index.vue'
+import Download from '../views/download/index.vue'
+import Price from '../views/price/index.vue'
+import Login from '../views/login/login.vue'
+import login_set_password from '../views/login/login_set_password.vue'
+import login_verify_code from '../views/login/login_verify_code.vue'
+import login_with_password from '../views/login/login_with_password.vue'
+import login_reset_password from '../views/login/login_reset_password.vue'
+import login_bind_phone from '../views/login/login_bind_phone.vue'
 
 
 Vue.use(VueRouter)
 
 const routes = [
-    {
+  {
     path: '/',
     redirect: "/index"
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/login/login_set_password',
+    name: 'login_set_password',
+    component: login_set_password
+  },
+  {
+    path: '/login/login_reset_password',
+    name: 'login_reset_password',
+    component: login_reset_password
+  },
+  {
+    path: '/login/login_verify_code',
+    name: 'login_verify_code',
+    component: login_verify_code
+  },
+ {
+    path: '/login/login_with_password',
+    name: 'login_with_password',
+    component: login_with_password
+  },
+   {
+    path: '/login/login_bind_phone',
+    name: 'login_bind_phone',
+    component: login_bind_phone
   },
   {
     path: '/lanhu_dingjiabeifen',

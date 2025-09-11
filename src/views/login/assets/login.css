@@ -1,7 +1,7 @@
 .page {
   background-color: rgba(3, 3, 0, 1);
   position: relative;
-  width: 900px;
+  width: 100%;
   height: 1440px;
   overflow: hidden;
   padding: 5px 21px 474px 21px;
@@ -60,6 +60,7 @@
 }
 
 .image-wrapper_3 {
+  justify-content: center; /* 主轴（垂直）方向居中 */
   margin: 191px 374px 0 384px;
 }
 
@@ -69,7 +70,10 @@
 }
 
 .text-wrapper_3 {
-  margin: 30px 304px 0 314px;
+
+  justify-content: center; /* 主轴（垂直）方向居中 */
+  align-items: center;     /* 交叉轴（水平）方向居中 */
+  height: 20px;
 }
 
 .text_4 {
@@ -91,7 +95,8 @@
 
 .text_7 {
   overflow-wrap: break-word;
-  color: rgba(153, 153, 153, 1);
+  background-color: darkgray;
+  color: rgb(193, 188, 188);
   font-size: 20px;
   font-family: PingFangSC-Medium;
   font-weight: 500;
@@ -105,6 +110,13 @@
 }
 .input_1 {
   background-color: rgba(35, 35, 35, 1);
+  color: rgba(255, 255, 255, 1);
+  /* font-size: 20px;
+  font-family: PingFangSC-Medium;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 28px; */
   border-radius: 8px;
   border: 1px solid rgba(69, 69, 69, 1);
   padding-left: 20px;
@@ -114,6 +126,10 @@
 }
 .input_1>>>.van-field__body {
   height: 56px;
+  color: white;
+}
+.input_1>>>.van-field__control {
+  color: white;
 }
 
 .box_3 {
@@ -141,6 +157,10 @@
 
 .box_4 {
   margin: 20px 271px 0 239px;
+  display: flex;            /* 开启 Flex 布局 */
+  flex-direction: column;  /* 主轴方向为“列”（垂直方向排列子元素） */
+  justify-content: center; /* 主轴（垂直）方向居中 */
+  align-items: center;     /* 交叉轴（水平）方向居中 */
 }
 
 .image-text_2 {
@@ -156,9 +176,10 @@
 }
 
 .text-group_1 {
+  display: flex;            /* 开启 Flex 布局 */
   width: 320px;
   height: 22px;
-  overflow-wrap: break-word;
+  /* overflow-wrap: break-word; */
   font-size: 0;
   font-weight: NaN;
   text-align: left;

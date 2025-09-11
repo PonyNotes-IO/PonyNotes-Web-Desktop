@@ -10,8 +10,8 @@
           <span class="text_67" @click="navTo('/price')">价格</span>
           <span class="text_68" @click="navTo('/download')">下载</span>
 
-          <div class="text-wrapper_1 flex-col"><span class="text_1">登录</span></div>
-          <div class="text-wrapper_2 flex-col"><span class="text_2">注册</span></div>
+          <div class="text-wrapper_1 flex-col"><span class="text_1" @click="navTo('/login')">注册/登录</span></div>
+          <!-- <div class="text-wrapper_2 flex-col"><span class="text_2" @click="navTo('/register')">注册</span></div> -->
         </div>
       </div>
 
@@ -128,7 +128,7 @@ export default {
       background-color: rgba(248, 149, 117, 1);
       border-radius: 1px;
       height: 35px;
-      width: 70px;
+      width: 110px;
       margin-right: 50px;
 
       .text_1 {
