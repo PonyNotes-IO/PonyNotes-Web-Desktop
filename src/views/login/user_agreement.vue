@@ -5,6 +5,7 @@
       <img
         class="icon_1"
         referrerpolicy="no-referrer"
+        @click="handleClose"
         src="./assets/img/SketchPngde74a947db13b4e5748e168e19224725a8a1ae1d4a4dd79de4955f53a16f2042.png"
       />
       <span class="text_4">小马笔记用户协议</span>
@@ -59,7 +60,12 @@ export default {
       constants: {}
     };
   },
-  methods: {}
+  methods: {
+    handleClose() {
+      // 触发自定义事件，通知父组件关闭弹窗
+      this.$emit('close');
+    }
+  }
 };
 </script>
 <style scoped lang="css">
@@ -138,6 +144,7 @@ export default {
   width: 7px;
   height: 14px;
   margin: 7px 0 7px 0;
+  cursor: pointer;
 }
 
 .text_4 {

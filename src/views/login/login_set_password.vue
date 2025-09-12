@@ -1,4 +1,5 @@
 <template>
+  <div class="scale-root">
   <div class="page flex-col">
     <!-- 返回按钮 -->
     <div class="image-wrapper_1 flex-row" @click="goBack">
@@ -20,27 +21,20 @@
     <!-- 密码输入框 -->
     <div class="section_3 flex-row">
       <!-- <div class="text-wrapper_1 flex-col"><span class="text_6">输入设置的密码</span></div> -->
-      <div class="input-wrapper flex-col">
+      <div class="input_1 flex-col justify-center">
         <input 
-          type="password"
+          :type="newPasswordVisible ? 'text' : 'password'"
           v-model="password"
           placeholder="请设置密码"
           class="password-input text-wrapper_1"
           @input="validatePasswordOnInput"
         />
-      </div>
-    </div>
-    
-    <!-- 确认密码输入框 -->
-    <div class="section_3 flex-row">
-      <!-- <div class="text-wrapper_1 flex-col"><span class="text_6">再次输入密码</span></div> -->
-      <div class="input-wrapper flex-col">
-        <input 
-          type="password"
-          v-model="confirmPassword"
-          placeholder="请确认密码"
-          class="password-input text-wrapper_1"
-          @input="checkPasswordMatch"
+          <img
+          class="icon_1 eye-icon"
+          referrerpolicy="no-referrer"
+           :src="newPasswordVisible ? visibleIcon : hiddenIcon"
+          @click="togglePasswordVisibility('newPassword')"
+          alt="切换密码可见性"
         />
       </div>
     </div>
@@ -50,22 +44,22 @@
       <span class="paragraph_1" :class="{ error: showError }">
         <template v-if="showError">
           <template v-if="passwordError">{{ passwordError }}</template>
-          <template v-else-if="passwordMismatch">两次输入的密码不一致</template>
+          
         </template>
-        <template v-else>
+        <!-- <template v-else>
           设置一个密码才可以继续
           <br />
           密码长度太短，至少需8个字符
           <br />
           密码需包含数字、字母、英文字符中任意两种
-        </template>
+        </template> -->
       </span>
     </div>
     
     <!-- 确定按钮 -->
-    <div class="section_4 flex-row">
+    <div class="section_4 flex-row  justify-center">
       <div 
-        class="text-wrapper_3 flex-col" 
+        class="text-wrapper_3 flex-col  justify-center" 
         @click="handleSetPassword"
         :class="{ disabled: isLoading || !canSubmit }"
       >
@@ -73,17 +67,19 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
 import { Toast } from 'vant';
 // import axios from 'axios';
 // 导入睁眼和闭眼图标
-// import hiddenIcon  from './assets/img/SketchPngb9722adfebe3496ec3901d85de34cb4a8bd1ae8e5ad2a88eeea8688d98177657.png';
-// import visibleIcon from './assets/img/SketchPngfccf3b734f0cce2a77ddd61b61628bc68ff58767b7f862291556c318a7317c89.png';
+import hiddenIcon  from './assets/img/SketchPngb9722adfebe3496ec3901d85de34cb4a8bd1ae8e5ad2a88eeea8688d98177657.png';
+import visibleIcon from './assets/img/SketchPngfccf3b734f0cce2a77ddd61b61628bc68ff58767b7f862291556c318a7317c89.png';
 
-
+import scaleMixin  from '../../utils/scale';
 export default {
+  mixins: [scaleMixin], // 使用混入
   data() {
     return {
       // 接收父页面参数
@@ -96,11 +92,14 @@ export default {
       
       // 页面状态
       password: '',
+      newPasswordVisible: false,
       confirmPassword: '',
       passwordError: '',
       passwordMismatch: false,
       showError: false,
-      isLoading: false
+      isLoading: false,
+      visibleIcon: visibleIcon,  // 睁眼图标-显示密码
+      hiddenIcon: hiddenIcon     // 闭眼图标-隐藏密码
     };
   },
   
@@ -143,23 +142,31 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
-    
+    togglePasswordVisibility(type) {
+      if (type === 'newPassword') {
+        this.newPasswordVisible = !this.newPasswordVisible;
+      } else {
+        this.confirmPasswordVisible = !this.confirmPasswordVisible;
+      }
+    },
     // 验证密码规则
     validatePassword(password) {
-      // 密码规则：8位以上，包含数字、字母中至少两种
+      // 密码规则：8位以上，包含数字、字母中至少两种，且不能包含汉字
       const minLength = 8;
       const hasNumber = /\d/.test(password);
       const hasLetter = /[a-zA-Z]/.test(password);
+      // 检测是否包含汉字（\u4e00-\u9fa5 是汉字的Unicode范围）
+      const hasChinese = /[\u4e00-\u9fa5]/.test(password);
+      
+      if (hasChinese) {
+        return '密码不能包含汉字'; // 优先提示汉字错误
+      }
       
       if (password.length < minLength) {
         return '密码长度不能少于8位';
       }
       
       if (!hasNumber && !hasLetter) {
-        return '密码需包含数字或字母';
-      }
-      
-      if (!(hasNumber || hasLetter)) {
         return '密码需包含数字或字母';
       }
       
@@ -170,20 +177,12 @@ export default {
     validatePasswordOnInput() {
       this.passwordError = this.validatePassword(this.password);
       this.showError = !!this.passwordError;
-      this.checkPasswordMatch(); // 同时检查密码一致性
-    },
-    
-    // 检查两次密码是否一致
-    checkPasswordMatch() {
-      this.passwordMismatch = this.password !== this.confirmPassword;
-      this.showError = this.passwordMismatch || !!this.passwordError;
     },
     
     // 处理设置密码
     async handleSetPassword() {
       // 验证密码
       this.passwordError = this.validatePassword(this.password);
-      this.checkPasswordMatch();
       
       if (this.passwordError || this.passwordMismatch) {
         this.showError = true;
@@ -209,11 +208,14 @@ export default {
           Toast.success('密码设置成功');
           // 设置成功后跳转到账户管理界面，携带参数
           this.$router.push({
-            path: '/account/manage',
+            path: '/account',
             query: {
               accountType: this.accountType,
               account: this.account,
-              isFirstLogin: this.isFirstLogin
+              isFirstLogin: this.isFirstLogin,
+              isFirstEmailLogin: this.isFirstEmailLogin,
+              lastPageAction: "login_set_password_successful",
+              phone: this.phone
             }
           });
         } else {
@@ -230,3 +232,12 @@ export default {
 };
 </script>
 <style scoped lang="css" src="./assets/login_set_password.css" />
+<style scoped>
+.scale-root {
+  overflow: hidden;
+}
+/* 错误提示信息样式 */
+.paragraph_1.error {
+  color: red; /* 设置错误提示信息字体颜色为红色 */
+}
+</style>

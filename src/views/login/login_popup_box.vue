@@ -1,4 +1,5 @@
 <template>
+  <div class="scale-root">
     <div class="login_popup_box flex-col"> 
         <div class="group_4 flex-col">
             <div class="box_8 flex-col">
@@ -48,15 +49,16 @@
             <privacy-policy />
         </van-popup>
     </div>
-
+</div>
 </template>
 
 <script>
 import { Popup, Icon } from 'vant';
 import UserAgreement from './user_agreement.vue';
 import PrivacyPolicy from './privacy_policy.vue';
-
+import scaleMixin  from '../../utils/scale';
 export default {
+  mixins: [scaleMixin], // 使用混入
   name: 'LoginPopupBox',
   components: {
     vanPopup: Popup,
@@ -217,4 +219,9 @@ export default {
 }
 
 /* 其他样式补充 */
+</style>
+<style scoped>
+.scale-root {
+  overflow: hidden;
+}
 </style>

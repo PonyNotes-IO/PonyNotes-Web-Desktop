@@ -1,146 +1,157 @@
 <template>
-  <div class="page flex-col">
-    <!-- 页面图片 -->
-    <div class="image-wrapper_3 flex-row">
-      <img
-        class="image_3"
-        referrerpolicy="no-referrer"
-        src="./assets/img/SketchPngc83012784b4d01cca040c34c120c4e75c61902c8d48246217777999d0463a686.png"
-        alt="小马笔记logo"
-      />
-    </div>
-
-    <!-- 欢迎文本 -->
-    <div class="text-wrapper_3 flex-row">
-      <span class="text_4">欢迎使用小马笔记</span>
-    </div>
-
-    <!-- 输入框区域  :type="isPhoneNumber ? 'number' : 'text'"-->
-    <div class="box_2 flex-row">
-      <div class="input_1 flex-col Input" >
-        <van-field
-          class="text_7 InputArea"
-          placeholder="输入邮箱或者手机号"
-          v-model="inputValue"
-          type="text"
-          @input="validateInput"
-        ></van-field>
+  <div class="scale-root">
+    <div class="page flex-col">
+      <!-- 页面图片 -->
+      <div class="image-wrapper_3 flex-row">
+        <img
+          class="image_3"
+          referrerpolicy="no-referrer"
+          src="./assets/img/SketchPngc83012784b4d01cca040c34c120c4e75c61902c8d48246217777999d0463a686.png"
+          alt="小马笔记logo"
+        />
       </div>
-    </div>
 
-    <!-- 登录/注册按钮 -->
-    <div class="box_3 flex-row">
-      <button 
-        class="button_1 flex-col" 
-        @click="handleLoginRegister"
-      >
-        <span class="text_8">登录/注册</span>
-      </button>
-    </div>
+      <!-- 欢迎文本 -->
+      <div class="text-wrapper_3 flex-row">
+        <span class="text_4">欢迎使用小马笔记</span>
+      </div>
 
-    <!-- 用户协议勾选区域 -->
-    <div class="box_4 flex-row">
-      <div class="image-text_2 flex-row justify-between items-center">
-        <van-checkbox
-          name="agreement"
-          v-model="agreementChecked"
-          icon-size="20"
-          class="checkbox_1 Checkbox"
-        ></van-checkbox>
-        <div class="text-group_1 flex-row">
-          <span class="text_9">我已阅读并同意</span> 
-          <span class="text_10" @click="openAgreement">《用户协议》</span>
-          <span class="text_11">与</span>
-          <span class="text_12" @click="openPrivacyPolicy">《隐私政策》</span>
+      <!-- 输入框区域  :type="isPhoneNumber ? 'number' : 'text'"-->
+      <div class="box_2 flex-row">
+        <div class="input_1 flex-col Input" >
+          <van-field
+            class="text_7 InputArea"
+            placeholder="输入邮箱或者手机号"
+            v-model="inputValue"
+            type="text"
+            @input="validateInput"
+          ></van-field>
         </div>
       </div>
-    </div>
 
-     <LoginPopupBox
-      v-if="showPopup"
-      @agree="handleAgreeFromChild"
-      @closePopup="handleClosePopup"
-    />
-    <!-- 用户协议弹窗、隐私政策弹窗、第三方扫码登录弹窗等原有内容 -->
+      <!-- 登录/注册按钮 -->
+      <div class="box_3 flex-row">
+        <button 
+          class="button_1 flex-col" 
+          @click="handleLoginRegister"
+        >
+          <span class="text_8">登录/注册</span>
+        </button>
+      </div>
 
-    <!-- 其他登录方式 -->
-    <div class="box_5 flex-row">
-      <img
-        class="image_6"
-        referrerpolicy="no-referrer"
-        src="./assets/img/SketchPngea302f0b17509638bf635ff6e8de579a5b8fe081c2784376be35b4033aecb704.png"
-        alt="分隔线"
+      <!-- 用户协议勾选区域 -->
+      <div class="box_4 flex-row">
+        <div class="image-text_2 flex-row justify-between items-center">
+          <van-checkbox
+            name="agreement"
+            v-model="agreementChecked"
+            icon-size="20"
+            class="checkbox_1 Checkbox"
+          ></van-checkbox>
+          <div class="text-group_1 flex-row">
+            <span class="text_9">我已阅读并同意</span> 
+            <span class="text_10" @click="openAgreement">《用户协议》</span>
+            <span class="text_11">与</span>
+            <span class="text_12" @click="openPrivacyPolicy">《隐私政策》</span>
+          </div>
+        </div>
+      </div>
+
+      <LoginPopupBox
+        v-if="showPopup"
+        @agree="handleAgreeFromChild"
+        @closePopup="handleClosePopup"
       />
-      <span class="text_13">其他登录方式</span>
-      <img
-        class="image_7"
-        referrerpolicy="no-referrer"
-        src="./assets/img/SketchPng6c680d45766d384a7d4b1cabac31ce18cfc2adc9f19caa4b2e38355a060c18b1.png"
-        alt="分隔线"
-      />
-    </div>
+      <!-- 用户协议弹窗、隐私政策弹窗、第三方扫码登录弹窗等原有内容 -->
 
-    <!-- 第三方登录图标 -->
-    <div class="box_6 flex-row">
-      <div class="image-wrapper_4 flex-row">
+      <!-- 其他登录方式 -->
+      <div class="box_5 flex-row">
         <img
-          class="icon_1"
+          class="image_6"
           referrerpolicy="no-referrer"
-          :src="item.imageUrl"
-          :alt="item.name + '登录'"
-          v-for="(item, index) in thirdPartyLogins"
-          :key="index"
-          @click="openThirdPartyLogin(index)"
+          src="./assets/img/SketchPngea302f0b17509638bf635ff6e8de579a5b8fe081c2784376be35b4033aecb704.png"
+          alt="分隔线"
+        />
+        <span class="text_13">其他登录方式</span>
+        <img
+          class="image_7"
+          referrerpolicy="no-referrer"
+          src="./assets/img/SketchPng6c680d45766d384a7d4b1cabac31ce18cfc2adc9f19caa4b2e38355a060c18b1.png"
+          alt="分隔线"
         />
       </div>
+
+      <!-- 第三方登录图标 -->
+      <div class="box_6 flex-row">
+        <div class="image-wrapper_4 flex-row">
+          <img
+            class="icon_1"
+            referrerpolicy="no-referrer"
+            :src="item.imageUrl"
+            :alt="item.name + '登录'"
+            v-for="(item, index) in thirdPartyLogins"
+            :key="index"
+            @click="openThirdPartyLogin(index)"
+          />
+        </div>
+      </div>
+
+      <!-- 用户协议弹窗 -->
+      <van-popup 
+        v-model="showAgreementPopup" 
+        :style="{ height: '80%' }" 
+       @close="closeAgreementPopup"
+         :border="false"
+        :close-on-click-overlay="false"  
+        :closeable="false"             
+      >
+      <user-agreement  v-if="showAgreementPopup"  @close="closeAgreementPopup" />
+        <!-- <div class="popup-header">
+          <span>用户协议</span>
+          <van-icon name="close" 
+          @click="closeAgreementPopup" />
+        </div> -->
+       
+      </van-popup>
+       <!-- <user-agreement  v-if="showAgreementPopup"  @close="closeAgreementPopup" /> <user-agreement /> -->
+      <!-- 隐私政策弹窗 -->
+      <van-popup 
+        v-model="showPrivacyPopup" 
+        :style="{ height: '80%' }" 
+        @close="closePrivacyPopup"
+        :border="false"
+        :close-on-click-overlay="false"  
+        :closeable="false"     
+      >
+      
+        <!-- <div class="popup-header">
+          <span>隐私政策</span>
+          <van-icon name="close" @click="closePrivacyPopup" />
+        </div> -->
+         <privacy-policy  v-if="showPrivacyPopup" @close="closePrivacyPopup" />
+      </van-popup>
+      <!-- <privacy-policy  v-if="showPrivacyPopup" @close="closePrivacyPopup" /><privacy-policy /> -->
+      <!-- 第三方扫码登录弹窗 -->
+      <van-popup 
+        v-model="showQrPopup" 
+        position="center" 
+        :style="{ width: '320px', padding: '16px' }"
+        @close="closeQrPopup"
+      >
+        <div class="qr-popup-header">
+          <span>{{ qrPlatformName }}扫码登录</span>
+          <van-icon name="close" @click="closeQrPopup" />
+        </div>
+        <div class="flex-col" style="align-items:center;">
+          <img 
+            :src="qrImageUrl" 
+            :alt="qrPlatformName + '登录二维码'" 
+            style="width:260px;height:260px;margin:16px 0;" 
+          />
+          <p style="font-size:14px;color:#666;">请使用{{ qrPlatformName }}扫描二维码登录</p>
+        </div>
+      </van-popup>
     </div>
-
-    <!-- 用户协议弹窗 -->
-    <van-popup 
-      v-model="showAgreementPopup" 
-      :style="{ height: '80%' }" 
-      @close="closeAgreementPopup"
-    >
-      <div class="popup-header">
-        <span>用户协议</span>
-        <van-icon name="close" @click="closeAgreementPopup" />
-      </div>
-      <user-agreement />
-    </van-popup>
-
-    <!-- 隐私政策弹窗 -->
-    <van-popup 
-      v-model="showPrivacyPopup" 
-      :style="{ height: '80%' }" 
-      @close="closePrivacyPopup"
-    >
-      <div class="popup-header">
-        <span>隐私政策</span>
-        <van-icon name="close" @click="closePrivacyPopup" />
-      </div>
-      <privacy-policy />
-    </van-popup>
-
-    <!-- 第三方扫码登录弹窗 -->
-    <van-popup 
-      v-model="showQrPopup" 
-      position="center" 
-      :style="{ width: '320px', padding: '16px' }"
-      @close="closeQrPopup"
-    >
-      <div class="qr-popup-header">
-        <span>{{ qrPlatformName }}扫码登录</span>
-        <van-icon name="close" @click="closeQrPopup" />
-      </div>
-      <div class="flex-col" style="align-items:center;">
-        <img 
-          :src="qrImageUrl" 
-          :alt="qrPlatformName + '登录二维码'" 
-          style="width:260px;height:260px;margin:16px 0;" 
-        />
-        <p style="font-size:14px;color:#666;">请使用{{ qrPlatformName }}扫描二维码登录</p>
-      </div>
-    </van-popup>
   </div>
 </template>
 
@@ -148,10 +159,12 @@
 import UserAgreement from './user_agreement.vue'
 import PrivacyPolicy from './privacy_policy.vue'
 import LoginPopupBox from './login_popup_box.vue'; 
+import scaleMixin  from '../../utils/scale';
 import { Icon } from 'vant'
 
 export default {  
   name: 'Login',
+  mixins: [scaleMixin], // 使用混入
   components: {
     'user-agreement': UserAgreement,
     'privacy-policy': PrivacyPolicy,
@@ -243,31 +256,38 @@ export default {
       // 获取用户信息请求后端接口information -getuserinfo
       try {
         this.isLoading = true
-        // 1. 请求后端接口：判断账号是否存在（手机号/邮箱）
-        const response = await this.$axios.post('/api/information/getuserinfo', {
-          account: this.inputValue, // 账号（手机号/邮箱）
-          accountType: this.isPhoneNumber ? 'phone' : 'email' // 账号类型
-        })
+        // // 1. 请求后端接口：判断账号是否存在（手机号/邮箱）
+        // const response = await this.$axios.post('/api/information/getuserinfo', {
+        //   account: this.inputValue, // 账号（手机号/邮箱）
+        //   accountType: this.isPhoneNumber ? 'phone' : 'email' // 账号类型
+        // })
 
-        const { code, data, message } = response.data
-        if (code !== 200) {
-          this.$toast.fail(message || '请求失败，请重试')
-          return
-        }
-
-        // 2. 根据后端返回的账号状态分支处理
-        this.isNewAccount = data.isNewAccount // 后端返回：true=新账号，false=已有账号
-        this.isFirstEmailLogin = data.isFirstEmailLogin || false // 邮箱首次登录标识（仅邮箱登录返回）
+        // const { code, data, message } = response.data
+        // if (code !== 200) {
+        //   this.$toast.fail(message || '请求失败，请重试')
+        //   return
+        // }
+        // // 2. 根据后端返回的账号状态分支处理
+        // this.isNewAccount = data.isNewAccount // 后端返回：true=新账号，false=已有账号
+        // this.isFirstEmailLogin = data.isFirstEmailLogin || false // 邮箱首次登录标识（仅邮箱登录返回）
+        // this.isNewAccount = true; // 测试代码，模拟新账号
+        this.isFirstEmailLogin = false;
+        this.isFirstLogin =false; // 测试代码，模拟首次登录
+        this.isPhoneNumber =false;
         var nextPath = '/index' // 默认跳转路径
         if (this.isPhoneNumber) {
-          if (this.isNewAccount) {
+          if (this.isFirstLogin) {
+            alert(1)
             nextPath = '/login/login_verify_code'
           } else {
+            alert(2)
             nextPath = '/login/login_with_password'
           }
         } else if(this.isFirstEmailLogin) {
+           alert(3)
            nextPath = '/login/login_verify_code'
         }else{
+           alert(4)
            nextPath = '/login/login_with_password'
         }
         var accountType = this.isPhoneNumber ? 'phone' : 'email';
@@ -276,53 +296,15 @@ export default {
             query: {
             accountType: accountType,  // 账号类型
             isFirstLogin: this.isFirstLogin, // 是否首次登录
+            isFirstEmailLogin: this.isFirstEmailLogin, // 是否首次登录邮箱
             account: this.inputValue,           // 账号（手机号/邮箱）
             phone: this.phone,                // 手机号
+            lastPageAction: 'index_login', // 标识从首页登录跳转过来
           }
         })
       } catch (error) {
-        // console.error('账号状态查询失败：', error)
-        // this.$toast.fail('网络异常，请检查网络后重试')
-        // 后端没通先跳转
-
-        this.isNewAccount = true // 后端返回：true=新账号，false=已有账号
-        this.isFirstEmailLogin = false // 邮箱首次登录标识（仅邮箱登录返回）
-        if(this.isPhoneNumber){
-          if (this.isNewAccount) {
-            // 把参数给到子页面 ：账号类型，是否首次登录，账号，手机号/邮箱，
-            alert('isPhoneNumber /isNewAccount /login-verify-code')
-            // 访问后端api 发送验证码
-            this.sendCaptcha(this.isNewAccount, this.isFirstEmailLogin)
-            console.log('isPhoneNumber /isNewAccount /login-verify-code')
-            this.$router.push({
-                path:'/login/login_verify_code',
-                query: {
-                accountType: this.accountType,  // 账号类型
-                isFirstLogin: this.isFirstLogin, // 是否首次登录
-                account: this.inputValue,           // 账号（手机号/邮箱）
-                phone: this.phone,                // 手机号
-              }
-            })
-
-          }else{
-            alert('isPhoneNumber /not new  //login-with-password')
-            this.$router.push({
-                path:'/login/login_with_password',
-                query: {
-                accountType: this.accountType,  // 账号类型
-                isFirstLogin: this.isFirstLogin, // 是否首次登录
-                account: this.inputValue,        // 账号（手机号/邮箱）
-                lastPageAction: 'index_login', // 标识从验证码登录跳转过来
-              }
-            })
-          }
-        }else{ //邮箱
-          if (this.isFirstEmailLogin) {// 邮箱首次登录
-            this.$router.push('/login/login_verify_code')
-          }else{//邮箱非首次登录
-            this.$router.push('/login/login_verify_code')
-          }
-        }
+        console.error('账号状态查询失败：', error)
+        this.$toast.fail('网络异常，请检查网络后重试')
       } finally {
         this.isLoading = false
       }
@@ -342,101 +324,6 @@ export default {
     register() {
       // 显示验证码弹窗
       this.showCaptchaPopup = true;
-    },
-    // verifyCaptcha() {
-    //   // 简单模拟验证码验证
-    //   if (this.captchaValue === '123456') {
-    //     this.captchaValid = true;
-    //     this.$toast.success('验证码验证成功');
-    //     this.closeCaptchaPopup();
-    //     // 模拟注册请求
-    //     this.$toast.loading({
-    //       message: '注册中...',
-    //       forbidClick: true,
-    //       duration: 1000
-    //     });
-    //     setTimeout(() => {
-    //       this.$toast.success('注册成功');
-    //       // 注册成功后切换为登录状态
-    //       this.isLogin = true;
-    //     }, 1000);
-    //   } else {
-    //     this.$toast.fail('验证码错误');
-    //   }
-    // },
-    confirmResetPwd() {
-      if (this.newPwdValue !== this.confirmPwdValue) {
-        this.$toast.fail('两次密码输入不一致');
-        return;
-      }
-      if (this.newPwdValue.length < 6) {
-        this.$toast.fail('密码长度不能少于6位');
-        return;
-      }
-      // 模拟重置密码请求
-      this.$toast.loading({
-        message: '重置中...',
-        forbidClick: true,
-        duration: 1000
-      });
-      setTimeout(() => {
-        this.$toast.success('密码重置成功');
-        this.closeResetPwdPopup();
-      }, 1000);
-    },
-
-   // 检查用户信息，判断是登录还是注册流程
-    async checkUserInfo() {
-      try {
-        this.isLoading = true;
-        
-        // 请求后端接口：判断账号是否存在
-        const response = await this.$axios.post('/api/information/getuserinfo', {
-          account: this.inputValue,
-          accountType: this.isPhoneNumber ? 'phone' : 'email'
-        });
-
-        const { code, data, message } = response.data;
-        
-        if (code !== 200) {
-          this.$toast.fail(message || '请求失败，请重试');
-          return;
-        }
-        
-        // 存储后端返回的账号状态
-        this.isNewAccount = data.isNewAccount;
-        this.isFirstEmailLogin = data.isFirstEmailLogin || false;
-        
-        // 根据账号状态处理不同流程
-        if (this.isNewAccount) {
-          // 新账号 - 走注册流程
-          this.handleNewAccountRegistration();
-        } else {
-          // 已有账号 - 走登录流程
-          this.handleExistingAccountLogin();
-        }
-      } catch (error) {
-        console.error('账号状态查询失败：', error);
-        this.$toast.fail('网络异常，请检查网络后重试');
-      } finally {
-        this.isLoading = false;
-      }
-    },
-    
-    // 处理新账号注册流程
-    handleNewAccountRegistration() {
-      // 设置验证码类型为注册
-      this.captchaType = 'register';
-      // 打开验证码弹窗
-      this.showCaptchaPopup = true;
-      // 自动发送验证码
-      this.sendCaptcha();
-    },
-    
-    // 处理已有账号登录流程
-    handleExistingAccountLogin() {
-      // 打开密码登录弹窗
-      this.showPasswordLoginPopup = true;
     },
     
     // 发送验证码入参口
@@ -682,39 +569,6 @@ export default {
         this.router.push('/account-management');
       }, 1000);
     },
-    
-    // 绑定手机号
-    async bindPhoneNumber(phone, captcha) {
-      try {
-        this.isLoading = true;
-        
-        // 请求后端绑定手机号
-        const response = await this.$axios.post('/api/user/bind-phone', {
-          email: this.isPhoneNumber ? '' : this.inputValue,
-          phone: phone,
-          captcha: captcha
-        });
-        
-        const { code, message } = response.data;
-        
-        if (code !== 200) {
-          this.$toast.fail(message || '绑定手机号失败');
-          return;
-        }
-        
-        this.$toast.success('手机号绑定成功');
-        this.showBindPhonePopup = false;
-        
-        // 绑定成功后跳转账户管理页面
-        this.router.push('/account-management');
-      } catch (error) {
-        console.error('绑定手机号失败：', error);
-        this.$toast.fail('绑定手机号失败，请重试');
-      } finally {
-        this.isLoading = false;
-      }
-    },
-    
     // 其他已有方法
 
     handleAgreeFromChild(){
@@ -827,3 +681,8 @@ export default {
 };
 </script>
 <style scoped lang="css" src="./assets/login.css" />
+<style scoped>
+.scale-root {
+  overflow: hidden;
+}
+</style>

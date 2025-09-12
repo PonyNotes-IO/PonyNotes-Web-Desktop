@@ -1,4 +1,5 @@
 <template>
+  <div class="scale-root">
   <div class="page flex-col">
     <!-- 返回按钮 -->
     <div class="image-wrapper_1 flex-row">
@@ -38,7 +39,7 @@
         @keydown="handleKeydown($event, index)"
         @focus="handleFocus(index)"
         :class="{ 'focused': focusedIndex === index }"
-        :ref="`codeInput${index}`"
+        :ref="`codeInput${index}`" 
       >
     </div>
     
@@ -80,22 +81,34 @@
       </button>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
+import scaleMixin  from '../../utils/scale';
+            // accountType: accountType,  // 账号类型
+            // isFirstLogin: this.isFirstLogin, // 是否首次登录
+            // isFirstEmailLogin: this.isFirstEmailLogin, // 是否首次登录邮箱
+            // account: this.inputValue,           // 账号（手机号/邮箱）
+            // phone: this.phone,                // 手机号
+            // lastPageAction: 'index_login', // 标识从首页登录跳转过来
 import { sendCaptcha, verifyCaptcha } from '../../utils/captchaUtil.js';
 export default {
+  mixins: [scaleMixin], // 使用混入
   data() {
     return {
       // 从父页面接收的参数
       accountType: '',
       isFirstLogin: false,
+      isFirstEmailLogin: false,
       account: '',
       phone: '',
+      lastPageAction: '',
       
       // 验证码相关
       codeArray: ['', '', '', '', '', ''],
       focusedIndex: 0,
+      
       showError: false,
       isCountingDown: true,
       countdownSeconds: 60,
@@ -128,16 +141,29 @@ export default {
     }
   },
   mounted() {
+
+
+
     // 从路由参数获取数据
     this.accountType = this.$route.query.accountType || '';
     this.isFirstLogin = this.$route.query.isFirstLogin === 'true';
+    this.isFirstEmailLogin = this.$route.query.isFirstEmailLogin === 'true';
     this.account = this.$route.query.account || '';
     this.phone = this.$route.query.phone || '';
     this.lastPageAction = this.$route.query.lastPageAction || '';
-    
+    console.log('$refs:', this.$refs);
+    console.log('获取到的账号类型：', this.accountType);
+    console.log('是否首次登录：', this.isFirstLogin);
+    console.log('是否首次邮箱登录：', this.isFirstEmailLogin);
+    console.log('账号：', this.account);
+    console.log('手机号：', this.phone);
+    console.log('上一个页面动作：', this.lastPageAction);
     // 自动聚焦第一个输入框
     this.$nextTick(() => {
-      this.$refs.codeInput0?.focus();
+      // 确保ref存在再调用focus
+      if (this.$refs.codeInput0) {
+        this.$refs.codeInput0[0]?.focus();
+      }
     });
     
     // 启动倒计时
@@ -150,24 +176,26 @@ export default {
     }
   },
   methods: {
-    // 处理输入事件
+    
     handleInput(index) {
-      // 只允许输入数字
       this.codeArray[index] = this.codeArray[index].replace(/[^0-9]/g, '');
-      
-      // 自动跳到下一个输入框
       if (this.codeArray[index] && index < 5) {
         this.focusedIndex = index + 1;
-        this.$refs[`codeInput${index + 1}`]?.focus();
+        const nextRef = `codeInput${index + 1}`;
+        // 检查：$refs存在 + 是DOM元素 + 有focus方法
+        if (this.$refs[nextRef] && this.$refs[nextRef].focus) {
+          this.$refs[nextRef].focus();
+        }
       }
     },
-    
-    // 处理键盘事件
+
     handleKeydown(event, index) {
-      // 支持回退键
       if (event.key === 'Backspace' && !this.codeArray[index] && index > 0) {
         this.focusedIndex = index - 1;
-        this.$refs[`codeInput${index - 1}`]?.focus();
+        const prevRef = `codeInput${index - 1}`;
+        if (this.$refs[prevRef] && this.$refs[prevRef].focus) {
+          this.$refs[prevRef].focus();
+        }
       }
     },
     
@@ -217,7 +245,9 @@ export default {
           this.codeArray = ['', '', '', '', '', ''];
           this.focusedIndex = 0;
           this.showError = false;
-          this.$refs.codeInput0?.focus();
+          if (this.$refs.codeInput0) {
+            this.$refs.codeInput0.focus();
+          }
           
           // 重新开始倒计时
           this.startCountdown();
@@ -246,40 +276,64 @@ export default {
       // 模拟API请求验证验证码
       setTimeout(() => {
         // 实际项目中应替换为真实的API验证
-        const isCodeValid = this.validateCode(code);
-        
+        // const isCodeValid = this.validateCode(code);
+        const isCodeValid =true;
         if (isCodeValid) {
-          // 验证成功，根据条件进入下一个页面
-          if (this.isFirstLogin) {
-            // 首次登录，跳转到完善信息页面
-            this.$router.push({
-              path: '/complete-info',
-              query: {
-                accountType: this.accountType,
-                account: this.account,
-                phone: this.phone
-              }
-            });
-          } else {
-            // 非首次登录，跳转到首页或其他页面
-            this.$router.push('/home');
+          var nextPath = '/index'; 
+          if (this.lastPageAction==='index_login'){
+            if (this.accountType === 'phone' &&this.isFirstLogin) {
+              nextPath = '/login/login_set_password';
+              this.lastPageAction = 'first_phone_login_validate_captcha';
+            }else if (this.accountType === 'email' && this.isFirstEmailLogin) {
+              nextPath = '/login/login_bind_phone';
+              // nextPath = '/login/login_set_password';
+              this.lastPageAction = 'first_email_login_validate_captcha';
+            }else{
+              nextPath = '/account';
+              this.lastPageAction = 'login_validate_captcha';
+            }
+          }else if (this.lastPageAction==='login_with_password_forget_password'){
+              nextPath = '/login/login_reset_password';
+              this.lastPageAction = 'login_validate_captcha';
+          }else if(this.lastPageAction==='login_with_password_switch_to_captcha_login'){
+              nextPath = '/account';
+              this.lastPageAction = 'login_validate_captcha';
+          }else if(this.lastPageAction==='login_with_password_bind_phone'){
+              nextPath = '/account';
+              this.lastPageAction = 'login_validate_captcha';
+          }else{
+              nextPath = '/account';
+              this.lastPageAction = 'login_validate_captcha';
           }
-        } else {
-          // 验证失败，显示红色错误提示
-          this.isVerifying = false;
-          this.showError = true;
-          
-          // 添加输入框震动效果
-          const inputs = document.querySelectorAll('.code-input');
-          inputs.forEach(input => {
-            input.classList.add('error-shake');
-            
-            setTimeout(() => {
-              input.classList.remove('error-shake');
-            }, 1000);
+        // if (this.accountType === 'phone' &&this.isFirstLogin) {
+        //     nextPath = '/login/login_set_password';
+        //     this.lastPageAction = 'first_phone_login_validate_captcha';
+        //   } else if (this.accountType === 'email' && this.isFirstEmailLogin) {
+        //     // nextPath = '/login/login_bind_phone';
+        //     nextPath = '/login/login_set_password';
+        //     this.lastPageAction = 'first_email_login_validate_captcha';
+        //   }else if (this.lastPageAction && this.lastPageAction == 'forget_password') {
+        //     nextPath = '/login/login_reset_password';
+        //     this.lastPageAction = 'forget_paasword_validate_captcha';
+        //   }else{
+        //     nextPath = '/account';
+        //     this.lastPageAction = 'login_validate_captcha';
+        //   }
+          this.$router.push({
+            path: nextPath,
+            query: {
+              accountType: this.accountType,
+              account: this.account,
+              phone: this.phone,
+              isFirstLogin: this.isFirstLogin,
+              isFirstEmailLogin: this.accountType === 'email' && this.isFirstLogin,
+              lastPageAction: this.lastPageAction
+            }
           });
+          //   // 手机验证码验证逻辑
+          return true; // 假设验证通过跳转页面，否则返回false
         }
-      }, 1000);
+      }, 10);
     },
     
   
@@ -299,41 +353,7 @@ export default {
               console.error('验证失败:', error);
             });
       };
-
-      if (verfityCaptcha) {
-        var nextPath = '/index'; // 默认跳转路径
-        
-        // 验证码验证成功，根据条件跳转页面
-       if (this.accountType === 'phone' &&this.isFirstLogin) {
-          nextPath = '/login/login_set_password';
-          this.lastPageAction = 'first_phone_login_validate_captcha';
-        } else if (this.accountType === 'email' && this.isFirstEmailLogin) {
-          // nextPath = '/login/login_bind_phone';
-           nextPath = '/login/login_set_password';
-          this.lastPageAction = 'first_email_login_validate_captcha';
-        }else if (this.lastPageAction && this.lastPageAction == 'forget_password') {
-          nextPath = '/login/login_reset_password';
-          this.lastPageAction = 'forget_paasword_validate_captcha';
-        }else{
-          nextPath = '/account';
-          this.lastPageAction = 'login_validate_captcha';
-        }
-        this.$router.push({
-          path: nextPath,
-          query: {
-            accountType: this.accountType,
-            account: this.account,
-            phone: this.phone,
-            isFirstLogin: this.isFirstLogin,
-            isFirstEmailLogin: this.accountType === 'email' && this.isFirstLogin,
-            lastPageAction: this.lastPageAction
-          }
-        });
-        //   // 手机验证码验证逻辑
-        return true; // 假设验证通过跳转页面，否则返回false
-      }else{
-        return false;
-      }
+      return verfityCaptcha();
       // return code === '123456';
     }
   }
@@ -399,5 +419,10 @@ export default {
 .button_1:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+</style>
+<style scoped>
+.scale-root {
+  overflow: hidden;
 }
 </style>

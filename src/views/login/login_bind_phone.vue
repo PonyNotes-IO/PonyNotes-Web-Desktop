@@ -1,4 +1,5 @@
 <template>
+  <div class="scale-root">
   <div class="page flex-col">
     <!-- 返回按钮 -->
     <div class="image-wrapper_1 flex-row">
@@ -87,11 +88,14 @@
       </button>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
 import { sendCaptcha, verifyCaptcha } from '../../utils/captchaUtil.js';
+import scaleMixin  from '../../utils/scale';
 export default {
+  mixins: [scaleMixin], // 使用混入
   data() {
     return {
       // 从父页面接收的参数
@@ -426,4 +430,9 @@ export default {
     margin: 80px 0 30px 0;
 }
 
+</style>
+<style scoped>
+.scale-root {
+  overflow: hidden;
+}
 </style>

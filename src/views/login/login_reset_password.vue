@@ -1,4 +1,5 @@
 <template>
+  <div class="scale-root">
   <div class="page flex-col">
     <!-- 返回按钮 -->
     <div class="image-wrapper_1 flex-row" @click="goBack">
@@ -59,10 +60,7 @@
           alt="切换密码可见性"
         />
       </div>
-      <!-- 密码规则错误提示 -->
-      <div v-if="showPasswordRuleError" class="error-text">
-        {{ passwordRuleError }}
-      </div>
+
     </div>
     
     <!-- 确认密码输入 -->
@@ -93,9 +91,16 @@
           alt="切换密码可见性"
         />
       </div>
-      <!-- 密码不一致提示 -->
+    </div>
+    <div class="box_5 flex-row justify-center">
+    <!-- 密码不一致提示 -->
       <div v-if="showPasswordMismatch" class="error-text">
         两次输入的密码不一致
+      </div>
+
+       <!-- 密码规则错误提示 -->
+      <div v-if="showPasswordRuleError" class="error-text">
+        {{ passwordRuleError }}
       </div>
     </div>
     
@@ -109,6 +114,7 @@
         <span class="text_9">{{ isLoading ? '提交中...' : '确定' }}</span>
       </button>
     </div>
+  </div>
   </div>
 </template>
 
@@ -125,7 +131,9 @@ import visibleIcon from './assets/img/SketchPngfccf3b734f0cce2a77ddd61b61628bc68
 //   timeout: 5000
 // });
 
+import scaleMixin  from '../../utils/scale';
 export default {
+  mixins: [scaleMixin], // 使用混入
   data() {
     return {
       // 接收父页面传递的参数
@@ -277,7 +285,7 @@ export default {
           Toast.success('密码重置成功');
           // 重置成功后跳转到登录页，携带参数
           this.$router.push({
-            path: '/login/login_with_password',
+            path: '/account',
             query: {
               accountType: this.accountType,
               account: this.account,
@@ -298,3 +306,8 @@ export default {
 };
 </script>
 <style scoped lang="css" src="./assets/login_reset_password.css" />
+<style scoped>
+.scale-root {
+  overflow: hidden;
+}
+</style>
