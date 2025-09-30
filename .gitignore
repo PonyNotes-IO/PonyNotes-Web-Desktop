@@ -3,3 +3,4 @@ dist.zip
 pnpm-lock.yaml
 /dist/
 target/
+node_modules/
