@@ -1,0 +1,280 @@
+<template>
+  <div class="scale-root">
+  <div class="page flex-col">
+    <!-- 返回按钮 -->
+    <div class="image-wrapper_1 flex-row" @click="goBack">
+      <img
+        class="image_3"
+        referrerpolicy="no-referrer"
+        src="./assets/img/reback.png"
+        alt="返回"
+      />
+    </div>
+    
+    <div class="box_2 flex-row justify-center">
+      <div class="text-group_1 flex-col">
+        <span class="text_4">重置密码</span>
+        <span class="text_5">请输入8位以上的密码，需包含大小写字母、数字和特殊字符</span>
+      </div>
+    </div>
+    
+    <!-- 账号显示（不可编辑） -->
+    <div class="box_3 flex-row justify-center">
+      <div class="input_1 flex-col">
+        <input 
+          class="text_6 text-wrapper_1" 
+          :value="displayAccount" 
+          style="width:480px;height:28px;" 
+          disabled
+        />
+      </div>
+    </div>
+    
+    <!-- 新密码输入 -->
+    <div class="box_4 flex-row justify-center">
+      <!-- <div class="section_1 flex-row justify-between">
+        <span class="text_7">请输入新密码</span>
+        <img
+          class="icon_1"
+          referrerpolicy="no-referrer"
+          src="./assets/img/SketchPngfccf3b734f0cce2a77ddd61b61628bc68ff58767b7f862291556c318a7317c89.png"
+          @click="togglePasswordVisibility('newPassword')"
+          alt="切换密码可见性"
+        />
+      </div> -->
+      <div class="input_1 flex-col justify-center">
+        <input 
+          class="text_6 " 
+          :type="newPasswordVisible ? 'text' : 'password'"
+          v-model="newPassword"
+
+          placeholder="请输入新密码"
+          style="width:480px;height:28px;"
+        />
+                <!-- 眼睛图标（睁眼/闭眼切换） -->
+        <img
+          class="icon_1 eye-icon"
+          referrerpolicy="no-referrer"
+           :src="newPasswordVisible ? visibleIcon : hiddenIcon"
+          @click="togglePasswordVisibility('newPassword')"
+          alt="切换密码可见性"
+        />
+      </div>
+
+    </div>
+    
+    <!-- 确认密码输入 -->
+    <div class="box_5 flex-row justify-center">
+      <!-- <div class="block_1 flex-row justify-between">
+        <span class="text_8">再次输入你的新密码</span>
+        <img
+          class="icon_2"
+          referrerpolicy="no-referrer"
+          src="./assets/img/SketchPngb9722adfebe3496ec3901d85de34cb4a8bd1ae8e5ad2a88eeea8688d98177657.png"
+          @click="togglePasswordVisibility('confirmPassword')"
+          alt="切换密码可见性"
+        />
+      </div> -->
+      <div class="input_1 flex-col justify-center">
+        <input 
+          class="text_6" 
+          :type="confirmPasswordVisible ? 'text' : 'password'"
+          v-model="confirmPassword"
+          placeholder="再次输入新密码"
+          style="width:480px;height:28px;"
+        />
+        <img
+          class="icon_2 eye-icon"
+          referrerpolicy="no-referrer"
+           :src="confirmPasswordVisible ? visibleIcon : hiddenIcon"
+          @click="togglePasswordVisibility('confirmPassword')"
+          alt="切换密码可见性"
+        />
+      </div>
+    </div>
+    <div class="box_5 flex-row justify-center">
+    <!-- 密码不一致提示 -->
+      <div v-if="showPasswordMismatch" class="error-text">
+        两次输入的密码不一致
+      </div>
+
+       <!-- 密码规则错误提示 -->
+      <div v-if="showPasswordRuleError" class="error-text">
+        {{ passwordRuleError }}
+      </div>
+    </div>
+    
+    <!-- 确定按钮 -->
+    <div class="box_6 flex-row">
+      <button 
+        class="button_1 flex-col" 
+        @click="handleResetPassword"
+        :disabled="isLoading"
+      >
+        <span class="text_9">{{ isLoading ? '提交中...' : '确定' }}</span>
+      </button>
+    </div>
+  </div>
+  </div>
+</template>
+
+<script>
+import { Toast } from 'vant';
+// 导入睁眼和闭眼图标
+import hiddenIcon  from './assets/img/SketchPngb9722adfebe3496ec3901d85de34cb4a8bd1ae8e5ad2a88eeea8688d98177657.png';
+import visibleIcon from './assets/img/SketchPngfccf3b734f0cce2a77ddd61b61628bc68ff58767b7f862291556c318a7317c89.png';
+import scaleMixin  from '../../utils/scale';
+import { setPassword,validatePassword } from '../../api/ponynote_login.js';
+
+export default {
+  mixins: [scaleMixin], // 使用混入
+  data() {
+    return {
+      // 接收父页面传递的参数
+      accountType: '',
+      account: '',
+      phone: '',
+      isFirstLogin: false,
+      isFirstEmailLogin: false,
+      lastPageAction: '',
+      
+      // 页面状态
+      newPassword: '',
+      confirmPassword: '',
+      newPasswordVisible: false,
+      confirmPasswordVisible: false,
+      showPasswordRuleError: false,
+      passwordRuleError: '',
+      showPasswordMismatch: false,
+      isLoading: false,
+      visibleIcon: visibleIcon,  // 睁眼图标-显示密码
+      hiddenIcon: hiddenIcon     // 闭眼图标-隐藏密码
+    };
+  },
+  
+  computed: {
+    // 格式化显示账号（手机号中间加*）
+    displayAccount() {
+      if (this.accountType === 'phone' && this.account) {
+        return this.account.replace(/^(\d{3})(\d{4})(\d{4})$/, '$1****$3');
+      }
+      return this.account || '';
+    }
+  },
+  
+  created() {
+    // 从路由参数获取数据
+    this.initParams();
+  },
+  
+  methods: {
+    // 初始化接收参数
+    initParams() {
+      const { 
+        accountType, 
+        account, 
+        phone, 
+        isFirstLogin, 
+        isFirstEmailLogin,
+        lastPageAction
+      } = this.$route.query;
+      
+      this.accountType = accountType || '';
+      this.account = account || phone || ''; // 优先使用account，没有则用phone
+      this.phone = phone || '';
+      this.isFirstLogin = JSON.parse(isFirstLogin) || false;
+      this.isFirstEmailLogin = JSON.parse(isFirstEmailLogin) || false;
+      this.lastPageAction = lastPageAction || '';
+    },
+    
+    // 返回上一页
+    goBack() {
+      this.$router.go(-1);
+    },
+    
+    // 切换密码可见性
+    togglePasswordVisibility(type) {
+      if (type === 'newPassword') {
+        this.newPasswordVisible = !this.newPasswordVisible;
+      } else {
+        this.confirmPasswordVisible = !this.confirmPasswordVisible;
+      }
+    },
+    
+
+    
+    // 检查两次密码是否一致
+    checkPasswordMatch() {
+      return this.newPassword === this.confirmPassword;
+    },
+    
+    // 处理重置密码
+    async handleResetPassword() {
+      // 重置错误提示
+      this.showPasswordRuleError = false;
+      this.showPasswordMismatch = false;
+      this.passwordRuleError = validatePassword(this.newPassword);
+      // 验证密码规则
+      if (this.passwordRuleError!== '200') {
+        this.showPasswordRuleError = true;
+        return;
+      }
+      // 验证密码一致性
+      if (!this.checkPasswordMatch()) {
+        Toast.fail('两次输入的密码不一致');
+        this.passwordRuleError = '两次输入的密码不一致';
+        this.showPasswordMismatch = true;
+        return;
+      }
+      
+      // 开始提交
+      this.isLoading = true;
+      
+      try {
+        // 调用重置密码接口
+        const response = await setPassword({
+          account: this.account,
+          accountType: this.accountType,
+          password: this.newPassword,
+          isFirstLogin: this.isFirstLogin,
+          isFirstEmailLogin: this.isFirstEmailLogin
+        });
+        
+        const { code, msg,data} = response.data
+        console.log(data)
+
+        if(response.status !== 200){
+          this.$toast.fail('请求失败，请重试')
+          return
+        }
+        
+        if (code === 200) {
+          Toast.success('密码重置成功');
+          // 重置成功后跳转到登录页，携带参数
+          this.$router.push({
+            path: '/account',
+            query: {
+              accountType: this.accountType,
+              account: this.account,
+              isFirstLogin: this.isFirstLogin
+            }
+          });
+        } else {
+          Toast.fail(msg || '密码重置失败，请重试');
+        }
+      } catch (error) {
+        console.error('重置密码请求失败:', error);
+        Toast.fail('网络异常，请稍后重试');
+      } finally {
+        this.isLoading = false;
+      }
+    }
+  }
+};
+</script>
+<style scoped lang="css" src="./assets/login_reset_password.css" />
+<style scoped>
+.scale-root {
+  overflow: hidden;
+}
+</style>
