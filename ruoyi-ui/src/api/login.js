@@ -58,3 +58,11 @@ export function getCodeImg() {
     timeout: 20000
   })
 }
+
+export function sendSms(data) {
+  
+  return request({
+    url: '/test/user/sendSms/' + data,
+    method: 'post'
+  })
+}

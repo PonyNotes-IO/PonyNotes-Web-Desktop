@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
             throws ServletException, IOException
     {
         LoginUser loginUser = tokenService.getLoginUser(request);
-        if (StringUtils.isNotNull(loginUser) && StringUtils.isNull(SecurityUtils.getAuthentication()))
+        if (StringUtils.isNotNull(loginUser) && isNotLogin(SecurityUtils.getAuthentication()))
         {
             tokenService.verifyToken(loginUser);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
@@ -40,5 +41,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
          chain.doFilter(request, response);
+    }
+
+    private boolean isNotLogin(Authentication authentication) {
+        if(authentication == null) return true;
+        return "anonymousUser".equals(authentication.getPrincipal());
     }
 }

@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.ruoyi.xmbj.api.protocol.PhoneLoginRequest;
+import com.ruoyi.xmbj.api.protocol.SendSmsCodeRequest;
+import com.ruoyi.xmbj.api.service.SmsServiceClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +37,9 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/test/user")
 public class TestController extends BaseController
 {
+
+    @Autowired
+    private SmsServiceClient smsServiceClient;
     private final static Map<Integer, UserEntity> users = new LinkedHashMap<Integer, UserEntity>();
     {
         users.put(1, new UserEntity(1, "admin", "admin123", "15888888888"));
@@ -44,6 +52,14 @@ public class TestController extends BaseController
     {
         List<UserEntity> userList = new ArrayList<UserEntity>(users.values());
         return R.ok(userList);
+    }
+
+    @PostMapping("sendSms/{phone}")
+    public R<?> sendSms(@PathVariable String phone) {
+        SendSmsCodeRequest body = new SendSmsCodeRequest();
+        body.setPhone(phone);
+        body.setPurpose("register");
+        return R.ok(smsServiceClient.sendCode(body));
     }
 
     @ApiOperation("获取用户详细")

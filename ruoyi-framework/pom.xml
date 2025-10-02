@@ -61,31 +61,5 @@
         </dependency>
 
     </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.5.15</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.5.15</version>
-                <executions>
-                    <execution>
-                        <id>repackage</id>
-                        <phase>none</phase> <!-- 禁用 repackage -->
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>

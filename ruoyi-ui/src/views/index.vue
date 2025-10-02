@@ -1,7 +1,9 @@
 <template>
   <div class="app-container home">
+    
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
+        <input v-model="phoneNo"><button @click="sendSms">接口测试</button>
         <h2>若依后台管理框架</h2>
         <p>
           一直想做一款后台管理系统，看了很多优秀的开源项目但是发现没有合适自己的。于是利用空闲休息时间开始自己写一套后台系统。如此有了若依管理系统，她可以用于所有的Web应用程序，如网站管理后台，网站会员中心，CMS，CRM，OA等等，当然，您也可以对她进行深度定制，以做出更强系统。所有前端后台代码封装过后十分精简易上手，出错概率低。同时支持移动客户端访问。系统会陆续更新一些实用功能。
@@ -1054,17 +1056,28 @@
 </template>
 
 <script>
+import { sendSms } from "@/api/login"
 export default {
   name: "Index",
   data() {
     return {
       // 版本号
-      version: "3.9.0"
+      version: "3.9.0",
+      phoneNo:'',
     }
   },
   methods: {
     goTarget(href) {
       window.open(href, "_blank")
+    },
+    sendSms() {
+      if (!this.phoneNo) {
+        this.$message.error('请输入手机号')
+        return
+      }
+      sendSms(this.phoneNo).then(res => {
+        this.$message.success('发送成功，请注意查收')
+      })
     }
   }
 }
