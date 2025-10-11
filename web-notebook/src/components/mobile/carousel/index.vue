@@ -221,9 +221,9 @@ export default {
 }
 
 /* 移动端适配 */
-@media (max-width: 767px) {
+@media (max-width: 100%) {
   .carousel-container {
-    height: 210px;
+    /* height: 210px; */
   }
   
   .carousel-indicators span {

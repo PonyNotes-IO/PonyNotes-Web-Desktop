@@ -274,26 +274,22 @@ export default {
 
             loopData0: [
                 {
-                    lanhuimage0:
-                        'https://lanhu-oss-proxy.lanhuapp.com/SketchPng98c430cd2f4df343630b1abb868f2d69110ba7a4a33106575937409663de4606',
+                    lanhuimage0:require('./assets/img/icon_loop1.png'),
                     lanhutext0: '本地优先，数据自有',
                     lanhutext1: '默认本地保存，用户完全掌控数据存储位置，无需依赖云端即可使用全部核心功能'
                 },
                 {
-                    lanhuimage0:
-                        'https://lanhu-oss-proxy.lanhuapp.com/SketchPng512a23d4d61caf4c786cf25eed3131ae71ab7f1a4b0982fc0ad2fa6396fd23c5',
+                    lanhuimage0:require('./assets/img/icon_loop2.png'),
                     lanhutext0: '全程加密传输',
                     lanhutext1: '采用行业标准&nbsp;HTTPS&nbsp;+加密协议，保障笔记在云同步过程中的数据安全'
                 },
                 {
-                    lanhuimage0:
-                        'https://lanhu-oss-proxy.lanhuapp.com/SketchPng188e4fe142d4a92016d2fcc6517e5d1b189e7c0e7228494d49fe41f67041d8b3',
+                    lanhuimage0:require( './assets/img/icon_loop3.png'),
                     lanhutext0: '开源透明，拒绝黑箱',
                     lanhutext1: '核心模块开源，代码可查，技术透明，真正做到“你看得见的安全“'
                 },
                 {
-                    lanhuimage0:
-                        'https://lanhu-oss-proxy.lanhuapp.com/SketchPng36aee2c152f46d80a1019f16f040c411443d7e64a9131e66fa1500158765a1fb',
+                    lanhuimage0:require('./assets/img/icon_loop4.png'),
                     lanhutext0: '数据可随时导出',
                     lanhutext1: '笔记支持&nbsp;Markdown、PDF、HTML&nbsp;等格式导出，避免平台锁定，随时迁移无负担'
                 }
@@ -314,12 +310,15 @@ export default {
         handleResize() {
         // 以1920为设计稿宽度
         const baseWidth = 1920;
+        // const baseHeight = 8449;
         const scale = window.innerWidth / baseWidth;
         document.querySelector('.scale-root').style.transform = `scale(${scale})`;
         document.querySelector('.scale-root').style.transformOrigin = 'top left';
         // 可选：设置根容器宽高，避免溢出
         document.querySelector('.scale-root').style.width = baseWidth + 'px';
         document.querySelector('.scale-root').style.height = '8449px';
+        // document.querySelector('.scale-root').style.height = baseHeight * scale + 'px'; // 动态计算高度
+        // document.querySelector('.scale-root').style.overflow = 'hidden'; // 防止内容溢出（由外层滚动控制）
         },
         initIntersectionObserver() {
             const items = document.querySelectorAll('.list-items_1');
@@ -344,8 +343,9 @@ p, h1, h2, h3, h4, h5, h6, span, a {
 }
 .scale-root {
   width: 100%; 
-  height: 8449px;
-  overflow: hidden;
+  height: 100vh;
+  overflow: auto; /* 允许滚动 */
+  /* overflow: hidden; */
 }
 .group_13 {
   position: relative;

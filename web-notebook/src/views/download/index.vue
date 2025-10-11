@@ -156,8 +156,8 @@ p, h1, h2, h3, h4, h5, h6, span, a {
 }
 .scale-root {
   width: 100%; 
-  height: 100%;
-  overflow: hidden;
+  height: auto;
+  /* overflow: hidden; */
 }
 .group_2 {
   top: 0;

@@ -163,7 +163,7 @@ export default {
   }
   .text_3 {
     overflow-wrap: break-word;
-    width: 75%;
+    width: 65%;
     color: rgba(248, 149, 117, 1);
     font-size: 12px;
     font-family: AlibabaPuHuiTi_3_65_Medium;

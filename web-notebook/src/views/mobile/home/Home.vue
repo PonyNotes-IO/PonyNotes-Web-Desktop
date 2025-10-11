@@ -228,7 +228,7 @@
         </div>
       </div>
       <div class="group_15 flex-col"><div class="block_4 flex-col"></div></div>
-      <span class="text_31">独一无二的手写体验</span>
+      <!-- <span class="text_31">独一无二的手写体验</span> -->
     </div>
     <div class="section_19 flex-col">
       <span class="text_32">一起思维发散，打破页面限制</span>
@@ -500,6 +500,11 @@ export default {
         { image: require('./assets/img/model_freedom_2.png'), title: '模型自由2' }
       ],
       loopData0: [
+        {
+          image0:require('./assets/img/icon_a0.png'),
+          text0: '本地优先，数据自有',
+          text1: '默认本地保存，用户完全掌控数据存储位置，无需依赖云端即可使用全部核心功能'
+        },
         {
           image0:require('./assets/img/icon_a1.png'),
           text0: '全程加密传输',

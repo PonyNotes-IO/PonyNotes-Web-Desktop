@@ -139,8 +139,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = 'ponynote';
-  // document.title = '小马笔记';
+  // document.title = 'ponynote';
+  document.title = '小马笔记';
   next(); // 必须调用next()，否则路由不会继续跳转
 });
 
