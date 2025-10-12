@@ -11,11 +11,12 @@ spring:
                 password: 123456
             # 从库数据源
             slave:
-                # 从数据源开关/默认关闭
-                enabled: false
-                url: 
-                username: 
-                password: 
+                # 从数据源开关/默认关闭 —— 已启用并配置为 Postgres
+                enabled: true
+                driver-class-name: org.postgresql.Driver
+                url: jdbc:postgresql://8.152.101.166:5432/postgres
+                username: postgres
+                password: possport
             # 初始连接数
             initialSize: 5
             # 最小连接池数量

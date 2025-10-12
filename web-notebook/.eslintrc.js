@@ -9,7 +9,16 @@ module.exports = {
   parser: 'vue-eslint-parser',
   parserOptions: {
     ecmaVersion: 2018, // 与 env 版本保持一致
-    sourceType: "module"
+    sourceType: "module",
+    allowImportExportEverywhere: false,
+    ecmaFeatures: {
+      jsx: false
+    },
+    parser: '@babel/eslint-parser', // 新增：指定 JS 代码使用 babel 解析器
+    // 配置babel预设，支持ES新语法
+    babelOptions: {
+      presets: ['@babel/preset-env']
+    }
   },
   extends: [
     "eslint:recommended",

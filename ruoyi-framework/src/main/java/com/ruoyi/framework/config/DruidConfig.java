@@ -23,6 +23,8 @@ import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.config.properties.DruidProperties;
 import com.ruoyi.framework.datasource.DynamicDataSource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * druid 配置多数据源
@@ -57,6 +59,15 @@ public class DruidConfig
         targetDataSources.put(DataSourceType.MASTER.name(), masterDataSource);
         setDataSource(targetDataSources, DataSourceType.SLAVE.name(), "slaveDataSource");
         return new DynamicDataSource(masterDataSource, targetDataSources);
+    }
+
+    /**
+     * 事务管理器，绑定到动态数据源
+     */
+    @Bean
+    public PlatformTransactionManager transactionManager(DataSource dynamicDataSource)
+    {
+        return new DataSourceTransactionManager(dynamicDataSource);
     }
     
     /**
