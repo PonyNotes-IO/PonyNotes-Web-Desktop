@@ -217,8 +217,8 @@ public class SysLoginController
         }
     
         AjaxResult ajax = AjaxResult.success(user);
-         String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
-         ajax.put(Constants.TOKEN, token);
+        String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
+        ajax.put(Constants.TOKEN, token);
         return ajax;
     }
     
@@ -336,12 +336,11 @@ public class SysLoginController
                 userService.updateUser(user);
             }
         }
-        return AjaxResult.success(user);
-        // AjaxResult ajax = AjaxResult.success(user);
-        // // 登录
-        // String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
-        // ajax.put(Constants.TOKEN, token);
-        // return ajax;
+//        return AjaxResult.success(user);
+         AjaxResult ajax = AjaxResult.success(user);
+         String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
+         ajax.put(Constants.TOKEN, token);
+         return ajax;
     }
     
 

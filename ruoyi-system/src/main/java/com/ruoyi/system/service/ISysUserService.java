@@ -1,8 +1,10 @@
 package com.ruoyi.system.service;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * 用户 业务层
@@ -223,4 +225,5 @@ public interface ISysUserService
 
     public SysUser loginEmailPassword(String email, String password);
 
+    Collection<? extends GrantedAuthority> getAuthorities(Long userId);
 }

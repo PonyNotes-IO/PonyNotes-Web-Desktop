@@ -2,12 +2,14 @@ package com.ruoyi.framework.web.service;
 
 import javax.annotation.Resource;
 
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.constant.CacheConstants;
@@ -32,6 +34,8 @@ import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
 
 import oshi.jna.platform.mac.IOKit.SMCKeyData;
+
+import java.util.Collection;
 
 /**
  * 登录校验方法
@@ -114,38 +118,35 @@ public class SysLoginService
      */
     public String loginWithAccountType(String username, String password)
     {
+        SysUser user = userService.selectUserByUserName(username);
+        if (user == null) {
+            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.not.exists")));
+            throw new UserNotExistsException();
+        }
+        // 4. 手动查询用户权限（替代UserDetailsServiceImpl中的权限查询）
+        Collection<? extends GrantedAuthority> authorities = userService.getAuthorities(user.getUserId()); // 注入userService获取权限
 
-        // 用户验证
-        Authentication authentication = null;
-        try
-        {
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-            AuthenticationContextHolder.setContext(authenticationToken);
-            // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
-            authentication = authenticationManager.authenticate(authenticationToken);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            if (e instanceof BadCredentialsException)
-            {
-                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
-                throw new UserPasswordNotMatchException();
-            }
-            else
-            {
-                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, e.getMessage()));
-                throw new ServiceException(e.getMessage());
-            }
-        }
-        finally
-        {
-            AuthenticationContextHolder.clearContext();
-        }
-        AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        // 5. 构建LoginUser对象（核心：封装用户信息和权限，用于生成token）
+        LoginUser loginUser = new LoginUser(
+                user.getUserId(),
+                user.getDeptId(),
+                user,
+                authorities
+        );
+        loginUser.setUser(user);
+        // 6. 手动构建Authentication对象（替代AuthenticationManager.authenticate的结果）
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                loginUser,       //  principal：用户信息
+                password,        //  credentials：密码（可传null，不影响token生成）
+                authorities      //  authorities：用户权限
+        );
+
+        // 7. 记录登录日志、更新登录信息（与原逻辑一致）
+        AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS,
+                MessageUtils.message("user.login.success")));
         recordLoginInfo(loginUser.getUserId());
-        // 生成token
+        loginUser = (LoginUser) authentication.getPrincipal();
+        // 8. 生成token（基于手动构建的LoginUser）
         return tokenService.createToken(loginUser);
     }
 

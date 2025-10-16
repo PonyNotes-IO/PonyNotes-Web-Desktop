@@ -398,7 +398,15 @@ export default {
         this.$toast.fail(loginWithCodeResponse.data.msg)
       }else{
         result = true
+        // 登录成功，存入token到localStorage
+        const token = loginWithCodeResponse.data.token;
+        localStorage.setItem('token', token); 
+        localStorage.setItem('userInfo', inputValue);
+        // 同时存入authToken（可能为兼容其他逻辑）
+        localStorage.setItem('authToken',token);
+
         this.$toast.success('登录成功')
+
       }
       return result;
     },
@@ -427,11 +435,7 @@ export default {
     //   let countdownTime = 60; // 初始时间设置为60秒
     //   this.resendBtnText = `${countdownTime}s后重新获取`;
     //   this.isResendDisabled = true; // 禁用按钮
-
     // }
-
-
-
   }
 };
 </script>

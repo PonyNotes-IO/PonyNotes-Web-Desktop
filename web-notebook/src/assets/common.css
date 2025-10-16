@@ -1,3 +1,6 @@
+#app {
+  height: 100vh; /* 视口高度 */
+}
 body * {
   box-sizing: border-box;
   flex-shrink: 0;

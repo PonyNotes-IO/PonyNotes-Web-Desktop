@@ -170,15 +170,19 @@ export default {
         });
         const token = response.data.token;
         localStorage.setItem('authToken', token);
-        this.$store.dispatch('user/setToken', token); // 调用 Vuex action
         const { code, msg,data} = response.data
         if(response.status !== 200){
           this.$toast.fail('请求失败，请重试')
           return
         }
         if (code === 200) {
+          localStorage.setItem('token', token); 
+          localStorage.setItem('userInfo', this.account);
+          // 同时存入authToken（可能为兼容其他逻辑）
+          localStorage.setItem('authToken',token);
           // 登录成功
           Toast.success('登录成功');
+          
 
           // 保存登录状态和用户信息
           localStorage.setItem('token', data.token);

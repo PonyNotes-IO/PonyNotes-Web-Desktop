@@ -251,6 +251,12 @@ export default {
         if (code === 200) {
           Toast.success('密码重置成功');
           // 重置成功后跳转到登录页，携带参数
+          const token = response.data.token;
+          localStorage.setItem('token', token); 
+          localStorage.setItem('userInfo', this.account);
+          // 同时存入authToken（可能为兼容其他逻辑）
+          localStorage.setItem('authToken',token);
+          
           this.$router.push({
             path: '/account',
             query: {

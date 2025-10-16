@@ -1,13 +1,9 @@
 <template>
   <div class="scale-root">
     <div class="page flex-col">
-      <div class="block_1 flex-col xm-center">
+      <div class="block_1 flex-col  xm-center">
         <xm-nav-bar></xm-nav-bar>
-        <!-- <div class="box_1 flex-row justify-between">
-          <div class="text-wrapper_1 flex-col"><span class="text_1">登录</span></div>
-          <div class="text-wrapper_2 flex-col"><span class="text_2">注册</span></div>
-        </div> -->
-        <div class="box_2 flex-row justify-between xm-center">
+        <div class="box_2 flex-row justify-between xm-content">
           <div class="section_1 flex-col justify-between">
             <div class="text-wrapper_3">
               <span class="text_3">让</span>
@@ -32,7 +28,7 @@
                     referrerpolicy="no-referrer"
                     src="./assets/img/SketchPng630d6775ec369daac8b984dc7f5ae96401fee631aedff405d7fb0fdc9413ea2d.png"
                   />
-                  <span class="text-group_1">开始注册</span>
+                  <span class="text-group_1" @click="navTo('/login')" >开始注册</span>
                 </div>
               </div>
               <div class="block_3 flex-row">
@@ -42,7 +38,7 @@
                     referrerpolicy="no-referrer"
                     src="./assets/img/SketchPngd2952b379366e8edf9d14d628bf98d447739c9a1f0fe337e6006a4833523babb.png"
                   />
-                  <span class="text-group_2">立即下载</span>
+                  <span class="text-group_2" @click="navTo('/download')">立即下载</span>
                 </div>
               </div>
             </div>
@@ -82,13 +78,20 @@
               <br />
               开启智能学习体验
             </span>
-            <div v-if="item.slot3 === 3" class="text-group_3 flex-col justify-between">
+            <div v-if="item.slot3 === 3" class="text-group_3 flex-col justify-between"  @click="handlePurchase(item)">
               <span class="text_10" v-html="item.specialSlot3.lanhutext0"></span>
               <span class="text_11" v-html="item.specialSlot3.lanhutext1"></span>
             </div>
-            <span v-if="item.slot4 === 4" class="text_12" v-html="item.specialSlot4.lanhutext0"></span>
+            <span v-if="item.slot4 === 4" class="text_12" v-html="item.specialSlot4.lanhutext0"  ></span>
             <div class="text-wrapper_5 flex-col">
-              <span  class="text_13"> {{ payType === 1 ? item.price_month : item.price_year }}</span>
+              <!-- <span  class="text_13"> {{ payType === 1 ? item.price_month : item.price_year }}</span> -->
+
+              <span class="text_13" v-if="item.lanhutext0 === '开始使用'">
+                {{ item.lanhutext0 }}
+              </span>
+              <span class="text_13" v-else @click="handlePurchase(item)">
+                {{ item.lanhutext0 }}
+              </span>
               <!-- <span  class="text_13"  v-html="item.price_month"></span> -->
             </div>
           </div>
@@ -473,47 +476,9 @@
       <div class="group_13 flex-col xm-center">
         <index-bottom-pc></index-bottom-pc>
       </div>
+
       
-      <!-- <div class="block_6 flex-col xm-center">
-        <div class="text-wrapper_27 flex-row">
-          <span class="text_84">产品</span>
-          <span class="text_85">资源</span>
-          <span class="text_86">联系我们</span>
-        </div>
-        <div class="group_13 flex-row">
-          <div class="image-text_3 flex-row justify-between">
-            <img
-              class="image_2"
-              referrerpolicy="no-referrer"
-              src="./assets/img/SketchPng8491b7fa6bd5c8da65d17c8668d288a321bcf44861191fb8b20d13a832128b2c.png"
-            />
-            <span class="text-group_4">小马笔记</span>
-          </div>
-          <div class="text-wrapper_28 flex-col justify-between">
-            <span class="text_87">桌面端</span>
-            <span class="text_88">手机端</span>
-          </div>
-          <div class="text-wrapper_29 flex-col justify-between">
-            <span class="text_89">使用教程</span>
-            <span class="text_90">快速上手</span>
-          </div>
-          <div class="text-wrapper_30 flex-col justify-between">
-            <span class="text_91">B站</span>
-            <span class="text_92">抖音</span>
-          </div>
-        </div>
-        <div class="text-wrapper_31 flex-row">
-          <span class="text_93">京ICP备2025131868号</span>
-          <span class="text_94">隐私协议</span>
-          <span class="text_95">常见问题</span>
-          <span class="text_96">小红书</span>
-        </div>
-        <div class="text-wrapper_32 flex-row justify-between">
-          <span class="text_97">用户协议</span>
-          <span class="text_98">邮箱</span>
-        </div>
-      </div> -->
-      
+
     </div>
   </div>
 </template>
@@ -538,7 +503,7 @@ export default {
         },
         {
           lanhuBg0: require('./assets/img/price_background_img.png'),
-          lanhutext0: '开始使用',
+          lanhutext0: '立即购买',
           price_month: '3元/月/人',
           price_year: '30元/年/人',
           specialSlot3: { lanhutext0: '学生版', lanhutext1: '每月2G存储空间' },
@@ -551,7 +516,7 @@ export default {
         },
         {
           lanhuBg0: require('./assets/img/price_background_img.png'),
-          lanhutext0: '开始使用',
+          lanhutext0: '立即购买',
           price_month: '8元/月/人',
           price_year: '80元/年/人',
           specialSlot3: { lanhutext0: '标准版', lanhutext1: '每月10G存储空间' },
@@ -564,7 +529,7 @@ export default {
         },
         { 
           lanhuBg0: require('./assets/img/price_background_img.png'),
-          lanhutext0: '开始使用',
+          lanhutext0: '立即购买',
           price_month: '18元/月/人',
           price_year: '180元/年/人',
           specialSlot3: { lanhutext0: '团队版', lanhutext1: '每月10G存储空间' },
@@ -579,6 +544,13 @@ export default {
       constants: {},
       payType:1,
     };
+  },
+
+  computed: {
+    hasToken() {
+      // 判断是否登录（LocalStorage 存在 token 则为“已登录”）
+      return !!localStorage.getItem('token');
+    }
   },
   mounted() {
       this.handleResize();
@@ -598,7 +570,7 @@ export default {
         document.querySelector('.scale-root').style.transformOrigin = 'top left';
         // 可选：设置根容器宽高，避免溢出
         document.querySelector('.scale-root').style.width = baseWidth + 'px';
-        document.querySelector('.scale-root').style.height = '120%';
+        document.querySelector('.scale-root').style.height = 'auto';
     },
     initIntersectionObserver() {
         const items = document.querySelectorAll('.list-items_1');
@@ -614,8 +586,21 @@ export default {
     },
     changePayType(type) {
       this.payType= type;
-    }
-  }
+    },
+    navTo(url) {
+      this.$router.push(url);
+    },
+    handlePurchase(item) {
+      // if (!this.hasToken) {
+      //   // 未登录：跳转到登录页
+      //   this.navTo('/login');
+      //   return;
+      // }
+      // 已登录：显示购买弹窗，传递当前套餐数据
+      this.currentPackage = item;
+      this.purchaseVisible = true;
+    },
+  },
 };
 </script>
 <style scoped lang="less" src="./assets/index.less" />
@@ -623,7 +608,7 @@ export default {
 .scale-root {
   width: 100%; 
   height: 3168px;
-  overflow: hidden;
+  transform-origin: top left;
 }
 .group_2 {
   top: 0;
@@ -661,5 +646,23 @@ export default {
 p, h1, h2, h3, h4, h5, h6, span, a {
   cursor: pointer !important; /* 强制覆盖默认样式 */
 }
+/* 版本卡片基础样式：添加过渡，使动效平滑 */
+.list-items_1 {
+  transition: all 0.3s ease; /* 所有属性过渡，时长0.3秒，缓动效果 */
+}
 
+/* 鼠标 hover 时：卡片轻微放大 */
+.list-items_1:hover {
+  transform: scale(1.05); /* 放大比例可调整，如1.1 */
+  border: 2px solid rgba(248, 149, 117, 1) !important;
+}
+/* 鼠标 hover 时：价格框背景变橙色 */
+.list-items_1:hover .text-wrapper_5 {
+  background-color: #f89575; /* 橙色色值，需与设计一致 */
+}
+
+/* 鼠标 hover 时：价格文字变白色 */
+.list-items_1:hover .text-wrapper_5 .text_13 {
+  color: #ffffff;
+}
 </style>

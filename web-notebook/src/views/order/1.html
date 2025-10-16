@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>开通会员 - 享受36项特权</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- 配置Tailwind主题 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FF7A45',
+            secondary: '#FFF2EA',
+            neutral: '#F5F5F5',
+            dark: '#333333',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .card-hover {
+        @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+      }
+      .tab-active {
+        @apply text-primary border-primary bg-secondary;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans text-dark">
+  <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden my-8">
+    <!-- 头部标题 -->
+    <div class="p-6 border-b border-gray-100">
+      <div class="flex justify-between items-center">
+        <h1 class="text-lg font-medium">您还不是会员，开通会员即可享受36项会员特权</h1>
+        <button class="text-gray-400 hover:text-gray-600 transition-colors">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- 会员类型标签 -->
+    <div class="px-6 pt-6">
+      <div class="flex overflow-x-auto pb-2 space-x-2 scrollbar-hide">
+        <button id="tab-student" class="tab-active whitespace-nowrap px-4 py-2 rounded-full border-2 font-medium text-sm transition-all">
+          学生版
+        </button>
+        <button id="tab-standard" class="whitespace-nowrap px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-medium text-sm transition-all hover:border-gray-300">
+          标准版
+        </button>
+        <button id="tab-team" class="whitespace-nowrap px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-medium text-sm transition-all hover:border-gray-300">
+          团队版
+        </button>
+        <button id="tab-addon" class="whitespace-nowrap px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-medium text-sm transition-all hover:border-gray-300">
+          会员补充包
+        </button>
+      </div>
+    </div>
+    
+    <!-- 内容区域 - 学生版 -->
+    <div id="content-student" class="p-6">
+      <!-- 获赠权益 -->
+      <div class="mb-8">
+        <h2 class="text-base font-medium mb-4">获赠权益</h2>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="flex flex-col items-center text-center p-3 bg-neutral rounded-lg card-hover">
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+              <i class="fa fa-robot text-primary"></i>
+            </div>
+            <p class="text-xs">小马AI</p>
+          </div>
+          <div class="flex flex-col items-center text-center p-3 bg-neutral rounded-lg card-hover">
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+              <i class="fa fa-calendar text-primary"></i>
+            </div>
+            <p class="text-xs">小马日历</p>
+          </div>
+          <div class="flex flex-col items-center text-center p-3 bg-neutral rounded-lg card-hover">
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+              <i class="fa fa-star text-primary"></i>
+            </div>
+            <p class="text-xs">小马收藏夹</p>
+          </div>
+          <div class="flex flex-col items-center text-center p-3 bg-neutral rounded-lg card-hover">
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+              <i class="fa fa-cloud text-primary"></i>
+            </div>
+            <p class="text-xs">云端同步</p>
+          </div>
+          <div class="flex flex-col items-center text-center p-3 bg-neutral rounded-lg card-hover">
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+              <i class="fa fa-hdd-o text-primary"></i>
+            </div>
+            <p class="text-xs">100T空间</p>
+          </div>
+        </div>
+        <div class="text-right mt-2">
+          <a href="#" class="text-primary text-sm hover:underline">查看更多</a>
+        </div>
+      </div>
+      
+      <!-- 购买时长 -->
+      <div class="mb-8">
+        <h2 class="text-base font-medium mb-4">选择购买时长</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="border-2 border-primary bg-secondary rounded-lg p-4 card-hover relative">
+            <div class="absolute -top-2 -right-2 bg-primary text-white text-xs px-2 py-1 rounded-full">
+              推荐
+            </div>
+            <p class="font-medium">包月30天</p>
+            <p class="text-primary text-xl font-bold mt-1">¥3</p>
+          </div>
+          <div class="border-2 border-gray-200 rounded-lg p-4 card-hover">
+            <p class="font-medium">包月365天</p>
+            <p class="text-gray-700 text-xl font-bold mt-1">¥30</p>
+            <p class="text-xs text-gray-500 mt-1">平均每天0.08元</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 协议确认 -->
+      <div class="mb-6">
+        <label class="flex items-center">
+          <input type="checkbox" class="form-checkbox h-4 w-4 text-primary rounded border-gray-300">
+          <span class="ml-2 text-sm text-gray-600">确认《会员服务》《隐私协议》</span>
+        </label>
+      </div>
+      
+      <!-- 支付区域 -->
+      <div class="bg-neutral rounded-lg p-4">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center">
+            <img src="https://picsum.photos/40/40" alt="二维码" class="w-16 h-16 rounded">
+          </div>
+          <div class="text-right">
+            <p class="text-sm text-gray-500">应付金额</p>
+            <p class="text-2xl font-bold text-primary">¥3</p>
+          </div>
+        </div>
+        <button class="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-lg transition-colors flex items-center justify-center">
+          <i class="fa fa-weixin mr-2"></i>
+          <i class="fa fa-credit-card mr-2"></i>
+          使用微信或者支付宝支付
+        </button>
+      </div>
+    </div>
+    
+    <!-- 内容区域 - 会员补充包 (默认隐藏) -->
+    <div id="content-addon" class="p-6 hidden">
+      <!-- 个人云存储空间 -->
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-base font-medium">个人云存储空间</h2>
+          <a href="#" class="text-primary text-sm hover:underline">查看更多</a>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-3">
+          <div class="border-2 border-primary bg-secondary rounded-lg p-3 card-hover">
+            <h3 class="font-medium text-sm">A扩充方案</h3>
+            <p class="text-xs text-gray-600 mt-2">存储空间 5G</p>
+            <p class="text-xs text-gray-600">Altken 100次/天</p>
+            <p class="text-primary font-bold mt-3">5元/月</p>
+          </div>
+          <div class="border-2 border-gray-200 rounded-lg p-3 card-hover">
+            <h3 class="font-medium text-sm">B扩充方案</h3>
+            <p class="text-xs text-gray-600 mt-2">Altken 500次/天</p>
+            <p class="text-primary font-bold mt-5">15元/月</p>
+          </div>
+          <div class="border-2 border-gray-200 rounded-lg p-3 card-hover">
+            <h3 class="font-medium text-sm">C扩充方案</h3>
+            <p class="text-xs text-gray-600 mt-2">存储空间 5G</p>
+            <p class="text-xs text-gray-600">Altken 100次/天</p>
+            <p class="text-primary font-bold mt-3">25元/月</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 协议确认 -->
+      <div class="mb-6">
+        <label class="flex items-center">
+          <input type="checkbox" class="form-checkbox h-4 w-4 text-primary rounded border-gray-300" checked>
+          <span class="ml-2 text-sm text-gray-600">确认《会员服务》《隐私协议》</span>
+        </label>
+      </div>
+      
+      <!-- 支付区域 -->
+      <div class="bg-neutral rounded-lg p-4">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center">
+            <img src="https://picsum.photos/40/40" alt="二维码" class="w-16 h-16 rounded">
+          </div>
+          <div class="text-right">
+            <p class="text-sm text-gray-500">应付金额</p>
+            <p class="text-2xl font-bold text-primary">¥3</p>
+          </div>
+        </div>
+        <button class="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-lg transition-colors flex items-center justify-center">
+          <i class="fa fa-weixin mr-2"></i>
+          <i class="fa fa-credit-card mr-2"></i>
+          使用微信或者支付宝支付
+        </button>
+      </div>
+    </div>
+    
+    <!-- 标准版和团队版内容区域 (默认隐藏) -->
+    <div id="content-standard" class="p-6 hidden">
+      <div class="flex items-center justify-center h-40 text-gray-500">
+        <p>标准版会员权益内容</p>
+      </div>
+    </div>
+    
+    <div id="content-team" class="p-6 hidden">
+      <div class="flex items-center justify-center h-40 text-gray-500">
+        <p>团队版会员权益内容</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 标签切换功能
+    const tabs = {
+      student: document.getElementById('tab-student'),
+      standard: document.getElementById('tab-standard'),
+      team: document.getElementById('tab-team'),
+      addon: document.getElementById('tab-addon')
+    };
+    
+    const contents = {
+      student: document.getElementById('content-student'),
+      standard: document.getElementById('content-standard'),
+      team: document.getElementById('content-team'),
+      addon: document.getElementById('content-addon')
+    };
+    
+    // 切换标签的函数
+    function switchTab(tabName) {
+      // 重置所有标签样式
+      Object.keys(tabs).forEach(key => {
+        tabs[key].classList.remove('tab-active');
+        tabs[key].classList.add('border-gray-200', 'text-gray-600');
+        
+        // 隐藏所有内容
+        contents[key].classList.add('hidden');
+      });
+      
+      // 设置当前标签样式
+      tabs[tabName].classList.add('tab-active');
+      tabs[tabName].classList.remove('border-gray-200', 'text-gray-600');
+      
+      // 显示当前内容
+      contents[tabName].classList.remove('hidden');
+    }
+    
+    // 为每个标签添加点击事件
+    Object.keys(tabs).forEach(key => {
+      tabs[key].addEventListener('click', () => switchTab(key));
+    });
+  </script>
+</body>
+</html>

@@ -209,6 +209,12 @@ export default {
         }
         
         if (code === 200) {
+          const token = response.data.token;
+          localStorage.setItem('token', token); 
+          localStorage.setItem('userInfo', this.account);
+          // 同时存入authToken（可能为兼容其他逻辑）
+          localStorage.setItem('authToken',token);
+
           Toast.success('密码设置成功');
           console.log(data)
           // 设置成功后跳转到账户管理界面，携带参数

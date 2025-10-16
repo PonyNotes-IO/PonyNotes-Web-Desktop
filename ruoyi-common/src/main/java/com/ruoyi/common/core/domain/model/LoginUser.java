@@ -71,8 +71,11 @@ public class LoginUser implements UserDetails
      */
     private SysUser user;
 
-    public LoginUser()
+    public LoginUser(Long userId, Long deptId, SysUser user, Collection<? extends GrantedAuthority> authorities)
     {
+        this.userId = userId;
+        this.deptId = deptId;
+        this.user = user;
     }
 
     public LoginUser(SysUser user, Set<String> permissions)

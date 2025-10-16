@@ -1,13 +1,13 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -584,4 +584,37 @@ public class SysUserServiceImpl implements ISysUserService
         return userMapper.loginEmailPassword(email, password);
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities(Long userId) {
+        Set<String> permissions = new HashSet<>();
+
+        // 1. 查询用户关联的角色ID
+        List<Long> roleIds = roleMapper.selectRoleListByUserId(userId);
+        if (roleIds.isEmpty()) {
+            // 无角色则返回空权限（根据业务决定是否允许无权限用户登录）
+            return Collections.emptyList();
+        }
+
+        // 2. 查询角色标识（role_key），并拼接ROLE_前缀（Spring Security角色规范）
+        List<SysRole> roles = roleMapper.selectRolePermissionByUserId(userId);
+        Set<String> rolePerms = roles.stream()
+                .map(role -> "ROLE_" + role.getRoleKey()) // 角色需加ROLE_前缀
+                .collect(Collectors.toSet());
+        permissions.addAll(rolePerms);
+
+        // 3. 查询角色关联的菜单ID
+
+        // 4. 查询菜单的权限标识（perms字段）
+
+        // 5. 转换为GrantedAuthority集合
+        return convertToAuthorities(permissions);
+    }
+    /**
+     * 将权限字符串集合转换为Spring Security的GrantedAuthority
+     */
+    private Collection<? extends GrantedAuthority> convertToAuthorities(Set<String> permissions) {
+        return permissions.stream()
+                .map(SimpleGrantedAuthority::new) // 用SimpleGrantedAuthority包装
+                .collect(Collectors.toList());
+    }
 }

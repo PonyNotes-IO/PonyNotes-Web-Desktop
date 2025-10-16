@@ -25,14 +25,14 @@
                                     <div class="image-text_1 flex-row justify-between">
                                         <img class="label_1" referrerpolicy="no-referrer"
                                             src="./assets/img/SketchPng630d6775ec369daac8b984dc7f5ae96401fee631aedff405d7fb0fdc9413ea2d.png" />
-                                        <span class="text-group_1">开始注册</span>
+                                        <span class="text-group_1" @click="navTo('/login')" >开始注册</span>
                                     </div>
                                 </div>
                                 <div class="block_2 flex-row">
                                     <div class="image-text_2 flex-row justify-between">
                                         <img class="label_2" referrerpolicy="no-referrer"
                                             src="./assets/img/SketchPngd2952b379366e8edf9d14d628bf98d447739c9a1f0fe337e6006a4833523babb.png" />
-                                        <span class="text-group_2">立即下载</span>
+                                        <span class="text-group_2" @click="navTo('/download')">立即下载</span>
                                     </div>
                                 </div>
                             </div>
@@ -46,38 +46,16 @@
             </div>
             <div class="box_2 flex-col xm-center">
                 <index-text :text="'易于使用且功能强大'"></index-text>
-                <!-- <div class="text-wrapper_4">
-                    <span class="text_6">易于使用</span>
-                    <span class="text_7">且功能强大</span>
-                </div> -->
                 <index-pic :data="data1"></index-pic>
 
                 <index-text :text="'独一无二的手写体验'"></index-text>
-                <!-- <div class="text-wrapper_6">
-                    <span class="text_15">独一无二</span>
-                    <span class="text_16">的手写体验</span>
-                </div> -->
                 <index-pic :data="data2"></index-pic>
 
                 <index-text :text="'一起思维发散，打破页面限制'"></index-text>
-                <!-- <div class="text-wrapper_9">
-                    <span class="text_24">一起思维发散，</span>
-                    <span class="text_25">打破页面限制</span>
-                </div> -->
                 <index-pic :data="data3"></index-pic>
-                <div class="box_15 flex-row justify-end">
-                    <!-- <div class="box_16 flex-col justify-between">
-                        <div class="text-wrapper_11">
-                            <span class="text_33">AI&nbsp;功能</span>
-                            <span class="text_34">，自选模型，更懂你</span>
-                        </div>
-                    </div> -->
-                </div>
+
                 <index-text :text="'AI 功能，自选模型，更懂你'"></index-text>
-
                 <index-pic :data="data4"></index-pic>
-
-
             </div>
             <div class="box_21 flex-col xm-center">
                 <div class="text-wrapper_13">
@@ -218,11 +196,27 @@ export default {
                     '知识站点',
                 ],
                 details: [
-                    { title: '模块化笔记', desc: '像搭积木一样编辑笔记，一键插入文字、表格、代码、音视频、网页等内容，自由组合，灵活创作' },
-                    { title: '多维表', desc: '支持多视图数据库，用表格、看板、日历等方式查看同一组数据' },
-                    { title: '任务系统', desc: '内置任务管理功能，支持待办事项、多状态、优先级、截止日期，笔记即项目管理' },
-                    { title: '模版复用', desc: '提供丰富场景模版，支持自定义保存模版，快速复用，提高记录效率' },
-                    { title: '知识站点', desc: '将笔记一键发布为静态网站，打造专属知识库或项目主页，支持自定义域名和样式' },
+                    { 
+                        title: '模块化笔记', 
+                        desc: '像搭积木一样编辑笔记，一键插入文字、表格、代码、音视频、网页等内容，自由组合，灵活创作',
+                        img: require('./assets/img/carousel_1.png')
+                    },
+                    { 
+                        title: '多维表', 
+                        desc: '支持多视图数据库，用表格、看板、日历等方式查看同一组数据',
+                        img: require('./assets/img/carousel_1.png')
+                     
+                    },
+                    { title: '任务系统', desc: '内置任务管理功能，支持待办事项、多状态、优先级、截止日期，笔记即项目管理',
+                        img: require('./assets/img/carousel_1.png')
+                     
+                    },
+                    { title: '模版复用', desc: '提供丰富场景模版，支持自定义保存模版，快速复用，提高记录效率' ,
+                        img: require('./assets/img/carousel_1.png')
+                    },
+                    { title: '知识站点', desc: '将笔记一键发布为静态网站，打造专属知识库或项目主页，支持自定义域名和样式' ,
+                        img: require('./assets/img/carousel_1.png')
+                    },
                 ]
             },
             data2: {
@@ -234,11 +228,19 @@ export default {
                     '图形辅助绘图',
                 ],
                 details: [
-                    { title: '手写笔记', desc: '支持流畅书写与自然笔迹回放，打破键盘限制，模拟纸笔体验' },
-                    { title: '多种纸张模板', desc: '提供横线、方格、康奈尔笔记、空白等纸张背景，适配学习和工作场景' },
-                    { title: '手写工具箱', desc: '多种笔刷、颜色、荧光笔、橡皮工具，满足个性化标注与创作' },
-                    { title: '智能书写识别', desc: '支持手写文字转文本、手势擦除，助力结构化整理与搜索' },
-                    { title: '图形辅助绘图', desc: '自动识别手绘图形，生成标准线条、箭头、图标，让思维导图和草图更清晰专业' },
+                    { title: '手写笔记', desc: '支持流畅书写与自然笔迹回放，打破键盘限制，模拟纸笔体验' ,
+                        img: require('./assets/img/carousel_1.png')
+                    },
+                    { title: '多种纸张模板', desc: '提供横线、方格、康奈尔笔记、空白等纸张背景，适配学习和工作场景' ,
+                        img: require('./assets/img/carousel_1.png')
+                    },
+                    { title: '手写工具箱', desc: '多种笔刷、颜色、荧光笔、橡皮工具，满足个性化标注与创作' ,
+                        img: require('./assets/img/carousel_1.png')
+                    },
+                    { title: '智能书写识别', desc: '支持手写文字转文本、手势擦除，助力结构化整理与搜索' ,
+                        img: require('./assets/img/carousel_1.png')},
+                    { title: '图形辅助绘图', desc: '自动识别手绘图形，生成标准线条、箭头、图标，让思维导图和草图更清晰专业' ,
+                        img: require('./assets/img/carousel_1.png')},
                 ]
             },
             data3: {
@@ -250,11 +252,31 @@ export default {
                     '实时协同',
                 ],
                 details: [
-                    { title: '白板页面', desc: '支持手绘直线、箭头、图形，自动矫正为标准图形，适合绘制流程图、思维导图、界面草图' },
-                    { title: '自然书写', desc: '兼容Apple Pencil和各类手写笔，支持压感与笔迹粗细调节，体验接近真实书写' },
-                    { title: '文字编辑', desc: '插入文本框，支持富文本格式，搭配手绘内容轻松表达逻辑' },
-                    { title: '图片导入', desc: '拖拽图片或截图快速贴入白板，支持标注、涂鸦与覆盖绘制' },
-                    { title: '实时协同', desc: '多人在线同时编辑白板，支持远程头脑风暴与教学演示' },
+                    { 
+                        title: '白板页面', 
+                        desc: '支持手绘直线、箭头、图形，自动矫正为标准图形，适合绘制流程图、思维导图、界面草图' ,
+                        img: require('./assets/img/carousel_1.png')
+                    },
+                    { 
+                        title: '自然书写', 
+                        desc: '兼容Apple Pencil和各类手写笔，支持压感与笔迹粗细调节，体验接近真实书写' ,
+                        img: require('./assets/img/carousel_1.png')
+                    },
+                    { 
+                        title: '文字编辑', 
+                        desc: '插入文本框，支持富文本格式，搭配手绘内容轻松表达逻辑',
+                        img: require('./assets/img/carousel_1.png') 
+                    },
+                    { 
+                        title: '图片导入', 
+                        desc: '拖拽图片或截图快速贴入白板，支持标注、涂鸦与覆盖绘制',
+                        img: require('./assets/img/carousel_1.png') 
+                    },
+                    { 
+                        title: '实时协同', 
+                        desc: '多人在线同时编辑白板，支持远程头脑风暴与教学演示',
+                        img: require('./assets/img/carousel_1.png') 
+                    },
                 ]
             },
             data4: {
@@ -265,10 +287,26 @@ export default {
                     '笔记智能搜索',
                 ],
                 details: [
-                    { title: '自由选择大模型', desc: '像搭积木一样编辑笔记，一键插入文字、表格、代码、音视频、网页等内容，自由组合，灵活创作' },
-                    { title: 'AI总结与问答', desc: '选中任意笔记内容，一键生成摘要、提炼重点，支持基于上下文的智能问答' },
-                    { title: 'AI写作助手', desc: '输入大纲或灵感碎片，AI&nbsp;帮你扩写文章、润色表达、生成标题，提升创作效率' },
-                    { title: '笔记智能搜索', desc: '理解你的搜索意图，不再局限关键词匹配，支持自然语言搜索与上下文推' },
+                    {
+                         title: '自由选择大模型', 
+                         desc: '像搭积木一样编辑笔记，一键插入文字、表格、代码、音视频、网页等内容，自由组合，灵活创作',
+                        img: require('./assets/img/carousel_1.png') 
+                    },
+                    { 
+                        title: 'AI总结与问答', 
+                        desc: '选中任意笔记内容，一键生成摘要、提炼重点，支持基于上下文的智能问答',
+                        img: require('./assets/img/carousel_1.png') 
+                    },
+                    { 
+                        title: 'AI写作助手', 
+                        desc: '输入大纲或灵感碎片，AI 帮你扩写文章、润色表达、生成标题，提升创作效率',
+                        img: require('./assets/img/carousel_1.png') 
+                    },
+                    { 
+                        title: '笔记智能搜索', 
+                        desc: '理解你的搜索意图，不再局限关键词匹配，支持自然语言搜索与上下文推',
+                        img: require('./assets/img/carousel_1.png') 
+                    },
                 ]
             },
 
@@ -331,6 +369,9 @@ export default {
             });
             }, { threshold: 0.5 });
             items.forEach(item => observer.observe(item));
+        },
+        navTo(url) {
+        this.$router.push(url);
         }
     }
 };

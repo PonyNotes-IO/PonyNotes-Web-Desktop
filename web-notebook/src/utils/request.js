@@ -1,6 +1,8 @@
 import axios from 'axios'
+// import auth from '@/utils/auth'
 // 是否显示重新登录
 export let isRelogin = { show: false }
+
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 创建axios实例
@@ -11,4 +13,17 @@ const service = axios.create({
   timeout: 10000
 })
 
+// // 请求拦截器
+// service.interceptors.request.use(
+//   config => {
+//     if (auth.hasToken()) {
+//       // 从工具类获取 Token 并添加到请求头
+//       config.headers['Authorization'] = `Bearer ${auth.getToken()}`
+//     }
+//     return config
+//   },
+//   error => {
+//     return Promise.reject(error)
+//   }
+// )
 export default service

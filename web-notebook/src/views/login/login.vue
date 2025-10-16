@@ -480,6 +480,6 @@ export default {
 <style scoped lang="css" src="./assets/login.css" />
 <style scoped>
 .scale-root {
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 </style>

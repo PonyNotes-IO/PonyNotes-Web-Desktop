@@ -2,8 +2,8 @@
     <div class="scale-root">
         <div class="page flex-col ">
             <div class="group_1 flex-col xm-center">
-                    <xm-nav-bar></xm-nav-bar>
-                <div class="group_3 flex-row xm-center">
+                <xm-nav-bar></xm-nav-bar>
+                <div class="group_3 flex-row xm-content ">
                     <div class="text-group_1 flex-col justify-between">
                         <span class="text_7">AI&nbsp;工具赋能内容创作</span>
                         <span class="text_8">简化工作流程，做事效率倍增</span>
@@ -71,7 +71,7 @@
                 </div>
                 <span class="text_34">ipad端</span>
                 <div class="block_3 flex-row justify-between">
-                    <div class="image-wrapper_1 flex-row">
+                    <div class="image-wrapper_1 flex-row download-item">
                         <img class="image_6" referrerpolicy="no-referrer"
                             src="./assets/img/SketchPng5ca6447a908c6de7fa2c2ae6a9d1298c4a348f3eba2c7b6550ee52724e96ee9f.png" />
                         <img class="image_7" referrerpolicy="no-referrer"
@@ -153,6 +153,7 @@ export default {
 /* 全局覆盖所有文本元素（p、h1~h6、span 等） */
 p, h1, h2, h3, h4, h5, h6, span, a {
     cursor: pointer !important; /* 强制覆盖默认样式 */
+
 }
 .scale-root {
   width: 100%; 
