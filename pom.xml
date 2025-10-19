@@ -260,6 +260,33 @@
                 <artifactId>springfox-boot-starter</artifactId>
                 <version>3.0.0</version>
             </dependency>
+            
+            <!-- 微信支付SDK -->
+            <dependency>
+                <groupId>com.github.wechatpay-apiv3</groupId>
+                <artifactId>wechatpay-java</artifactId>
+                <version>0.4.7</version>
+            </dependency>
+
+            <!-- 支付宝SDK -->
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>4.38.0.ALL</version>
+            </dependency>
+
+            <!-- 二维码生成工具（用于本地生成二维码图片） -->
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>3.5.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>javase</artifactId>
+                <version>3.5.1</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

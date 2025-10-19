@@ -190,7 +190,24 @@ verify:
       sms: "verify:sms:"          # 短信验证码Redis Key前缀（最终Key：verify:sms:13800138000）
       email: "verify:email:"      # 邮箱验证码Redis Key前缀（最终Key：verify:email:test@qq.com）
 
-
+# 支付配置
+payment:
+  # 微信支付配置
+  wechat:
+    mch-id: 1600000000000000  # 商户ID（替换为真实值）
+    mch-serial-no: 1234567890ABCDEF  # 商户证书序列号（替换为真实值）
+    private-key-path: classpath:cert/apiclient_key.pem  # 商户私钥路径（放在resources/cert下）
+    api-v3-key: your_api_v3_key  # APIv3密钥（替换为真实值）
+    app-id: wx1234567890abcdef  # 公众号/小程序APPID（替换为真实值）
+    notify-url: http://your-domain.com/api/payment/callback/wechat  # 微信支付回调地址（需公网可访问）
+  
+  # 支付宝配置
+  alipay:
+    app-id: 2021000000000000  # 支付宝APPID（替换为真实值）
+    private-key: your_private_key  # 商户私钥（替换为真实值）
+    public-key: alipay_public_key  # 支付宝公钥（替换为真实值）
+    gateway-url: https://openapi.alipaydev.com/gateway.do  # 支付宝网关（沙箱环境用dev，生产环境去掉dev）
+    notify-url: http://your-domain.com/api/payment/callback/alipay  # 支付宝回调地址（需公网可访问）
 # xiaomabiji@1521503155920564.onaliyun.com
 
 

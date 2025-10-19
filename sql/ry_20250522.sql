@@ -702,3 +702,18 @@ create table gen_table_column (
   update_time       datetime                                   comment '更新时间',
   primary key (column_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';
+
+drop table if exists sys_payment_order;
+CREATE TABLE `sys_payment_order` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '订单ID',
+  `order_no` varchar(64) NOT NULL COMMENT '订单编号',
+  `amount` decimal(10,2) NOT NULL COMMENT '支付金额(元)',
+  `payment_type` varchar(20) NOT NULL COMMENT '支付方式(wechat:微信,alipay:支付宝)',
+  `qr_code_url` varchar(255) DEFAULT NULL COMMENT '支付二维码URL',
+  `status` varchar(20) NOT NULL COMMENT '订单状态(pending:待支付,success:已支付,failed:失败)',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `pay_time` datetime DEFAULT NULL COMMENT '支付时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_order_no` (`order_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '支付订单表';

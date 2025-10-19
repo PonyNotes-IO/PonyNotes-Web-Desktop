@@ -476,22 +476,30 @@
       <div class="group_13 flex-col xm-center">
         <index-bottom-pc></index-bottom-pc>
       </div>
-
-      
-
+       <!-- :package="currentPackage"  -->
+      <create-order v-if="purchaseVisible" 
+        :package="currentPackage"
+        :packageInfo="currentPackage"
+        :payType="payType"
+        @close="purchaseVisible = false" >
+      </create-order>
     </div>
   </div>
 </template>
 <script>
 import XmNavBar from '@/components/xm-nav-bar.vue';
 import IndexBottomPC from '@/components/index-bottom-pc.vue';
+import CreateOrder from '@/views/order/create_order.vue';
 export default {
   components:{
         XmNavBar, 
-        'index-bottom-pc': IndexBottomPC
+        'index-bottom-pc': IndexBottomPC,
+        'create-order': CreateOrder,
   },
   data() {
     return {
+      purchaseVisible: false, // 控制购买弹窗显示
+      currentPackage: null, // 当前选择的套餐
       loopData0: [
         {
           lanhuBg0: require('./assets/img/price_background_img.png'),
@@ -504,6 +512,7 @@ export default {
         {
           lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '立即购买',
+          packageType: 'student',
           price_month: '3元/月/人',
           price_year: '30元/年/人',
           specialSlot3: { lanhutext0: '学生版', lanhutext1: '每月2G存储空间' },
@@ -517,6 +526,7 @@ export default {
         {
           lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '立即购买',
+          packageType: 'standard',
           price_month: '8元/月/人',
           price_year: '80元/年/人',
           specialSlot3: { lanhutext0: '标准版', lanhutext1: '每月10G存储空间' },
@@ -530,6 +540,7 @@ export default {
         { 
           lanhuBg0: require('./assets/img/price_background_img.png'),
           lanhutext0: '立即购买',
+          packageType: 'team',
           price_month: '18元/月/人',
           price_year: '180元/年/人',
           specialSlot3: { lanhutext0: '团队版', lanhutext1: '每月10G存储空间' },
