@@ -106,8 +106,82 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-    </dependencies>
 
+        <!-- 微信支付SDK -->
+        <dependency>
+            <groupId>com.github.wechatpay-apiv3</groupId>
+            <artifactId>wechatpay-java</artifactId>
+            <version>0.2.17</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.unmz.java.wechat.pay</groupId>-->
+<!--            <artifactId>wechat-pay-sdk</artifactId>-->
+<!--            <version>1.0.8</version>-->
+<!--            <classifier>sources</classifier>-->
+<!--            <type>java-source</type>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.wechat.pay</groupId>-->
+<!--            <artifactId>wechat-pay-java</artifactId>-->
+<!--            <version>0.4.7</version> &lt;!&ndash; 支持Native支付的版本 &ndash;&gt;-->
+<!--            <classifier>all</classifier> &lt;!&ndash; 包含所有模块 &ndash;&gt;-->
+<!--        </dependency>-->
+        <!-- 微信支付依赖的HTTP客户端（可选，根据SDK版本需求） -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.9.3</version>
+        </dependency>
+
+        <!-- 支付宝SDK -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.40.0.ALL</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.59</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <!-- 优先从中央仓库下载微信支付SDK -->
+        <repository>
+            <id>central-wechat</id>
+            <url>https://repo1.maven.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy> <!-- 强制检查更新 -->
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- 保留阿里云仓库（用于其他依赖） -->
+        <repository>
+            <id>nexus-aliyun</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>wechat-pay-maven</id>
+            <url>https://maven.weixin.qq.com/repository/releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
     <build>
         <finalName>${project.artifactId}</finalName>
     </build>

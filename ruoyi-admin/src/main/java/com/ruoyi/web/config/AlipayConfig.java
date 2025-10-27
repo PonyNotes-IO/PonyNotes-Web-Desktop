@@ -2,13 +2,23 @@ package com.ruoyi.web.config;
 
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.internal.util.AlipaySignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
+
 @Configuration
 public class AlipayConfig {
+    // 编码格式常量
+    private static final String CHARSET = "UTF-8";
+    // 签名算法常量
+    private static final String SIGN_TYPE = "RSA2";
 
+    private static final Logger log = LoggerFactory.getLogger(AlipayConfig.class);
     @Value("${payment.alipay.app-id}")
     private String appId;
 
@@ -34,13 +44,38 @@ public class AlipayConfig {
                 appId,
                 privateKey,
                 "json",
-                "UTF-8",
+                CHARSET,
                 publicKey,
                 "RSA2"  // 签名算法
         );
     }
 
+
+    // 回调验证工具方法（4.40.0版本推荐方式）
+    public boolean verifySign(Map<String, String> params) {
+        try {
+            return AlipaySignature.rsaCheckV1(
+                  params,
+                    publicKey,
+                    CHARSET,
+                    SIGN_TYPE
+            );
+        } catch (Exception e) {
+            log.error("支付宝签名验证失败", e);
+            return false;
+        }
+    }
+
+    // getter方法
     public String getNotifyUrl() {
         return notifyUrl;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public String getGatewayUrl() {
+        return gatewayUrl;
     }
 }
