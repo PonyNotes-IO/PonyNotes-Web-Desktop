@@ -1,12 +1,14 @@
 package com.ruoyi.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
 import com.ruoyi.system.mapper.PaymentOrderMapper;
-import com.ruoyi.system.service.PaymentService;
+//import com.ruoyi.system.service.PaymentService;
+import com.ruoyi.system.service.SysPaymentService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,7 +16,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Service
-public class SysPaymentServiceImpl extends ServiceImpl<PaymentOrderMapper, PaymentOrder> implements PaymentService {
+public class SysPaymentServiceImpl extends ServiceImpl<PaymentOrderMapper, PaymentOrder> implements SysPaymentService {
 
     /**
      * 创建支付订单并生成二维码

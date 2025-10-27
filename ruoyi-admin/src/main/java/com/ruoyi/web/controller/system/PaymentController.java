@@ -4,7 +4,8 @@ package com.ruoyi.web.controller.system;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
-import com.ruoyi.system.service.PaymentService;
+//import com.ruoyi.system.service.PaymentService;
+import com.ruoyi.system.service.SysPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
 public class PaymentController {
 
     @Autowired
-    private PaymentService paymentService;
+    private SysPaymentService paymentService;
 
     /**
      * 创建支付订单并生成二维码

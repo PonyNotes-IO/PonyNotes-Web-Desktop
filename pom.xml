@@ -36,7 +36,8 @@
 <!--        <poi.version>3.17</poi.version>-->
         <poi.version>4.0.1</poi.version>
         <velocity.version>1.7</velocity.version>
-
+        <mybatis-plus-version>3.5.5</mybatis-plus-version>
+        <alipay-sdk-version>4.22.32.ALL</alipay-sdk-version>
 
     </properties>
 
@@ -262,11 +263,11 @@
             </dependency>
             
             <!-- 微信支付SDK -->
-            <dependency>
+<!--            <dependency>
                 <groupId>com.github.wechatpay-apiv3</groupId>
                 <artifactId>wechatpay-java</artifactId>
                 <version>0.4.7</version>
-            </dependency>
+            </dependency>-->
 
             <!-- 支付宝SDK -->
             <dependency>
