@@ -20,5 +20,8 @@ public interface PaymentService {
      */
     boolean handlePaymentCallback(String orderNo, String paymentType);
 
+    /**
+     * 验证支付回调签名
+     */
     boolean verifySign(String paymentType, String orderNo, Map<String, String> sign);
 }

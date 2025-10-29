@@ -190,7 +190,9 @@
         </div>
         
         <!-- 协议确认和支付区域 -->
-        <PaymentSection :amount="paymentAmount" :checked="true" />
+        <PaymentSection :amount="paymentAmount" 
+        :checked="true" 
+        @paymentSuccess="handlePaymentSuccess"/>
       </div>
 
     </div>
@@ -282,6 +284,10 @@ export default {
     }
   },
   methods: {
+    handlePaymentSuccess(paymentInfo) {
+      console.log('支付成功:', paymentInfo)
+      // 处理支付成功后的业务逻辑
+    },
     onClose() {
         this.purchaseVisible = false;
         // 方式2：向父组件发送关闭事件
