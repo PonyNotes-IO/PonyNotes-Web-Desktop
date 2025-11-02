@@ -65,16 +65,11 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import axios from 'axios'; // 引入axios用于接口请求
-import { createPayment, pollPaymentStatus } from '@/api/system/payment'
-
+import { ref, computed } from 'vue'
+import { createPayment, pollPaymentStatus } from '@/api/payment'
 export default {
   props: {
-    amount: {
-      type: Number,
-      required: true
-    },
+    amount: { type: Number, required: true },
     checked: {
       type: Boolean,
       default: false

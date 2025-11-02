@@ -67,5 +67,11 @@
         </set>
         where id = #{id}
     </update>
-
+    <select id="selectExpiredOrders"  resultMap="PaymentOrderResult">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_payment_order
+        where status  = 'pending' and
+        pay_time  &lt;= #{payTime}
+    </select>
 </mapper>

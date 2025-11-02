@@ -1,13 +1,23 @@
 //package com.ruoyi.web.config;
-//
+//// Java 标准库
+//import java.io.ByteArrayOutputStream;
+//import java.io.FileNotFoundException;
+//import java.io.InputStream;
+//import java.nio.charset.StandardCharsets;
+//// 微信支付 SDK 相关
 //import com.wechat.pay.java.core.Config;
 //import com.wechat.pay.java.core.RSAAutoCertificateConfig;
 //import com.wechat.pay.java.service.payments.nativepay.NativePayService;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
+//// Spring 框架相关
+//import org.springframework.core.io.ClassPathResource;
+//import org.springframework.core.io.Resource;
 //import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
+//import org.springframework.context.annotation.Lazy;
+//
 //import javax.crypto.Mac;
 //import javax.crypto.spec.SecretKeySpec;
 //import java.nio.charset.StandardCharsets;
@@ -17,9 +27,16 @@
 //import java.util.Map;
 //
 //@Configuration
-//public class WechatPayConfiguration {
+//public class WechatPayConfig {
 //
-//    Logger logger = LoggerFactory.getLogger(WechatPayConfiguration.class);
+//    Logger logger = LoggerFactory.getLogger(WechatPayConfig.class);
+//
+//    // 新增：注入app-id和app-secret
+//    @Value("${payment.wechat.app-id}")
+//    private String appId;  // 原代码中getAppId()返回了mchId，需修正
+//
+//    @Value("${payment.wechat.app-secret}")
+//    private String appSecret;  // 新增appsecret字段
 //
 //    @Value("${payment.wechat.mch-id}")
 //    private String mchId;
@@ -39,20 +56,36 @@
 //    /**
 //     * 初始化微信支付配置（自动加载证书）
 //     */
-//    @Bean
-//    public Config wechatPayConfig() {
-//        try{
-//            return new RSAAutoCertificateConfig.Builder()
-//                    .merchantId(mchId)
-//                    .privateKeyFromPath(privateKeyPath)
-//                    .merchantSerialNumber(mchSerialNo)
-//                    .apiV3Key(apiV3Key)
-//                    .build();
-//        } catch (Exception e) {
-//            logger.error("微信支付配置异常",e);
-//        }
-//        return null;
-//    }
+////    @Bean
+////    public Config WechatPayConfig() {
+////        try {
+////            Resource resource = new ClassPathResource(privateKeyPath);
+////            if (!resource.exists()) {
+////                throw new FileNotFoundException("私钥文件不存在：" + privateKeyPath);
+////            }
+////            // 读取私钥内容
+////            String privateKeyPEM;
+////            try (InputStream in = resource.getInputStream();
+////                 ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+////                byte[] buffer = new byte[8192];
+////                int len;
+////                while ((len = in.read(buffer)) != -1) {
+////                    baos.write(buffer, 0, len);
+////                }
+////                privateKeyPEM = baos.toString(StandardCharsets.UTF_8.name());
+////            }
+////            // 构建配置（自动管理证书，无需手动下载根证书）
+////            return new RSAAutoCertificateConfig.Builder()
+////                    .merchantId(mchId)
+////                    .privateKey(privateKeyPEM)
+////                    .merchantSerialNumber(mchSerialNo)
+////                    .apiV3Key(apiV3Key)
+////                    .build();
+////        } catch (Exception e) {
+////            logger.error("微信支付配置异常",e);
+////        }
+////        return null;
+////    }
 //
 //    /**
 //     * 微信Native支付服务（生成二维码）
@@ -125,10 +158,63 @@
 //        }
 //    }
 //    public String getAppId() {
-//        return mchId;
+//        return appId;
 //    }
 //
 //    public String getMchId() {
 //        return mchId;
 //    }
+//
+//    public Logger getLogger() {
+//        return logger;
+//    }
+//
+//    public void setLogger(Logger logger) {
+//        this.logger = logger;
+//    }
+//
+//    public void setAppId(String appId) {
+//        this.appId = appId;
+//    }
+//
+//    public String getAppSecret() {
+//        return appSecret;
+//    }
+//
+//    public void setAppSecret(String appSecret) {
+//        this.appSecret = appSecret;
+//    }
+//
+//    public void setMchId(String mchId) {
+//        this.mchId = mchId;
+//    }
+//
+//    public String getMchSerialNo() {
+//        return mchSerialNo;
+//    }
+//
+//    public void setMchSerialNo(String mchSerialNo) {
+//        this.mchSerialNo = mchSerialNo;
+//    }
+//
+//    public String getPrivateKeyPath() {
+//        return privateKeyPath;
+//    }
+//
+//    public void setPrivateKeyPath(String privateKeyPath) {
+//        this.privateKeyPath = privateKeyPath;
+//    }
+//
+//    public String getApiV3Key() {
+//        return apiV3Key;
+//    }
+//
+//    public void setApiV3Key(String apiV3Key) {
+//        this.apiV3Key = apiV3Key;
+//    }
+//
+//    public void setNotifyUrl(String notifyUrl) {
+//        this.notifyUrl = notifyUrl;
+//    }
 //}
+

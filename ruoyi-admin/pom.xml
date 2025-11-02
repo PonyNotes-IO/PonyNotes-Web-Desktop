@@ -145,6 +145,10 @@
             <version>1.59</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
     </dependencies>
     <repositories>
         <!-- 优先从中央仓库下载微信支付SDK -->

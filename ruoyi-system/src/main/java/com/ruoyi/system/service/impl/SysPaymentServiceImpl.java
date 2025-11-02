@@ -37,6 +37,6 @@ public class SysPaymentServiceImpl  implements ISysPaymentService {
 
     @Override
     public List<PaymentOrder> selectExpiredOrders(String pending, Date expireTime) {
-        return sysPaymentOrderMapper.selectExpiredOrders( pending,  expireTime);
+        return sysPaymentOrderMapper.selectExpiredOrders( expireTime);
     }
 }
