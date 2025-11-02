@@ -67,6 +67,7 @@
 <script>
 import { ref, computed } from 'vue';
 import axios from 'axios'; // 引入axios用于接口请求
+import { createPayment, pollPaymentStatus } from '@/api/system/payment'
 
 export default {
   props: {
@@ -99,17 +100,49 @@ export default {
       generatePaymentQrCode(type);
     };
 
-    // 生成支付二维码（调用后端接口）
+    // 生成支付二维码
     const generatePaymentQrCode = async (type) => {
       try {
-        const res = await axios.post('/api/create-payment', {
+        const response = await createPayment({
           amount: props.amount,
           paymentType: type
         });
-        if (type === 'wechat') {
-          wechatQrCode.value = res.data.qrCodeUrl;
+        
+        if (response.code === 200) {
+          const qrCodeUrl = response.data.qrCodeUrl;
+          if (type === 'wechat') {
+            wechatQrCode.value = qrCodeUrl;
+          } else {
+            alipayQrCode.value = qrCodeUrl;
+          }
+          
+          // 开始轮询支付状态
+          pollPaymentStatus(
+            response.data.orderNo,
+            () => {
+              // 支付成功
+              alert('支付成功！');
+              this.$emit('paymentSuccess', {
+                orderNo: response.data.orderNo,
+                amount: props.amount,
+                paymentType: type
+              });
+            },
+            (error) => {
+              // 支付失败
+              if (error === 'expired') {
+                alert('支付已超时，请重新发起支付');
+              } else {
+                alert('支付失败，请重试');
+              }
+            },
+            () => {
+              // 轮询超时
+              alert('支付超时，请重新发起支付');
+            }
+          );
         } else {
-          alipayQrCode.value = res.data.qrCodeUrl;
+          alert(response.msg || '创建支付订单失败');
         }
       } catch (err) {
         console.error('生成支付二维码失败:', err);
@@ -118,7 +151,7 @@ export default {
     };
 
     // 处理支付
-    const handlePayment = async () => {
+    const handlePayment = () => {
       // 验证：必须同意协议且选择支付方式
       if (!isAgreed.value) {
         alert('请先确认《会员服务》和《隐私协议》');
@@ -129,32 +162,10 @@ export default {
         return;
       }
 
+      // 开始支付流程
       isLoading.value = true;
-      try {
-        // 调用后端接口确认支付状态（实际项目中会轮询查询）
-        const res = await axios.get('/api/check-payment', {
-          params: {
-            paymentType: selectedPayment.value,
-            amount: props.amount
-          }
-        });
-        
-        if (res.data.success) {
-          alert('支付成功！');
-          // 通知父组件支付成功
-          this.$emit('paymentSuccess', {
-            amount: props.amount,
-            paymentType: selectedPayment.value
-          });
-        } else {
-          alert('支付尚未完成，请扫码支付');
-        }
-      } catch (err) {
-        console.error('支付查询失败:', err);
-        alert('支付过程出错，请重试');
-      } finally {
-        isLoading.value = false;
-      }
+      // 生成二维码
+      generatePaymentQrCode(selectedPayment.value);
     };
 
     return {
