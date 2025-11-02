@@ -4,34 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="be08aca9-bff7-4bf9-a571-0b98117d14bb" name="Changes" comment="">
+    <list default="true" id="3e249690-951f-4402-9c5c-bbab9bed7dcc" name="更改" comment="多数据源mybatis插件注入,xmbj数据库的对象demo,注释掉原有的数据源切面">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/SysLoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/SysLoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-common/src/main/java/com/ruoyi/common/core/domain/model/LoginUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-common/src/main/java/com/ruoyi/common/core/domain/model/LoginUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/web/service/SysLoginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/web/service/SysLoginService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/service/ISysUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/service/ISysUserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/SysUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/SysUserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/node_modules/.pnpm-workspace-state-v1.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/node_modules/.pnpm-workspace-state-v1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/node_modules/.vue-global-types/vue_2.7_0.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/assets/common.css" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/assets/common.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/components/index-pic-tab.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/components/index-pic-tab.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/components/xm-nav-bar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/components/xm-nav-bar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/utils/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/utils/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/utils/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/utils/request.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/download/assets/index.less" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/download/assets/index.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/download/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/download/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/index/assets/img/img_1.png" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/index/assets/img/img_1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/index/assets/index.less" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/index/assets/index.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/index/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/index/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/login/assets/login.css" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/login/assets/login.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/login/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/login/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/login/login_reset_password.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/login/login_reset_password.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/login/login_set_password.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/login/login_set_password.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/login/login_verify_code.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/login/login_verify_code.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/login/login_with_password.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/login/login_with_password.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/price/assets/index.less" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/price/assets/index.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/price/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/price/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-system/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,207 +19,47 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="localRepository" value="D:\repository" />
-        <option name="mavenHome" value="D:/apache-maven-3.5.0" />
-        <option name="useMavenConfig" value="true" />
-        <option name="userSettingsFile" value="D:\apache-maven-3.5.0\conf\settings.xml" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
-  <component name="MavenRunner">
-    <option name="skipTests" value="true" />
-    <option name="vmOptions" value="-Dfile.encoding=UTF-8" />
-  </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 5
-}</component>
-  <component name="ProjectId" id="33U7bhDx7ybGRMWYJO7LQfeQQVW" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="34rdaIOLyJwc36W5LW2HLs5DW3B" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.RuoYiApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;Maven.ruoyi [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.ruoyi [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.ruoyi-system [package].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature__all__fix&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.ruoyi [org.apache.maven.plugins:maven-clean-plugin:3.2.0:clean].executor": "Run",
+    "Maven.ruoyi [package].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "feature__payment",
+    "kotlin-language-version-configured": "true"
   }
-}</component>
-  <component name="RunManager" selected="Application.RuoYiApplication">
-    <configuration name="RuoYiApplication" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.ruoyi.RuoYiApplication" />
-      <module name="ruoyi-admin" />
-      <option name="PROGRAM_PARAMETERS" value="--spring.profiles.active=mydev" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.ruoyi.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+}]]></component>
+  <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
+      <module name="ruoyi-system" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="ruoyi-system" />
       <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ruoyi [package]" type="MavenRunConfiguration" factoryName="Maven">
-      <MavenSettings>
-        <option name="myGeneralSettings">
-          <MavenGeneralSettings>
-            <option name="alwaysUpdateSnapshots" value="false" />
-            <option name="checksumPolicy" value="NOT_SET" />
-            <option name="failureBehavior" value="NOT_SET" />
-            <option name="localRepository" value="" />
-            <option name="mavenHome" value="Bundled (Maven 3)" />
-            <option name="nonRecursive" value="false" />
-            <option name="outputLevel" value="INFO" />
-            <option name="pluginUpdatePolicy" value="DEFAULT" />
-            <option name="printErrorStackTraces" value="false" />
-            <option name="showDialogWithAdvancedSettings" value="false" />
-            <option name="threads" />
-            <option name="useMavenConfig" value="true" />
-            <option name="usePluginRegistry" value="false" />
-            <option name="userSettingsFile" value="" />
-            <option name="workOffline" value="false" />
-          </MavenGeneralSettings>
-        </option>
-        <option name="myRunnerSettings">
-          <MavenRunnerSettings>
-            <option name="delegateBuildToMaven" value="false" />
-            <option name="environmentProperties">
-              <map />
-            </option>
-            <option name="jreName" value="#USE_PROJECT_JDK" />
-            <option name="mavenProperties">
-              <map />
-            </option>
-            <option name="passParentEnv" value="true" />
-            <option name="runMavenInBackground" value="true" />
-            <option name="skipTests" value="true" />
-            <option name="vmOptions" value="-Dfile.encoding=UTF-8" />
-          </MavenRunnerSettings>
-        </option>
-        <option name="myRunnerParameters">
-          <MavenRunnerParameters>
-            <option name="profiles">
-              <set />
-            </option>
-            <option name="goals">
-              <list>
-                <option value="package" />
-              </list>
-            </option>
-            <option name="pomFileName" value="pom.xml" />
-            <option name="profilesMap">
-              <map />
-            </option>
-            <option name="resolveToWorkspace" value="false" />
-            <option name="workingDirPath" value="$PROJECT_DIR$" />
-          </MavenRunnerParameters>
-        </option>
-      </MavenSettings>
       <method v="2" />
     </configuration>
-    <list>
-      <item itemvalue="Application.RuoYiApplication" />
-      <item itemvalue="Maven.ruoyi [package]" />
-    </list>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="be08aca9-bff7-4bf9-a571-0b98117d14bb" name="Changes" comment="" />
-      <created>1759359870469</created>
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="3e249690-951f-4402-9c5c-bbab9bed7dcc" name="更改" comment="多数据源mybatis插件注入,xmbj数据库的对象demo,注释掉原有的数据源切面" />
+      <created>1761975689210</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1759359870469</updated>
+      <updated>1761975689210</updated>
     </task>
     <servers />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/SysLoginController.java</url>
-          <line>331</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ruoyi-common/src/main/java/com/ruoyi/common/filter/RepeatableFilter.java</url>
-          <line>33</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/web/service/SysPasswordService.java</url>
-          <line>46</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/web/service/SysPasswordService.java</url>
-          <line>47</line>
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/web/service/SysPasswordService.java</url>
-          <line>49</line>
-          <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/web/service/UserDetailsServiceImpl.java</url>
-          <line>56</line>
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/web/service/UserDetailsServiceImpl.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="34" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/web/service/UserDetailsServiceImpl.java</url>
-          <line>50</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

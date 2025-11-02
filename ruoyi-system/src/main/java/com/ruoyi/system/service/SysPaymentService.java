@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
 
+import java.math.BigDecimal;
+
 public interface SysPaymentService extends IService<PaymentOrder> {
     /**
      * 创建支付订单并生成二维码
