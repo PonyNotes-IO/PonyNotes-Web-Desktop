@@ -15,5 +15,5 @@ public interface SysPaymentOrderMapper {
 
     int  updateById(PaymentOrder order);
 
-    List<PaymentOrder> selectExpiredOrders(String pending, Date expireTime);
+    List<PaymentOrder> selectExpiredOrders(Date expireTime);
 }
