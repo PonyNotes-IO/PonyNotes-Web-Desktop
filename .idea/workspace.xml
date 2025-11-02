@@ -5,23 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="be08aca9-bff7-4bf9-a571-0b98117d14bb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/util/OrderNoGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ruoyi-quartz/src/main/java/com/ruoyi/quartz/task/PaymentOrderTimer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/service/ISysPaymentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/config/WechatPayCofig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/service/impl/PaymentServiceImplbackup.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/cert/apiclient_cert.p12" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/cert/apiclient_cert.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/cert/apiclient_key.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/cert/证书使用说明.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-admin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/config/AlipayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/config/AlipayConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/config/WechatPayConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/config/WechatPayConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/PaymentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/service/PaymentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/service/impl/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/service/impl/PaymentServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-quartz/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-quartz/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/domain/PaymentOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/domain/PaymentOrder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/domain/vo/PaymentQrCodeVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/domain/vo/PaymentQrCodeVO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/mapper/SysPaymentOrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/mapper/SysPaymentOrderMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/service/SysPaymentService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/SysPaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/SysPaymentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/resources/mapper/system/SysPaymentOrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/resources/mapper/system/SysPaymentOrderMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-notebook/node_modules/.pnpm-workspace-state-v1.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/node_modules/.pnpm-workspace-state-v1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-notebook/src/views/order/payment_section.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web-notebook/src/views/order/payment_section.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,8 +31,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -50,8 +50,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="localRepository" value="D:\repository" />
-        <option name="userSettingsFile" value="D:\apache-maven-3.5.0\conf\settings.xml" />
+        <option name="useMavenConfig" value="true" />
       </MavenGeneralSettings>
     </option>
   </component>
@@ -82,12 +81,21 @@
     &quot;git-widget-placeholder&quot;: &quot;feature__payment&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;I:/gu/PonyNotes-Web-Desktop&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="I:\gu\PonyNotes-Web-Desktop\ruoyi-admin\src\main\resources\cert" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ruoyi.web.service.impl" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.RuoYiApplication">
     <configuration name="RuoYiApplication" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.ruoyi.RuoYiApplication" />
@@ -99,17 +107,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -273,6 +270,21 @@
           <url>file://$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/web/service/UserDetailsServiceImpl.java</url>
           <line>50</line>
           <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/service/impl/PaymentServiceImpl.java</url>
+          <line>168</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/PaymentController.java</url>
+          <line>42</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/service/impl/PaymentServiceImpl.java</url>
+          <line>191</line>
+          <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -34,20 +34,31 @@ public class AlipayConfig {
     @Value("${payment.alipay.notify-url}")
     private String notifyUrl;
 
+    // 新增超时时间配置（单位：毫秒）
+    @Value("${payment.alipay.connect-timeout:30000}")
+    private int connectTimeout;
+
+    @Value("${payment.alipay.read-timeout:30000}")
+    private int readTimeout;
+
     /**
      * 初始化支付宝客户端
      */
     @Bean
     public AlipayClient alipayClient() {
-        return new DefaultAlipayClient(
+        DefaultAlipayClient client = new DefaultAlipayClient(
                 gatewayUrl,
                 appId,
                 privateKey,
                 "json",
                 CHARSET,
                 publicKey,
-                "RSA2"  // 签名算法
+                "RSA2"
         );
+        // 设置超时时间
+        client.setConnectTimeout(connectTimeout);
+        client.setReadTimeout(readTimeout);
+        return client;
     }
 
 

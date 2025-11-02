@@ -4,6 +4,7 @@ package com.ruoyi.web.controller.system;
 import com.alipay.api.internal.util.file.IOUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
 import com.ruoyi.web.service.PaymentService;
@@ -12,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/payment")
 public class PaymentController {
 
-    private final Logger log = LoggerFactory.getLogger(PaymentController.class);
+    private Logger log = LoggerFactory.getLogger(PaymentController.class);
     @Autowired
     private PaymentService paymentService;
 
@@ -34,6 +34,7 @@ public class PaymentController {
      * 创建支付订单并生成二维码
      */
     @PostMapping("/create")
+    @Anonymous
     public AjaxResult createPayment(
             @RequestParam BigDecimal amount,
             @RequestParam String paymentType) {
@@ -49,6 +50,7 @@ public class PaymentController {
      * 查询支付状态
      */
     @GetMapping("/status")
+    @Anonymous
     public AjaxResult checkPaymentStatus(@RequestParam String orderNo) {
         String status = paymentService.checkPaymentStatus(orderNo);
         return AjaxResult.success(status);
@@ -58,6 +60,7 @@ public class PaymentController {
      * 支付宝回调接口
      */
     @PostMapping("/callback/alipay")
+    @Anonymous
     public String alipayCallback(HttpServletRequest request) {
         try {
             // 1. 将request参数转换为Map
@@ -102,24 +105,13 @@ public class PaymentController {
      * 微信支付回调接口
      */
     @PostMapping("/callback/wechat")
+    @Anonymous
     public String wechatCallback(HttpServletRequest request) {
         try {
             // 1. 读取请求body和header
             String body = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
-            String timestamp = request.getHeader("Wechatpay-Timestamp");
-            String nonce = request.getHeader("Wechatpay-Nonce");
-            String signature = request.getHeader("Wechatpay-Signature");
-            String serial = request.getHeader("Wechatpay-Serial");
-
-            // 2. 验签
-            Map<String, String> wechatParams = new HashMap<>();
-            wechatParams.put("body", body);
-            wechatParams.put("timestamp", timestamp);
-            wechatParams.put("nonce", nonce);
-            wechatParams.put("signature", signature);
-            wechatParams.put("serial", serial);
+            Map<String, String> wechatParams  = paymentService.getWechatParams(request);
             boolean verifySuccess = paymentService.verifySign("wechat", null, wechatParams);
-
             if (!verifySuccess) {
                 log.error("微信支付回调验签失败");
                 return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[签名验证失败]]></return_msg></xml>";
@@ -145,57 +137,6 @@ public class PaymentController {
             return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[系统异常]]></return_msg></xml>";
         }
     }
-
-    // @PostMapping("/callback/alipay")
-    // public String alipayNotify(HttpServletRequest request) {
-    //     // 1) 将 request.getParameterMap() 转为 Map<String,String>
-    //     Map<String,String> params = new HashMap<>();
-    //     Map<String,String[]> requestParams = request.getParameterMap();
-    //     for (String name : requestParams.keySet()) {
-    //         String[] values = requestParams.get(name);
-    //         String valueStr = String.join(",", values);
-    //         params.put(name, valueStr);
-    //     }
-    //     // 2) 验签
-    //     boolean ok = paymentService.verifySign("alipay",  null, params);
-    //     if (ok) {
-    //         String outTradeNo = params.get("out_trade_no");
-    //         paymentService.handlePaymentCallback(outTradeNo, "alipay");
-    //         return "success"; // 必须是支付宝指定的 plain text
-    //     } else {
-    //         return "fail";
-    //     }
-    // }
-    // @PostMapping("/callback/wechat")
-    // public String wechatNotify(HttpServletRequest request) throws IOException {
-    //     String body = StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8);
-    //     String timestamp = request.getHeader("Wechatpay-Timestamp");
-    //     String nonce = request.getHeader("Wechatpay-Nonce");
-    //     String signature = request.getHeader("Wechatpay-Signature");
-    //     String serial = request.getHeader("Wechatpay-Serial");
-
-    //     // 传给 wechat verify 方法（需要你完善实现）
-    //     Map<String, String> wechatNotifyParams = new HashMap<>();
-    //     wechatNotifyParams.put("body", body);
-    //     wechatNotifyParams.put("timestamp", timestamp);
-    //     wechatNotifyParams.put("nonce", nonce);
-    //     wechatNotifyParams.put("signature", signature);
-    //     wechatNotifyParams.put("serial", serial);
-    //     boolean ok = paymentService.verifySign("wechat", null, wechatNotifyParams);
-
-    //     if (ok) {
-    //         // 解析 body JSON 获取 out_trade_no
-    //         String outTradeNo = parseOutTradeNoFromJson(body);
-    //         if (outTradeNo == null || outTradeNo.isEmpty()) {
-    //             log.error("无法从微信通知中解析出 out_trade_no, body={}", body);
-    //             return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[MISSING out_trade_no]]></return_msg></xml>";
-    //         }
-    //         paymentService.handlePaymentCallback(outTradeNo, "wechat");
-    //         return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
-    //     } else {
-    //         return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[SIGNATURE FAIL]]></return_msg></xml>";
-    //     }
-    // }
 
     /**
      * 从微信通知的 JSON 文本中解析 out_trade_no 字段。

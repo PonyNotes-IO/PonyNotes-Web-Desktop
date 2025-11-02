@@ -1,6 +1,8 @@
 package com.ruoyi.web.service;
 
 import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
+
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -24,4 +26,6 @@ public interface PaymentService {
      * 验证支付回调签名
      */
     boolean verifySign(String paymentType, String orderNo, Map<String, String> sign);
+
+    Map<String, String> getWechatParams(HttpServletRequest request);
 }
