@@ -8,9 +8,10 @@ import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.system.service.ISysPaymentService;
 import com.ruoyi.web.config.AlipayConfig;
-import com.ruoyi.web.config.WechatPayConfig;
+//import com.ruoyi.web.config.WechatPayConfig;
 import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
+import com.ruoyi.web.config.WechatPayConfiguration;
 import com.ruoyi.web.service.PaymentService;
 import com.ruoyi.web.util.OrderNoGenerator;
 import com.wechat.pay.java.service.payments.model.Transaction;
@@ -36,7 +37,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private NativePayService wechatNativePayService;  // 微信Native支付服务
     @Autowired
-    private WechatPayConfig wechatPayConfig;          // 微信支付配置
+    private WechatPayConfiguration wechatPayConfig;          // 微信支付配置
     @Autowired
     private AlipayClient alipayClient;                // 支付宝客户端
     @Autowired

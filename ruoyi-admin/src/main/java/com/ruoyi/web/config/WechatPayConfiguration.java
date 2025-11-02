@@ -21,8 +21,6 @@ public class WechatPayConfiguration {
 
     Logger logger = LoggerFactory.getLogger(WechatPayConfiguration.class);
 
-    Logger logger = LoggerFactory.getLogger(WechatPayConfig.class);
-
     @Value("${payment.wechat.mch-id}")
     private String mchId;
 

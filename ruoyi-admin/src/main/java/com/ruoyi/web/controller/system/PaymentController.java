@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
-import com.ruoyi.web.config.WechatPayConfig;
 import com.ruoyi.web.service.PaymentService;
 
 import org.slf4j.Logger;
@@ -27,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/payment")
 public class PaymentController {
 
-    private Logger log = LoggerFactory.getLogger(WechatPayConfig.class);
+    private final Logger log = LoggerFactory.getLogger(PaymentController.class);
     @Autowired
     private PaymentService paymentService;
 
