@@ -17,7 +17,8 @@ import ChangePassword from '@/views/mobile/account/change_password.vue'
 import BindEmail from '@/views/mobile/account/bind_email.vue'
 
 Vue.use(VueRouter)
-
+// 导入设备检测工具
+import { deviceDetector } from '../util/device-utils'
 const routes = [
   {
     path: '/mobile/home',
@@ -111,9 +112,27 @@ const routes = [
   }
 ]
 
+
 const mobileRouter = new VueRouter({
   mode: 'history',
   routes
 })
+mobileRouter.beforeEach(async (to, from, next) => {
+  // 设置页面标题
+  document.title = '小马笔记';
+  
+  // 检测设备类型
+  const deviceType = await deviceDetector.detect();
+  const isMobilePath = to.path.startsWith('/mobile');
+  
+  // 根据设备类型决定重定向
+  if (deviceType === 'mobile' && !isMobilePath && to.path !== '/') {
+    next('/mobile/home');
+  } else if (deviceType === 'pc' && isMobilePath) {
+    next('/index');
+  } else {
+    next();
+  }
+});
 
 export default mobileRouter
