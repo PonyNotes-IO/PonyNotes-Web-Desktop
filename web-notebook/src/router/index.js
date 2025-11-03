@@ -24,6 +24,9 @@ import accunt_manage from '../views/account/account_manage.vue'
 
 Vue.use(VueRouter)
 
+// 导入设备检测工具
+import { deviceDetector } from '../util/device-utils'
+
 const routes = [
   {
     path: '/',
@@ -138,10 +141,22 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  // document.title = 'ponynote';
+router.beforeEach(async (to, from, next) => {
+  // 设置页面标题
   document.title = '小马笔记';
-  next(); // 必须调用next()，否则路由不会继续跳转
+  
+  // 检测设备类型
+  const deviceType = await deviceDetector.detect();
+  const isMobilePath = to.path.startsWith('/mobile');
+  
+  // 根据设备类型决定重定向
+  if (deviceType === 'mobile' && !isMobilePath && to.path !== '/') {
+    next('/mobile/home');
+  } else if (deviceType === 'pc' && isMobilePath) {
+    next('/index');
+  } else {
+    next();
+  }
 });
 
 export default router
