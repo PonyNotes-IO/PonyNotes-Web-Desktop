@@ -1,3 +1,5 @@
+server:
+  port: 9081
 # 数据源配置
 spring:
   datasource:
@@ -12,10 +14,11 @@ spring:
       # 从库数据源
       slave:
         # 从数据源开关/默认关闭
-        enabled: false
-        url:
-        username:
-        password:
+        enabled: true
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://8.152.101.166:5432/xiaomabiji
+        username: xiaomabiji
+        password: Xmbj20251012
       # 初始连接数
       initialSize: 5
       # 最小连接池数量

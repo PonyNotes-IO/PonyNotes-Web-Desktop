@@ -7,5 +7,7 @@ target/
 */target/
 node_modules/
 web-notebook/node_modules/
+web-notebook/dist/
+logs
 .class
 .workspace.xml
