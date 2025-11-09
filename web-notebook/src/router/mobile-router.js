@@ -21,6 +21,15 @@ Vue.use(VueRouter)
 import { deviceDetector } from '../util/device-utils'
 const routes = [
   {
+    path: '/',
+    beforeEnter: (to, from, next) => {
+      // 如果目标 URL 包含 /noteshare，则不重定向到 /index
+      if (to.fullPath.includes('/noteshare')) {
+        next();
+      }
+    }
+  },
+  {
     path: '/mobile/home',
     name: 'MobileHome',
     component: MobileHome,
@@ -117,7 +126,6 @@ const routes = [
     meta: { title: '小马笔记 - 共享连接' }
   } 
 ]
-
 
 const mobileRouter = new VueRouter({
   mode: 'hash',

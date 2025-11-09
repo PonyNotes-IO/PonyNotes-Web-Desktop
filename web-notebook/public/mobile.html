@@ -22,8 +22,10 @@
       // 支持 hash 路由下的 noteshare 访问
       var hashPath = window.location.hash || '';
       var noteshare = hashPath.includes('/noteshare');
-      if (deviceType === 'mobile' && !window.location.pathname.startsWith('/mobile') && !noteshare) {
-        window.location.href = '/mobile/home';
+      
+      // 如果是移动设备且当前不是移动端页面，重定向到移动端首页
+      if (deviceType === 'mobile' && !window.location.pathname.endsWith('/mobile.html') && !noteshare) {
+        window.location.href = '/mobile.html#/mobile/home';
       }
     </script>
     <style type="text/css">

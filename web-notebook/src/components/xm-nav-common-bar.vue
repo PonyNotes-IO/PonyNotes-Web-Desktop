@@ -1,7 +1,7 @@
 <template>
     <div class="xm-index-nav-bar" :class="{ 'is-sticky': isSticky }">
       <div class="content-bar">
-        <div class="box_23 flex-row group_1">
+        <div class="box_23 flex-row group_1 justify-content" >
           <img @click="navTo('/')" class="label_8" referrerpolicy="no-referrer"
             src="./img/logo.png" />
           <span class="text_65" @click="navTo('/')">小马笔记</span>
@@ -14,9 +14,9 @@
               <span class="user-info">{{ truncateUserInfo() }}</span> <!-- 示例：显示手机号前几位，实际可从接口获取 -->
             </div>
           </div>
-          <div class="text-wrapper_1 flex-col justify-content: center" v-if="showLoginButton">
+          <div class="text-wrapper_1 flex-col " v-if="showLoginButton">
             <span class="text_1" @click="navTo('/login')">注册/登录</span>
-          </div>
+          </div> 
 
           <!-- <div class="text-wrapper_2 flex-col"><span class="text_2" @click="navTo('/register')">注册</span></div> -->
         </div>
@@ -59,15 +59,15 @@ export default {
       // 首页特殊处理
       if (deviceType === 'mobile'  || isMobile) {
         if ( url === '/index') {
-          this.$router.push('/mobile/home');
+          this.$router.push(url.replace('/#/', '/mobile/home'));
         } else if (url === '/login') {
-          this.$router.push('/mobile/login');
+          this.$router.push(url.replace('/#/','/mobile/login'));
         } else if (url === '/price') {
-          this.$router.push('/mobile/price');
+          this.$router.push(url.replace('/#/','/mobile/price'));
         } else if (url === '/download') {
-          this.$router.push('/mobile/download');
+          this.$router.push(url.replace('/#/','/mobile/download'));
         } else {
-         this.$router.push('/mobile/home');
+         this.$router.push(url.replace('/#/','/mobile/home'));
         }
       } else {
         this.$router.push(url);
@@ -128,6 +128,10 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+:root {
+  font-size: calc(100vw / 13); // 1300px视口下，1rem = 100px，便于换算
+}
+
 .xm-index-nav-bar {
   height: 6.5vw; /* 85px 转换为vw（基于1300px基准视口） */
   padding-top: 1.9vw; /* 25px 转换为vw */
@@ -183,18 +187,18 @@ export default {
     }
     
     .text_66 {
-      width: 2.7vw; /* 35px 转换为vw */
+      // width: 2.7vw; /* 35px 转换为vw */
       height: 1.9vw; /* 25px 转换为vw */
       color: rgba(255, 255, 255, 1);
       font-size: 1.3vw; /* 17px 转换为vw */
-      font-family: AlibabaPuHuiTi_3_65_Medium;
+      font-family: AlimamaFangYuanTiVF-SemiBold-Round;
       font-weight: NaN;
       text-align: left;
       white-space: nowrap;
       line-height: 1.9vw; /* 25px 转换为vw */
       // margin-left: 50vw; /* 650px 转换为vw */
       margin-left:35%;
-      margin-right: 2.3vw; /* 30px 转换为vw */
+      margin-right: 1.3vw; /* 30px 转换为vw */
       margin-top: 0.3vw; /* 4px 转换为vw */
       
       &.active {
@@ -205,7 +209,7 @@ export default {
     }
     
     .text_67 {
-      width: 2.7vw; /* 35px 转换为vw */
+      // width: 2.7vw; /* 35px 转换为vw */
       height: 1.9vw; /* 25px 转换为vw */
       color: rgba(255, 255, 255, 1);
       font-size: 1.3vw; /* 17px 转换为vw */
@@ -214,7 +218,7 @@ export default {
       text-align: left;
       white-space: nowrap;
       line-height: 1.9vw; /* 25px 转换为vw */
-      margin-left: 0.2vw; /* 3px 转换为vw */
+      // margin-left: 0.2vw; /* 3px 转换为vw */
       margin-top: 0.3vw; /* 4px 转换为vw */
       
       &.active {
@@ -225,7 +229,7 @@ export default {
     }
     
     .text_68 {
-      width: 2.7vw; /* 35px 转换为vw */
+      // width: 2.7vw; /* 35px 转换为vw */
       height: 1.9vw; /* 25px 转换为vw */
       color: rgba(255, 255, 255, 1);
       font-size: 1.3vw; /* 17px 转换为vw */
@@ -234,7 +238,7 @@ export default {
       text-align: left;
       white-space: nowrap;
       line-height: 1.9vw; /* 25px 转换为vw */
-      margin-left: 2.7vw; /* 35px 转换为vw */
+      margin-left: 1.3vw; /* 35px 转换为vw */
       margin-right: 14.6vw; /* 190px 转换为vw */
       margin-top: 0.3vw; /* 4px 转换为vw */
       
@@ -251,12 +255,13 @@ export default {
       background-color: rgba(248, 149, 117, 1);
       border-radius: 0.08vw; /* 1px 转换为vw */
       height: 2.7vw; /* 35px 转换为vw */
-      // width: 8.4vw; /* 110px 转换为vw */
       width: 8.5vw;
-      margin-right: 3.8vw; /* 50px 转换为vw */
+      margin-right: 5vw; /* 50px 转换为vw */
+      align-items: center;
+      justify-content: center;
       
       .text_1 {
-        width: 2.7vw; /* 35px 转换为vw */
+        // width: 2.7vw; /* 35px 转换为vw */
         height: 1.9vw; /* 25px 转换为vw */
         color: rgba(255, 255, 255, 1);
         font-size: 1.3vw; /* 17px 转换为vw */
@@ -266,7 +271,7 @@ export default {
         text-align: center;
         white-space: nowrap;
         line-height: 1.9vw; /* 25px 转换为vw */
-        margin: 0.4vw 0 0 1.4vw; /* 5px 0 0 18px 转换为vw */
+        // margin: 0.4vw 0 0 1.4vw; /* 5px 0 0 18px 转换为vw */
       }
     }
     
