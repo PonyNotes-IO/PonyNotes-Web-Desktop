@@ -255,8 +255,8 @@ export default {
       background-color: rgba(248, 149, 117, 1);
       border-radius: 0.08vw; /* 1px 转换为vw */
       height: 2.7vw; /* 35px 转换为vw */
-      width: 8.5vw;
-      margin-right: 5vw; /* 50px 转换为vw */
+      width: 10vw;
+      margin-right: 3vw; /* 50px 转换为vw */
       align-items: center;
       justify-content: center;
       
