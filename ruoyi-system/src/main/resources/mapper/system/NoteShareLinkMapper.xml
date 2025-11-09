@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.NoteShareMapper">
+
+    <resultMap type="NoteShare" id="NoteShareResultMap">
+        <id column="share_id" property="shareId"/>
+        <result column="note_id" property="noteId"/>
+        <result column="note_version" property="noteVersion"/>
+        <result column="author_id" property="authorId"/>
+        <result column="share_time" property="shareTime"/>
+        <result column="expire_time" property="expireTime"/>
+        <result column="access_type" property="accessType"/>
+        <result column="access_password" property="accessPassword"/>
+        <result column="share_token" property="shareToken"/>
+        <result column="is_active" property="active"/>
+        <result column="access_count" property="accessCount"/>
+    </resultMap>
+
+    <select id="selectByShareId" resultMap="NoteShareResultMap">
+        SELECT share_id, note_id, note_version, author_id, share_time, expire_time,
+        access_type, access_password, share_token, is_active, access_count
+        FROM note_shares
+        WHERE share_id = #{shareId}
+    </select>
+
+    <select id="selectByShareIdAndToken" resultMap="NoteShareResultMap">
+        SELECT share_id, note_id, note_version, author_id, share_time, expire_time,
+        access_type, access_password, share_token, is_active, access_count
+        FROM note_shares
+        WHERE share_id = #{shareId} AND share_token = #{shareToken}
+    </select>
+
+    <select id="selectByNoteId" resultMap="NoteShareResultMap">
+        SELECT share_id, note_id, note_version, author_id, share_time, expire_time,
+        access_type, access_password, share_token, is_active, access_count
+        FROM note_shares
+        WHERE note_id = #{noteId}
+        ORDER BY share_time DESC
+    </select>
+
+    <select id="selectByAuthorId" resultMap="NoteShareResultMap">
+        SELECT share_id, note_id, note_version, author_id, share_time, expire_time,
+        access_type, access_password, share_token, is_active, access_count
+        FROM note_shares
+        WHERE author_id = #{authorId}
+        ORDER BY share_time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.system.domain.NoteShare">
+        INSERT INTO note_shares (share_id, note_id, note_version, author_id, share_time, expire_time,
+        access_type, access_password, share_token, is_active, access_count)
+        VALUES (#{shareId}, #{noteId}, #{noteVersion}, #{authorId}, #{shareTime}, #{expireTime},
+        #{accessType}, #{accessPassword}, #{shareToken}, #{active}, #{accessCount})
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.system.domain.NoteShare">
+        UPDATE note_shares
+        SET note_version = #{noteVersion},
+        expire_time = #{expireTime},
+        access_type = #{accessType},
+        access_password = #{accessPassword},
+        is_active = #{active}
+        WHERE share_id = #{shareId}
+    </update>
+
+    <update id="updateActiveStatus">
+        UPDATE note_shares
+        SET is_active = #{isActive}
+        WHERE share_id = #{shareId}
+    </update>
+
+    <update id="incrementAccessCount">
+        UPDATE note_shares
+        SET access_count = access_count + 1
+        WHERE share_id = #{shareId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM note_shares
+        WHERE share_id = #{shareId}
+    </delete>
+
+    <delete id="deleteByNoteId">
+        DELETE FROM note_shares
+        WHERE note_id = #{noteId}
+    </delete>
+
+    <select id="countByAuthorId" resultType="int">
+        SELECT COUNT(*)
+        FROM note_shares
+        WHERE author_id = #{authorId}
+    </select>
+</mapper>

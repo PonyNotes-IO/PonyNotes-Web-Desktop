@@ -308,26 +308,19 @@
       </div>
       <div class="text-wrapper_11">
         <span class="text_47">
-          8、我在电脑端购买了订阅，如何在&nbsp;iPad&nbsp;等设
-          <br />
-          备上恢复使用？
+          8、我在电脑端购买了订阅，如何在&nbsp;iPad&nbsp;等设备上恢复使用？
           <br />
         </span>
         <span class="paragraph">
           只需使用相同账号登录，系统将自动同步您的订阅权益。
           <br />
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;无论您通过&nbsp;官网、桌面端&nbsp;还是&nbsp;App&nbsp;端&nbsp;完成购
-          <br />
-          买，只要登录的是同一账户，订阅状态将在
-          <br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;各端同步；
+买，只要登录的是同一账户，订阅状态将在各端同步；
           <br />
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果未自动恢复，请前往&nbsp;「账户设置&nbsp;→&nbsp;恢复购
-          <br />
-          买」&nbsp;尝试手动同步；
+          买」尝试手动同步；
           <br />
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若仍未恢复，请确认&nbsp;iPad&nbsp;登录账号与购买账号
-          <br />
           一致，或联系客户支持协助处理。
           <br />
         </span>

@@ -15,10 +15,13 @@
         var isMobile = /Mobile|Android|iP(hone|od)|Windows Phone/i.test(ua);
         return isMobile ? 'mobile' : 'pc';
       }
-      
+
       // 页面加载前进行设备检测和重定向
       var deviceType = detectDevice();
-      if (deviceType === 'mobile' && !window.location.pathname.startsWith('/mobile')) {
+      // 支持 hash 路由下的 noteshare 访问
+      var hashPath = window.location.hash || '';
+      var noteshare = hashPath.includes('/noteshare');
+      if (deviceType === 'mobile' && !window.location.pathname.startsWith('/mobile') && !noteshare) {
         window.location.href = '/mobile/home';
       }
     </script>

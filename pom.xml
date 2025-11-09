@@ -24,7 +24,7 @@
         <bitwalker.version>1.19</bitwalker.version>
         <kaptcha.version>2.3.2</kaptcha.version>
         <swagger.version>2.9.2</swagger.version>
-        <pagehelper.boot.version>1.2.5</pagehelper.boot.version>
+        <pagehelper.boot.version>1.4.7</pagehelper.boot.version>
 <!--        <oshi.version>3.9.1</oshi.version>-->
         <oshi.version>6.1.5</oshi.version>
 <!--        <commons.io.version>2.5</commons.io.version>-->
@@ -54,6 +54,7 @@
             <artifactId>swagger-models</artifactId>
             <version>1.6.2</version>
         </dependency>
+
     </dependencies>
 
     <!-- 依赖声明 -->
@@ -132,6 +133,7 @@
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.boot.version}</version>
+
             </dependency>
 
             <!-- 获取系统信息 -->
@@ -303,7 +305,12 @@
                 <artifactId>javase</artifactId>
                 <version>3.5.1</version>
             </dependency>
-
+            <!--解析markdown 插件-->
+            <dependency>
+                <groupId>com.github.rjeschke</groupId>
+                <artifactId>txtmark</artifactId>
+                <version>0.13</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

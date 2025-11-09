@@ -15,7 +15,7 @@ import Account from '@/views/mobile/account/account.vue'
 import ChangePhone from '@/views/mobile/account/change_phone.vue'
 import ChangePassword from '@/views/mobile/account/change_password.vue'
 import BindEmail from '@/views/mobile/account/bind_email.vue'
-
+import noteshare from '@/views/noteshare/noteshare.vue'
 Vue.use(VueRouter)
 // 导入设备检测工具
 import { deviceDetector } from '../util/device-utils'
@@ -109,26 +109,55 @@ const routes = [
     name: 'BindEmail',
     component: BindEmail,
     meta: { title: '小马笔记 - 绑定邮箱' }
-  }
+  },
+  {
+    path: '/noteshare',
+    name: 'mobile-noteshare',
+    component: noteshare,
+    meta: { title: '小马笔记 - 共享连接' }
+  } 
 ]
 
 
 const mobileRouter = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
+  base: process.env.BASE_URL,
   routes
 })
-mobileRouter.beforeEach(async (to, from, next) => {
-  // 设置页面标题
-  document.title = '小马笔记';
+// mobileRouter.beforeEach(async (to, from, next) => {
+//   // 设置页面标题
+//   document.title = '小马笔记';
+
+//   // 检测设备类型
+//   const deviceType = await deviceDetector.detect();
+//   const isMobilePath = to.path.startsWith('/mobile');
   
-  // 检测设备类型
+//   // 根据设备类型决定重定向
+//   if (deviceType === 'mobile' && !isMobilePath && to.path !== '/'&& !to.path.startsWith('/noteshare')) {
+//     next('/mobile/home');
+//   } else if (deviceType === 'pc' && isMobilePath  && !to.path.startsWith('/noteshare')) {
+//     next('/index');
+//   } else {
+//     next();
+//   }
+// });
+const isNoteSharePath = (path) => {
+  return path.replace(/\?.*/, '').endsWith('/noteshare') 
+      || path.replace(/\?.*/, '').includes('/noteshare/');
+};
+mobileRouter.beforeEach(async (to, from, next) => {
+  document.title = '小马笔记';
   const deviceType = await deviceDetector.detect();
   const isMobilePath = to.path.startsWith('/mobile');
-  
-  // 根据设备类型决定重定向
-  if (deviceType === 'mobile' && !isMobilePath && to.path !== '/') {
+  const noteshare = to.path.includes('noteshare');
+  console.log('noteshare path check:', noteshare);
+  if (isNoteSharePath(to.path)) {
+    next();
+    return; // 直接返回，不执行后续设备检测逻辑
+  }
+  if (deviceType === 'mobile' && !isMobilePath && to.path !== '/' && !noteshare) {
     next('/mobile/home');
-  } else if (deviceType === 'pc' && isMobilePath) {
+  } else if (deviceType === 'pc' && isMobilePath ) {
     next('/index');
   } else {
     next();

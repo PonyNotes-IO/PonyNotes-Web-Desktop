@@ -22,11 +22,11 @@
     <button class="text_3" v-if="showLogin" @click="handleLogin">注册/登录</button>
     <!-- <button class="text_4" v-if="showRegister" @click="handleRegister">注册</button> -->
     <!-- <button class="text_5" v-if="showMore" @click="handleMore">...</button> -->
-     <img
+     <!-- <img
           class="icon_1"
           referrerpolicy="no-referrer"
           :src="moreImage"
-        />
+        /> -->
   </div>
 </template>
 

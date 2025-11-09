@@ -15,8 +15,8 @@ spring:
                 enabled: true
                 driver-class-name: org.postgresql.Driver
                 url: jdbc:postgresql://8.152.101.166:5432/postgres
-                username: postgres
-                password: possport
+                username: xiaomabiji
+                password: Xmbj20251012
             # 初始连接数
             initialSize: 5
             # 最小连接池数量

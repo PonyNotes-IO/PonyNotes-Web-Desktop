@@ -20,7 +20,7 @@ import login_with_password from '../views/login/login_with_password.vue'
 import login_reset_password from '../views/login/login_reset_password.vue'
 import login_bind_phone from '../views/login/login_bind_phone.vue'
 import accunt_manage from '../views/account/account_manage.vue'
-
+import noteshare from '../views/noteshare/noteshare.vue'
 
 Vue.use(VueRouter)
 
@@ -30,7 +30,14 @@ import { deviceDetector } from '../util/device-utils'
 const routes = [
   {
     path: '/',
-    redirect: "/index"
+    beforeEnter: (to, from, next) => {
+      // 如果目标 URL 包含 /noteshare，则不重定向到 /index
+      if (to.fullPath.includes('/noteshare')) {
+        next();
+      } else {
+        next('/index');
+      }
+    }
   },
   {
     path: '/login',
@@ -132,6 +139,12 @@ const routes = [
     name: 'account',
     component: accunt_manage
   },
+  {
+    path: '/noteshare',
+    name: 'noteshare',
+    component: noteshare
+  },
+
 ]
 
 
@@ -140,7 +153,10 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-
+const isNoteSharePath = (path) => {
+  return path.replace(/\?.*/, '').endsWith('/noteshare') 
+      || path.replace(/\?.*/, '').includes('/noteshare/');
+};
 router.beforeEach(async (to, from, next) => {
   // 设置页面标题
   document.title = '小马笔记';
@@ -148,11 +164,19 @@ router.beforeEach(async (to, from, next) => {
   // 检测设备类型
   const deviceType = await deviceDetector.detect();
   const isMobilePath = to.path.startsWith('/mobile');
-  
+  // const noteshare = to.path.includes('noteshare');
   // 根据设备类型决定重定向
+  // if (noteshare) { 
+  //   next();
+  //   return;
+  // }
+  if (isNoteSharePath(to.path)) {
+    next();
+    return; 
+  }
   if (deviceType === 'mobile' && !isMobilePath && to.path !== '/') {
     next('/mobile/home');
-  } else if (deviceType === 'pc' && isMobilePath) {
+  } else if (deviceType === 'pc' && isMobilePath ) {
     next('/index');
   } else {
     next();
