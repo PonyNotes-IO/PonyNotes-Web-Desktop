@@ -87,7 +87,7 @@ export default {
       const startTime = Date.now();
       const appUrl = `appflowy-flutter://note?workspaceId=${this.workspaceId}&viewId=${this.viewId}`;
       // 下载页 URL
-      const downloadUrl = 'https://xiaomabiji.com/#/download';
+      const downloadUrl = 'https://manager.xiaomabiji.com/#/download';
       // 尝试唤起应用
       window.location.href = appUrl;
 
