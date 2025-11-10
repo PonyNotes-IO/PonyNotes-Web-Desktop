@@ -164,19 +164,17 @@ router.beforeEach(async (to, from, next) => {
   // 检测设备类型
   const deviceType = await deviceDetector.detect();
   const isMobilePath = to.path.startsWith('/mobile');
-  // const noteshare = to.path.includes('noteshare');
-  // 根据设备类型决定重定向
-  // if (noteshare) { 
-  //   next();
-  //   return;
-  // }
+  
   if (isNoteSharePath(to.path)) {
     next();
     return; 
   }
+  
+  // 如果是移动设备访问PC端页面，重定向到移动端首页
   if (deviceType === 'mobile' && !isMobilePath && to.path !== '/') {
-    next('/mobile/home');
-  } else if (deviceType === 'pc' && isMobilePath ) {
+    // 重定向到移动端HTML文件
+    window.location.href = '/mobile.html#/mobile/home';
+  } else if (deviceType === 'pc' && isMobilePath) {
     next('/index');
   } else {
     next();
