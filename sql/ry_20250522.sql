@@ -74,8 +74,7 @@ insert into sys_user values(2,  105, 'ry',    '小马笔记', '00', 'ry@qq.com',
 -- 3、岗位信息表
 -- ----------------------------
 drop table if exists sys_post;
-create table sys_post
-(
+create table sys_post (
   post_id       bigint(20)      not null auto_increment    comment '岗位ID',
   post_code     varchar(64)     not null                   comment '岗位编码',
   post_name     varchar(50)     not null                   comment '岗位名称',
