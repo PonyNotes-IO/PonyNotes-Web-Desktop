@@ -1,12 +1,13 @@
 package com.ruoyi.web.controller.system;
 
-
 import com.alipay.api.internal.util.file.IOUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.system.domain.PaymentOrder;
+import com.ruoyi.system.domain.vo.PaymentResult;
 import com.ruoyi.web.service.PaymentService;
 
 import org.slf4j.Logger;
@@ -31,16 +32,19 @@ public class PaymentController {
     private PaymentService paymentService;
 
     /**
-     * 创建支付订单并生成二维码
+     * 创建支付订单
      */
     @PostMapping("/create")
     @Anonymous
     public AjaxResult createPayment(
             @RequestParam BigDecimal amount,
-            @RequestParam String paymentType) {
+            @RequestParam String paymentType,
+            @RequestParam(required = false) String productName,
+            HttpServletRequest httpServletRequest) {
         try {
-            PaymentQrCodeVO qrCodeVO = paymentService.createPayment(amount, paymentType);
-            return AjaxResult.success(qrCodeVO);
+            PaymentResult paymentResult = paymentService.createPayment(amount, paymentType, productName,
+                    httpServletRequest);
+            return AjaxResult.success(paymentResult);
         } catch (IllegalArgumentException e) {
             return AjaxResult.error(e.getMessage());
         }
@@ -93,11 +97,32 @@ public class PaymentController {
                     return "success"; // 支付宝要求返回 success 字符串
                 }
             }
-            
+
             return "fail";
         } catch (Exception e) {
             log.error("支付宝回调处理异常", e);
             return "fail";
+        }
+    }
+
+    // 新增支付宝同步回调处理（用户支付成功后跳转）
+    @GetMapping("/return/alipay")
+    @Anonymous
+    public AjaxResult alipayReturn(HttpServletRequest request) {
+        Map<String, String> params = new HashMap<>();
+        Map<String, String[]> requestParams = request.getParameterMap();
+        for (String name : requestParams.keySet()) {
+            String[] values = requestParams.get(name);
+            String valueStr = StringUtils.join(values, ",");
+            params.put(name, valueStr);
+        }
+        String outTradeNo = params.get("out_trade_no");
+        // 验签
+        if (paymentService.verifySign("alipay", outTradeNo, params)) {
+            PaymentOrder paymentOrder = paymentService.getPaymentOrder(outTradeNo);
+            return AjaxResult.success("支付成功", paymentOrder);
+        } else {
+            return AjaxResult.error("签名验证失败");
         }
     }
 
@@ -110,7 +135,7 @@ public class PaymentController {
         try {
             // 1. 读取请求body和header
             String body = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
-            Map<String, String> wechatParams  = paymentService.getWechatParams(request);
+            Map<String, String> wechatParams = paymentService.getWechatParams(request);
             boolean verifySuccess = paymentService.verifySign("wechat", null, wechatParams);
             if (!verifySuccess) {
                 log.error("微信支付回调验签失败");
@@ -125,13 +150,13 @@ public class PaymentController {
 
             String outTradeNo = jsonNode.get("out_trade_no").asText();
             boolean success = paymentService.handlePaymentCallback(outTradeNo, "wechat");
-            
+
             if (success) {
                 return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
             } else {
                 return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[处理失败]]></return_msg></xml>";
             }
-            
+
         } catch (Exception e) {
             log.error("微信支付回调处理异常", e);
             return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[系统异常]]></return_msg></xml>";
@@ -155,7 +180,8 @@ public class PaymentController {
                 return root.get("out_trade_no").asText();
             }
             // 部分微信回调把实际信息放在 resource 下
-            if (root.has("resource") && root.get("resource").has("out_trade_no") && !root.get("resource").get("out_trade_no").isNull()) {
+            if (root.has("resource") && root.get("resource").has("out_trade_no")
+                    && !root.get("resource").get("out_trade_no").isNull()) {
                 return root.get("resource").get("out_trade_no").asText();
             }
             // 其他可能的嵌套或不同字段名可在此扩展

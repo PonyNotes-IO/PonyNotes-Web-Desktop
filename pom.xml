@@ -311,6 +311,11 @@
                 <artifactId>txtmark</artifactId>
                 <version>0.13</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-pay</artifactId>
+                <version>4.4.0</version> <!-- 版本可根据最新稳定版调整 -->
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

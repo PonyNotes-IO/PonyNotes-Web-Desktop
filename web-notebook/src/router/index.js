@@ -21,7 +21,8 @@ import login_reset_password from '../views/login/login_reset_password.vue'
 import login_bind_phone from '../views/login/login_bind_phone.vue'
 import accunt_manage from '../views/account/account_manage.vue'
 import noteshare from '../views/noteshare/noteshare.vue'
-
+import createOrder from '../views/order/create_order.vue'
+import paymentSuccess from '../views/order/payment_success.vue'
 Vue.use(VueRouter)
 
 // 导入设备检测工具
@@ -144,7 +145,16 @@ const routes = [
     name: 'noteshare',
     component: noteshare
   },
-
+  {
+    path: '/createOrder',
+    component: createOrder,
+    meta: { keepAlive: false, paymentPage: true }
+  },
+  {
+    path: '/paymentSuccess',
+    component: paymentSuccess,
+    meta: { paymentPage: false }
+  }
 ]
 
 

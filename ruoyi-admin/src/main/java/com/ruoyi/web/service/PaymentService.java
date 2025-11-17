@@ -1,6 +1,7 @@
 package com.ruoyi.web.service;
 
-import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
+import com.ruoyi.system.domain.PaymentOrder;
+import com.ruoyi.system.domain.vo.PaymentResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -10,7 +11,7 @@ public interface PaymentService {
     /**
      * 创建支付订单并生成二维码
      */
-    PaymentQrCodeVO createPayment(BigDecimal amount, String paymentType);
+    PaymentResult createPayment(BigDecimal amount, String paymentType, String productName, HttpServletRequest request);
 
     /**
      * 查询支付状态
@@ -28,4 +29,9 @@ public interface PaymentService {
     boolean verifySign(String paymentType, String orderNo, Map<String, String> sign);
 
     Map<String, String> getWechatParams(HttpServletRequest request);
+
+    /**
+     * 获取支付订单信息
+     */
+    PaymentOrder getPaymentOrder(String outTradeNo);
 }

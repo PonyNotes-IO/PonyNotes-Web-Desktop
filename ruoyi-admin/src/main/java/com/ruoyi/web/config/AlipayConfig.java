@@ -41,6 +41,9 @@ public class AlipayConfig {
     @Value("${payment.alipay.read-timeout:30000}")
     private int readTimeout;
 
+    @Value("${payment.alipay.return-url}")
+    private String returnUrl;
+
     /**
      * 初始化支付宝客户端
      */
@@ -88,5 +91,9 @@ public class AlipayConfig {
 
     public String getGatewayUrl() {
         return gatewayUrl;
+    }
+
+    public String getReturnUrl() {
+        return returnUrl;
     }
 }

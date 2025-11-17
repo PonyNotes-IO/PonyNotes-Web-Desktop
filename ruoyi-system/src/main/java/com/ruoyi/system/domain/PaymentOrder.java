@@ -1,6 +1,5 @@
 package com.ruoyi.system.domain;
 
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -14,6 +13,7 @@ public class PaymentOrder {
     private Date createTime;
     private Date updateTime;
     private Date payTime;
+    private String productName; // 商品名称
 
     public Long getId() {
         return id;
@@ -85,5 +85,13 @@ public class PaymentOrder {
 
     public void setPayTime(Date payTime) {
         this.payTime = payTime;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }

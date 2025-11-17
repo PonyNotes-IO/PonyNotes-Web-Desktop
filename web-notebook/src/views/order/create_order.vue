@@ -281,6 +281,22 @@ export default {
       // 拼接套餐类型和时长，从映射表取价格
       const key = this.currentTab === 'addon'?`addon_${this.currentAddon}`:`${this.currentTab}_${this.currentDuration}`;
       return priceMap[key] || 0; // 无匹配时默认0
+    },
+    // 生成产品名称
+    productName() {
+      const productMap = {
+        'student_30': '学生版-包月30天',
+        'student_365': '学生版-包年365天',
+        'standard_30': '标准版-包月30天',
+        'standard_365': '标准版-包年365天',
+        'team_30': '团队版-包月30天',
+        'team_365': '团队版-包年365天',
+        'addon_5': '会员补充包-A方案5G存储',
+        'addon_15': '会员补充包-B方案500次Altken',
+        'addon_25': '会员补充包-C方案5G存储+100次Altken'
+      };
+      const key = this.currentTab === 'addon'?`addon_${this.currentAddon}`:`${this.currentTab}_${this.currentDuration}`;
+      return productMap[key] || '未知产品';
     }
   },
   methods: {

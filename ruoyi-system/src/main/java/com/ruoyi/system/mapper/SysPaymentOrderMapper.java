@@ -16,4 +16,6 @@ public interface SysPaymentOrderMapper {
     int  updateById(PaymentOrder order);
 
     List<PaymentOrder> selectExpiredOrders(Date expireTime);
+
+    PaymentOrder getPaymentOrder(String tradeNo);
 }

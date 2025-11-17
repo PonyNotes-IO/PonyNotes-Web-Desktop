@@ -7,7 +7,8 @@ export function createPayment(data) {
     method: 'post',
     params: {
       amount: data.amount,
-      paymentType: data.paymentType
+      paymentType: data.paymentType,
+      productName: data.productName
     }
   })
 }
@@ -22,6 +23,18 @@ export function checkPaymentStatus(orderNo) {
     }
   })
 }
+
+// alipayReturn 同步回调处理（用户支付成功后跳转）
+export function getPaymentOrder(orderNo) {
+  return request({
+    url: '/api/payment/return/alipay',
+    method: 'get',
+    params: {
+      orderNo: orderNo
+    }
+  })
+}
+
 
 // 轮询检查支付状态(每3秒查询一次，最多查询5分钟)
 export function pollPaymentStatus(orderNo, onSuccess, onError, onTimeout) {
