@@ -2,6 +2,8 @@ package com.ruoyi.common.core.domain;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.function.Supplier;
+
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.utils.StringUtils;
 
@@ -78,7 +80,9 @@ public class AjaxResult extends HashMap<String, Object> implements java.io.Seria
     {
         return AjaxResult.success("操作成功", data);
     }
-
+    public static<T> AjaxResult success(Supplier<T> getter) {
+        return success("操作成功",getter.get());
+    }
     /**
      * 返回成功消息
      * 
