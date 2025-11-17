@@ -118,6 +118,11 @@
             <artifactId>wechatpay-java</artifactId>
             <version>0.2.17</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>4.4.0</version> <!-- 4.0+版本支持V3接口 -->
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>net.unmz.java.wechat.pay</groupId>-->
 <!--            <artifactId>wechat-pay-sdk</artifactId>-->

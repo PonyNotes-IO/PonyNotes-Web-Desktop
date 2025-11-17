@@ -711,6 +711,7 @@ CREATE TABLE `sys_payment_order` (
   `payment_type` varchar(20) NOT NULL COMMENT '支付方式(wechat:微信,alipay:支付宝)',
   `qr_code_url` varchar(255) DEFAULT NULL COMMENT '支付二维码URL',
   `status` varchar(20) NOT NULL COMMENT '订单状态(pending:待支付,success:已支付,failed:失败)',
+  `product_name` varchar(100) DEFAULT NULL COMMENT '商品名称',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `pay_time` datetime DEFAULT NULL COMMENT '支付时间',
