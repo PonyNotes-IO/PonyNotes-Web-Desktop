@@ -83,11 +83,38 @@ export default {
       }
     },
     openApp() {
+
+      var iframe = document.createElement('iframe');
+      const appUrl = `ponynotes://note?workspaceId=${this.workspaceId}&viewId=${this.viewId}`;
+      iframe.style.display = 'none';
+      iframe.src = appUrl;
+      document.body.appendChild(iframe);
+
+      // 尝试唤起应用
+      // window.location.href = appUrl;
+      // 设置超时时间（例如500ms）
+      const timeout = 1000;
+      const downloadUrl = location.origin + '/#/download';
+      const timer = setTimeout(() => {
+          // 超时后执行回退逻辑（如跳转到下载页）
+          this.$toast('打开App超时，请检查是否已安装PonyNotes');
+          setTimeout(() => {
+            window.location.href = downloadUrl;
+          }, 500);
+      }, timeout);
+
+      // 如果页面失去焦点（应用成功打开），则清除超时
+      window.onblur = function() {
+          clearTimeout(timer);
+      };
+    },
+    openApp1() {
+      
           // 记录当前时间，用于后续判断
       const startTime = Date.now();
       const appUrl = `appflowy-flutter://note?workspaceId=${this.workspaceId}&viewId=${this.viewId}`;
       // 下载页 URL
-      const downloadUrl = 'https://xiaomabiji.com/#/download';
+      const downloadUrl = location.origin + '/#/download';
       // 尝试唤起应用
       window.location.href = appUrl;
 
