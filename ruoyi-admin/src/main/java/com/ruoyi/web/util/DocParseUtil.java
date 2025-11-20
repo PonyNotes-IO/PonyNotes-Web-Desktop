@@ -13,7 +13,8 @@ import com.ruoyi.web.service.SmsService;
 
 public class DocParseUtil {
 
-    static String ENDPOINT = "docmind-api.cn-hangzhou.aliyuncs.com";
+//    static String ENDPOINT = "docmind-api.cn-hangzhou.aliyuncs.com";
+    static String ENDPOINT = "docmind-api.cn-beijing.aliyuncs.com";
 
     /**
      * 调用阿里云文档解析
@@ -55,7 +56,9 @@ public class DocParseUtil {
             resultRequest.id = id;
             do {
                 try {
-                    Thread.sleep(i == 0 ? 10000: 50000);
+                    if(times > 0) {
+                        Thread.sleep(i == 0 ? 10000: 50000);
+                    }
                     GetDocStructureResultResponse response = client.getDocStructureResult(resultRequest);
                     if(response.getBody() != null && response.getBody().completed) {
                         return response.getBody();

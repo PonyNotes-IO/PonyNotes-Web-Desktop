@@ -2,6 +2,7 @@ package com.ruoyi.web.service.impl;
 
 import com.aliyun.docmind_api20220711.models.SubmitDocStructureJobResponse;
 import com.ruoyi.common.core.redis.RedisCache;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.component.BaiDuOcrComponent;
 import com.ruoyi.web.model.ParseRequest;
 import com.ruoyi.web.service.DocParseService;
@@ -31,6 +32,9 @@ public class DocParseServiceImpl implements DocParseService {
         }
 
         SubmitDocStructureJobResponse response = smsService.executeWithAli(DocParseUtil.parse(request));
+        if(StringUtils.isEmpty(request.getResultType())) {
+            return response.getBody();
+        }
         if(response.getBody() != null && response.getBody().getData() != null) {
             String id = response.getBody().getData().getId();
            Object o =  smsService.executeWithAli(DocParseUtil.result(id,5));
@@ -39,5 +43,10 @@ public class DocParseServiceImpl implements DocParseService {
            }
         }
         return response.getBody();
+    }
+
+    @Override
+    public Object content(String taskId) {
+        return smsService.executeWithAli(DocParseUtil.result(taskId,0));
     }
 }

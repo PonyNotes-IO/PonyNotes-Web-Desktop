@@ -4,6 +4,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.web.model.ParseRequest;
 import com.ruoyi.web.service.DocParseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,5 +18,10 @@ public class DocParseController {
     @RequestMapping(value = "parse",method = RequestMethod.POST)
     public AjaxResult parse(ParseRequest request) {
         return AjaxResult.success(() -> docParseService.parsePdf(request));
+    }
+
+    @RequestMapping(value = "content/{taskId}",method = {RequestMethod.POST,RequestMethod.GET})
+    public AjaxResult content(@PathVariable String taskId) {
+        return AjaxResult.success(() -> docParseService.content(taskId));
     }
 }

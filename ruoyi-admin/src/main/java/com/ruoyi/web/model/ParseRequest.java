@@ -10,6 +10,16 @@ public class ParseRequest implements Serializable {
 
     private String type;
 
+    private String resultType;
+
+    public String getResultType() {
+        return resultType;
+    }
+
+    public void setResultType(String resultType) {
+        this.resultType = resultType;
+    }
+
     public MultipartFile getDoc() {
         return doc;
     }
