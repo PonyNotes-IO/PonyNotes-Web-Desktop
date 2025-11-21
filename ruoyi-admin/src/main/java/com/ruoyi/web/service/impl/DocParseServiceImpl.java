@@ -26,10 +26,10 @@ public class DocParseServiceImpl implements DocParseService {
     @Override
     public Object parsePdf(ParseRequest request) {
 
-        Object parse = baiDuOcrComponent.parse(redisCache, request);
-        if(parse != null) {
-            return parse;
-        }
+//        Object parse = baiDuOcrComponent.parse(redisCache, request);
+//        if(parse != null) {
+//            return parse;
+//        }
 
         SubmitDocStructureJobResponse response = smsService.executeWithAli(DocParseUtil.parse(request));
         if(StringUtils.isEmpty(request.getResultType())) {

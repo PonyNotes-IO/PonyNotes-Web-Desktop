@@ -13,8 +13,8 @@ import com.ruoyi.web.service.SmsService;
 
 public class DocParseUtil {
 
-//    static String ENDPOINT = "docmind-api.cn-hangzhou.aliyuncs.com";
-    static String ENDPOINT = "docmind-api.cn-beijing.aliyuncs.com";
+    static String ENDPOINT = "docmind-api.cn-hangzhou.aliyuncs.com";
+//    static String ENDPOINT = "docmind-api.cn-beijing.aliyuncs.com";
 
     /**
      * 调用阿里云文档解析
