@@ -63,7 +63,10 @@
         </div>
         
         <!-- 协议确认和支付区域 -->
-        <PaymentSection :amount="paymentAmount" />
+        <PaymentSection :amount="paymentAmount"
+        :checked="true" 
+        :product-name="productName"
+        @paymentSuccess="handlePaymentSuccess"/>
       </div>
       
 
@@ -109,7 +112,10 @@
         </div>
         
         <!-- 协议确认和支付区域 -->
-       <PaymentSection :amount="paymentAmount" />
+       <PaymentSection :amount="paymentAmount" 
+        :checked="true" 
+        :product-name="productName"
+        @paymentSuccess="handlePaymentSuccess"/>
       </div>
       
       <!-- 团队版内容区域 -->
@@ -153,7 +159,11 @@
         </div>
         
         <!-- 协议确认和支付区域 -->
-         <PaymentSection :amount="paymentAmount" />
+         <PaymentSection :amount="paymentAmount" 
+        :checked="true" 
+        :product-name="productName"
+        @paymentSuccess="handlePaymentSuccess"/>
+        
       </div>
 
       <!-- 内容区域 - 会员补充包 -->
@@ -192,6 +202,7 @@
         <!-- 协议确认和支付区域 -->
         <PaymentSection :amount="paymentAmount" 
         :checked="true" 
+        :product-name="productName"
         @paymentSuccess="handlePaymentSuccess"/>
       </div>
 

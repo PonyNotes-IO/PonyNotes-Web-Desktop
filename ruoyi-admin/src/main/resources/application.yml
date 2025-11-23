@@ -176,17 +176,27 @@ verify:
       sms: "verify:sms:"          # 短信验证码Redis Key前缀（最终Key：verify:sms:13800138000）
       email: "verify:email:"      # 邮箱验证码Redis Key前缀（最终Key：verify:email:test@qq.com）
 
+# 前端配置
+frontend:
+  # 前端域名地址（用于支付成功跳转等）
+  # domain: https://www.xiaomabiji.com
+  domain: https://localhost:8081
+
 # 支付配置
 payment:
   # 微信支付配置
   wechat:
     mch-id: 1726492374  # 商户ID（替换为真实值）
-    mch-serial-no: 1234567890ABCDEF  # 商户证书序列号（替换为真实值）
+    mch-serial-no: 7C696DA8BE49EA0F1146DD503D718C23D6D97E7F  # 商户证书序列号（替换为真实值）
     private-key-path: cert/apiclient_key.pem  # 商户私钥路径（放在resources/cert下）
-    api-v3-key: your_api_v3_key  # APIv3密钥（替换为真实值）
-    app-id: wx1234567890abcdef  # 公众号/小程序APPID（替换为真实值）
+    public-key-path: cert/pub_key.pem
+    pub_key_id: PUB_KEY_ID_0117264923742025102800112219001601
+    api-v3-key: 91110108MA7GCA6M5B91110108MA7GCA  # APIv3密钥（替换为真实值）
+    app-id: wx09097cecc59d8571  # 公众号/小程序APPID（替换为真实值）
     app-secret: 8520bed9d7932527310bb358e8c0c495  # 新增：关联的小程序/服务号的appsecret（若接口需要）
+    sub-mchid: 1900000109
     notify-url: http://www.xiaomabiji.com/api/payment/callback/wechat  # 微信支付回调地址（需公网可访问）
+    
 
   # 支付宝配置
   alipay:
@@ -198,7 +208,7 @@ payment:
     gateway-url: https://openapi.alipay.com/gateway.do # 支付宝网关（沙箱环境用dev，生产环境去掉dev）
     notify-url: http://www.xiaomabiji.com/api/payment/callback/alipay
 #    return-url: https://www.xiaomabiji.com/#/price
-    return-url: http://test.xiaomabiji.com:8080/api/payment/return/alipay
+    return-url: http://localhost:8080/api/payment/return/alipay
     connect-timeout: 30000  # 连接超时时间，30秒
     read-timeout: 30000
 #    http://your-domain.com/api/payment/callback/alipay  # 支付宝回调地址（需公网可访问）

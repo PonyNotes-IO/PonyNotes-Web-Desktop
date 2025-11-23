@@ -1,11 +1,14 @@
 package com.ruoyi.web.controller.system;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.internal.util.file.IOUtils;
+import com.aliyuncs.http.HttpUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentResult;
 import com.ruoyi.web.service.PaymentService;
@@ -13,10 +16,12 @@ import com.ruoyi.web.service.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,21 +33,40 @@ import javax.servlet.http.HttpServletRequest;
 public class PaymentController {
 
     private Logger log = LoggerFactory.getLogger(PaymentController.class);
+
     @Autowired
     private PaymentService paymentService;
 
+    @Value("${frontend.domain}")
+    private String frontendDomain;
+    @Autowired
+    private TokenService tokenService;
+
+    @GetMapping("/wechat/openid")
+    public AjaxResult getOpenid(@RequestParam String code) {
+        JSONObject json = paymentService.getOpenid(code);
+        if (json.containsKey("openid")) {
+            return AjaxResult.success(json);
+        } else {
+            return AjaxResult.error("获取 openid 失败");
+        }
+    }
     /**
      * 创建支付订单
      */
     @PostMapping("/create")
-    @Anonymous
     public AjaxResult createPayment(
             @RequestParam BigDecimal amount,
             @RequestParam String paymentType,
             @RequestParam(required = false) String productName,
+            @RequestParam(required = false) String openid,
             HttpServletRequest httpServletRequest) {
         try {
-            PaymentResult paymentResult = paymentService.createPayment(amount, paymentType, productName,
+            String userInfo = tokenService.getUserInfoFromToken(httpServletRequest).toString();
+            if (StringUtils.isEmpty(userInfo)){
+                return AjaxResult.error("用户未登录,请登录");
+            }
+            PaymentResult paymentResult = paymentService.createPayment(amount, paymentType, productName,openid,
                     httpServletRequest);
             return AjaxResult.success(paymentResult);
         } catch (IllegalArgumentException e) {
@@ -108,24 +132,70 @@ public class PaymentController {
     // 新增支付宝同步回调处理（用户支付成功后跳转）
     @GetMapping("/return/alipay")
     @Anonymous
-    public AjaxResult alipayReturn(HttpServletRequest request) {
-        Map<String, String> params = new HashMap<>();
-        Map<String, String[]> requestParams = request.getParameterMap();
-        for (String name : requestParams.keySet()) {
-            String[] values = requestParams.get(name);
-            String valueStr = StringUtils.join(values, ",");
-            params.put(name, valueStr);
-        }
-        String outTradeNo = params.get("out_trade_no");
-        // 验签
-        if (paymentService.verifySign("alipay", outTradeNo, params)) {
+    public String alipayReturn(HttpServletRequest request) {
+        try {
+            log.info("支付宝同步回调开始处理，请求参数: {}", request.getQueryString());
+
+            Map<String, String> params = new HashMap<>();
+            Map<String, String[]> requestParams = request.getParameterMap();
+            for (String name : requestParams.keySet()) {
+                String[] values = requestParams.get(name);
+                String valueStr = StringUtils.join(values, ",");
+                params.put(name, valueStr);
+            }
+
+            String outTradeNo = params.get("out_trade_no");
+            log.info("支付宝同步回调处理，订单号: {}", outTradeNo);
+
+            // 验签
+            if (!paymentService.verifySign("alipay", outTradeNo, params)) {
+                log.error("支付宝同步回调验签失败，订单号: {}", outTradeNo);
+                return generateErrorHtml("签名验证失败");
+            }
+
             PaymentOrder paymentOrder = paymentService.getPaymentOrder(outTradeNo);
-            return AjaxResult.success("支付成功", paymentOrder);
-        } else {
-            return AjaxResult.error("签名验证失败");
+            if (paymentOrder == null) {
+                log.error("支付宝同步回调订单查询失败，订单号: {}", outTradeNo);
+                return generateErrorHtml("订单不存在");
+            }
+
+            // 记录支付成功日志
+            log.info("支付宝支付成功，订单号: {}, 金额: {}, 状态: {}",
+                    outTradeNo, paymentOrder.getAmount(), paymentOrder.getStatus());
+
+            // 构建前端跳转URL
+            String redirectUrl = String.format(
+                    frontendDomain
+                            + "/#/paymentSuccess?orderNo=%s&amount=%s&paymentType=%s&productName=%s&payTime=%s&status=%s",
+                    URLEncoder.encode(outTradeNo, StandardCharsets.UTF_8.name()),
+                    paymentOrder.getAmount(),
+                    URLEncoder.encode(paymentOrder.getPaymentType(), StandardCharsets.UTF_8.name()),
+                    URLEncoder.encode(paymentOrder.getProductName() != null ? paymentOrder.getProductName() : "",
+                            StandardCharsets.UTF_8.name()),
+                    URLEncoder.encode(paymentOrder.getPayTime() != null ? paymentOrder.getPayTime().toString() : "",
+                            StandardCharsets.UTF_8.name()),
+                    URLEncoder.encode(paymentOrder.getStatus(), StandardCharsets.UTF_8.name()));
+
+            log.info("支付宝同步回调处理完成，跳转到: {}", redirectUrl);
+
+            // 返回HTML页面自动跳转
+            return generateAutoRedirectHtml(redirectUrl, "支付成功", "支付成功，正在跳转...");
+
+        } catch (Exception e) {
+            log.error("支付宝同步回调处理异常", e);
+            return generateErrorHtml("系统异常");
         }
     }
 
+    // http://test.xiaomabiji.com:8080/api/payment/return/alipay?charset=UTF-8&
+    // out_trade_no=alipay_1763484986907_11_b0_000&
+    // method=alipay.trade.page.pay.return&
+    // total_amount=0.01&
+    // sign=Y25CFjvWfL0JV9fKFZWkvhV2TGur7wZzuZhQDsXYbmcrhTVsUMqj5iM%2FeLjSNxTSMrA3WNQfdTq41RRsEd47%2FhhHUyAQ0hpGHpuhFK6kEtpL1Lo9%2BXkBwOCzCtw1JCdmPLd7y%2BQ%2BseATEVI76uTTYFbOZT0XYgNjaRRqkRRJxPVqr9lG3B9AtfFhRHBBcB74yLD28fD%2Fp0FZwiAf7adnmj90zHiZnhmvQQJocKSz5M2R4Qf3YsrI6G63lqaXOebB6BxMkGpNHztruoCl3q38mlBvIS2fnJB%2FtD5sKKB2ps%2BoSObPTsUNeQa9NLAVTgc4eV%2B7NsMhi5D9ujnfSYcnzQ%3D%3D&
+    // trade_no=2025111922001429691409195713&
+    // auth_app_id=2021005187696622&version=1.0&
+    // app_id=2021005187696622&sign_type=RSA2
+    // &seller_id=2088970023817737&timestamp=2025-11-19+01%3A03%3A45
     /**
      * 微信支付回调接口
      */
@@ -190,6 +260,65 @@ public class PaymentController {
             log.error("解析微信通知 JSON 异常", e);
             return null;
         }
+    }
+
+    /**
+     * 生成自动跳转的HTML页面
+     */
+    private String generateAutoRedirectHtml(String redirectUrl, String title, String message) {
+        return "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "    <meta charset=\"UTF-8\">" +
+                "    <title>" + title + "</title>" +
+                "    <meta http-equiv=\"refresh\" content=\"3;url=" + redirectUrl + "\">" +
+                "    <style>" +
+                "        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }" +
+                "        .message { margin: 20px 0; font-size: 18px; color: #333; }" +
+                "        .countdown { color: #666; font-size: 14px; }" +
+                "        .link { color: #1890ff; text-decoration: none; }" +
+                "    </style>" +
+                "</head>" +
+                "<body>" +
+                "    <h1>" + title + "</h1>" +
+                "    <div class=\"message\">" + message + "</div>" +
+                "    <div class=\"countdown\">页面将在 <span id=\"countdown\">3</span> 秒后自动跳转...</div>" +
+                "    <div>如果页面没有自动跳转，请 <a href=\"" + redirectUrl + "\" class=\"link\">点击这里</a></div>" +
+                "    <script>" +
+                "        var seconds = 3;" +
+                "        function updateCountdown() {" +
+                "            seconds--;" +
+                "            document.getElementById('countdown').textContent = seconds;" +
+                "            if (seconds <= 0) {" +
+                "                window.location.href = '" + redirectUrl + "';" +
+                "            }" +
+                "        }" +
+                "        setInterval(updateCountdown, 1000);" +
+                "    </script>" +
+                "</body>" +
+                "</html>";
+    }
+
+    /**
+     * 生成错误提示HTML页面
+     */
+    private String generateErrorHtml(String errorMessage) {
+        return "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "    <meta charset=\"UTF-8\">" +
+                "    <title>支付失败</title>" +
+                "    <style>" +
+                "        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }" +
+                "        .error { color: #ff4d4f; font-size: 18px; margin: 20px 0; }" +
+                "    </style>" +
+                "</head>" +
+                "<body>" +
+                "    <h1>支付失败</h1>" +
+                "    <div class=\"error\">错误信息: " + errorMessage + "</div>" +
+                "    <div>请返回重新尝试或联系客服</div>" +
+                "</body>" +
+                "</html>";
     }
 
 }

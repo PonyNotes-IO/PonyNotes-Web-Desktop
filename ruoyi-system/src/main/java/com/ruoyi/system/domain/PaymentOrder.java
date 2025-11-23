@@ -13,6 +13,8 @@ public class PaymentOrder {
     private Date createTime;
     private Date updateTime;
     private Date payTime;
+
+    private String userInfo;
     private String productName; // 商品名称
 
     public Long getId() {
@@ -93,5 +95,13 @@ public class PaymentOrder {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(String userInfo) {
+        this.userInfo = userInfo;
     }
 }

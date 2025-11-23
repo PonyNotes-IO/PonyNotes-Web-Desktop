@@ -112,6 +112,7 @@ import ChangePhoneModal from './ChangePhoneModal.vue';
 import BindEmailModal from './BindEmailModal.vue';
 import ChangePasswordModal from './ChangePasswordModal.vue';
 import { getuserinfo } from '../../api/ponynote_login';
+import {  TokenKey, setToken, UserInfoKey, setUserInfo } from '@/utils/auth';
 // 常量定义集中管理
 const SECURITY_MESSAGES = {
   missingPhone: '你当前的账号安全系数较低，请补充手机号',
@@ -234,6 +235,13 @@ export default {
         
         // 处理响应数据（兼容字符串和对象）
         let userInfo = response.data.data;
+        const token = response.data.token;
+        console.log("登录成功，token："+token)
+        console.log("登录成功，inputValue："+userInfo)
+        localStorage.setItem(TokenKey, token); 
+        localStorage.setItem(UserInfoKey, userInfo.phone || userInfo.email || userInfo.userName);
+        setToken(token);
+        setUserInfo( userInfo.phone || userInfo.email || userInfo.userName);
         if (typeof userInfo === 'string') {
           try {
             userInfo = JSON.parse(userInfo);

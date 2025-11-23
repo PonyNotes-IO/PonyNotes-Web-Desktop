@@ -23,7 +23,7 @@
     <!-- 错误提示 -->
     <div v-if="error" class="error-message">
       <p>{{ error }}</p>
-      <!-- <button class="retry-btn" @click="fetchOrderInfo">重试</button> -->
+      <button class="retry-btn" @click="fetchOrderInfo">重试</button>
     </div>
 
     <!-- 订单信息 -->
@@ -46,11 +46,11 @@
       </div>
       <div v-if="orderInfo" class="info-item">
         <span class="label">订单状态：</span>
-        <span class="value">{{ status === 'success' ? '已完成' : '处理中' }}</span>
+        <span class="value">{{ orderInfo.status === 'success' ? '已完成' : '处理中' }}</span>
       </div>
       <div v-if="orderInfo && orderInfo.productName" class="info-item">
         <span class="label">商品名称：</span>
-        <span class="value">{{ productName }}</span>
+        <span class="value">{{ orderInfo.productName }}</span>
       </div>
       <div v-if="orderInfo && orderInfo.validDate" class="info-item">
         <span class="label">有效期至：</span>
@@ -68,127 +68,81 @@
 </template>
 
 <script>
-// import { ref, computed } from 'vue'
-// import { useRoute, useRouter } from 'vue-router'
-// import { useStore } from 'vuex'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { getPaymentOrder } from '@/api/payment'
-
-// export default {
-//   setup() {
-//     const route = useRoute()
-//     const router = useRouter()
-//     // 定义响应式变量
-//     const routeParams = computed(() => {
-//       const params = {};
-//       for (const key in route.query) {
-//         params[key] = decodeURIComponent(route.query[key] || '');
-//       }
-//       return params;
-//     });
-
-//     const orderNo = ref(routeParams.value.orderNo);
-//     const amount = ref(routeParams.value.amount);
-//     const paymentType = ref(routeParams.value.paymentType);
-//     const payTime = ref(routeParams.value.payTime);
-//     const productName = ref(routeParams.value.productName);
-//     const status = ref(routeParams.value.status);
-//     const formattedAmount = ref(amount.value ? parseFloat(amount.value).toFixed(2) : '0.00');
-//     const loading = ref(false); // 直接使用URL参数，不需要加载
-//     const error = ref(null);
-//     const orderInfo = ref({
-//       orderNo: orderNo.value,
-//       amount: amount.value,
-//       paymentType: paymentType.value,
-//       payTime: payTime.value,
-//       productName: productName.value,
-//       status: status.value
-//     });
-
-
-//     // 返回首页
-//     const goToHome = () => {
-//       router.go(-1); // 返回上一页，而不是跳转至首页
-//     }
-
-//     return {
-//       orderNo,
-//       formattedAmount,
-//       paymentType,
-//       payTime,
-//       loading,
-//       error,
-//       orderInfo,
-//       goToHome
-//     }
-//   }
-// }
+// import { useStore } from 'vuex'
 
 export default {
-  data() {
-    return {
-      orderNo: '',
-      amount: '',
-      paymentType: '',
-      payTime: '',
-      productName: '',
-      status: '',
-      formattedAmount: '0.00',
-      loading: false,
-      error: null,
-      orderInfo: {}
-    }
-  },
-  created() {
-    // 在created钩子中获取路由参数（Vue 2使用this.$route）
-    const routeParams = this.getRouteParams()
-    this.orderNo = routeParams.orderNo
-    this.amount = routeParams.amount
-    this.paymentType = routeParams.paymentType
-    this.payTime = routeParams.payTime
-    this.productName = routeParams.productName
-    this.status = routeParams.status
-    this.formattedAmount = this.amount ? parseFloat(this.amount).toFixed(2) : '0.00'
-    this.orderInfo = {
-      orderNo: this.orderNo,
-      amount: this.amount,
-      paymentType: this.paymentType,
-      payTime: this.payTime,
-      productName: this.productName,
-      status: this.status
+  setup() {
+    const route = useRoute()
+    const router = useRouter()
+    // 定义响应式变量
+    const routeParams = computed(() => {
+      const params = {};
+      for (const key in route.query) {
+        params[key] = decodeURIComponent(route.query[key] || '');
+      }
+      return params;
+    });
+
+    const orderNo = ref(routeParams.value.orderNo);
+    const amount = ref(routeParams.value.amount);
+    const paymentType = ref(routeParams.value.paymentType);
+    const payTime = ref(routeParams.value.payTime);
+    const productName = ref(routeParams.value.productName);
+    const status = ref(routeParams.value.status);
+    const formattedAmount = ref(amount.value ? parseFloat(amount.value).toFixed(2) : '0.00');
+    const loading = ref(false); // 直接使用URL参数，不需要加载
+    const error = ref(null);
+    const orderInfo = ref({
+      orderNo: orderNo.value,
+      amount: amount.value,
+      paymentType: paymentType.value,
+      payTime: payTime.value,
+      productName: productName.value,
+      status: status.value
+    });
+
+    // 获取订单详情
+    const fetchOrderInfo = async () => {
+      try {
+        loading.value = true;
+        const res = await getPaymentOrder(orderNo.value);
+        orderInfo.value = res.data;
+        // 如果接口返回了更完整的信息，更新本地状态
+        if (res.data.amount) amount.value = res.data.amount;
+        if (res.data.paymentType) paymentType.value = res.data.paymentType;
+        if (res.data.payTime) payTime.value = res.data.payTime;
+        formattedAmount.value = amount.value ? parseFloat(amount.value).toFixed(2) : '0.00';
+      } catch (err) {
+        error.value = err.message || '获取订单信息失败';
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    // 组件挂载时获取订单信息
+    onMounted(() => {
+      if (orderNo.value) {
+        fetchOrderInfo();
+      }
+    });
+
+    // 返回首页
+    const goToHome = () => {
+      router.go(-1); // 返回上一页，而不是跳转至首页
     }
 
-    if (this.orderNo) {
-      this.fetchOrderInfo()
-    }
-  },
-  methods: {
-    // 解析路由参数（Vue 2中通过this.$route.query获取）
-    getRouteParams() {
-      const params = {}
-      for (const key in this.$route.query) {
-        params[key] = decodeURIComponent(this.$route.query[key] || '')
-      }
-      return params
-    },
-    // 获取订单详情
-    async fetchOrderInfo() {
-      try {
-        this.loading = true
-        const res = await getPaymentOrder(this.orderNo)
-        this.orderInfo = res.data
-        if (res.data.amount) this.amount = res.data.amount
-        if (res.data.paymentType) this.paymentType = res.data.paymentType
-        if (res.data.payTime) this.payTime = res.data.payTime
-        this.formattedAmount = this.amount ? parseFloat(this.amount).toFixed(2) : '0.00'
-      } catch (err) {
-        this.error = err.message || '获取订单信息失败'
-      } finally {
-        this.loading = false
-      }
-    },
-    // 返回首页（Vue 2使用this.$router）
-    goToHome() {
-      this.$router.push({ path: '/' })
+    return {
+      orderNo,
+      formattedAmount,
+      paymentType,
+      payTime,
+      loading,
+      error,
+      orderInfo,
+      goToHome
     }
   }
 }
@@ -299,13 +253,13 @@ export default {
       .label {
         flex: 1;
         color: #666;
-        font-size: 0.5rem;
+        font-size: 0.9rem;
       }
 
       .value {
         flex: 2;
         color: #333;
-        font-size: 0.5rem;
+        font-size: 0.9rem;
         word-break: break-all; // 防止订单号过长溢出
       }
     }

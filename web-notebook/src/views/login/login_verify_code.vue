@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import {  TokenKey, setToken, UserInfoKey, setUserInfo } from '@/utils/auth';
 import scaleMixin  from '../../utils/scale';
 import { verifyCaptcha,sendCaptcha, loginWithCode,registerUser} from '../../api/ponynote_login.js'; 
 export default {
@@ -311,7 +312,7 @@ export default {
             this.lastPageAction = 'login_validate_captcha';
         }
         if (nextPath === '/account') {//loginwithcode登录成功，跳转到首页
-          let loginResult = this.loginWithCode(this.inputValue,code,this.accountType);
+          let loginResult = this.loginWithCode(this.account,code,this.accountType);
           if (!loginResult) {//登录成功，跳转到首页
             return false;
           }
@@ -348,10 +349,10 @@ export default {
           this.codeArray = ['', '', '', '', '', ''];
           this.focusedIndex = 0;
           this.showError = false;
-          this.$refs.codeInput0?.focus();
-          // if (this.$refs.codeInput0) {
-          //   this.$refs.codeInput0.focus();
-          // }
+          // this.$refs.codeInput0?.focus();
+          if (this.$refs.codeInput0) {
+            this.$refs.codeInput0.focus();
+          }
           // 重新开始倒计时
           this.startCountdown();
           
@@ -384,6 +385,7 @@ export default {
     },
 
     async loginWithCode(inputValue,code,accountType) {
+      console.log("loginWithCodeAction"+inputValue + accountType + code)
       const loginWithCodeResponse  = await loginWithCode({
             accountType: accountType, 
             inputValue: inputValue,
@@ -394,17 +396,22 @@ export default {
           this.$toast.fail('登录失败，请重试')
           console.log("登录发送失败，请重试"+loginWithCodeResponse.data)
           console.log(loginWithCodeResponse )
+          return false;
       }else if(loginWithCodeResponse.data.code !== 200){
         this.$toast.fail(loginWithCodeResponse.data.msg)
+        return false;
       }else{
         result = true
         // 登录成功，存入token到localStorage
         const token = loginWithCodeResponse.data.token;
-        localStorage.setItem('token', token); 
-        localStorage.setItem('userInfo', inputValue);
+        console.log("登录成功，token："+token)
+        console.log("登录成功，inputValue："+inputValue)
+        localStorage.setItem(TokenKey, token); 
+        localStorage.setItem(UserInfoKey, inputValue);
+        setToken(token);
+        setUserInfo(inputValue);
         // 同时存入authToken（可能为兼容其他逻辑）
         localStorage.setItem('authToken',token);
-
         this.$toast.success('登录成功')
 
       }

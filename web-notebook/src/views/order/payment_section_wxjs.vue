@@ -23,6 +23,16 @@
 
         <!-- 支付方式卡片（微信 + 支付宝 并排） -->
         <div class="payment-grid">
+            <!-- 微信内支付（JSAPI） -->
+          <div
+            v-if="isWechat"
+            class="payment-card"
+            @click="selectPayment('wechat_jsapi')"
+            :class="{ 'selected': selectedPayment === 'wechat_jsapi' }"
+          >
+            <div class="payment-icon" :style="{ backgroundImage: `url(${require('./assets/img/wx_icon.png')})` }"></div>
+            <p class="payment-name">微信内支付</p>
+          </div>
           <div  
             class="payment-card" 
             @click="selectPayment('wechat')" 
@@ -97,7 +107,9 @@
 </template>
 
 <script>
-import { ref, computed, getCurrentInstance, onUnmounted } from 'vue'
+/* global WeixinJSBridge */ 
+import WeixinJSBridge from 'weixin-js-sdk'
+import { ref, computed, getCurrentInstance, onUnmounted, onMounted } from 'vue'
 import { createPayment, pollPaymentStatus } from '@/api/payment'
 export default {
   props: {
@@ -119,14 +131,53 @@ export default {
     const showPaymentToast = ref(false); // 支付提示弹窗
     const paymentToastText = ref(''); // 支付提示文本
     const currentOrderNo = ref(''); // 当前订单号
-    // 轮询定时器ID
-    const pollTimer = ref(null);
-
-    // 格式化金额
+    const pollTimer = ref(null); // 轮询定时器ID
+    const isWechat = ref(false); // 是否在微信内
+    const openid = ref(''); // 微信用户 openid
     const formattedAmount = computed(() => {
       return props.amount.toFixed(2);
     });
 
+    // 检查是否在微信浏览器内
+    const checkEnv = () => {
+      const ua = navigator.userAgent.toLowerCase();
+      isWechat.value = ua.includes('micromessenger');
+    };
+
+    // 从 URL 中获取参数
+    const getUrlParam = (name) => {
+      const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
+      const r = window.location.search.substr(1).match(reg);
+      return r ? decodeURIComponent(r[2]) : null;
+    };
+
+    // 通过 code 获取 openid
+    const getOpenid = async () => {
+      const code = getUrlParam('code');
+      if (code) {
+        try {
+          // 调用后端接口换取 openid
+          const response = await instance.proxy.$api.get('/wechat/openid', { code });
+          if (response.code === 200) {
+            openid.value = response.data.openid;
+            localStorage.setItem('openid', openid.value); // 缓存 openid
+          } else {
+            alert('获取微信授权失败');
+          }
+        } catch (error) {
+          console.error('获取 openid 失败:', error);
+          alert('获取微信授权失败');
+        }
+      } else if (!localStorage.getItem('openid')) {
+        // 没有 code 且没有缓存的 openid，跳转微信授权页面
+        const appid = '你的公众号 AppID';
+        const redirectUri = encodeURIComponent(window.location.href);
+        window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirectUri}&response_type=code&scope=snsapi_base&state=pay#wechat_redirect`;
+      } else {
+        // 有缓存的 openid，直接使用
+        openid.value = localStorage.getItem('openid');
+      }
+    };
     // 选择支付方式
     const selectPayment = (type) => {
       if (isLoading.value) return;
@@ -176,6 +227,45 @@ export default {
           }
         }
       );
+    };
+
+    // 调起微信 JSAPI 支付
+    const invokeWechatPay = (payParams) => {
+      if (typeof WeixinJSBridge === 'undefined') {
+        if (document.addEventListener) {
+          document.addEventListener('WeixinJSBridgeReady', () => onBridgeReady(payParams), false);
+        } else if (document.attachEvent) {
+          document.attachEvent('WeixinJSBridgeReady', () => onBridgeReady(payParams));
+          document.attachEvent('onWeixinJSBridgeReady', () => onBridgeReady(payParams));
+        }
+      } else {
+        onBridgeReady(payParams);
+      }
+    };
+
+    const onBridgeReady = (payParams) => {
+      WeixinJSBridge.invoke('getBrandWCPayRequest', {
+        appId: payParams.appId,
+        timeStamp: payParams.timeStamp,
+        nonceStr: payParams.nonceStr,
+        package: payParams.package,
+        signType: payParams.signType,
+        paySign: payParams.paySign
+      }, (res) => {
+        if (res.err_msg === 'get_brand_wcpay_request:ok') {
+          // 支付成功
+          instance.emit('paymentSuccess', {
+            orderNo: payParams.outTradeNo,
+            amount: props.amount,
+            paymentType: selectedPayment.value
+          });
+        } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+          alert('用户取消支付');
+        } else {
+          alert('支付失败，请重试');
+        }
+        WeixinJSBridge.log(res.err_msg);
+      });
     };
 
     // 处理支付
@@ -243,7 +333,13 @@ export default {
             }, 1000);
           } else if (selectedPayment.value === 'wechat') {
               // 微信支付仍使用窗口打开方式
+             
+              if (isWechat.value && response.data.data) {
+                // 微信内支付使用 JSAPI 调起
+                invokeWechatPay(response.data.data);
+              }else {
                 window.open(payUrl, '_blank');
+              }
           }
           // 延迟5秒再开始轮询（给支付宝足够时间创建订单）
           setTimeout(() => {
@@ -284,7 +380,11 @@ export default {
         isLoading.value = false;
       }
     };
-
+    // 组件挂载时初始化环境判断
+    onMounted(() => {
+      checkEnv();
+      if (isWechat.value) getOpenid(); // 微信内才获取openid
+    });
     // 组件卸载时清除轮询
     onUnmounted(() => {
       clearPolling();
@@ -300,7 +400,8 @@ export default {
       showPaymentToast,
       paymentToastText,
       checkPaymentStatus,
-      closePaymentToast
+      closePaymentToast,
+      isWechat
     };
   }
 };

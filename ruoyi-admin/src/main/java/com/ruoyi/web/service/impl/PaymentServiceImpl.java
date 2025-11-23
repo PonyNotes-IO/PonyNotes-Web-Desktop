@@ -10,10 +10,13 @@ import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysPaymentService;
 import com.ruoyi.web.config.AlipayConfig;
+import com.ruoyi.web.config.RestTemplateConfig;
 import com.ruoyi.web.config.WechatPayConfig;
 import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentResult;
@@ -21,6 +24,7 @@ import com.ruoyi.web.service.PaymentService;
 import com.ruoyi.web.util.OrderNoGenerator;
 import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.core.RSAAutoCertificateConfig;
+
 import com.wechat.pay.java.service.partnerpayments.nativepay.NativePayService;
 import com.wechat.pay.java.service.partnerpayments.nativepay.model.QueryOrderByOutTradeNoRequest;
 import com.wechat.pay.java.service.partnerpayments.nativepay.model.Transaction;
@@ -29,30 +33,37 @@ import com.wechat.pay.java.service.payments.h5.model.PrepayRequest;
 import com.wechat.pay.java.service.payments.h5.model.Amount;
 import com.wechat.pay.java.service.payments.h5.model.PrepayResponse;
 import com.wechat.pay.java.service.payments.h5.model.SceneInfo;
+import com.wechat.pay.java.service.payments.jsapi.JsapiService;
+//import com.wechat.pay.java.service.payments.jsapi.model.PrepayRequest;
 //import com.wechat.pay.java.service.payments.nativepay.model.Amount;
 
 //import com.wechat.pay.java.service.payments.nativepay.model.PrepayRequest;
 //import com.wechat.pay.java.service.payments.nativepay.model.PrepayResponse;
 //import com.wechat.pay.java.service.payments.nativepay.model.QueryOrderByOutTradeNoRequest;
+import org.bouncycastle.jcajce.provider.asymmetric.rsa.RSAUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.Signature;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.*;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
     private static final Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
-    // @Autowired
-    // private NativePayService wechatNativePayService; // 微信Native支付服务
+     @Autowired
+     private NativePayService wechatNativePayService; // 微信Native支付服务
 
     @Autowired
     private WechatPayConfig wechatPayConfig; // 微信支付配置
@@ -64,11 +75,16 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private ISysPaymentService paymentService; // 项目系统订单服务
 
+    @Autowired
+    private RestTemplateConfig restTemplateConfig;
+
+    @Autowired
+    private TokenService tokenService;
     /**
      * 创建支付订单并生成二维码（微信/支付宝真实调用）
      */
     @Override
-    public PaymentResult createPayment(BigDecimal amount, String paymentType, String productName,
+    public PaymentResult createPayment(BigDecimal amount, String paymentType, String productName,String openid,
             HttpServletRequest httpServletRequest) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             log.error("支付金额非法：{}", amount);
@@ -77,68 +93,146 @@ public class PaymentServiceImpl implements PaymentService {
         // 1. 生成唯一订单号orderNoGenerator
         // String orderNo = generateOrderNo(paymentType);
         String orderNo = OrderNoGenerator.generate(paymentType);
-        String payUrl = "";
+        String payInfo = "";
 
-        try {
-            // 2. 根据支付方式调用对应SDK生成二维码
-            if ("wechat".equals(paymentType)) {
-                payUrl = "";
-                payUrl = createWechatH5PayUrl(orderNo, amount, httpServletRequest);
+        // 2. 根据支付方式调用对应SDK生成二维码
+        if ("wechat".equals(paymentType)) {
+            payInfo = "";
+//                payUrl = createWechatH5PayUrl(orderNo, amount, httpServletRequest);
+            payInfo = createWechatQrCode(orderNo, amount, httpServletRequest);
 
-            } else if ("alipay".equals(paymentType)) {
-                payUrl = createAlipayPagePayUrl(orderNo, amount);
-            } else {
-                throw new IllegalArgumentException("不支持的支付方式：" + paymentType);
+        }else if ("wechat_jsapi".equals(paymentType)) {
+            // 校验openid（JSAPI必需）
+            if (StringUtils.isEmpty(openid)) {
+                throw new IllegalArgumentException("JSAPI支付需要用户openid");
             }
-
-            // 3. 保存订单
-            PaymentOrder order = new PaymentOrder();
-            order.setOrderNo(orderNo);
-            order.setAmount(amount);
-            order.setPaymentType(paymentType);
-            order.setProductName(productName);
-            order.setQrCodeUrl(payUrl);
-            order.setStatus("pending"); // 待支付
-            order.setCreateTime(new Date());
-            paymentService.insert(order);
-
-            // 4. 返回二维码信息
-            PaymentResult vo = new PaymentResult();
-            vo.setOrderNo(orderNo);
-            vo.setPayUrl(payUrl);
-            vo.setExpireTime(DateUtils.addMinutes(new Date(), 15)); // 15分钟过期
-
-            return vo;
-
-        } catch (Exception e) {
-            log.error("生成支付二维码失败", e);
-            throw new RuntimeException("支付订单创建失败：" + e.getMessage());
+            payInfo = createWechatJsapiPay(orderNo, amount, openid);
+        } else if ("alipay".equals(paymentType)) {
+            payInfo = createAlipayPagePayUrl(orderNo, amount);
+        } else {
+            throw new IllegalArgumentException("不支持的支付方式：" + paymentType);
         }
+        String userInfo = tokenService.getUserInfoFromToken(httpServletRequest).toString();
+        // 3. 保存订单
+        PaymentOrder order = new PaymentOrder();
+        order.setOrderNo(orderNo);
+        order.setAmount(amount);
+        order.setPaymentType(paymentType);
+        order.setProductName(productName);
+        order.setQrCodeUrl(payInfo);
+        order.setStatus("pending"); // 待支付
+        order.setCreateTime(new Date());
+        order.setUserInfo("userInfo");
+        paymentService.insert(order);
+
+        // 4. 返回二维码信息
+        PaymentResult vo = new PaymentResult();
+        vo.setOrderNo(orderNo);
+        vo.setPayUrl(payInfo);
+        vo.setExpireTime(DateUtils.addMinutes(new Date(), 15)); // 15分钟过期
+
+        return vo;
+
+    }
+
+    /**
+     * 微信JSAPI支付：生成调起参数（给前端用）
+     */
+    private String createWechatJsapiPay(String orderNo, BigDecimal amount, String openid) {
+        try {
+            // 构建JSAPI支付请求参数
+            com.wechat.pay.java.service.payments.jsapi.model.PrepayRequest request = new com.wechat.pay.java.service.payments.jsapi.model.PrepayRequest();
+            request.setOutTradeNo(orderNo);
+            request.setDescription("会员充值-" + orderNo);
+            request.setNotifyUrl(wechatPayConfig.getNotifyUrl());
+            request.setAppid(wechatPayConfig.getAppId());
+            request.setMchid(wechatPayConfig.getMchId());
+
+            // 金额（分）
+            com.wechat.pay.java.service.payments.jsapi.model.Amount amountObj = new com.wechat.pay.java.service.payments.jsapi.model.Amount();
+            amountObj.setTotal(amount.multiply(new BigDecimal(100)).intValue());
+            request.setAmount(amountObj);
+
+            // JSAPI必需：用户openid
+            com.wechat.pay.java.service.payments.jsapi.model.Payer payer = new com.wechat.pay.java.service.payments.jsapi.model.Payer();
+            payer.setOpenid(openid);
+            request.setPayer(payer);
+            // 调用微信JSAPI支付接口
+            com.wechat.pay.java.service.payments.jsapi.model.PrepayResponse response = wechatPayConfig.jsapiPayService().prepay(request);
+            // 返回前端调起支付所需的参数（JSON格式）
+            JSONObject jsApiParams = new JSONObject();
+            jsApiParams.put("appId", wechatPayConfig.getAppId());
+            jsApiParams.put("timeStamp", String.valueOf(System.currentTimeMillis() / 1000));
+            jsApiParams.put("nonceStr", UUID.randomUUID().toString().replaceAll("-", ""));
+            jsApiParams.put("package", "prepay_id=" + response.getPrepayId()); // 关键：prepay_id
+            jsApiParams.put("signType", "RSA");
+            // 生成签名（前端调起时需要）
+            String sign = generateJsapiSign(jsApiParams, wechatPayConfig.getPrivateKeyPath());
+            jsApiParams.put("paySign", sign);
+
+            return jsApiParams.toString();
+        } catch (Exception e) {
+            log.error("微信JSAPI支付创建失败", e);
+            throw new RuntimeException("JSAPI支付订单创建失败：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 生成JSAPI支付签名（供前端调起使用）
+     */
+    private String generateJsapiSign(JSONObject params, String privateKeyPath) throws Exception {
+        // 1. 读取商户私钥
+        Resource resource = new ClassPathResource(privateKeyPath);
+        String privateKeyPEM = IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8);
+
+        // 2. 按规则拼接签名串（appId、timeStamp、nonceStr、package）
+        String signStr = String.format("appId=%s&timeStamp=%s&nonceStr=%s&package=%s",
+                params.getString("appId"),
+                params.getString("timeStamp"),
+                params.getString("nonceStr"),
+                params.getString("package"));
+
+        // 3. 使用私钥签名
+        privateKeyPEM = privateKeyPEM.replace("-----BEGIN PRIVATE KEY-----", "")
+                .replace("-----END PRIVATE KEY-----", "")
+                .replaceAll("\\s+", ""); // 去除所有空白字符
+
+        byte[] keyBytes = Base64.getDecoder().decode(privateKeyPEM);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initSign(privateKey);
+        signature.update(signStr.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(signature.sign());
     }
 
     /**
      * 微信支付：生成Native支付二维码
      */
-    // private String createWechatQrCode(String orderNo, BigDecimal amount) throws
-    // Exception {
-    // // 构建请求参数
-    // PrepayRequest request = new PrepayRequest();
-    // request.setOutTradeNo(orderNo); // 商户订单号
-    // request.setAppid(wechatPayConfig.getAppId()); // 公众号/小程序APPID
-    // request.setMchid(wechatPayConfig.getMchId()); // 商户号
-    // request.setDescription("会员充值-" + orderNo); // 订单描述
-    // request.setNotifyUrl(wechatPayConfig.getNotifyUrl()); // 回调地址
-    //
-    // // 金额（单位：分）
-    // Amount amountObj = new Amount();
-    // amountObj.setTotal(amount.multiply(new BigDecimal(100)).intValue()); // 元转分
-    // request.setAmount(amountObj);
-    //
-    // // 调用微信支付SDK生成二维码
-    //// PrepayResponse response = wechatNativePayService.prepay(request);
-    //// return response.getCodeUrl(); // 返回微信支付二维码链接
-    // return "";
-    // }
+     private String createWechatQrCode(String orderNo, BigDecimal amount, HttpServletRequest httpServletRequest) {
+         // 构建请求参数
+
+         com.wechat.pay.java.service.partnerpayments.nativepay.model.PrepayRequest request = new
+                 com.wechat.pay.java.service.partnerpayments.nativepay.model.PrepayRequest();
+         request.setOutTradeNo(orderNo); // 商户订单号
+         request.setDescription("会员充值-" + orderNo); // 订单描述
+         request.setNotifyUrl(wechatPayConfig.getNotifyUrl()); // 回调地址
+         request.setSpAppid(wechatPayConfig.getAppId()); // 从配置中获取服务商appid
+         request.setSpMchid(wechatPayConfig.getMchId());
+         // 子商户参数 (新增)
+//         request.setSubMchid(wechatPayConfig.getSubMchid()); // 从配置中获取子商户号
+         // 金额（单位：分）
+         com.wechat.pay.java.service.partnerpayments.nativepay.model.Amount amountObj = new
+                 com.wechat.pay.java.service.partnerpayments.nativepay.model.Amount();
+         amountObj.setTotal(amount.multiply(new BigDecimal(100)).intValue()); // 元转分
+         request.setAmount(amountObj);
+
+//          调用微信支付SDK生成二维码
+         com.wechat.pay.java.service.partnerpayments.nativepay.model.PrepayResponse response = wechatNativePayService.prepay(request);
+         return response.getCodeUrl(); // 返回微信支付二维码链接
+     }
 
     // 微信H5支付链接生成
     public String createWechatH5PayUrl(String orderNo, BigDecimal amount, HttpServletRequest httpServletRequest) {
@@ -164,9 +258,10 @@ public class PaymentServiceImpl implements PaymentService {
         request.setSceneInfo(sceneInfo);
 
         // 3. 调用微信H5支付接口
-        // H5Service h5Service = new
-        // H5Service.Builder().config(wechatPayConfig.WechatPayConfig()).build();
-        H5Service h5Service = new H5Service.Builder().build();
+        H5Service h5Service = new H5Service.Builder()
+                .config(wechatPayConfig.WechatPayConfig()) // 使用配置类中的Config对象
+                .build();
+//        H5Service h5Service = new H5Service.Builder().build();
         PrepayResponse response = h5Service.prepay(request);
         String payUrl = response.getH5Url(); // 支付跳转链接
         return payUrl;
@@ -497,5 +592,32 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentOrder getPaymentOrder(String TradeNo) {
         // TODO Auto-generated method stub
         return paymentService.getPaymentOrder(TradeNo);
+    }
+
+    @Override
+    public JSONObject getOpenid(String code) {
+        // 调用微信 API 换取 openid
+        String appid = wechatPayConfig.getAppId();
+        String secret = wechatPayConfig.getAppSecret();
+//        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + secret + "&code=" + code + "&grant_type=authorization_code";
+        String url = UriComponentsBuilder.fromHttpUrl("https://api.weixin.qq.com/sns/oauth2/access_token")
+                .queryParam("appid", appid)
+                .queryParam("secret", secret)
+                .queryParam("code", code)
+                .queryParam("grant_type", "authorization_code")
+                .toUriString();
+        try {
+            // getForObject 会自动发起 GET 请求并将响应体转换成指定的类型（这里是 String）
+            String responseBody = restTemplateConfig.restTemplate().getForObject(url, String.class);
+            return JSONObject.parseObject(responseBody);
+        } catch (Exception e) {
+            // 异常处理
+            JSONObject errorJson = new JSONObject();
+            errorJson.put("error", "Exception occurred: " + e.getMessage());
+            return errorJson;
+        }
+//        String result = HttpUtil.get(url);
+//        JSONObject json = JSONObject.parseObject(result);
+//        return json;
     }
 }

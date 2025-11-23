@@ -55,6 +55,7 @@
 import { Toast } from 'vant';
 import scaleMixin from '../../utils/scale';
 import { loginWithPassWord ,sendCaptcha } from '../../api/ponynote_login';
+import {  TokenKey, setToken, UserInfoKey, setUserInfo } from '@/utils/auth';
 export default {
   mixins: [scaleMixin],
   data() {
@@ -187,7 +188,10 @@ export default {
           // 保存登录状态和用户信息
           localStorage.setItem('token', data.token);
           localStorage.setItem('userInfo', JSON.stringify(data.userInfo));
-
+          localStorage.setItem(TokenKey, data.token); 
+          localStorage.setItem(UserInfoKey, JSON.stringify(data.userInfo));
+          setToken(data.token);
+          setUserInfo(JSON.stringify(data.userInfo));
           // 根据是否首次登录决定跳转页面，均携带参数
           let targetPath = '/account';
           this.$router.replace({

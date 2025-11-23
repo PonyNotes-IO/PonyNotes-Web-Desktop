@@ -125,7 +125,7 @@ import hiddenIcon  from './assets/img/SketchPngb9722adfebe3496ec3901d85de34cb4a8
 import visibleIcon from './assets/img/SketchPngfccf3b734f0cce2a77ddd61b61628bc68ff58767b7f862291556c318a7317c89.png';
 import scaleMixin  from '../../utils/scale';
 import { setPassword,validatePassword } from '../../api/ponynote_login.js';
-
+import {  TokenKey, setToken, UserInfoKey, setUserInfo } from '@/utils/auth';
 export default {
   mixins: [scaleMixin], // 使用混入
   data() {
@@ -256,7 +256,10 @@ export default {
           localStorage.setItem('userInfo', this.account);
           // 同时存入authToken（可能为兼容其他逻辑）
           localStorage.setItem('authToken',token);
-          
+          localStorage.setItem(TokenKey, token); 
+          localStorage.setItem(UserInfoKey,this.account);
+          setToken(token);
+          setUserInfo(this.account);
           this.$router.push({
             path: '/account',
             query: {

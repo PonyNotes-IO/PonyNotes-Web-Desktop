@@ -494,6 +494,8 @@
 import XmNavBar from '@/components/xm-nav-bar.vue';
 import IndexBottomPC from '@/components/index-bottom-pc.vue';
 import CreateOrder from '@/views/order/create_order.vue';
+import {  TokenKey } from '@/utils/auth';
+// import { hasToken } from '../../utils/auth';
 export default {
   components:{
         XmNavBar, 
@@ -504,6 +506,7 @@ export default {
     return {
       purchaseVisible: false, // 控制购买弹窗显示
       currentPackage: null, // 当前选择的套餐
+      hasToken: false, // 用户是否已登录
       loopData0: [
         {
           lanhuBg0: require('./assets/img/price_background_img.png'),
@@ -561,12 +564,14 @@ export default {
     };
   },
 
-  computed: {
-    hasToken() {
-      // 判断是否登录（LocalStorage 存在 token 则为“已登录”）
-      return !!localStorage.getItem('token');
-    }
-  },
+  // computed: {
+  //   checkToken() {
+  //     // 判断是否登录（LocalStorage 存在 token 则为“已登录”）
+  //     this.token = localStorage.getItem(TokenKey);
+  //     return this.token;
+  //     // return !!localStorage.getItem(TokenKey);
+  //   }
+  // },
   mounted() {
       this.handleResize();
       window.addEventListener('resize', this.handleResize);
@@ -587,6 +592,7 @@ export default {
         document.querySelector('.scale-root').style.width = baseWidth + 'px';
         document.querySelector('.scale-root').style.height = 'auto';
     },
+    
     initIntersectionObserver() {
         const items = document.querySelectorAll('.list-items_1');
         const observer = new IntersectionObserver((entries) => {
@@ -605,9 +611,19 @@ export default {
     navTo(url) {
       this.$router.push(url);
     },
+
+    // 检查用户登录状态，未登录跳转登录页，已登录显示购买弹窗
     handlePurchase(item) {
+      this.token = localStorage.getItem(TokenKey);
+      console.log(this.token);
+      if (this.token == null || this.token == '') {
+        this.navTo('/login');
+        return;
+      }
+      console.log(this.hasToken);
       // if (!this.hasToken) {
       //   // 未登录：跳转到登录页
+      //   console.log(this.hasToken);
       //   this.navTo('/login');
       //   return;
       // }

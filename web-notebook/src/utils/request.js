@@ -26,4 +26,18 @@ const service = axios.create({
 //     return Promise.reject(error)
 //   }
 // )
+// 请求拦截器：添加token到请求头
+service.interceptors.request.use(
+  config => {
+    // 从localStorage或Vuex中获取token
+    const token = localStorage.getItem('token')
+    if (token) {
+      // 以Bearer格式添加到Authorization头
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return config
+  },
+  error => Promise.reject(error)
+)
+
 export default service

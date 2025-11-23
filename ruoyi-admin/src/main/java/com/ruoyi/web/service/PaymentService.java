@@ -1,5 +1,6 @@
 package com.ruoyi.web.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentResult;
 
@@ -11,7 +12,7 @@ public interface PaymentService {
     /**
      * 创建支付订单并生成二维码
      */
-    PaymentResult createPayment(BigDecimal amount, String paymentType, String productName, HttpServletRequest request);
+    PaymentResult createPayment(BigDecimal amount, String paymentType, String productName,String openid, HttpServletRequest request);
 
     /**
      * 查询支付状态
@@ -34,4 +35,6 @@ public interface PaymentService {
      * 获取支付订单信息
      */
     PaymentOrder getPaymentOrder(String outTradeNo);
+
+    JSONObject getOpenid(String code);
 }
