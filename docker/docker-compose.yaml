@@ -2,6 +2,7 @@ services:
   xm-manager:
     image: openjdk:8-jdk-alpine
     volumes:
+      - ./server/target/ruoyi-admin.jar:/app/app.jar
       - tmp
 
 
