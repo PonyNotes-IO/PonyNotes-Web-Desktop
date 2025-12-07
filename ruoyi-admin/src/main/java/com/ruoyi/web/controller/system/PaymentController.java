@@ -42,6 +42,14 @@ public class PaymentController {
     @Autowired
     private TokenService tokenService;
 
+    @GetMapping("/wxConfig")
+    public AjaxResult getWechatPayConfig(@RequestParam String url) {
+        // 1. 获取当前页面的URL，用于生成签名
+        // 2. 调用微信支付API生成签名
+        // 3. 返回签名和配置参数
+        Map<String, String> config = paymentService.getJsApiConfig(url);
+        return AjaxResult.success(config);
+    }
     @GetMapping("/wechat/openid")
     public AjaxResult getOpenid(@RequestParam String code) {
         JSONObject json = paymentService.getOpenid(code);
@@ -58,15 +66,17 @@ public class PaymentController {
     public AjaxResult createPayment(
             @RequestParam BigDecimal amount,
             @RequestParam String paymentType,
+            @RequestParam String userInfo,
             @RequestParam(required = false) String productName,
             @RequestParam(required = false) String openid,
+            @RequestParam(required = false) String url,
             HttpServletRequest httpServletRequest) {
         try {
-            String userInfo = tokenService.getUserInfoFromToken(httpServletRequest).toString();
+//            String userInfo = tokenService.getUserInfoFromToken(httpServletRequest).toString();
             if (StringUtils.isEmpty(userInfo)){
                 return AjaxResult.error("用户未登录,请登录");
             }
-            PaymentResult paymentResult = paymentService.createPayment(amount, paymentType, productName,openid,
+            PaymentResult paymentResult = paymentService.createPayment(amount, paymentType,userInfo, productName,openid,url,
                     httpServletRequest);
             return AjaxResult.success(paymentResult);
         } catch (IllegalArgumentException e) {

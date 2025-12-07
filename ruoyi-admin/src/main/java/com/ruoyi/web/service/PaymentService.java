@@ -12,7 +12,7 @@ public interface PaymentService {
     /**
      * 创建支付订单并生成二维码
      */
-    PaymentResult createPayment(BigDecimal amount, String paymentType, String productName,String openid, HttpServletRequest request);
+    PaymentResult createPayment(BigDecimal amount, String paymentType,String userInfo, String productName, String openid, String url, HttpServletRequest request);
 
     /**
      * 查询支付状态
@@ -37,4 +37,6 @@ public interface PaymentService {
     PaymentOrder getPaymentOrder(String outTradeNo);
 
     JSONObject getOpenid(String code);
+
+    Map<String, String> getJsApiConfig(String url);
 }

@@ -92,7 +92,7 @@ public class WechatPayConfig {
             // 读取私钥内容
             String pucKeyPEM;
             try (InputStream in = pubRec.getInputStream();
-                 ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
                 byte[] buffer = new byte[8192];
                 int len;
                 while ((len = in.read(buffer)) != -1) {
@@ -102,9 +102,9 @@ public class WechatPayConfig {
             }
             Config config = new RSAPublicKeyConfig.Builder()
                     .merchantId(mchId)
-//                    .privateKeyFromPath(privateKeyPath)
+                    // .privateKeyFromPath(privateKeyPath)
                     .privateKey(privateKeyPEM)
-//                    .publicKeyFromPath(publicKeyPath)
+                    // .publicKeyFromPath(publicKeyPath)
                     .publicKey(pucKeyPEM)
                     .publicKeyId(publicKeyId)
                     .merchantSerialNumber(mchSerialNo)
@@ -165,6 +165,7 @@ public class WechatPayConfig {
     // }
     // }
 
+
     /**
      * 检查时间同步状态
      */
@@ -224,6 +225,7 @@ public class WechatPayConfig {
             throw new RuntimeException("JSAPI支付服务初始化异常", e);
         }
     }
+
     /**
      * 验证微信支付回调通知签名
      * 
@@ -360,4 +362,6 @@ public class WechatPayConfig {
     public void setPublicKeyId(String publicKeyId) {
         this.publicKeyId = publicKeyId;
     }
+
+
 }
