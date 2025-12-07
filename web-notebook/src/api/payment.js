@@ -8,6 +8,45 @@ export function createPayment(data) {
     params: {
       amount: data.amount,
       paymentType: data.paymentType,
+      productName: data.productName,
+      openId: data.openId,
+      url: data.url,
+      userInfo: data.userInfo
+    }
+  })
+}
+
+export function getWxJsSdkConfig(url) {
+  return request({
+      url: '/api/payment/wxConfig',
+      method: 'get',
+      params: {
+        url: url
+      }
+    })
+}
+
+
+
+export function createPaymentByWxJSAPI(data) {
+  return request({
+    url: '/api/payment/create',
+    method: 'post',
+    params: {
+      amount: data.amount,
+      paymentType:'wechat_jsapi',
+      productName: data.productName
+    }
+  })
+}
+
+export function createPaymentByWxNative(data) {
+  return request({
+    url: '/api/payment/create',
+    method: 'post',
+    params: {
+      amount: data.amount,
+      paymentType:'wechat_native',
       productName: data.productName
     }
   })

@@ -35,6 +35,16 @@ service.interceptors.request.use(
       // 以Bearer格式添加到Authorization头
       config.headers['Authorization'] = `Bearer ${token}`
     }
+    // 2. 构造 userInfo 参数（传递用户标识，非敏感信息）
+    const userId = localStorage.getItem('userId');
+    const userNickname = localStorage.getItem('userNickname');
+    const userName = localStorage.getItem('userName');
+    const userInfo = JSON.stringify({ userId, userNickname, userName });
+    if (userId) {
+      if (config.method === 'post' && config.data) {
+        config.data.userInfo = userInfo;
+      }
+    } 
     return config
   },
   error => Promise.reject(error)
