@@ -64,6 +64,9 @@ export default {
     workspaceId() {
       return this.$route.query.workspaceId;
     },
+    type() {
+      return this.$route.query.type || 'share';
+    },
     viewId() {
       return this.$route.query.viewId;
     }
@@ -85,7 +88,7 @@ export default {
     openApp() {
 
       var iframe = document.createElement('iframe');
-      const appUrl = `ponynotes://note?workspaceId=${this.workspaceId}&viewId=${this.viewId}`;
+      const appUrl = `ponynotes://note?workspaceId=${this.workspaceId}&viewId=${this.viewId}&type=${this.type}`;
       iframe.style.display = 'none';
       iframe.src = appUrl;
       document.body.appendChild(iframe);
