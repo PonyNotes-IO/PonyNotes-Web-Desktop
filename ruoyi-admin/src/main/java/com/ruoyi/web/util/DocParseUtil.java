@@ -54,6 +54,8 @@ public class DocParseUtil {
             int i =0;
             GetDocStructureResultRequest resultRequest = new GetDocStructureResultRequest();
             resultRequest.id = id;
+            resultRequest.imageStrategy = "url";
+            resultRequest.revealMarkdown = true;
             do {
                 try {
                     if(times > 0) {
