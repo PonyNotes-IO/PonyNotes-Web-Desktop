@@ -33,7 +33,6 @@ const goTo = (index) => { currentIndex.value = totalRaw + index }
 const slideWidth = ref(1000)
 const updateSlideWidth = () => {
   if (typeof window !== 'undefined') {
-    // 移动端使用 90vw，桌面端上限 1000px
     slideWidth.value = window.innerWidth < 768 ? window.innerWidth * 0.9 : 1000
   }
 }
@@ -89,7 +88,7 @@ onUnmounted(() => {
         <nav class="max-w-[1100px] mx-auto px-6 h-20 flex items-center justify-between">
           <div class="flex items-center gap-2 group" data-aos="fade-down">
             <img src="/images/ico.png"
-              class="w-8 h-8 object-contain transition-transform duration-1000 group-hover:rotate-[360deg]"
+              class="w-8 h-8 object-contain transition-transform duration-1000 group-hover:rotate-[360deg] border-none shadow-none"
               alt="小马笔记 Logo" />
             <span class="text-xl font-bold tracking-tight text-gray-900">小马笔记</span>
           </div>
@@ -111,7 +110,7 @@ onUnmounted(() => {
             </a>
             <div data-aos="fade-down" data-aos-delay="250">
               <button
-                class="bg-[#FF4D00] text-white px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 active:scale-95">注册/登录</button>
+                class="bg-[#FF4D00] text-white px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 active:scale-95 border-none shadow-none">注册/登录</button>
             </div>
           </div>
         </nav>
@@ -133,13 +132,15 @@ onUnmounted(() => {
               </p>
               <div class="pt-4" data-aos="zoom-in-up" data-aos-delay="800">
                 <button
-                  class="bg-[#FF4D00] text-white px-9 py-3.5 rounded-xl text-base font-bold transition-all duration-500 hover:translate-y-[-4px]">免费下载使用</button>
+                  class="bg-[#FF4D00] text-white px-9 py-3.5 rounded-xl text-base font-bold transition-all duration-500 hover:translate-y-[-4px] border-none shadow-none">免费下载使用</button>
               </div>
             </div>
             <div class="flex-1 relative w-full max-w-[650px]" data-aos="fade-left" data-aos-duration="1200"
               data-aos-delay="500">
               <div class="relative animate-float-slow">
-                <img src="/images/index_right.png" class="w-full h-auto block" alt="Hero Preview" />
+                <!-- 移除阴影和边框 -->
+                <img src="/images/index_right.png" class="w-full h-auto block border-none shadow-none"
+                  alt="Hero Preview" />
               </div>
             </div>
           </div>
@@ -164,8 +165,10 @@ onUnmounted(() => {
             :style="{ width: 'var(--sw)' }"
             :class="[index === currentIndex ? 'opacity-100 scale-100 z-10' : 'opacity-40 scale-[0.93] blur-[4px]']"
             @click="currentIndex = index">
-            <div class="rounded-[1rem] md:rounded-[1.5rem] overflow-hidden bg-gray-100 border border-gray-100">
-              <img src="/images/intro1.png" class="w-full h-full object-cover object-top" alt="Feature Preview" />
+            <!-- 核心修正：移除 rounded 内的 bg-gray-100 和 border 类名 -->
+            <div class="rounded-[1rem] md:rounded-[1.5rem] overflow-hidden bg-transparent border-none shadow-none">
+              <img src="/images/intro1.png" class="w-full h-full object-cover object-top border-none shadow-none"
+                alt="Feature Preview" />
             </div>
           </div>
 
@@ -173,7 +176,7 @@ onUnmounted(() => {
       </div>
 
       <div class="flex justify-center mt-12" data-aos="fade-up">
-        <div class="bg-[#F5F5F5] rounded-full px-4 py-2 flex items-center gap-3">
+        <div class="bg-[#F5F5F5] rounded-full px-4 py-2 flex items-center gap-3 border-none shadow-none">
           <button v-for="(item, index) in rawSlides" :key="item.id" @click="goTo(index)"
             class="w-8 h-1.5 rounded-full transition-all duration-300"
             :class="[index === realIndex ? 'bg-[#FF4D00] w-12' : 'bg-[#E0E0E0] hover:bg-gray-300']"></button>
@@ -183,7 +186,7 @@ onUnmounted(() => {
 
     <!-- ================= 黑色背景板块 (模块化/多维表/任务/站点) ================= -->
 
-    <!-- 1. 模块化笔记 (按照图片 1 调整) -->
+    <!-- 1. 模块化笔记 -->
     <section class="pt-12 pb-20 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6">
         <div class="mb-12 text-center md:text-left" data-aos="fade-right">
@@ -197,12 +200,12 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="flex justify-center" data-aos="fade-up">
-          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl shadow-none" />
+          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
         </div>
       </div>
     </section>
 
-    <!-- 2. 多维表 (保持结构，统一字号) -->
+    <!-- 2. 多维表 -->
     <section class="py-16 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6">
         <div class="mb-10 text-center md:text-left" data-aos="fade-right">
@@ -215,12 +218,12 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="flex justify-center" data-aos="fade-up">
-          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl shadow-none" />
+          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
         </div>
       </div>
     </section>
 
-    <!-- 3. 任务系统 (按照图片 2 调整：右对齐 + 换行) -->
+    <!-- 3. 任务系统 -->
     <section class="py-16 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6 flex flex-col items-center md:items-end">
         <div class="mb-10 text-center md:text-right" data-aos="fade-left">
@@ -233,12 +236,12 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="flex justify-center md:justify-start w-full" data-aos="fade-up">
-          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl shadow-none" />
+          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
         </div>
       </div>
     </section>
 
-    <!-- 4. 知识站点 (按照图片 3 调整：右对齐 + 换行) -->
+    <!-- 4. 知识站点 -->
     <section class="py-16 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6 flex flex-col items-center md:items-end">
         <div class="mb-10 text-center md:text-right" data-aos="fade-left">
@@ -251,7 +254,7 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="flex justify-center md:justify-start w-full" data-aos="fade-up">
-          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl shadow-none" />
+          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
         </div>
       </div>
     </section>
@@ -261,65 +264,15 @@ onUnmounted(() => {
       <div class="max-w-[1220px] mx-auto px-10">
         <div class="flex justify-center items-center gap-0 mb-12" data-aos="flip-up">
           <span
-            class="bg-[#FF4D00] text-white px-4 py-1.5 text-[28px] font-bold tracking-tight transform hover:rotate-2 transition-transform cursor-default">独一无二</span>
+            class="bg-[#FF4D00] text-white px-4 py-1.5 text-[28px] font-bold tracking-tight transform hover:rotate-2">独一无二</span>
           <span class="text-[32px] font-bold text-gray-900 tracking-tight ml-3">的手写体验</span>
         </div>
         <div class="mb-8" data-aos="fade-up">
           <h2 class="text-[48px] font-bold mb-4 text-[#4facfe] tracking-tight">手写笔记</h2>
-          <div class="text-[20px] text-gray-900 font-bold leading-tight">
-            <p>支持流畅书写与自然笔迹回放，打破键盘限制，模拟纸笔体验</p>
-          </div>
+          <p class="text-[20px] text-gray-900 font-bold leading-tight">支持流畅书写与自然笔迹回放，打破键盘限制，模拟纸笔体验</p>
         </div>
         <div class="flex justify-center" data-aos="zoom-in">
-          <img src="/images/intro1.png" class="w-full max-w-[640px] h-auto block rounded-xl shadow-none" />
-        </div>
-      </div>
-    </section>
-
-    <section class="py-16 bg-white text-gray-900">
-      <div class="max-w-[1220px] mx-auto px-10">
-        <div class="mb-8" data-aos="fade-right">
-          <h2
-            class="text-[48px] font-bold mb-4 bg-gradient-to-r from-[#FACC15] to-[#4ADE80] bg-clip-text text-transparent animate-gradient-x">
-            多种纸张模板</h2>
-          <div class="text-[20px] text-gray-900 font-bold leading-tight">
-            <p>提供横线、方格、康奈尔笔记、空白等纸张背景，适配学习和工作场景</p>
-          </div>
-        </div>
-        <div class="flex justify-center" data-aos="fade-left">
-          <img src="/images/intro1.png" class="w-full max-w-[640px] h-auto block rounded-xl shadow-none" />
-        </div>
-      </div>
-    </section>
-
-    <section class="py-16 bg-white text-gray-900">
-      <div class="max-w-[1220px] mx-auto px-10 flex flex-col">
-        <div class="flex flex-col items-end text-right mb-8" data-aos="fade-left">
-          <h2
-            class="text-[48px] font-bold mb-4 bg-gradient-to-r from-[#F97316] to-[#EF4444] bg-clip-text text-transparent animate-gradient-x">
-            手写工具箱</h2>
-          <div class="text-[20px] text-gray-900 font-bold leading-tight">
-            <p>多种笔刷、颜色、荧光笔、橡皮工具满足个性化标注与创作</p>
-          </div>
-        </div>
-        <div class="flex justify-start" data-aos="fade-right">
-          <img src="/images/intro1.png" class="w-full max-w-[640px] h-auto block rounded-xl shadow-none" />
-        </div>
-      </div>
-    </section>
-
-    <section class="py-16 bg-white text-gray-900">
-      <div class="max-w-[1220px] mx-auto px-10 flex flex-col">
-        <div class="flex flex-col items-end text-right mb-8" data-aos="fade-left">
-          <h2
-            class="text-[48px] font-bold mb-4 bg-gradient-to-r from-[#00F8FF] to-[#3CF9FF] bg-clip-text text-transparent animate-gradient-x">
-            智能书写识别</h2>
-          <div class="text-[20px] text-gray-900 font-bold leading-tight">
-            <p>支持手写文字转文本、手势擦除助力结构化整理与搜索</p>
-          </div>
-        </div>
-        <div class="flex justify-start" data-aos="fade-right">
-          <img src="/images/intro1.png" class="w-full max-w-[640px] h-auto block rounded-xl shadow-none" />
+          <img src="/images/intro1.png" class="w-full max-w-[640px] h-auto block rounded-xl border-none shadow-none" />
         </div>
       </div>
     </section>
@@ -327,7 +280,7 @@ onUnmounted(() => {
     <!-- ================= 一起思维发散 (黑色卡片) ================= -->
     <section class="py-16 bg-white w-full flex justify-center">
       <div
-        class="w-[96%] max-w-[1240px] bg-black text-white rounded-[3.5rem] py-24 overflow-hidden relative shadow-none"
+        class="w-[96%] max-w-[1240px] bg-black text-white rounded-[3.5rem] py-24 overflow-hidden relative shadow-none border-none"
         data-aos="zoom-in-up">
         <div
           class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600 opacity-20 blur-[150px] rounded-full animate-pulse-slow">
@@ -345,12 +298,13 @@ onUnmounted(() => {
           <!-- 子项 1 -->
           <div class="mb-32 flex flex-col items-start text-left">
             <h3
-              class="text-[42px] font-bold mb-5 bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] bg-clip-text text-transparent animate-gradient-x"
+              class="text-[42px] font-bold mb-6 bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] bg-clip-text text-transparent animate-gradient-x"
               data-aos="fade-right">无限白板</h3>
             <div class="text-[22px] text-white/90 font-medium mb-10 max-w-2xl" data-aos="fade-right">
               <p>支持手绘直线、箭头、图形，自动矫正为标准图形，适合绘制流程图、思维导图、界面草图</p>
             </div>
-            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl shadow-none" data-aos="fade-up" />
+            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl border-none shadow-none"
+              data-aos="fade-up" />
           </div>
           <!-- 子项 2 -->
           <div class="mb-32 flex flex-col items-start text-left">
@@ -360,7 +314,8 @@ onUnmounted(() => {
             <div class="text-[22px] text-white/90 font-medium mb-10 max-w-xl" data-aos="fade-right">
               <p>兼容 Apple Pencil 和各类手写笔，支持压感与笔迹粗细调节，体验接近真实书写</p>
             </div>
-            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl shadow-none" data-aos="fade-up" />
+            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl border-none shadow-none"
+              data-aos="fade-up" />
           </div>
           <!-- 子项 3 -->
           <div class="mb-32 flex flex-col items-end text-right">
@@ -370,7 +325,8 @@ onUnmounted(() => {
             <div class="text-[22px] text-white/90 font-medium mb-10 max-w-xl" data-aos="fade-left">
               <p>插入文本框，支持富文本格式搭配手绘内容轻松表达逻辑</p>
             </div>
-            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl shadow-none" data-aos="fade-up" />
+            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl border-none shadow-none"
+              data-aos="fade-up" />
           </div>
         </div>
       </div>
@@ -391,12 +347,12 @@ onUnmounted(() => {
             <h3 class="text-[36px] font-bold text-[#3B82F6] mb-6">自由选择大模型</h3>
             <p class="text-[18px] text-gray-900 font-bold leading-relaxed">小马笔记支持多种主流大语言模型，按需切换，满足不同场景需求</p>
           </div>
-          <div data-aos="fade-left"><img src="/images/intro1.png" class="w-full h-auto block rounded-xl shadow-none" />
+          <div data-aos="fade-left"><img src="/images/intro1.png" class="w-full rounded-xl border-none shadow-none" />
           </div>
         </div>
         <div class="grid md:grid-cols-2 gap-20 items-center mb-32">
           <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/intro1.png"
-              class="w-full h-auto block rounded-xl shadow-none" /></div>
+              class="w-full rounded-xl border-none shadow-none" /></div>
           <div class="order-1 md:order-2 text-right" data-aos="fade-left">
             <h3 class="text-[36px] font-bold text-[#4ADE80] mb-6">AI总结与问答</h3>
             <p class="text-[18px] text-gray-900 font-bold leading-relaxed">选中任意笔记内容，一键生成摘要、提炼重点，支持基于上下文的智能问答</p>
@@ -407,7 +363,7 @@ onUnmounted(() => {
             <h3 class="text-[36px] font-bold text-[#F97316] mb-6">AI写作助手</h3>
             <p class="text-[18px] text-gray-900 font-bold leading-relaxed">输入大纲或灵感碎片，AI 帮你扩写文章、润色表达、生成标题，提升创作效率</p>
           </div>
-          <div data-aos="fade-left"><img src="/images/intro1.png" class="w-full h-auto block rounded-xl shadow-none" />
+          <div data-aos="fade-left"><img src="/images/intro1.png" class="w-full rounded-xl border-none shadow-none" />
           </div>
         </div>
       </div>
@@ -416,10 +372,10 @@ onUnmounted(() => {
     <!-- ================= 隐私保护 (黑色圆角卡片) ================= -->
     <section class="py-24 bg-white w-full flex justify-center">
       <div
-        class="w-[96%] max-w-[1240px] bg-black text-white rounded-[3.5rem] py-32 overflow-hidden relative shadow-none"
+        class="w-[96%] max-w-[1240px] bg-black text-white rounded-[3.5rem] py-32 overflow-hidden relative shadow-none border-none"
         data-aos="zoom-in-up">
         <div
-          class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600 opacity-10 blur-[150px] rounded-full animate-pulse-slow">
+          class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-500 opacity-10 blur-[150px] rounded-full animate-pulse-slow">
         </div>
         <div
           class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-500 opacity-10 blur-[150px] rounded-full animate-pulse-slow"
@@ -438,32 +394,15 @@ onUnmounted(() => {
                 </p>
               </div>
               <div data-aos="fade-left"><img src="/images/intro1.png"
-                  class="w-full h-auto block rounded-xl shadow-none" /></div>
+                  class="w-full h-auto block rounded-xl border-none shadow-none" /></div>
             </div>
             <div class="grid md:grid-cols-2 gap-16 items-center">
               <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/intro1.png"
-                  class="w-full h-auto block rounded-xl shadow-none" /></div>
+                  class="w-full h-auto block rounded-xl border-none shadow-none" /></div>
               <div class="order-1 md:order-2 text-right">
                 <h3 data-aos="fade-left" class="text-[36px] font-bold mb-6 text-white">全程加密传输</h3>
                 <p class="text-[18px] text-white/70 font-medium leading-relaxed">采用行业标准 HTTPS + 加密协议，保障笔记在云同步过程中的数据安全
                 </p>
-              </div>
-            </div>
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-              <div data-aos="fade-right">
-                <h3 class="text-[36px] font-bold mb-6 text-white">开源透明 拒绝黑箱</h3>
-                <p class="text-[18px] text-white/70 font-medium leading-relaxed">核心模块开源，代码可查，技术透明，真正做到“你见得见的安全”</p>
-              </div>
-              <div data-aos="fade-left"><img src="/images/intro1.png"
-                  class="w-full h-auto block rounded-xl shadow-none" /></div>
-            </div>
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-              <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/intro1.png"
-                  class="w-full h-auto block rounded-xl shadow-none" /></div>
-              <div class="order-1 md:order-2 text-right">
-                <h3 data-aos="fade-left" class="text-[36px] font-bold mb-6 text-white">数据开放 可随时导出</h3>
-                <p class="text-[18px] text-white/70 font-medium leading-relaxed">笔记支持 Markdown、PDF、HTML
-                  等格式导出，避免平台锁定，随时迁移无负担</p>
               </div>
             </div>
           </div>
@@ -478,7 +417,7 @@ onUnmounted(() => {
           <h2 class="text-[56px] font-bold text-[#FF4D00] tracking-tight">利用API让笔记进行联动</h2>
         </div>
         <div class="flex justify-center" data-aos="zoom-in" data-aos-duration="1200">
-          <img src="/images/programm.png" class="w-full max-w-[1000px] h-auto block rounded-xl shadow-none"
+          <img src="/images/programm.png" class="w-full max-w-[1000px] h-auto block rounded-xl border-none shadow-none"
             alt="API Linkage" />
         </div>
       </div>
