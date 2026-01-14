@@ -1,0 +1,586 @@
+<script setup>
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+// 引入 AOS 动画库
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+
+useSeoMeta({
+  title: '小马笔记 - 让记录更简单，让知识更加智慧',
+})
+
+// --- 1. 原始数据 (用于轮播图逻辑) ---
+const rawSlides = [
+  { id: 1, title: '导入或者迁移', desc: '从其他应用和文件导入数据到 小马笔记', type: 'import' },
+  { id: 2, title: '无限画布', desc: '打破页面限制，随心所欲布局你的灵感', type: 'canvas' },
+  { id: 3, title: '多维表数据库', desc: '用表格、看板、日历管理你的结构化数据', type: 'table' },
+  { id: 4, title: 'AI 智能助手', desc: '利用大模型能力，一键总结、润色与续写', type: 'ai' },
+  { id: 5, title: '全平台同步', desc: '实时同步，随时随地记录你的想法', type: 'sync' }
+]
+
+// --- 2. 构造无限视觉数据 ---
+const slides = [...rawSlides, ...rawSlides, ...rawSlides]
+
+// --- 3. 轮播逻辑 ---
+const currentIndex = ref(5)
+const totalRaw = rawSlides.length
+const realIndex = computed(() => currentIndex.value % totalRaw)
+let timer = null
+
+const next = () => { currentIndex.value++ }
+const goTo = (index) => { currentIndex.value = totalRaw + index }
+
+// --- 4. 移动端适配：动态宽度计算 ---
+const slideWidth = ref(1000)
+const updateSlideWidth = () => {
+  if (typeof window !== 'undefined') {
+    // 移动端使用 90vw，桌面端上限 1000px
+    slideWidth.value = window.innerWidth < 768 ? window.innerWidth * 0.9 : 1000
+  }
+}
+
+// --- 5. 打字机效果逻辑 ---
+const typewriterText = ref('')
+const fullText = '让记录更简单，让知识更加智慧'
+let typeIndex = 0
+
+const typeWriter = () => {
+  if (typeIndex < fullText.length) {
+    typewriterText.value += fullText.charAt(typeIndex)
+    typeIndex++
+    setTimeout(typeWriter, 100)
+  }
+}
+
+onMounted(() => {
+  // 初始化 AOS 配置
+  AOS.init({
+    duration: 1000,
+    easing: 'ease-out-quint',
+    once: false,
+    offset: 120,
+    delay: 0,
+    anchorPlacement: 'top-bottom',
+  })
+
+  // 初始化宽度并监听窗口缩放
+  updateSlideWidth()
+  window.addEventListener('resize', updateSlideWidth)
+
+  timer = setInterval(next, 5000)
+  typeWriter()
+})
+
+onUnmounted(() => {
+  clearInterval(timer)
+  window.removeEventListener('resize', updateSlideWidth)
+})
+</script>
+
+<template>
+  <!-- 全局容器 -->
+  <div class="w-full bg-white min-h-screen font-sans overflow-x-hidden selection:bg-[#FF4D00] selection:text-white">
+
+    <!-- =========================================================
+         Hero 区域
+    ========================================================= -->
+    <div class="relative w-full bg-no-repeat bg-cover bg-top" style="background-image: url('/images/topbg.png');">
+      <div class="relative z-10">
+        <!-- 导航栏 -->
+        <nav class="max-w-[1100px] mx-auto px-6 h-20 flex items-center justify-between">
+          <div class="flex items-center gap-2 group" data-aos="fade-down">
+            <img src="/images/ico.png"
+              class="w-8 h-8 object-contain transition-transform duration-1000 group-hover:rotate-[360deg]"
+              alt="小马笔记 Logo" />
+            <span class="text-xl font-bold tracking-tight text-gray-900">小马笔记</span>
+          </div>
+          <div class="hidden md:flex items-center gap-10 text-[14px] font-semibold text-gray-600">
+            <a href="#" class="hover:text-[#FF4D00] transition-colors relative group" data-aos="fade-down"
+              data-aos-delay="100">
+              功能<span
+                class="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-[#FF4D00] transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            <a href="#" class="hover:text-[#FF4D00] transition-colors relative group" data-aos="fade-down"
+              data-aos-delay="150">
+              价格<span
+                class="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-[#FF4D00] transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            <a href="#" class="hover:text-[#FF4D00] transition-colors relative group" data-aos="fade-down"
+              data-aos-delay="200">
+              下载<span
+                class="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-[#FF4D00] transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            <div data-aos="fade-down" data-aos-delay="250">
+              <button
+                class="bg-[#FF4D00] text-white px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 active:scale-95">注册/登录</button>
+            </div>
+          </div>
+        </nav>
+
+        <!-- Hero 内容 -->
+        <section class="max-w-[1100px] mx-auto px-6 pt-12 md:pt-20 pb-32">
+          <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-8">
+            <div class="flex-1 space-y-6 text-center lg:text-left">
+              <h1 class="text-4xl md:text-[54px] font-extrabold leading-[1.15] tracking-tight text-gray-900">
+                <span class="block" data-aos="fade-up" data-aos-delay="200">让<span
+                    class="text-[#FF4D00]">笔记</span>更简单</span>
+                <span class="relative block" data-aos="fade-up" data-aos-delay="400">
+                  {{ typewriterText }}<span class="animate-blink text-[#FF4D00]">|</span>
+                </span>
+              </h1>
+              <p class="text-gray-500 text-[16px] leading-relaxed max-w-md mx-auto lg:mx-0 font-medium"
+                data-aos="fade-up" data-aos-delay="600">
+                让笔记更简单、让知识更智慧，开源、本地优先、云同步，多模态记录与 AI 并存，助你高效构建个人与团队的知识系统
+              </p>
+              <div class="pt-4" data-aos="zoom-in-up" data-aos-delay="800">
+                <button
+                  class="bg-[#FF4D00] text-white px-9 py-3.5 rounded-xl text-base font-bold transition-all duration-500 hover:translate-y-[-4px]">免费下载使用</button>
+              </div>
+            </div>
+            <div class="flex-1 relative w-full max-w-[650px]" data-aos="fade-left" data-aos-duration="1200"
+              data-aos-delay="500">
+              <div class="relative animate-float-slow">
+                <img src="/images/index_right.png" class="w-full h-auto block" alt="Hero Preview" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         轮播 Section
+    ========================================================= -->
+    <section class="py-24 bg-white overflow-hidden w-full relative z-20">
+      <div class="max-w-[1200px] mx-auto px-6 text-center mb-16" data-aos="fade-up">
+        <h2 class="text-3xl md:text-[42px] font-bold text-gray-900 tracking-tight">易于使用且功能强大</h2>
+      </div>
+
+      <!-- 设置幻灯片宽度 CSS 变量 -->
+      <div class="relative w-full" data-aos="fade-up" data-aos-delay="200" :style="{ '--sw': slideWidth + 'px' }">
+        <div class="flex transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+          :style="{ transform: `translateX(calc(50% - (var(--sw) * ${currentIndex} + var(--sw) / 2)))` }">
+
+          <div v-for="(slide, index) in slides" :key="index" class="shrink-0 px-2 md:px-5 transition-all duration-700"
+            :style="{ width: 'var(--sw)' }"
+            :class="[index === currentIndex ? 'opacity-100 scale-100 z-10' : 'opacity-40 scale-[0.93] blur-[4px]']"
+            @click="currentIndex = index">
+            <div class="rounded-[1rem] md:rounded-[1.5rem] overflow-hidden bg-gray-100 border border-gray-100">
+              <img src="/images/intro1.png" class="w-full h-full object-cover object-top" alt="Feature Preview" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="flex justify-center mt-12" data-aos="fade-up">
+        <div class="bg-[#F5F5F5] rounded-full px-4 py-2 flex items-center gap-3">
+          <button v-for="(item, index) in rawSlides" :key="item.id" @click="goTo(index)"
+            class="w-8 h-1.5 rounded-full transition-all duration-300"
+            :class="[index === realIndex ? 'bg-[#FF4D00] w-12' : 'bg-[#E0E0E0] hover:bg-gray-300']"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 黑色背景板块 (模块化/多维表/任务/站点) ================= -->
+
+    <!-- 1. 模块化笔记 (按照图片 1 调整) -->
+    <section class="pt-12 pb-20 bg-black text-white w-full">
+      <div class="max-w-[1100px] mx-auto px-6">
+        <div class="mb-12 text-center md:text-left" data-aos="fade-right">
+          <h2
+            class="text-[42px] font-bold mb-6 bg-gradient-to-r from-[#4facfe] to-[#00f2fe] bg-clip-text text-transparent tracking-tight">
+            模块化笔记</h2>
+          <div class="space-y-1 font-medium leading-snug">
+            <p class="text-[20px] text-gray-400 mb-2">像搭积木一样编辑笔记</p>
+            <p class="text-[26px] text-white font-bold mb-1">一键插入文字、表格、代码、音视频、网页等</p>
+            <p class="text-[26px] text-white font-bold">内容，自由组合，灵活创作</p>
+          </div>
+        </div>
+        <div class="flex justify-center" data-aos="fade-up">
+          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl shadow-none" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 多维表 (保持结构，统一字号) -->
+    <section class="py-16 bg-black text-white w-full">
+      <div class="max-w-[1100px] mx-auto px-6">
+        <div class="mb-10 text-center md:text-left" data-aos="fade-right">
+          <h2
+            class="text-[36px] font-bold mb-4 bg-gradient-to-r from-[#FACC15] to-[#4ADE80] bg-clip-text text-transparent animate-gradient-x">
+            多维表</h2>
+          <div class="space-y-1 font-medium leading-tight">
+            <p class="text-[18px] text-gray-400">支持类似 Notion 的多视图数据库</p>
+            <p class="text-[24px] text-white font-bold">用表格、看板、日历等方式查看同一组数据</p>
+          </div>
+        </div>
+        <div class="flex justify-center" data-aos="fade-up">
+          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl shadow-none" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 任务系统 (按照图片 2 调整：右对齐 + 换行) -->
+    <section class="py-16 bg-black text-white w-full">
+      <div class="max-w-[1100px] mx-auto px-6 flex flex-col items-center md:items-end">
+        <div class="mb-10 text-center md:text-right" data-aos="fade-left">
+          <h2
+            class="text-[42px] font-bold mb-6 bg-gradient-to-r from-[#F97316] to-[#EF4444] bg-clip-text text-transparent animate-gradient-x">
+            任务系统</h2>
+          <div class="space-y-1 font-medium leading-snug">
+            <p class="text-[20px] text-gray-400">内置任务管理功能支持待办事项、多状态、优</p>
+            <p class="text-[26px] text-white font-bold">先级、截止日期笔记即项目管理</p>
+          </div>
+        </div>
+        <div class="flex justify-center md:justify-start w-full" data-aos="fade-up">
+          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl shadow-none" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 知识站点 (按照图片 3 调整：右对齐 + 换行) -->
+    <section class="py-16 bg-black text-white w-full">
+      <div class="max-w-[1100px] mx-auto px-6 flex flex-col items-center md:items-end">
+        <div class="mb-10 text-center md:text-right" data-aos="fade-left">
+          <h2
+            class="text-[42px] font-bold mb-6 bg-gradient-to-r from-[#00F8FF] to-[#3CF9FF] bg-clip-text text-transparent animate-gradient-x">
+            知识站点</h2>
+          <div class="space-y-1 font-medium leading-snug">
+            <p class="text-[20px] text-gray-400">将笔记一键发布为静态网站打造专属知识库或</p>
+            <p class="text-[26px] text-white font-bold">项目主页，支持自定义域名和样式</p>
+          </div>
+        </div>
+        <div class="flex justify-center md:justify-start w-full" data-aos="fade-up">
+          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl shadow-none" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 白色背景手写功能板块 ================= -->
+    <section class="py-16 bg-white text-gray-900">
+      <div class="max-w-[1220px] mx-auto px-10">
+        <div class="flex justify-center items-center gap-0 mb-12" data-aos="flip-up">
+          <span
+            class="bg-[#FF4D00] text-white px-4 py-1.5 text-[28px] font-bold tracking-tight transform hover:rotate-2 transition-transform cursor-default">独一无二</span>
+          <span class="text-[32px] font-bold text-gray-900 tracking-tight ml-3">的手写体验</span>
+        </div>
+        <div class="mb-8" data-aos="fade-up">
+          <h2 class="text-[48px] font-bold mb-4 text-[#4facfe] tracking-tight">手写笔记</h2>
+          <div class="text-[20px] text-gray-900 font-bold leading-tight">
+            <p>支持流畅书写与自然笔迹回放，打破键盘限制，模拟纸笔体验</p>
+          </div>
+        </div>
+        <div class="flex justify-center" data-aos="zoom-in">
+          <img src="/images/intro1.png" class="w-full max-w-[640px] h-auto block rounded-xl shadow-none" />
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 bg-white text-gray-900">
+      <div class="max-w-[1220px] mx-auto px-10">
+        <div class="mb-8" data-aos="fade-right">
+          <h2
+            class="text-[48px] font-bold mb-4 bg-gradient-to-r from-[#FACC15] to-[#4ADE80] bg-clip-text text-transparent animate-gradient-x">
+            多种纸张模板</h2>
+          <div class="text-[20px] text-gray-900 font-bold leading-tight">
+            <p>提供横线、方格、康奈尔笔记、空白等纸张背景，适配学习和工作场景</p>
+          </div>
+        </div>
+        <div class="flex justify-center" data-aos="fade-left">
+          <img src="/images/intro1.png" class="w-full max-w-[640px] h-auto block rounded-xl shadow-none" />
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 bg-white text-gray-900">
+      <div class="max-w-[1220px] mx-auto px-10 flex flex-col">
+        <div class="flex flex-col items-end text-right mb-8" data-aos="fade-left">
+          <h2
+            class="text-[48px] font-bold mb-4 bg-gradient-to-r from-[#F97316] to-[#EF4444] bg-clip-text text-transparent animate-gradient-x">
+            手写工具箱</h2>
+          <div class="text-[20px] text-gray-900 font-bold leading-tight">
+            <p>多种笔刷、颜色、荧光笔、橡皮工具满足个性化标注与创作</p>
+          </div>
+        </div>
+        <div class="flex justify-start" data-aos="fade-right">
+          <img src="/images/intro1.png" class="w-full max-w-[640px] h-auto block rounded-xl shadow-none" />
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 bg-white text-gray-900">
+      <div class="max-w-[1220px] mx-auto px-10 flex flex-col">
+        <div class="flex flex-col items-end text-right mb-8" data-aos="fade-left">
+          <h2
+            class="text-[48px] font-bold mb-4 bg-gradient-to-r from-[#00F8FF] to-[#3CF9FF] bg-clip-text text-transparent animate-gradient-x">
+            智能书写识别</h2>
+          <div class="text-[20px] text-gray-900 font-bold leading-tight">
+            <p>支持手写文字转文本、手势擦除助力结构化整理与搜索</p>
+          </div>
+        </div>
+        <div class="flex justify-start" data-aos="fade-right">
+          <img src="/images/intro1.png" class="w-full max-w-[640px] h-auto block rounded-xl shadow-none" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 一起思维发散 (黑色卡片) ================= -->
+    <section class="py-16 bg-white w-full flex justify-center">
+      <div
+        class="w-[96%] max-w-[1240px] bg-black text-white rounded-[3.5rem] py-24 overflow-hidden relative shadow-none"
+        data-aos="zoom-in-up">
+        <div
+          class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600 opacity-20 blur-[150px] rounded-full animate-pulse-slow">
+        </div>
+        <div
+          class="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-purple-600 opacity-20 blur-[150px] rounded-full animate-pulse-slow"
+          style="animation-delay: 2s;"></div>
+        <div class="max-w-[1000px] mx-auto px-6 relative z-10">
+          <div class="text-center mb-28">
+            <h2 class="text-[56px] font-bold mb-6 text-white tracking-tight">一起思维发散</h2>
+            <p
+              class="text-[56px] font-bold bg-gradient-to-r from-[#FF8F00] to-[#FF4D00] bg-clip-text text-transparent animate-gradient-x">
+              打破页面限制。</p>
+          </div>
+          <!-- 子项 1 -->
+          <div class="mb-32 flex flex-col items-start text-left">
+            <h3
+              class="text-[42px] font-bold mb-5 bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] bg-clip-text text-transparent animate-gradient-x"
+              data-aos="fade-right">无限白板</h3>
+            <div class="text-[22px] text-white/90 font-medium mb-10 max-w-2xl" data-aos="fade-right">
+              <p>支持手绘直线、箭头、图形，自动矫正为标准图形，适合绘制流程图、思维导图、界面草图</p>
+            </div>
+            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl shadow-none" data-aos="fade-up" />
+          </div>
+          <!-- 子项 2 -->
+          <div class="mb-32 flex flex-col items-start text-left">
+            <h3
+              class="text-[42px] font-bold mb-5 bg-gradient-to-r from-[#84CC16] to-[#22C55E] bg-clip-text text-transparent animate-gradient-x"
+              data-aos="fade-right">自然书写</h3>
+            <div class="text-[22px] text-white/90 font-medium mb-10 max-w-xl" data-aos="fade-right">
+              <p>兼容 Apple Pencil 和各类手写笔，支持压感与笔迹粗细调节，体验接近真实书写</p>
+            </div>
+            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl shadow-none" data-aos="fade-up" />
+          </div>
+          <!-- 子项 3 -->
+          <div class="mb-32 flex flex-col items-end text-right">
+            <h3
+              class="text-[42px] font-bold mb-5 bg-gradient-to-r from-[#F97316] to-[#EF4444] bg-clip-text text-transparent animate-gradient-x"
+              data-aos="fade-left">文字编辑</h3>
+            <div class="text-[22px] text-white/90 font-medium mb-10 max-w-xl" data-aos="fade-left">
+              <p>插入文本框，支持富文本格式搭配手绘内容轻松表达逻辑</p>
+            </div>
+            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl shadow-none" data-aos="fade-up" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= AI功能 (白色背景) ================= -->
+    <section class="py-24 bg-white w-full overflow-hidden">
+      <div class="max-w-[1100px] mx-auto px-6">
+        <div class="text-center mb-24" data-aos="fade-up">
+          <h2 class="text-[54px] font-extrabold text-gray-900 mb-2">AI功能</h2>
+          <div class="flex justify-center items-center gap-4 text-[54px] font-extrabold">
+            <span class="text-gray-900">自选模型</span>
+            <span class="bg-[#FF4D00] text-white px-6 py-1">更懂你</span>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-20 items-center mb-32">
+          <div data-aos="fade-right">
+            <h3 class="text-[36px] font-bold text-[#3B82F6] mb-6">自由选择大模型</h3>
+            <p class="text-[18px] text-gray-900 font-bold leading-relaxed">小马笔记支持多种主流大语言模型，按需切换，满足不同场景需求</p>
+          </div>
+          <div data-aos="fade-left"><img src="/images/intro1.png" class="w-full h-auto block rounded-xl shadow-none" />
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-20 items-center mb-32">
+          <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/intro1.png"
+              class="w-full h-auto block rounded-xl shadow-none" /></div>
+          <div class="order-1 md:order-2 text-right" data-aos="fade-left">
+            <h3 class="text-[36px] font-bold text-[#4ADE80] mb-6">AI总结与问答</h3>
+            <p class="text-[18px] text-gray-900 font-bold leading-relaxed">选中任意笔记内容，一键生成摘要、提炼重点，支持基于上下文的智能问答</p>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-20 items-center">
+          <div data-aos="fade-right">
+            <h3 class="text-[36px] font-bold text-[#F97316] mb-6">AI写作助手</h3>
+            <p class="text-[18px] text-gray-900 font-bold leading-relaxed">输入大纲或灵感碎片，AI 帮你扩写文章、润色表达、生成标题，提升创作效率</p>
+          </div>
+          <div data-aos="fade-left"><img src="/images/intro1.png" class="w-full h-auto block rounded-xl shadow-none" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 隐私保护 (黑色圆角卡片) ================= -->
+    <section class="py-24 bg-white w-full flex justify-center">
+      <div
+        class="w-[96%] max-w-[1240px] bg-black text-white rounded-[3.5rem] py-32 overflow-hidden relative shadow-none"
+        data-aos="zoom-in-up">
+        <div
+          class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600 opacity-10 blur-[150px] rounded-full animate-pulse-slow">
+        </div>
+        <div
+          class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-500 opacity-10 blur-[150px] rounded-full animate-pulse-slow"
+          style="animation-delay: 3s;"></div>
+        <div class="max-w-[1000px] mx-auto px-6 relative z-10">
+          <div class="text-center mb-32">
+            <h2 data-aos="fade-up"
+              class="text-[56px] font-bold bg-gradient-to-r from-[#6EE7B7] via-[#3B82F6] to-[#9333EA] bg-clip-text text-transparent tracking-tight animate-gradient-x">
+              专为注重隐私的人打造</h2>
+          </div>
+          <div class="space-y-40">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+              <div data-aos="fade-right">
+                <h3 class="text-[36px] font-bold mb-6 text-white">本地优先 数据自有</h3>
+                <p class="text-[18px] text-white/70 font-medium leading-relaxed">默认本地保存，用户完全掌控数据存储位置，无需依赖云端即可使用全部核心功能
+                </p>
+              </div>
+              <div data-aos="fade-left"><img src="/images/intro1.png"
+                  class="w-full h-auto block rounded-xl shadow-none" /></div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+              <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/intro1.png"
+                  class="w-full h-auto block rounded-xl shadow-none" /></div>
+              <div class="order-1 md:order-2 text-right">
+                <h3 data-aos="fade-left" class="text-[36px] font-bold mb-6 text-white">全程加密传输</h3>
+                <p class="text-[18px] text-white/70 font-medium leading-relaxed">采用行业标准 HTTPS + 加密协议，保障笔记在云同步过程中的数据安全
+                </p>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+              <div data-aos="fade-right">
+                <h3 class="text-[36px] font-bold mb-6 text-white">开源透明 拒绝黑箱</h3>
+                <p class="text-[18px] text-white/70 font-medium leading-relaxed">核心模块开源，代码可查，技术透明，真正做到“你见得见的安全”</p>
+              </div>
+              <div data-aos="fade-left"><img src="/images/intro1.png"
+                  class="w-full h-auto block rounded-xl shadow-none" /></div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+              <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/intro1.png"
+                  class="w-full h-auto block rounded-xl shadow-none" /></div>
+              <div class="order-1 md:order-2 text-right">
+                <h3 data-aos="fade-left" class="text-[36px] font-bold mb-6 text-white">数据开放 可随时导出</h3>
+                <p class="text-[18px] text-white/70 font-medium leading-relaxed">笔记支持 Markdown、PDF、HTML
+                  等格式导出，避免平台锁定，随时迁移无负担</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= API联动 ================= -->
+    <section class="py-24 bg-white w-full overflow-hidden">
+      <div class="max-w-[1100px] mx-auto px-6">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2 class="text-[56px] font-bold text-[#FF4D00] tracking-tight">利用API让笔记进行联动</h2>
+        </div>
+        <div class="flex justify-center" data-aos="zoom-in" data-aos-duration="1200">
+          <img src="/images/programm.png" class="w-full max-w-[1000px] h-auto block rounded-xl shadow-none"
+            alt="API Linkage" />
+        </div>
+      </div>
+    </section>
+
+  </div>
+</template>
+
+<style>
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  width: 100%;
+  overflow-x: hidden;
+}
+</style>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.03em;
+}
+
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.animate-float-slow {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes gradient-x {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 6s ease infinite;
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(1.1);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+</style>
