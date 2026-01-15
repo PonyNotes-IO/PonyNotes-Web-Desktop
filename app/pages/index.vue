@@ -33,6 +33,7 @@ const goTo = (index) => { currentIndex.value = totalRaw + index }
 const slideWidth = ref(1000)
 const updateSlideWidth = () => {
   if (typeof window !== 'undefined') {
+    // 移动端使用 90vw，桌面端上限 1000px
     slideWidth.value = window.innerWidth < 768 ? window.innerWidth * 0.9 : 1000
   }
 }
@@ -86,33 +87,7 @@ onUnmounted(() => {
       <div class="relative z-10">
         <!-- 导航栏 -->
         <nav class="max-w-[1100px] mx-auto px-6 h-20 flex items-center justify-between">
-          <div class="flex items-center gap-2 group" data-aos="fade-down">
-            <img src="/images/ico.png"
-              class="w-8 h-8 object-contain transition-transform duration-1000 group-hover:rotate-[360deg] border-none shadow-none"
-              alt="小马笔记 Logo" />
-            <span class="text-xl font-bold tracking-tight text-gray-900">小马笔记</span>
-          </div>
-          <div class="hidden md:flex items-center gap-10 text-[14px] font-semibold text-gray-600">
-            <a href="#" class="hover:text-[#FF4D00] transition-colors relative group" data-aos="fade-down"
-              data-aos-delay="100">
-              功能<span
-                class="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-[#FF4D00] transition-all duration-300 group-hover:w-full"></span>
-            </a>
-            <a href="#" class="hover:text-[#FF4D00] transition-colors relative group" data-aos="fade-down"
-              data-aos-delay="150">
-              价格<span
-                class="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-[#FF4D00] transition-all duration-300 group-hover:w-full"></span>
-            </a>
-            <a href="#" class="hover:text-[#FF4D00] transition-colors relative group" data-aos="fade-down"
-              data-aos-delay="200">
-              下载<span
-                class="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-[#FF4D00] transition-all duration-300 group-hover:w-full"></span>
-            </a>
-            <div data-aos="fade-down" data-aos-delay="250">
-              <button
-                class="bg-[#FF4D00] text-white px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 active:scale-95 border-none shadow-none">注册/登录</button>
-            </div>
-          </div>
+          <AppHeader />
         </nav>
 
         <!-- Hero 内容 -->
@@ -138,7 +113,6 @@ onUnmounted(() => {
             <div class="flex-1 relative w-full max-w-[650px]" data-aos="fade-left" data-aos-duration="1200"
               data-aos-delay="500">
               <div class="relative animate-float-slow">
-                <!-- 移除阴影和边框 -->
                 <img src="/images/index_right.png" class="w-full h-auto block border-none shadow-none"
                   alt="Hero Preview" />
               </div>
@@ -165,7 +139,6 @@ onUnmounted(() => {
             :style="{ width: 'var(--sw)' }"
             :class="[index === currentIndex ? 'opacity-100 scale-100 z-10' : 'opacity-40 scale-[0.93] blur-[4px]']"
             @click="currentIndex = index">
-            <!-- 核心修正：移除 rounded 内的 bg-gray-100 和 border 类名 -->
             <div class="rounded-[1rem] md:rounded-[1.5rem] overflow-hidden bg-transparent border-none shadow-none">
               <img src="/images/intro1.png" class="w-full h-full object-cover object-top border-none shadow-none"
                 alt="Feature Preview" />
@@ -184,7 +157,7 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <!-- ================= 黑色背景板块 (模块化/多维表/任务/站点) ================= -->
+    <!-- ================= 黑色背景功能板块 (模块化/多维表/任务/站点) ================= -->
 
     <!-- 1. 模块化笔记 -->
     <section class="pt-12 pb-20 bg-black text-white w-full">
@@ -277,7 +250,7 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <!-- ================= 一起思维发散 (黑色卡片) ================= -->
+    <!-- ================= 一起思维发散 (黑色大圆角) ================= -->
     <section class="py-16 bg-white w-full flex justify-center">
       <div
         class="w-[96%] max-w-[1240px] bg-black text-white rounded-[3.5rem] py-24 overflow-hidden relative shadow-none border-none"
@@ -352,7 +325,7 @@ onUnmounted(() => {
         </div>
         <div class="grid md:grid-cols-2 gap-20 items-center mb-32">
           <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/intro1.png"
-              class="w-full rounded-xl border-none shadow-none" /></div>
+              class="w-full h-auto block rounded-xl border-none shadow-none" /></div>
           <div class="order-1 md:order-2 text-right" data-aos="fade-left">
             <h3 class="text-[36px] font-bold text-[#4ADE80] mb-6">AI总结与问答</h3>
             <p class="text-[18px] text-gray-900 font-bold leading-relaxed">选中任意笔记内容，一键生成摘要、提炼重点，支持基于上下文的智能问答</p>
@@ -375,10 +348,10 @@ onUnmounted(() => {
         class="w-[96%] max-w-[1240px] bg-black text-white rounded-[3.5rem] py-32 overflow-hidden relative shadow-none border-none"
         data-aos="zoom-in-up">
         <div
-          class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-500 opacity-10 blur-[150px] rounded-full animate-pulse-slow">
+          class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600 opacity-10 blur-[150px] rounded-full animate-pulse-slow">
         </div>
         <div
-          class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-500 opacity-10 blur-[150px] rounded-full animate-pulse-slow"
+          class="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-cyan-500 opacity-10 blur-[150px] rounded-full animate-pulse-slow"
           style="animation-delay: 3s;"></div>
         <div class="max-w-[1000px] mx-auto px-6 relative z-10">
           <div class="text-center mb-32">
