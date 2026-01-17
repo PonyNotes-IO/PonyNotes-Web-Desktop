@@ -20,9 +20,28 @@ const isRegisterButtonActive = computed(() => {
 })
 
 const handleRegister = () => {
+    console.log('=== handleRegister 被调用 ===')
+    console.log('phoneNumber:', phoneNumber.value)
+    console.log('agreeTerms:', agreeTerms.value)
+    console.log('isRegisterButtonActive:', isRegisterButtonActive.value)
+
     if (isRegisterButtonActive.value) {
+        console.log('✅ 条件判断通过，准备跳转')
         console.log(`注册/登录请求: ${phoneNumber.value}`)
-        emit('close')
+
+        // 使用最直接的原生跳转，确保 100% 成功
+        // 在 Nuxt 中如果路由有问题，这样也能强制刷新到目标地址
+        console.log('🚀 执行跳转: window.location.href = "/account"')
+        window.location.href = '/account'
+
+        // 延迟一点点执行 emit，给浏览器处理跳转请求的时间
+        setTimeout(() => {
+            console.log('⏰ 延迟关闭弹窗')
+            emit('close')
+        }, 100)
+    } else {
+        console.log('❌ 条件判断未通过，无法跳转')
+        console.log('原因: phoneNumber 为空或 agreeTerms 未勾选')
     }
 }
 
@@ -64,7 +83,8 @@ const stopPropagation = (event) => {
                     class="w-full px-5 py-4 mb-4 text-[15px] rounded-[12px] bg-[#F5F5F7] border-none focus:ring-1 focus:ring-[#FF4D00]/20 outline-none transition-all placeholder:text-gray-400 font-medium" />
 
                 <!-- 登录注册按钮 (颜色逻辑优化：勾选协议即变色) -->
-                <button @click="handleRegister" :disabled="!isRegisterButtonActive"
+                <!-- 移除 disabled 属性，改为在函数内部判断，确保点击事件能被触发 -->
+                <button @click="handleRegister"
                     class="w-full py-3.5 mb-4 rounded-[18px] text-[16px] font-bold transition-all duration-300 border-none shadow-none"
                     :class="agreeTerms
                         ? 'bg-[#FF4D00] text-white hover:bg-opacity-95 cursor-pointer shadow-lg shadow-[#FF4D00]/20'
