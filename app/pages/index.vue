@@ -97,17 +97,15 @@ onUnmounted(() => {
               <h1 class="text-4xl md:text-[54px] font-extrabold leading-[1.15] tracking-tight text-gray-900">
                 <span class="block" data-aos="fade-up" data-aos-delay="200">让<span
                     class="text-[#FF4D00]">笔记</span>更简单</span>
-                <span class="relative block" data-aos="fade-up" data-aos-delay="400">
-                  {{ typewriterText }}<span class="animate-blink text-[#FF4D00]">|</span>
-                </span>
+                <span class="block" data-aos="fade-up" data-aos-delay="400">让知识更加<span class="text-[#FF4D00]">智慧</span></span>
               </h1>
-              <p class="text-gray-500 text-[16px] leading-relaxed max-w-md mx-auto lg:mx-0 font-medium"
+              <p class="text-[#4E403B] text-[16px] leading-relaxed max-w-md mx-auto lg:mx-0 font-medium"
                 data-aos="fade-up" data-aos-delay="600">
                 让笔记更简单、让知识更智慧，开源、本地优先、云同步，多模态记录与 AI 并存，助你高效构建个人与团队的知识系统
               </p>
               <div class="pt-4" data-aos="zoom-in-up" data-aos-delay="800">
                 <button
-                  class="bg-[#FF4D00] text-white px-9 py-3.5 rounded-xl text-base font-bold transition-all duration-500 hover:translate-y-[-4px] border-none shadow-none">免费下载使用</button>
+                  class="bg-[#FF4D00] text-white px-16 py-2.5 rounded-xl text-[15px] font-bold transition-all duration-500 hover:translate-y-[-4px] border-none shadow-none">免费下载使用</button>
               </div>
             </div>
             <div class="flex-1 relative w-full max-w-[650px]" data-aos="fade-left" data-aos-duration="1200"
@@ -183,7 +181,7 @@ onUnmounted(() => {
       <div class="max-w-[1100px] mx-auto px-6">
         <div class="mb-10 text-center md:text-left" data-aos="fade-right">
           <h2
-            class="text-[36px] font-bold mb-4 bg-gradient-to-r from-[#FACC15] to-[#4ADE80] bg-clip-text text-transparent animate-gradient-x">
+            class="text-[36px] font-bold mb-4 bg-gradient-to-r from-[#FF8B3C] to-[#77FF6E] bg-clip-text text-transparent">
             多维表</h2>
           <div class="space-y-1 font-medium leading-tight">
             <p class="text-[18px] text-gray-400">支持类似 Notion 的多视图数据库</p>
