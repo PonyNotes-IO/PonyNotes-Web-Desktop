@@ -24,7 +24,7 @@ const closeModal = () => {
                 <img src="/images/ico.png"
                     class="w-8 h-8 object-contain transition-transform duration-1000 group-hover:rotate-[360deg] border-none shadow-none"
                     alt="小马笔记 Logo" />
-                <span class="text-xl font-bold tracking-tight text-gray-900">小马笔记</span>
+                <span class="text-xl font-bold tracking-tight text-[#FF3800]">小马笔记</span>
             </NuxtLink>
 
             <!-- 右侧 导航链接与按钮 -->
@@ -49,15 +49,14 @@ const closeModal = () => {
                 </NuxtLink>
 
                 <!-- 注册登录按钮：添加 @click 事件 -->
-                <button
-                    @click="openModal"
+                <button @click="openModal"
                     class="bg-[#FF4D00] text-white px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 active:scale-95 border-none shadow-none">
                     注册/登录
                 </button>
             </div>
         </div>
     </nav>
-    
+
     <!-- 登录注册模态框组件 -->
     <LoginModal :isVisible="isModalVisible" @close="closeModal" />
 </template>
