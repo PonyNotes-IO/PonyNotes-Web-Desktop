@@ -70,6 +70,7 @@ public class TokenService {
                 LoginUser user = redisCache.getCacheObject(userKey);
                 return user;
             } catch (Exception e) {
+                log.warn("错误内容是[{}],\n请求url[{}]",token,request.getRequestURI());
                 log.error("获取用户信息异常'{}'", e.getMessage());
             }
         }

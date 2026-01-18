@@ -2,6 +2,7 @@ package com.ruoyi.system.service.impl;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.system.domain.PaymentOrder;
+import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
 import com.ruoyi.system.mapper.SysPaymentOrderMapper;
 import com.ruoyi.system.service.ISysPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
