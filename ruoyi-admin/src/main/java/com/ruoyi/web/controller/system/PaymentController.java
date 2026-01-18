@@ -13,6 +13,9 @@ import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentResult;
 import com.ruoyi.web.service.PaymentService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Api(value = "支付",tags = {"支付"})
 @RestController
 @RequestMapping("/api/payment")
 public class PaymentController {
@@ -63,10 +67,11 @@ public class PaymentController {
      * 创建支付订单
      */
     @PostMapping("/create")
+    @ApiOperation("创建订单")
     public AjaxResult createPayment(
-            @RequestParam BigDecimal amount,
-            @RequestParam String paymentType,
-            @RequestParam String userInfo,
+            @RequestParam @ApiParam("订单金额") BigDecimal amount,
+            @RequestParam @ApiParam("支付方式类型,alipay 支付宝") String paymentType,
+            @RequestParam @ApiParam("用户标识") String userInfo,
             @RequestParam(required = false) String productName,
             @RequestParam(required = false) String openid,
             @RequestParam(required = false) String url,

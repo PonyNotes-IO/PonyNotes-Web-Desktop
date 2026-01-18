@@ -3,6 +3,9 @@ package com.ruoyi.web.controller.system;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +45,9 @@ import org.springframework.http.MediaType;
  * @author ruoyi
  */
 @RestController
+@Api(
+        value = "系统用户", tags = {"用户"}
+)
 public class SysLoginController
 {
     @Autowired
@@ -88,6 +94,7 @@ public class SysLoginController
      * @return 结果
      */
     @PostMapping("/login")
+    @ApiOperation("登录")
     public AjaxResult login(@RequestBody LoginBody loginBody)
     {
         AjaxResult ajax = AjaxResult.success();
@@ -102,6 +109,7 @@ public class SysLoginController
      * 根据账号（手机号/邮箱）查询用户信息
      */
     @Anonymous
+    @ApiOperation("用户信息")
     @PostMapping(value = "/api/getuserinfo", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AjaxResult getUserInfo(@RequestBody AccountQueryRequest request) {
         SysUser user = null;
@@ -154,6 +162,7 @@ public class SysLoginController
 
 
     @Anonymous
+    @ApiOperation("验证码登录")
     @PostMapping(value ="/api/loginWithCode", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AjaxResult loginWithCode(@RequestBody LoginVo loginVo) {
         if (StringUtils.isEmpty(loginVo.getLoginType())) {
@@ -230,6 +239,7 @@ public class SysLoginController
     }
     
     @Anonymous
+    @ApiOperation("注册用户")
     @PostMapping(value ="/api/registerUser", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AjaxResult registerUser(@RequestBody LoginVo loginVo) {
         if (StringUtils.isEmpty(loginVo.getLoginType())) {
@@ -248,6 +258,7 @@ public class SysLoginController
     }
 
     @Anonymous
+    @ApiOperation("修改绑定手机号")
     @PostMapping(value ="/api/changePhoneByCode", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AjaxResult changePhoneByCode(@RequestBody LoginVo loginVo) {
         if (StringUtils.isEmpty(loginVo.getPhone()) || StringUtils.isEmpty(loginVo.getUsername())) {
@@ -279,6 +290,7 @@ public class SysLoginController
 
 
     @Anonymous
+    @ApiOperation("设置密码")
     @PostMapping(value ="/api/setPassword", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AjaxResult setPassword(@RequestBody LoginVo loginVo) {
         if (StringUtils.isEmpty(loginVo.getLoginType())) {
@@ -354,6 +366,7 @@ public class SysLoginController
 
 
     @Anonymous
+    @ApiOperation("绑定手机号")
     @PostMapping(value ="/api/bindPhone", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AjaxResult bindPhone(@RequestBody LoginVo loginVo) {
         if (StringUtils.isEmpty(loginVo.getLoginType())) {
@@ -405,6 +418,7 @@ public class SysLoginController
     
 
     @Anonymous
+    @ApiOperation("绑定邮箱")
     @PostMapping(value ="/api/bindEmail", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AjaxResult bindEmail(@RequestBody LoginVo loginVo) {
         if (StringUtils.isEmpty(loginVo.getLoginType())) {
@@ -438,6 +452,7 @@ public class SysLoginController
     }
 
     @Anonymous
+    @ApiOperation("更新密码")
     @PostMapping(value ="/api/updatePassword", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AjaxResult updatePassword(@RequestBody LoginVo loginVo) {
         if (StringUtils.isEmpty(loginVo.getPassword())) {
@@ -468,6 +483,7 @@ public class SysLoginController
      * @return 用户信息
      */
     @GetMapping("getInfo")
+    @ApiOperation("用户信息")
     public AjaxResult getInfo()
     {
         LoginUser loginUser = SecurityUtils.getLoginUser();
@@ -496,6 +512,7 @@ public class SysLoginController
      * @return 路由信息
      */
     @GetMapping("getRouters")
+    @ApiOperation("获取菜单")
     public AjaxResult getRouters()
     {
         Long userId = SecurityUtils.getUserId();

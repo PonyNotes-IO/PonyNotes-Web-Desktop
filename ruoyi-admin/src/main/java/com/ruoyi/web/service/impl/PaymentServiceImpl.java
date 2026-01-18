@@ -3,6 +3,10 @@ package com.ruoyi.web.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
+import com.alipay.api.AlipayConfig;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradePrecreateModel;
+import com.alipay.api.domain.ExtendParams;
 import com.alipay.api.internal.util.file.IOUtils;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
@@ -14,11 +18,11 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysPaymentService;
-import com.ruoyi.web.config.AlipayConfig;
 import com.ruoyi.web.config.RestTemplateConfig;
 import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentResult;
 import com.ruoyi.web.config.WechatPayConfig;
+import com.ruoyi.web.config.XmAlipayConfig;
 import com.ruoyi.web.service.PaymentService;
 import com.ruoyi.web.util.OrderNoGenerator;
 import com.wechat.pay.java.core.Config;
@@ -72,7 +76,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private AlipayClient alipayClient; // 支付宝客户端
     @Autowired
-    private AlipayConfig alipayConfig; // 支付宝配置
+    private XmAlipayConfig alipayConfig; // 支付宝配置
 
     @Autowired
     private ISysPaymentService paymentService; // 项目系统订单服务
@@ -122,6 +126,8 @@ public class PaymentServiceImpl implements PaymentService {
             payInfo = createWechatQrCode(orderNo, amount,httpServletRequest);
         } else if ("alipay".equals(paymentType)) {
             payInfo = createAlipayPagePayUrl(orderNo, amount);
+        } else if ("alipay_qr".equals(paymentType)) {
+            payInfo = createAlipayQrCodePayUrl(orderNo, amount,userInfo);
         } else {
             throw new IllegalArgumentException("不支持的支付方式：" + paymentType);
         }
@@ -351,6 +357,71 @@ public class PaymentServiceImpl implements PaymentService {
             log.error("支付宝接口调用异常", e);
             throw new RuntimeException("支付宝支付创建失败");
         }
+    }
+
+
+    // 支付宝网页支付链接生成
+    public String createAlipayQrCodePayUrl(String orderNo, BigDecimal amount,String userInfo) {
+        AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
+        AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
+
+        // 设置商户订单号
+        model.setOutTradeNo(orderNo);
+
+        // 设置订单总金额
+        model.setTotalAmount(String.valueOf(amount.setScale(2, BigDecimal.ROUND_UP)));
+
+        // 设置订单标题
+        model.setSubject("会员充值");
+
+        // 设置产品码
+        model.setProductCode("QR_CODE_OFFLINE");
+
+        // 设置业务扩展参数
+        ExtendParams extendParams = new ExtendParams();
+        extendParams.setSysServiceProviderId(userInfo);
+        model.setExtendParams(extendParams);
+
+
+        request.setBizModel(model);
+
+        // 3. 调用支付宝接口，获取支付表单
+        try {
+            AlipayClient alipayClient = new DefaultAlipayClient(getAlipayConfig());
+
+            AlipayTradePrecreateResponse response = alipayClient.execute(request);
+            System.out.println(response.getBody());
+
+            if (response.isSuccess()) {
+                System.out.println("调用成功");
+                return response.getQrCode();
+            } else {
+                System.out.println("调用失败");
+                // sdk版本是"4.38.0.ALL"及以上,可以参考下面的示例获取诊断链接
+                // String diagnosisUrl = DiagnosisUtils.getDiagnosisUrl(response);
+                // System.out.println(diagnosisUrl);
+
+                throw new RuntimeException("支付宝接口调用失败");
+            }
+        } catch (AlipayApiException e) {
+            log.error("支付宝接口调用异常", e);
+            throw new RuntimeException("支付宝支付创建失败");
+        }
+    }
+
+    private AlipayConfig getAlipayConfig() {
+        String privateKey  = alipayConfig.getPrivateKey();
+        String alipayPublicKey = alipayConfig.getPublicKey();
+        AlipayConfig c = new AlipayConfig();
+        c.setServerUrl("https://openapi.alipay.com/gateway.do");
+        c.setAppId(alipayConfig.getAppId());
+        c.setPrivateKey(privateKey);
+        c.setFormat("json");
+        c.setAlipayPublicKey(alipayPublicKey);
+        c.setCharset("UTF-8");
+        c.setSignType("RSA2");
+        return c;
+
     }
 
     /**
