@@ -10,38 +10,51 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'bind'])
 
+const api = useApi()
+
 const email = ref('')
 const verificationCode = ref('')
 const countdown = ref(0)
 const isSending = ref(false)
+const loading = ref(false)
 
-// 验证邮箱格式
 const isValidEmail = computed(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return emailRegex.test(email.value)
 })
 
-// 倒计时功能
-const startCountdown = () => {
+const startCountdown = async () => {
     if (countdown.value > 0 || !isValidEmail.value) return
 
-    countdown.value = 60
-    isSending.value = true
+    try {
+        isSending.value = true
+        
+        await api.user.bindEmail({
+            email: email.value.trim(),
+            loginType: 'code'
+        })
 
-    const timer = setInterval(() => {
-        countdown.value--
-        if (countdown.value <= 0) {
-            clearInterval(timer)
-            isSending.value = false
-        }
-    }, 1000)
+        countdown.value = 60
+
+        const timer = setInterval(() => {
+            countdown.value--
+            if (countdown.value <= 0) {
+                clearInterval(timer)
+                isSending.value = false
+            }
+        }, 1000)
+    } catch (error) {
+        console.error('发送验证码失败:', error)
+        alert('发送验证码失败，请稍后重试')
+        isSending.value = false
+    }
 }
 
 const countdownText = computed(() => {
     return countdown.value > 0 ? `${countdown.value}s` : '重新获取'
 })
 
-const handleBind = () => {
+const handleBind = async () => {
     if (!isValidEmail.value) {
         alert('请输入有效的邮箱地址')
         return
@@ -50,7 +63,29 @@ const handleBind = () => {
         alert('请输入验证码')
         return
     }
-    emit('bind', { email: email.value, code: verificationCode.value })
+
+    try {
+        loading.value = true
+        
+        const res = await api.user.bindEmail({
+            email: email.value.trim(),
+            code: verificationCode.value.trim(),
+            loginType: 'code'
+        })
+
+        if (res.code === 200) {
+            alert('绑定邮箱成功!')
+            emit('bind', { email: email.value })
+            handleClose()
+        } else {
+            alert(res.msg || '绑定失败，请重试')
+        }
+    } catch (error) {
+        console.error('绑定邮箱失败:', error)
+        alert('绑定失败，请检查验证码是否正确')
+    } finally {
+        loading.value = false
+    }
 }
 
 const handleClose = () => {
@@ -106,13 +141,13 @@ const handleClose = () => {
 
                 <!-- 底部按钮 -->
                 <div class="flex items-center justify-center gap-3">
-                    <button @click="handleClose"
+                    <button @click="handleClose" :disabled="loading"
                         class="px-6 py-2 text-[15px] font-medium text-gray-700 bg-[#F5F5F5] rounded-lg hover:bg-gray-200 transition-all">
                         取消
                     </button>
-                    <button @click="handleBind"
+                    <button @click="handleBind" :disabled="loading"
                         class="px-6 py-2 text-[15px] font-medium text-white bg-[#FF4D00] rounded-lg hover:bg-[#FF4D00]/90 transition-all">
-                        完成
+                        {{ loading ? '绑定中...' : '完成' }}
                     </button>
                 </div>
             </div>

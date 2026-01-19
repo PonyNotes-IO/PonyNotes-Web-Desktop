@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 
 const props = defineProps({
     isVisible: {
@@ -10,46 +10,104 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
+const api = useApi()
+const userStore = useUserStore()
+const router = useRouter()
+
 const phoneNumber = ref('')
 const agreeTerms = ref(false)
+const verificationCode = ref('')
+const countdown = ref(0)
+const isCodeSent = ref(false)
+const loading = ref(false)
 
-// 动态计算按钮是否激活
 const isRegisterButtonActive = computed(() => {
-    // 检查非空且同意条款
-    return phoneNumber.value.trim() !== '' && agreeTerms.value
+    return phoneNumber.value.trim() !== '' && agreeTerms.value && verificationCode.value.trim() !== ''
 })
 
-const handleRegister = () => {
-    console.log('=== handleRegister 被调用 ===')
-    console.log('phoneNumber:', phoneNumber.value)
-    console.log('agreeTerms:', agreeTerms.value)
-    console.log('isRegisterButtonActive:', isRegisterButtonActive.value)
+const countdownText = computed(() => {
+    return countdown.value > 0 ? `${countdown.value}s` : '获取验证码'
+})
 
-    if (isRegisterButtonActive.value) {
-        console.log('✅ 条件判断通过，准备跳转')
-        console.log(`注册/登录请求: ${phoneNumber.value}`)
+const isValidPhoneOrEmail = computed(() => {
+    const value = phoneNumber.value.trim()
+    const phoneRegex = /^1[3-9]\d{9}$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return phoneRegex.test(value) || emailRegex.test(value)
+})
 
-        // 使用最直接的原生跳转，确保 100% 成功
-        // 在 Nuxt 中如果路由有问题，这样也能强制刷新到目标地址
-        console.log('🚀 执行跳转: window.location.href = "/account"')
-        window.location.href = '/account'
+const sendVerificationCode = async () => {
+    if (countdown.value > 0 || !isValidPhoneOrEmail.value) return
 
-        // 延迟一点点执行 emit，给浏览器处理跳转请求的时间
-        setTimeout(() => {
-            console.log('⏰ 延迟关闭弹窗')
-            emit('close')
-        }, 100)
-    } else {
-        console.log('❌ 条件判断未通过，无法跳转')
-        console.log('原因: phoneNumber 为空或 agreeTerms 未勾选')
+    try {
+        loading.value = true
+        const isPhone = /^1[3-9]\d{9}$/.test(phoneNumber.value.trim())
+        
+        await api.user.registerUser({
+            [isPhone ? 'phone' : 'email']: phoneNumber.value.trim(),
+            loginType: 'code'
+        })
+
+        isCodeSent.value = true
+        countdown.value = 60
+
+        const timer = setInterval(() => {
+            countdown.value--
+            if (countdown.value <= 0) {
+                clearInterval(timer)
+            }
+        }, 1000)
+    } catch (error) {
+        console.error('发送验证码失败:', error)
+        alert('发送验证码失败，请稍后重试')
+    } finally {
+        loading.value = false
+    }
+}
+
+const handleRegister = async () => {
+    if (!isRegisterButtonActive.value) {
+        if (!agreeTerms.value) {
+            alert('请先阅读并同意用户协议和隐私政策')
+        }
+        return
+    }
+
+    try {
+        loading.value = true
+        const isPhone = /^1[3-9]\d{9}$/.test(phoneNumber.value.trim())
+        
+        const res = await api.user.loginWithCode({
+            [isPhone ? 'phone' : 'email']: phoneNumber.value.trim(),
+            code: verificationCode.value.trim(),
+            loginType: 'code'
+        })
+
+        if (res.code === 200) {
+            userStore.setUser(res.data.user, res.data.token)
+          alert('登录成功!')
+          emit('close')
+          router.push('/account')
+        } else {
+          alert(res.msg || '登录失败，请重试')
+        }
+    } catch (error) {
+        console.error('登录失败:', error)
+        alert('登录失败，请检查验证码是否正确')
+    } finally {
+        loading.value = false
     }
 }
 
 const closeModal = () => {
+    phoneNumber.value = ''
+    verificationCode.value = ''
+    agreeTerms.value = false
+    isCodeSent.value = false
+    countdown.value = 0
     emit('close')
 }
 
-// 阻止事件冒泡，防止点击模态框内容时关闭
 const stopPropagation = (event) => {
     event.stopPropagation()
 }
@@ -82,14 +140,26 @@ const stopPropagation = (event) => {
                 <input v-model="phoneNumber" type="text" placeholder="输入邮箱或手机号"
                     class="w-full px-5 py-4 mb-4 text-[15px] rounded-[12px] bg-[#F5F5F7] border-none focus:ring-1 focus:ring-[#FF4D00]/20 outline-none transition-all placeholder:text-gray-400 font-medium" />
 
-                <!-- 登录注册按钮 (颜色逻辑优化：勾选协议即变色) -->
-                <!-- 移除 disabled 属性，改为在函数内部判断，确保点击事件能被触发 -->
-                <button @click="handleRegister"
+                <!-- 验证码输入框和发送按钮 -->
+                <div class="flex items-center gap-3 mb-4">
+                    <input v-model="verificationCode" type="text" placeholder="输入验证码" maxlength="6"
+                        class="flex-1 px-5 py-4 text-[15px] rounded-[12px] bg-[#F5F5F7] border-none focus:ring-1 focus:ring-[#FF4D00]/20 outline-none transition-all placeholder:text-gray-400 font-medium" />
+                    <button @click="sendVerificationCode" :disabled="countdown > 0 || !isValidPhoneOrEmail || loading"
+                        class="px-6 py-4 text-[15px] font-bold rounded-[12px] transition-all whitespace-nowrap"
+                        :class="countdown > 0 || !isValidPhoneOrEmail || loading
+                            ? 'bg-[#F5F5F7] text-gray-400 cursor-not-allowed'
+                            : 'bg-[#FF4D00] text-white hover:bg-opacity-95'">
+                        {{ loading ? '发送中...' : countdownText }}
+                    </button>
+                </div>
+
+                <!-- 登录注册按钮 -->
+                <button @click="handleRegister" :disabled="loading || !isRegisterButtonActive"
                     class="w-full py-3.5 mb-4 rounded-[18px] text-[16px] font-bold transition-all duration-300 border-none shadow-none"
-                    :class="agreeTerms
+                    :class="isRegisterButtonActive && !loading
                         ? 'bg-[#FF4D00] text-white hover:bg-opacity-95 cursor-pointer shadow-lg shadow-[#FF4D00]/20'
                         : 'bg-[#F5F5F7] text-[#FF4D00] cursor-not-allowed'">
-                    登录注册
+                    {{ loading ? '登录中...' : '登录注册' }}
                 </button>
 
                 <!-- 服务协议复选框 -->

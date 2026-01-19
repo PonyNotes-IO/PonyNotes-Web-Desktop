@@ -1,9 +1,13 @@
 <script setup>
-import { ref } from 'vue'
-// 导入 LoginModal 组件
+import { ref, onMounted } from 'vue'
 import LoginModal from './LoginModal.vue'
 
 const isModalVisible = ref(false)
+const userStore = useUserStore()
+
+onMounted(() => {
+    userStore.initUser()
+})
 
 const openModal = () => {
     isModalVisible.value = true
@@ -11,6 +15,13 @@ const openModal = () => {
 
 const closeModal = () => {
     isModalVisible.value = false
+}
+
+const handleLogout = () => {
+    if (confirm('确定要退出登录吗？')) {
+        userStore.clearUser()
+        window.location.href = '/'
+    }
 }
 </script>
 
@@ -48,8 +59,20 @@ const closeModal = () => {
                     <span class="active-line"></span>
                 </NuxtLink>
 
-                <!-- 注册登录按钮：添加 @click 事件 -->
-                <button @click="openModal"
+                <!-- 用户已登录 -->
+                <div v-if="userStore.isLoggedIn.value" class="flex items-center gap-4">
+                    <NuxtLink to="/account" class="nav-item">
+                        账号设置
+                        <span class="active-line"></span>
+                    </NuxtLink>
+                    <button @click="handleLogout"
+                        class="bg-gray-100 text-gray-700 px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 border-none shadow-none">
+                        退出登录
+                    </button>
+                </div>
+
+                <!-- 用户未登录 -->
+                <button v-else @click="openModal"
                     class="bg-[#FF4D00] text-white px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 active:scale-95 border-none shadow-none">
                     注册/登录
                 </button>

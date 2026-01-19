@@ -9,6 +9,9 @@ useSeoMeta({
     title: '账号绑定 - 小马笔记',
 })
 
+const api = useApi()
+const userStore = useUserStore()
+
 onMounted(() => {
     AOS.init({
         duration: 1000,
@@ -17,21 +20,23 @@ onMounted(() => {
         offset: 50,
         anchorPlacement: 'top-bottom',
     })
+    
+    fetchUserInfo()
 })
 
-// 弹窗显示状态
 const showVerifyModal = ref(false)
 const showBindEmailModal = ref(false)
 const currentAction = ref('')
+const loading = ref(false)
 
 const bindingItems = ref([
     {
         id: 'phone',
         title: '手机号',
-        status: '196****1345',
-        isBound: true,
-        icon: 'check',
-        actionText: '更改'
+        status: '未绑定',
+        isBound: false,
+        icon: 'warning',
+        actionText: '绑定'
     },
     {
         id: 'email',
@@ -44,47 +49,76 @@ const bindingItems = ref([
     {
         id: 'password',
         title: '账户密码',
-        status: '已设置，可通过账户密码登录',
-        isBound: true,
-        icon: 'check',
-        actionText: '更改'
+        status: '未设置',
+        isBound: false,
+        icon: 'warning',
+        actionText: '设置'
     }
 ])
 
-// 处理按钮点击
+const fetchUserInfo = async () => {
+    try {
+        loading.value = true
+        const res = await api.user.getInfo()
+        
+        if (res.code === 200 && res.data) {
+            const userData = res.data
+            
+            if (userData.phone) {
+                const phoneItem = bindingItems.value.find(item => item.id === 'phone')
+                if (phoneItem) {
+                    phoneItem.isBound = true
+                    phoneItem.status = userData.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+                    phoneItem.actionText = '更改'
+                }
+            }
+            
+            if (userData.email) {
+                const emailItem = bindingItems.value.find(item => item.id === 'email')
+                if (emailItem) {
+                    emailItem.isBound = true
+                    emailItem.status = userData.email
+                    emailItem.actionText = '更改'
+                }
+            }
+            
+            if (userData.hasPassword) {
+                const passwordItem = bindingItems.value.find(item => item.id === 'password')
+                if (passwordItem) {
+                    passwordItem.isBound = true
+                    passwordItem.status = '已设置，可通过账户密码登录'
+                    passwordItem.actionText = '更改'
+                }
+            }
+        }
+    } catch (error) {
+        console.error('获取用户信息失败:', error)
+    } finally {
+        loading.value = false
+    }
+}
+
 const handleAction = (item) => {
     currentAction.value = item.id
 
     if (item.id === 'email' && !item.isBound) {
-        // 同时显示两个弹窗，左侧是身份验证，右侧是绑定邮箱
         showVerifyModal.value = true
         showBindEmailModal.value = true
     } else {
-        // 同时显示两个弹窗，左侧是身份验证，右侧是绑定邮箱
         showVerifyModal.value = true
         showBindEmailModal.value = true
     }
 }
 
-// 身份验证成功后的处理
 const handleVerifySuccess = (code) => {
     console.log('验证成功，验证码:', code)
     showVerifyModal.value = false
-    // 这里可以根据 currentAction.value 执行不同的后续操作
-    // 例如：如果是更改手机号，可以打开一个新的弹窗输入新手机号
 }
 
-// 绑定邮箱成功后的处理
 const handleBindEmailSuccess = (data) => {
     console.log('绑定邮箱成功:', data)
     showBindEmailModal.value = false
-    // 更新邮箱绑定状态
-    const emailItem = bindingItems.value.find(item => item.id === 'email')
-    if (emailItem) {
-        emailItem.isBound = true
-        emailItem.status = data.email
-        emailItem.actionText = '更改'
-    }
+    fetchUserInfo()
 }
 </script>
 
