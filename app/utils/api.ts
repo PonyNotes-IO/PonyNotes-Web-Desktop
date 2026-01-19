@@ -4,7 +4,8 @@
  */
 
 // API 基础配置
-const API_BASE_URL = 'http://localhost:8080'
+// const API_BASE_URL = 'http://localhost:8080'
+const API_BASE_URL = 'https://www.xiaomabiji.com/prod-api'
 
 export interface ApiResponse<T = any> {
   code: number
@@ -44,7 +45,7 @@ export const request = async <T = any>(
         'Content-Type': 'application/json',
         ...fetchOptions.headers,
       },
-    })
+    } as any)
     return response
   } catch (error: any) {
     // 统一错误处理

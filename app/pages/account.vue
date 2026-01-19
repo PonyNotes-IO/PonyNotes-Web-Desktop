@@ -58,17 +58,22 @@ const bindingItems = ref([
 
 const fetchUserInfo = async () => {
     try {
+        console.log(userStore.userInfo.value,'userStore.userInfo')
         loading.value = true
-        const res = await api.user.getInfo()
-        
+        const isPhone = !!userStore.userInfo.value.phonenumber;
+        const res = await api.user.getuserinfo({
+            account: userStore.userInfo.value.phonenumber || userStore.userInfo.value.email,
+            accountType: isPhone ? 'phone' : 'email'
+        })  
+        console.log(res,'获取用户信息')
         if (res.code === 200 && res.data) {
             const userData = res.data
             
-            if (userData.phone) {
+            if (userData.phonenumber) {
                 const phoneItem = bindingItems.value.find(item => item.id === 'phone')
                 if (phoneItem) {
                     phoneItem.isBound = true
-                    phoneItem.status = userData.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+                    phoneItem.status = userData.phonenumber.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
                     phoneItem.actionText = '更改'
                 }
             }
@@ -82,7 +87,7 @@ const fetchUserInfo = async () => {
                 }
             }
             
-            if (userData.hasPassword) {
+            if (userData.password) {
                 const passwordItem = bindingItems.value.find(item => item.id === 'password')
                 if (passwordItem) {
                     passwordItem.isBound = true

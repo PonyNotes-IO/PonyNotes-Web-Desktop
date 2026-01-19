@@ -43,9 +43,11 @@ const sendVerificationCode = async () => {
         loading.value = true
         const isPhone = /^1[3-9]\d{9}$/.test(phoneNumber.value.trim())
         
-        await api.user.registerUser({
-            [isPhone ? 'phone' : 'email']: phoneNumber.value.trim(),
-            loginType: 'code'
+        await api.user.sendCaptcha({
+            accountType: isPhone ? 'phone' : 'email',
+            account: phoneNumber.value.trim()
+            // [isPhone ? 'phone' : 'email']: phoneNumber.value.trim(),
+            // loginType: 'code'
         })
 
         isCodeSent.value = true
@@ -77,20 +79,44 @@ const handleRegister = async () => {
         loading.value = true
         const isPhone = /^1[3-9]\d{9}$/.test(phoneNumber.value.trim())
         
-        const res = await api.user.loginWithCode({
-            [isPhone ? 'phone' : 'email']: phoneNumber.value.trim(),
-            code: verificationCode.value.trim(),
-            loginType: 'code'
-        })
+        // const res = await api.user.loginWithCode({
+        //     'accountType':isPhone ? 'phone' : 'email',
+        //     [isPhone ? 'phone' : 'email']: phoneNumber.value.trim(),
+        //     inputValue: phoneNumber.value.trim(),
+        //     loginType: 'code',
+        //     code: verificationCode.value.trim()
+        // })
+        // console.log(res)
+        // if (res.code == 200) {
+            const loginWithCodeResponse  = await api.user.doCodeLogin({
+                accountType: isPhone ? 'phone' : 'email',
+                inputValue: phoneNumber.value.trim(),
+                code: verificationCode.value.trim()
+            });
+            console.log(loginWithCodeResponse,'loginWithCodeResponse');
+            if(loginWithCodeResponse.code !== 200){
+                alert(loginWithCodeResponse.msg || '登录失败，请重试')
+                return false;
+            }else{
+                // 登录成功，存入token到localStorage
+                const token = loginWithCodeResponse.token;
+                console.log("登录成功，token："+token,loginWithCodeResponse)
+                userStore.setUser(loginWithCodeResponse.data, loginWithCodeResponse.token)
+                // localStorage.setItem(TokenKey, token); 
+                // localStorage.setItem(UserInfoKey, inputValue);
+                // setToken(token);
+                // setUserInfo(inputValue);
+                // 同时存入authToken（可能为兼容其他逻辑）
+                localStorage.setItem('authToken',token);
+                alert('登录成功!')
+                emit('close')
+                router.push('/account')
+            }
+            // userStore.setUser(res.data.user, res.data.token)
 
-        if (res.code === 200) {
-            userStore.setUser(res.data.user, res.data.token)
-          alert('登录成功!')
-          emit('close')
-          router.push('/account')
-        } else {
-          alert(res.msg || '登录失败，请重试')
-        }
+        // } else {
+        //   alert(res.msg || '登录失败，请重试')
+        // }
     } catch (error) {
         console.error('登录失败:', error)
         alert('登录失败，请检查验证码是否正确')
@@ -187,7 +213,7 @@ const stopPropagation = (event) => {
 
 
                 <!-- 社交登录按钮 (还原为圆角胶囊样式) -->
-                <button
+                <!-- <button
                     class="w-full py-3.5 mb-4 rounded-full border border-[#EEEEEE] bg-white text-gray-800 text-[15px] font-bold flex items-center justify-center gap-3 hover:bg-[#F9F9F9] transition-colors shadow-none">
                     <img src="/images/login/weixin.png" class="h-6 w-6" alt="微信登录" />
                     微信登录
@@ -197,7 +223,7 @@ const stopPropagation = (event) => {
                     class="w-full py-3.5 rounded-full border border-[#EEEEEE] bg-white text-gray-800 text-[15px] font-bold flex items-center justify-center gap-3 hover:bg-[#F9F9F9] transition-colors shadow-none">
                     <img src="/images/login/douyin.png" class="h-6 w-6" alt="抖音登录" />
                     抖音登录
-                </button>
+                </button> -->
 
             </div>
         </div>
