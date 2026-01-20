@@ -1,12 +1,26 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import LoginModal from './LoginModal.vue'
+import ConfirmModal from './ConfirmModal.vue'
 
 const isModalVisible = ref(false)
+const isConfirmVisible = ref(false)
+const isScrolled = ref(false)
 const userStore = useUserStore()
 
+// 用 computed 确保响应式追踪
+const isLoggedIn = computed(() => userStore.isLoggedIn.value)
+
+const handleScroll = () => {
+    isScrolled.value = window.scrollY > 0
+}
+
 onMounted(() => {
-    userStore.initUser()
+    window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll)
 })
 
 const openModal = () => {
@@ -18,16 +32,30 @@ const closeModal = () => {
 }
 
 const handleLogout = () => {
-    if (confirm('确定要退出登录吗？')) {
-        userStore.clearUser()
-        window.location.href = '/'
-    }
+    isConfirmVisible.value = true
+}
+
+const confirmLogout = async () => {
+    isConfirmVisible.value = false
+    
+    // 清空用户状态（内存 + localStorage）
+    userStore.clearUser()
+    
+    // 使用 Nuxt 路由跳转，不刷新页面
+    await navigateTo('/', { replace: true })
+}
+
+const cancelLogout = () => {
+    isConfirmVisible.value = false
 }
 </script>
 
 <template>
-    <!-- 统一的顶部导航组件：背景完全透明，z-50 确保在最上层 -->
-    <nav class="w-full bg-transparent h-20 relative z-50">
+    <!-- 统一的顶部导航组件：滚动时显示半透明背景，z-[100] 确保在最上层 -->
+    <nav 
+        class="w-full h-20 fixed top-0 z-[100] transition-all duration-300"
+        :class="[isScrolled ? 'bg-white/90 backdrop-blur-md' : 'bg-transparent']"
+    >
         <div class="max-w-[1140px] mx-auto px-6 h-full flex items-center justify-between">
 
             <!-- 左侧 Logo 区域：点击回首页 -->
@@ -60,19 +88,19 @@ const handleLogout = () => {
                 </NuxtLink>
 
                 <!-- 用户已登录 -->
-                <div v-if="userStore.isLoggedIn.value" class="flex items-center gap-4">
+                <div v-show="isLoggedIn" class="flex items-center gap-10 text-[14px] font-semibold text-gray-600">
                     <NuxtLink to="/account" class="nav-item">
                         账号设置
                         <span class="active-line"></span>
                     </NuxtLink>
-                    <button @click="handleLogout"
-                        class="bg-gray-100 text-gray-700 px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 border-none shadow-none">
+                    <div @click.stop="handleLogout" class="nav-item cursor-pointer">
                         退出登录
-                    </button>
+                        <span class="active-line"></span>
+                    </div>
                 </div>
 
                 <!-- 用户未登录 -->
-                <button v-else @click="openModal"
+                <button v-show="!isLoggedIn" @click="openModal"
                     class="bg-[#FF4D00] text-white px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 active:scale-95 border-none shadow-none">
                     注册/登录
                 </button>
@@ -82,6 +110,13 @@ const handleLogout = () => {
 
     <!-- 登录注册模态框组件 -->
     <LoginModal :isVisible="isModalVisible" @close="closeModal" />
+    
+    <!-- 退出登录确认框 -->
+    <ConfirmModal 
+        :isVisible="isConfirmVisible" 
+        message="确定要退出登录吗？"
+        @confirm="confirmLogout"
+        @cancel="cancelLogout" />
 </template>
 
 <style scoped>

@@ -85,13 +85,10 @@ onUnmounted(() => {
     ========================================================= -->
     <div class="relative w-full bg-no-repeat bg-cover bg-top" style="background-image: url('/images/topbg.png');">
       <div class="relative z-10">
-        <!-- 导航栏 -->
-        <nav class="max-w-[1100px] mx-auto px-6 h-20 flex items-center justify-between">
-          <AppHeader />
-        </nav>
+        <!-- 导航栏 (已移至 Layout) -->
 
         <!-- Hero 内容 -->
-        <section class="max-w-[1100px] mx-auto px-6 pt-12 md:pt-20 pb-32">
+        <section class="max-w-[1100px] mx-auto px-6 pt-32 md:pt-40 pb-32">
           <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-8">
             <div class="flex-1 space-y-6 text-center lg:text-left">
               <h1 class="text-4xl md:text-[54px] font-extrabold leading-[1.15] tracking-tight text-gray-900">
@@ -343,7 +340,7 @@ onUnmounted(() => {
     <!-- ================= 隐私保护 (黑色圆角卡片) ================= -->
     <section class="py-24 bg-white w-full flex justify-center">
       <div
-        class="w-[96%] max-w-[1240px] bg-black text-white rounded-[3.5rem] py-32 overflow-hidden relative shadow-none border-none"
+        class="w-[96%] max-w-[1240px] bg-black text-white rounded-[3.5rem] py-32 relative border-none custom-floating-shadow z-[110]"
         data-aos="zoom-in-up">
         <div
           class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600 opacity-10 blur-[150px] rounded-full animate-pulse-slow">
@@ -492,5 +489,9 @@ h3 {
 
 .animate-pulse-slow {
   animation: pulse-slow 8s ease-in-out infinite;
+}
+
+.custom-floating-shadow {
+  box-shadow: 0 -40px 100px -10px rgba(0, 0, 0, 0.5), 0 30px 100px -20px rgba(0, 0, 0, 0.3);
 }
 </style>

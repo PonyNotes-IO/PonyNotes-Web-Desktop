@@ -138,13 +138,10 @@ const handleBindEmailSuccess = (data) => {
             </div>
 
             <div class="relative z-10">
-                <!-- 导航栏 -->
-                <nav class="max-w-[1100px] mx-auto px-6 h-20 flex items-center justify-between font-bold">
-                    <AppHeader />
-                </nav>
+                <!-- 导航栏 (已移至 Layout) -->
 
                 <!-- 标题 -->
-                <header class="max-w-[1140px] mx-auto px-6 pt-4">
+                <header class="max-w-[1140px] mx-auto px-6 pt-24">
                     <h1 class="text-[18px] font-bold text-gray-900 tracking-tight max-w-[800px] ml-10 mb-0"
                         data-aos="fade-right">
                         账号绑定

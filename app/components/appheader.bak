@@ -1,3 +1,30 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+import LoginModal from './LoginModal.vue'
+
+const isModalVisible = ref(false)
+const userStore = useUserStore()
+
+onMounted(() => {
+    userStore.initUser()
+})
+
+const openModal = () => {
+    isModalVisible.value = true
+}
+
+const closeModal = () => {
+    isModalVisible.value = false
+}
+
+const handleLogout = () => {
+    if (confirm('确定要退出登录吗？')) {
+        userStore.clearUser()
+        window.location.href = '/'
+    }
+}
+</script>
+
 <template>
     <!-- 统一的顶部导航组件：背景完全透明，z-50 确保在最上层 -->
     <nav class="w-full bg-transparent h-20 relative z-50">
@@ -8,7 +35,7 @@
                 <img src="/images/ico.png"
                     class="w-8 h-8 object-contain transition-transform duration-1000 group-hover:rotate-[360deg] border-none shadow-none"
                     alt="小马笔记 Logo" />
-                <span class="text-xl font-bold tracking-tight text-gray-900">小马笔记</span>
+                <span class="text-xl font-bold tracking-tight text-[#FF3800]">小马笔记</span>
             </NuxtLink>
 
             <!-- 右侧 导航链接与按钮 -->
@@ -32,26 +59,33 @@
                     <span class="active-line"></span>
                 </NuxtLink>
 
-                <!-- 注册登录按钮：保持品牌色，无阴影 -->
-                <button
+                <!-- 用户已登录 -->
+                <div v-if="userStore.isLoggedIn.value" class="flex items-center gap-4">
+                    <NuxtLink to="/account" class="nav-item">
+                        账号设置
+                        <span class="active-line"></span>
+                    </NuxtLink>
+                    <button @click="handleLogout"
+                        class="bg-gray-100 text-gray-700 px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 border-none shadow-none">
+                        退出登录
+                    </button>
+                </div>
+
+                <!-- 用户未登录 -->
+                <button v-else @click="openModal"
                     class="bg-[#FF4D00] text-white px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 active:scale-95 border-none shadow-none">
                     注册/登录
                 </button>
             </div>
         </div>
     </nav>
+
+    <!-- 登录注册模态框组件 -->
+    <LoginModal :isVisible="isModalVisible" @close="closeModal" />
 </template>
 
-<script setup>
-/** 
- * 组件逻辑：
- * 采用 NuxtLink 内置路由匹配
- * 透明背景以便复用在带有背景图的 Section 之上
- */
-</script>
-
 <style scoped>
-/* 导航项基础样式 */
+/* 导航项基础样式 (保持不变) */
 .nav-item {
     position: relative;
     transition: color 0.3s ease;

@@ -49,12 +49,9 @@ onMounted(() => {
             style="background-image: url('/images/download/bg@2x.png'); 
                    background-size: 100% auto;">
 
-                <!-- 导航栏 -->
-        <nav class="max-w-[1100px] mx-auto px-6 h-20 flex items-center justify-between">
-          <AppHeader />
-        </nav>
+                <!-- 导航栏 (已移至 Layout) -->
 
-            <div class="max-w-[1140px] mx-auto px-6 text-center pt-24 pb-[650px]"> <!-- 增大底部填充 -->
+            <div class="max-w-[1140px] mx-auto px-6 text-center pt-44 pb-[650px]"> <!-- 增大底部填充 -->
                 <h1 class="text-[40px] md:text-[48px] font-bold text-gray-900 tracking-tight mb-10" data-aos="zoom-in">
                     下载
                 </h1>

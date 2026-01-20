@@ -75,6 +75,17 @@ const handleRegister = async () => {
         return
     }
 
+    // --- 临时跳过验证逻辑 (仅内存有效，刷新即消失) ---
+    userStore.isLoggedIn.value = true
+    userStore.userInfo.value = { username: '小马用户', phone: '18888888888' }
+    userStore.token.value = 'mock-token-123'
+    
+    alert('登录成功 (已跳过验证)')
+    emit('close')
+    router.push('/account')
+    return;
+    // -----------------------
+
     try {
         loading.value = true
         const isPhone = /^1[3-9]\d{9}$/.test(phoneNumber.value.trim())

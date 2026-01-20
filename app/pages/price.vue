@@ -41,13 +41,10 @@ onMounted(() => {
             </div>
 
             <div class="relative z-10">
-                <!-- 导航栏 -->
-                <nav class="max-w-[1100px] mx-auto px-6 h-20 flex items-center justify-between">
-                    <AppHeader />
-                </nav>
+                <!-- 导航栏 (已移至 Layout) -->
 
                 <!-- 主标题区域 (主标题居中) -->
-                <header class="max-w-[1140px] mx-auto px-6 pt-12">
+                <header class="max-w-[1140px] mx-auto px-6 pt-32">
                     <h1 class="text-[56px] font-extrabold text-gray-900 tracking-tight leading-tight text-center"
                         data-aos="fade-up">
                         新一代<span class="text-[#FF4D00]">AI</span>本地存储小马笔记
