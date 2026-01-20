@@ -36,9 +36,18 @@ export function updateWorkspace(data) {
 }
 
 // 删除工作空间
-export function delWorkspace(workspaceId) {
+export function deleteWorkspace(workspaceId) {
   return request({
     url: '/system/workspace/' + workspaceId,
     method: 'delete'
+  })
+}
+
+// 批量删除工作空间
+export function deleteWorkspaceByIds(workspaceIds) {
+  return request({
+    url: '/system/workspace/batch',
+    method: 'delete',
+    data: workspaceIds
   })
 }

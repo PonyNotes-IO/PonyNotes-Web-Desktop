@@ -1,34 +1,27 @@
 import request from '@/utils/request'
 
-// 查询登录日志列表
-export function list(query) {
+// 查询系统登录日志列表
+export function listLogininfor(query) {
   return request({
     url: '/monitor/logininfor/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
-// 删除登录日志
-export function delLogininfor(infoId) {
+// 删除系统登录日志
+export function deleteLogininfor(infoIds) {
   return request({
-    url: '/monitor/logininfor/' + infoId,
-    method: 'delete'
+    url: '/monitor/logininfor/remove',
+    method: 'post',
+    data: infoIds
   })
 }
 
-// 解锁用户登录状态
-export function unlockLogininfor(userName) {
-  return request({
-    url: '/monitor/logininfor/unlock/' + userName,
-    method: 'get'
-  })
-}
-
-// 清空登录日志
+// 清空系统登录日志
 export function cleanLogininfor() {
   return request({
     url: '/monitor/logininfor/clean',
-    method: 'delete'
+    method: 'post'
   })
 }

@@ -44,31 +44,36 @@ public class SysLogininforController extends BaseController
         return getDataTable(list);
     }
 
-    @Log(title = "登录日志", businessType = BusinessType.EXPORT)
+    @Log(title = "系统访问记录", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysLogininfor logininfor)
     {
         List<SysLogininfor> list = logininforService.selectLogininforList(logininfor);
         ExcelUtil<SysLogininfor> util = new ExcelUtil<SysLogininfor>(SysLogininfor.class);
-        util.exportExcel(response, list, "登录日志");
+        util.exportExcel(response, list, "系统访问记录");
     }
 
+    @Log(title = "系统访问记录", businessType = BusinessType.DELETE)
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
-    @Log(title = "登录日志", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{infoIds}")
-    public AjaxResult remove(@PathVariable Long[] infoIds)
+    @DeleteMapping("/batch")
+    public AjaxResult remove(String ids)
     {
-        return toAjax(logininforService.deleteLogininforByIds(infoIds));
+        String[] idArray = ids.split(",");
+        Long[] longIds = new Long[idArray.length];
+        for (int i = 0; i < idArray.length; i++) {
+            longIds[i] = Long.parseLong(idArray[i]);
+        }
+        return toAjax(logininforService.deleteLogininforByIds(longIds));
     }
 
+    @Log(title = "系统访问记录", businessType = BusinessType.CLEAN)
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
-    @Log(title = "登录日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
     public AjaxResult clean()
     {
         logininforService.cleanLogininfor();
-        return success();
+        return AjaxResult.success();
     }
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:unlock')")

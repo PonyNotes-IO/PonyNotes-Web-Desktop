@@ -2,6 +2,7 @@ package com.ruoyi.web.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.system.domain.PaymentOrder;
+import com.ruoyi.system.domain.SysPaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ public interface PaymentService {
     /**
      * 获取支付订单信息
      */
-    PaymentOrder getPaymentOrder(String outTradeNo);
+    SysPaymentOrder getPaymentOrder(String outTradeNo);
 
     JSONObject getOpenid(String code);
 

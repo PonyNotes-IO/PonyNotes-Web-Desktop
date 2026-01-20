@@ -10,6 +10,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.domain.PaymentOrder;
+import com.ruoyi.system.domain.SysPaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentResult;
 import com.ruoyi.web.service.PaymentService;
 
@@ -168,7 +169,7 @@ public class PaymentController {
                 return generateErrorHtml("签名验证失败");
             }
 
-            PaymentOrder paymentOrder = paymentService.getPaymentOrder(outTradeNo);
+            SysPaymentOrder paymentOrder = paymentService.getPaymentOrder(outTradeNo);
             if (paymentOrder == null) {
                 log.error("支付宝同步回调订单查询失败，订单号: {}", outTradeNo);
                 return generateErrorHtml("订单不存在");

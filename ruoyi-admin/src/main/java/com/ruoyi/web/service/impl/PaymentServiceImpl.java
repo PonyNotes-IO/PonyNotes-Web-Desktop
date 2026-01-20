@@ -17,6 +17,7 @@ import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.web.service.TokenService;
+import com.ruoyi.system.domain.SysPaymentOrder;
 import com.ruoyi.system.service.ISysPaymentService;
 import com.ruoyi.web.config.RestTemplateConfig;
 import com.ruoyi.system.domain.PaymentOrder;
@@ -133,7 +134,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
 //        String userInfo = tokenService.getUserInfoFromToken(httpServletRequest).toString();
         // 3. 保存订单
-        PaymentOrder order = new PaymentOrder();
+        SysPaymentOrder order = new SysPaymentOrder();
         order.setOrderNo(orderNo);
         order.setAmount(amount);
         order.setPaymentType(paymentType);
@@ -431,7 +432,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public String checkPaymentStatus(String orderNo) {
         // 1. 查询本地订单
-        PaymentOrder order = paymentService.selectOne(orderNo);
+        SysPaymentOrder order = paymentService.selectOne(orderNo);
         if (order == null) {
             return "invalid"; // 订单不存在
         }
@@ -581,7 +582,7 @@ public class PaymentServiceImpl implements PaymentService {
      */
     @Override
     public boolean handlePaymentCallback(String orderNo, String paymentType) {
-        PaymentOrder order = paymentService.selectOne(orderNo);
+        SysPaymentOrder order = paymentService.selectOne(orderNo);
         if (order == null || !"pending".equals(order.getStatus())) {
             return false;
         }
@@ -678,7 +679,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentOrder getPaymentOrder(String TradeNo) {
+    public SysPaymentOrder getPaymentOrder(String TradeNo) {
         // TODO Auto-generated method stub
         return paymentService.getPaymentOrder(TradeNo);
     }

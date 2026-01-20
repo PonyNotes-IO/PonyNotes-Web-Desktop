@@ -121,8 +121,8 @@ public class SysLoginController
 
         if (user != null) {
             AjaxResult ajax = AjaxResult.success(user);
-            // 登录
-            String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
+            // 登录 - 不需要密码验证，因为是通过账号查询直接登录
+            String token = loginService.loginWithAccountType(user.getUserName(), user.getPassword(), false);
             ajax.put(Constants.TOKEN, token);
             return ajax;
         } else {
@@ -154,8 +154,8 @@ public class SysLoginController
             return AjaxResult.error("username or password is error");
         }
         AjaxResult ajax = AjaxResult.success(user);
-        // 登录
-        String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
+        // 登录 - 需要密码验证，因为是通过密码直接登录
+        String token = loginService.loginWithAccountType(user.getUserName(), user.getPassword(), true);
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
@@ -233,7 +233,8 @@ public class SysLoginController
         }
     
         AjaxResult ajax = AjaxResult.success(user);
-        String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
+        // 登录 - 不需要密码验证，因为是通过验证码登录
+        String token = loginService.loginWithAccountType(user.getUserName(), user.getPassword(), false);
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
@@ -357,7 +358,8 @@ public class SysLoginController
         }
 //        return AjaxResult.success(user);
          AjaxResult ajax = AjaxResult.success(user);
-         String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
+         // 登录 - 不需要密码验证，因为是刚设置完密码直接登录
+         String token = loginService.loginWithAccountType(user.getUserName(), user.getPassword(), false);
          ajax.put(Constants.TOKEN, token);
          return ajax;
     }
