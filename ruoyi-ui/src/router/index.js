@@ -127,10 +127,52 @@ export const dynamicRoutes = [
     permissions: ['system:dict:list'],
     children: [
       {
-        path: 'index/:dictId(\\d+)',
+        path: 'index/:dictId(\d+)',
         component: () => import('@/views/system/dict/data'),
         name: 'Data',
         meta: { title: '字典数据', activeMenu: '/system/dict' }
+      }
+    ]
+  },
+  {
+    path: '/system/dict/dataManage',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:dict:list'],
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/system/dict/dataManage'),
+        name: 'DictDataManage',
+        meta: { title: '字典数据管理', activeMenu: '/system/dict' }
+      }
+    ]
+  },
+  {
+    path: '/system/record',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:record:list'],
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/system/record/index'),
+        name: 'Record',
+        meta: { title: '登录记录', activeMenu: '/system/record' }
+      }
+    ]
+  },
+  {
+    path: '/system/order',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:order:list'],
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/system/order/index'),
+        name: 'Order',
+        meta: { title: '订单管理', activeMenu: '/system/order' }
       }
     ]
   },

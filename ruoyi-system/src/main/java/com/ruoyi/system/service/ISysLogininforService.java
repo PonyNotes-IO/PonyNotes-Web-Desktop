@@ -4,7 +4,7 @@ import java.util.List;
 import com.ruoyi.system.domain.SysLogininfor;
 
 /**
- * 系统访问记录服务接口
+ * 系统访问日志情况信息 服务层
  * 
  * @author ruoyi
  */
@@ -15,7 +15,7 @@ public interface ISysLogininforService
      * 
      * @param logininfor 访问日志对象
      */
-    public void insertLoginInfor(SysLogininfor logininfor);
+    public void insertLogininfor(SysLogininfor logininfor);
 
     /**
      * 查询系统登录日志集合

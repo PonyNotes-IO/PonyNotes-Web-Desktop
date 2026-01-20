@@ -61,6 +61,7 @@ public class SysUserController extends BaseController
     public TableDataInfo list(SysUser user)
     {
         startPage();
+        startOrderBy();
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }

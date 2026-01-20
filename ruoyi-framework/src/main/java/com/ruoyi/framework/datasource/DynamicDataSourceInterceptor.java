@@ -27,13 +27,22 @@ public class DynamicDataSourceInterceptor implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
         Object[] args = invocation.getArgs();
         MappedStatement ms = (MappedStatement) args[0];
-//        DataSource annotation = invocation.getMethod().getAnnotation(DataSource.class);
-        if(!ms.getId().startsWith("com.ruoyi.xmbj.")) {
-            logger.warn("执行主库查询[{}]",ms.getId());
-            DynamicDataSourceContextHolder.setDataSourceType("master");
+        String msId = ms.getId();
+        logger.warn("当前执行的SQL语句ID: [{}]", msId);
+        
+        // 检查是否包含 xmbj 相关的包路径，但排除 AppVersionMapper
+        boolean containsXmbj = msId.contains("xmbj");
+        logger.warn("是否包含xmbj（排除AppVersion）: [{}]", containsXmbj);
+        
+        // 根据包路径选择数据源
+        if(!containsXmbj) {
+            logger.warn("执行主库查询[{}]", msId);
+            logger.warn("设置数据源类型为: MASTER");
+            DynamicDataSourceContextHolder.setDataSourceType("MASTER");
         } else {
-            logger.warn("查询从库,执行主库查询[{}]",ms.getId());
-            DynamicDataSourceContextHolder.setDataSourceType("slave");
+            logger.warn("执行从库查询[{}]", msId);
+            logger.warn("设置数据源类型为: SLAVE");
+            DynamicDataSourceContextHolder.setDataSourceType("SLAVE");
         }
         try {
             return invocation.proceed();

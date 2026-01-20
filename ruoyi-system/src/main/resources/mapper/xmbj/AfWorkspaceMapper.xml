@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.xmbj.mapper.AfWorkspaceMapper">
+    
+    <resultMap type="AfWorkspace" id="AfWorkspaceResult">
+        <result property="workspaceId"    column="workspace_id"    />
+        <result property="databaseStorageId"    column="database_storage_id"    />
+        <result property="ownerUid"    column="owner_uid"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="workspaceType"    column="workspace_type"    />
+        <result property="deletedAt"    column="deleted_at"    />
+        <result property="workspaceName"    column="workspace_name"    />
+        <result property="icon"    column="icon"    />
+        <result property="settings"    column="settings"    />
+        <result property="isInitialized"    column="is_initialized"    />
+        <result property="defaultPublishedViewId"    column="default_published_view_id"    />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.xmbj.domain.vo.AfWorkspaceVo" id="AfWorkspaceVoResult">
+        <result property="workspaceId"    column="workspace_id"    />
+        <result property="workspaceName"    column="workspace_name"    />
+        <result property="icon"    column="icon"    />
+        <result property="workspaceType"    column="workspace_type"    />
+        <result property="memberCount"    column="member_count"    />
+        <result property="guestEditPermissionCount"    column="guest_edit_permission_count"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="expiredAt"    column="expired_at"    />
+    </resultMap>
+
+    <sql id="selectAfWorkspaceVo">
+        select w.workspace_id, w.database_storage_id, w.owner_uid, au.name as owner_name, w.created_at, w.workspace_type, w.deleted_at, w.workspace_name, w.icon, w.settings, 
+        CASE WHEN w.is_initialized = true THEN 1 ELSE 0 END as is_initialized, 
+        w.default_published_view_id 
+        from af_workspace w
+        left join af_user au on w.owner_uid = au.uid
+    </sql>
+
+    <select id="selectAfWorkspaceList" parameterType="AfWorkspace" resultMap="AfWorkspaceResult">
+        <include refid="selectAfWorkspaceVo"/>
+        <where>  
+            <if test="databaseStorageId != null and databaseStorageId != ''"> and w.database_storage_id = #{databaseStorageId}</if>
+            <if test="ownerUid != null"> and w.owner_uid = #{ownerUid}</if>
+            <if test="createdAt != null"> and w.created_at = #{createdAt}</if>
+            <if test="workspaceType != null"> and w.workspace_type = #{workspaceType}</if>
+            <if test="deletedAt != null"> and w.deleted_at = #{deletedAt}</if>
+            <if test="workspaceName != null and workspaceName != ''"> and w.workspace_name like concat('%', #{workspaceName}, '%')</if>
+            <if test="icon != null and icon != ''"> and w.icon = #{icon}</if>
+            <if test="settings != null and settings != ''"> and w.settings = #{settings}</if>
+            <if test="isInitialized != null"> and w.is_initialized = #{isInitialized}::boolean</if>
+            <if test="defaultPublishedViewId != null and defaultPublishedViewId != ''"> and w.default_published_view_id = #{defaultPublishedViewId}</if>
+        </where>
+    </select>
+
+    <select id="selectAfWorkspaceVoList" parameterType="AfWorkspace" resultMap="AfWorkspaceVoResult">
+        SELECT 
+            w.workspace_id,
+            w.workspace_name,
+            w.icon,
+            w.workspace_type,
+            COALESCE(wm.member_count, 0) as member_count,
+            COALESCE(perm.guest_edit_permission_count, 0) as guest_edit_permission_count,
+            w.created_at,
+            w.expired_at
+        FROM af_workspace w
+        LEFT JOIN (
+            SELECT workspace_id, COUNT(*) as member_count
+            FROM af_workspace_member
+            GROUP BY workspace_id
+        ) wm ON w.workspace_id = wm.workspace_id
+        LEFT JOIN (
+            SELECT 
+                wmr.workspace_id,
+                COUNT(*) as guest_edit_permission_count
+            FROM af_workspace_member wmr
+            INNER JOIN af_roles ar ON wmr.role_id = ar.id
+            INNER JOIN af_permissions ap ON ar.id = ap.role_id
+            WHERE ap.permission_name = 'guest_edit'
+            GROUP BY wmr.workspace_id
+        ) perm ON w.workspace_id = perm.workspace_id
+        <where>  
+            <if test="databaseStorageId != null and databaseStorageId != ''"> and w.database_storage_id = #{databaseStorageId}</if>
+            <if test="ownerUid != null"> and w.owner_uid = #{ownerUid}</if>
+            <if test="createdAt != null"> and w.created_at = #{createdAt}</if>
+            <if test="workspaceType != null"> and w.workspace_type = #{workspaceType}</if>
+            <if test="deletedAt != null"> and w.deleted_at = #{deletedAt}</if>
+            <if test="workspaceName != null and workspaceName != ''"> and w.workspace_name like concat('%', #{workspaceName}, '%')</if>
+            <if test="icon != null and icon != ''"> and w.icon = #{icon}</if>
+            <if test="settings != null and settings != ''"> and w.settings = #{settings}</if>
+        </where>
+    </select>
+    
+    <select id="selectAfWorkspaceByWorkspaceId" parameterType="String" resultMap="AfWorkspaceResult">
+        <include refid="selectAfWorkspaceVo"/>
+        where w.workspace_id = #{workspaceId}::uuid
+    </select>
+
+    <insert id="insertAfWorkspace" parameterType="AfWorkspace">
+        insert into af_workspace
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id,</if>
+            <if test="databaseStorageId != null and databaseStorageId != ''">database_storage_id,</if>
+            <if test="ownerUid != null">owner_uid,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="workspaceType != null">workspace_type,</if>
+            <if test="deletedAt != null">deleted_at,</if>
+            <if test="workspaceName != null">workspace_name,</if>
+            <if test="icon != null and icon != ''">icon,</if>
+            <if test="settings != null">settings,</if>
+            <if test="isInitialized != null">is_initialized,</if>
+            <if test="defaultPublishedViewId != null">default_published_view_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">#{workspaceId},</if>
+            <if test="databaseStorageId != null and databaseStorageId != ''">#{databaseStorageId}::uuid,</if>
+            <if test="ownerUid != null">#{ownerUid},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="workspaceType != null">#{workspaceType},</if>
+            <if test="deletedAt != null">#{deletedAt},</if>
+            <if test="workspaceName != null">#{workspaceName},</if>
+            <if test="icon != null and icon != ''">#{icon},</if>
+            <if test="settings != null">#{settings},</if>
+            <if test="isInitialized != null">#{isInitialized}::boolean,</if>
+            <if test="defaultPublishedViewId != null">#{defaultPublishedViewId}::uuid,</if>
+         </trim>
+    </insert>
+
+    <update id="updateAfWorkspace" parameterType="AfWorkspace">
+        update af_workspace
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="databaseStorageId != null and databaseStorageId != ''">database_storage_id = #{databaseStorageId}::uuid,</if>
+            <if test="ownerUid != null">owner_uid = #{ownerUid},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="workspaceType != null">workspace_type = #{workspaceType},</if>
+            <if test="deletedAt != null">deleted_at = #{deletedAt},</if>
+            <if test="workspaceName != null">workspace_name = #{workspaceName},</if>
+            <if test="icon != null and icon != ''">icon = #{icon},</if>
+            <if test="settings != null">settings = #{settings},</if>
+            <if test="isInitialized != null">is_initialized = #{isInitialized}::boolean,</if>
+            <if test="defaultPublishedViewId != null and defaultPublishedViewId != ''">default_published_view_id = #{defaultPublishedViewId}::uuid,</if>
+        </trim>
+        where workspace_id = #{workspaceId}::uuid
+    </update>
+
+    <delete id="deleteAfWorkspaceByWorkspaceId" parameterType="String">
+        delete from af_workspace where workspace_id = #{workspaceId}::uuid
+    </delete>
+
+    <delete id="deleteAfWorkspaceByWorkspaceIds" parameterType="String">
+        delete from af_workspace where workspace_id in 
+        <foreach item="workspaceId" collection="array" open="(" separator="," close=")">
+            #{workspaceId}::uuid
+        </foreach>
+    </delete>
+</mapper>

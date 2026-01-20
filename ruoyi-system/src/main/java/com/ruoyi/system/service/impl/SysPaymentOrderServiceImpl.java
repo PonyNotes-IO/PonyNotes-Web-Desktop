@@ -1,131 +1,96 @@
 package com.ruoyi.system.service.impl;
 
-import com.ruoyi.system.domain.SysPaymentOrder;
-import com.ruoyi.system.mapper.SysPaymentOrderMapper;
-import com.ruoyi.system.service.ISysPaymentOrderService;
-import com.ruoyi.common.core.text.Convert;
+import java.util.List;
+import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.List;
+import com.ruoyi.system.mapper.SysPaymentOrderMapper;
+import com.ruoyi.system.domain.SysPaymentOrder;
+import com.ruoyi.system.service.ISysPaymentOrderService;
 
 /**
- * 支付订单 服务层实现
+ * 支付订单Service业务层处理
  * 
- * @author ruoyi
+ * @author 张继科
+ * @date 2026-01-21
  */
 @Service
-public class SysPaymentOrderServiceImpl implements ISysPaymentOrderService
+public class SysPaymentOrderServiceImpl implements ISysPaymentOrderService 
 {
     @Autowired
-    private SysPaymentOrderMapper paymentOrderMapper;
+    private SysPaymentOrderMapper sysPaymentOrderMapper;
 
     /**
-     * 新增支付订单
+     * 查询支付订单
      * 
-     * @param paymentOrder 支付订单对象
-     * @return 结果
+     * @param id 支付订单主键
+     * @return 支付订单
      */
     @Override
-    public int insertPaymentOrder(SysPaymentOrder paymentOrder)
+    public SysPaymentOrder selectSysPaymentOrderById(Long id)
     {
-        return paymentOrderMapper.insert(paymentOrder);
-    }
-
-    /**
-     * 根据订单号查询支付订单
-     * 
-     * @param orderNo 订单编号
-     * @return 支付订单对象
-     */
-    @Override
-    public SysPaymentOrder selectPaymentOrderByOrderNo(String orderNo)
-    {
-        return paymentOrderMapper.selectOne(orderNo);
-    }
-
-    /**
-     * 根据ID更新支付订单
-     * 
-     * @param paymentOrder 支付订单对象
-     * @return 结果
-     */
-    @Override
-    public int updatePaymentOrderById(SysPaymentOrder paymentOrder)
-    {
-        return paymentOrderMapper.updateById(paymentOrder);
-    }
-
-    /**
-     * 查询过期订单
-     * 
-     * @param payTime 支付时间
-     * @return 过期订单列表
-     */
-    @Override
-    public List<SysPaymentOrder> selectExpiredOrders(Date payTime)
-    {
-        return paymentOrderMapper.selectExpiredOrders(payTime);
-    }
-
-    /**
-     * 根据订单号查询支付订单
-     * 
-     * @param tradeNo 交易单号
-     * @return 支付订单对象
-     */
-    @Override
-    public SysPaymentOrder getPaymentOrderByTradeNo(String tradeNo)
-    {
-        return paymentOrderMapper.getPaymentOrder(tradeNo);
+        return sysPaymentOrderMapper.selectSysPaymentOrderById(id);
     }
 
     /**
      * 查询支付订单列表
      * 
-     * @param paymentOrder 支付订单对象
-     * @return 支付订单列表
+     * @param sysPaymentOrder 支付订单
+     * @return 支付订单
      */
     @Override
-    public List<SysPaymentOrder> selectPaymentOrderList(SysPaymentOrder paymentOrder)
+    public List<SysPaymentOrder> selectSysPaymentOrderList(SysPaymentOrder sysPaymentOrder)
     {
-        return paymentOrderMapper.selectPaymentOrderList(paymentOrder);
+        return sysPaymentOrderMapper.selectSysPaymentOrderList(sysPaymentOrder);
     }
 
     /**
-     * 根据ID查询支付订单
+     * 新增支付订单
      * 
-     * @param id 订单ID
-     * @return 支付订单对象
+     * @param sysPaymentOrder 支付订单
+     * @return 结果
      */
     @Override
-    public SysPaymentOrder selectPaymentOrderById(Long id)
+    public int insertSysPaymentOrder(SysPaymentOrder sysPaymentOrder)
     {
-        return paymentOrderMapper.selectPaymentOrderById(id);
+        sysPaymentOrder.setCreateTime(DateUtils.getNowDate());
+        return sysPaymentOrderMapper.insertSysPaymentOrder(sysPaymentOrder);
+    }
+
+    /**
+     * 修改支付订单
+     * 
+     * @param sysPaymentOrder 支付订单
+     * @return 结果
+     */
+    @Override
+    public int updateSysPaymentOrder(SysPaymentOrder sysPaymentOrder)
+    {
+        sysPaymentOrder.setUpdateTime(DateUtils.getNowDate());
+        return sysPaymentOrderMapper.updateSysPaymentOrder(sysPaymentOrder);
     }
 
     /**
      * 批量删除支付订单
      * 
-     * @param ids 需要删除的订单ID字符串
+     * @param ids 需要删除的支付订单主键
      * @return 结果
      */
     @Override
-    public int deletePaymentOrderByIds(String ids)
+    public int deleteSysPaymentOrderByIds(Long[] ids)
     {
-        return paymentOrderMapper.deletePaymentOrderByIds(Convert.toLongArray(ids));
+        return sysPaymentOrderMapper.deleteSysPaymentOrderByIds(ids);
     }
 
     /**
-     * 删除支付订单
+     * 删除支付订单信息
      * 
-     * @param id 订单ID
+     * @param id 支付订单主键
      * @return 结果
      */
     @Override
-    public int deletePaymentOrderById(Long id)
+    public int deleteSysPaymentOrderById(Long id)
     {
-        return paymentOrderMapper.deletePaymentOrderByIds(new Long[]{id});
+        return sysPaymentOrderMapper.deleteSysPaymentOrderById(id);
     }
 }

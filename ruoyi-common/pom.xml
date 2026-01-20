@@ -120,6 +120,12 @@
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
 
+        <!-- 七牛云SDK -->
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

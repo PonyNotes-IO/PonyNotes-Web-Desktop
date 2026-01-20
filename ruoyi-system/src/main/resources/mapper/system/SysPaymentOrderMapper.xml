@@ -1,127 +1,99 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.SysPaymentOrderMapper">
-    <resultMap type="SysPaymentOrder" id="PaymentOrderResult">
-        <id     property="id"               column="id"         />
-        <result property="orderNo"          column="order_no"         />
-        <result property="amount"           column="amount"       />
-        <result property="paymentType"      column="payment_type"       />
-        <result property="qrCodeUrl"        column="qr_code_url"           />
-        <result property="productName"      column="product_name"           />
-        <result property="createTime"       column="create_time"             />
-        <result property="updateTime"       column="update_time"          />
-        <result property="payTime"          column="pay_time"        />
-        <result property="status"           column="status"        />
+    
+    <resultMap type="SysPaymentOrder" id="SysPaymentOrderResult">
+        <result property="id"    column="id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="amount"    column="amount"    />
+        <result property="paymentType"    column="payment_type"    />
+        <result property="qrCodeUrl"    column="qr_code_url"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="productName"    column="product_name"    />
+        <result property="userInfo"    column="user_info"    />
     </resultMap>
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id, order_no, amount, payment_type, qr_code_url, product_name, status,
-         create_time, update_time, pay_time
+
+    <sql id="selectSysPaymentOrderVo">
+        select id, order_no, amount, payment_type, qr_code_url, status, create_time, update_time, pay_time, product_name, user_info from sys_payment_order
     </sql>
 
-    <!-- 新增支付订单 -->
-    <insert id="insert" parameterType="SysPaymentOrder" useGeneratedKeys="true" keyProperty="id">
-        insert into sys_payment_order (
-        <if test="orderNo != null and orderNo != ''">order_no,</if>
-        <if test="amount != null">amount,</if>
-        <if test="paymentType != null and paymentType != ''">payment_type,</if>
-        <if test="qrCodeUrl != null and qrCodeUrl != ''">qr_code_url,</if>
-        <if test="productName != null and productName != ''">product_name,</if>
-        <if test="status != null and status != ''">status,</if>
-        <if test="createTime != null">create_time,</if>
-        update_time
-        ) values (
-        <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
-        <if test="amount != null">#{amount},</if>
-        <if test="paymentType != null and paymentType != ''">#{paymentType},</if>
-        <if test="qrCodeUrl != null and qrCodeUrl != ''">#{qrCodeUrl},</if>
-        <if test="productName != null and productName != ''">#{productName},</if>
-        <if test="status != null and status != ''">#{status},</if>
-        <if test="createTime != null">#{createTime},</if>
-        sysdate()
-        )
-    </insert>
-
-    <!-- 根据订单号查询支付订单 -->
-    <select id="selectOne" parameterType="String" resultMap="PaymentOrderResult">
-        select
-        <include refid="Base_Column_List"/>
-        from sys_payment_order
-        where order_no = #{orderNo}
+    <select id="selectSysPaymentOrderList" parameterType="SysPaymentOrder" resultMap="SysPaymentOrderResult">
+        <include refid="selectSysPaymentOrderVo"/>
+        <where>  
+            <if test="orderNo != null  and orderNo != ''"> and order_no like concat('%', #{orderNo}, '%')</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="paymentType != null  and paymentType != ''"> and payment_type = #{paymentType}</if>
+            <if test="qrCodeUrl != null  and qrCodeUrl != ''"> and qr_code_url = #{qrCodeUrl}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="startPayTime != null "> and pay_time >= #{startPayTime}</if>
+            <if test="endPayTime != null "> and pay_time &lt;= #{endPayTime}</if>
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="userInfo != null  and userInfo != ''"> and user_info = #{userInfo}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysPaymentOrderById" parameterType="Long" resultMap="SysPaymentOrderResult">
+        <include refid="selectSysPaymentOrderVo"/>
+        where id = #{id}
     </select>
 
-    <!-- 根据ID更新支付订单 -->
-    <update id="updateById" parameterType="SysPaymentOrder">
+    <insert id="insertSysPaymentOrder" parameterType="SysPaymentOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_payment_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">order_no,</if>
+            <if test="amount != null">amount,</if>
+            <if test="paymentType != null and paymentType != ''">payment_type,</if>
+            <if test="qrCodeUrl != null">qr_code_url,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="productName != null">product_name,</if>
+            <if test="userInfo != null">user_info,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="paymentType != null and paymentType != ''">#{paymentType},</if>
+            <if test="qrCodeUrl != null">#{qrCodeUrl},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="productName != null">#{productName},</if>
+            <if test="userInfo != null">#{userInfo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysPaymentOrder" parameterType="SysPaymentOrder">
         update sys_payment_order
-        <set>
+        <trim prefix="SET" suffixOverrides=",">
             <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
             <if test="amount != null">amount = #{amount},</if>
             <if test="paymentType != null and paymentType != ''">payment_type = #{paymentType},</if>
-            <if test="qrCodeUrl != null and qrCodeUrl != ''">qr_code_url = #{qrCodeUrl},</if>
+            <if test="qrCodeUrl != null">qr_code_url = #{qrCodeUrl},</if>
             <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="payTime != null">pay_time = #{payTime},</if>
             <if test="productName != null">product_name = #{productName},</if>
-            update_time = sysdate()
-        </set>
+            <if test="userInfo != null">user_info = #{userInfo},</if>
+        </trim>
         where id = #{id}
     </update>
-    <select id="selectExpiredOrders"  resultMap="PaymentOrderResult">
-        select
-        <include refid="Base_Column_List"/>
-        from sys_payment_order
-        where status  = 'pending' and
-        pay_time  &lt;= #{payTime}
-    </select>
-    <select id="getPaymentOrder" parameterType="String" resultMap="PaymentOrderResult">
-        select
-        <include refid="Base_Column_List"/>
-        from sys_payment_order
-        where order_no = #{tradeNo}
-        limit 1
-    </select>
 
-    <!-- 查询支付订单列表 -->
-    <select id="selectPaymentOrderList" parameterType="SysPaymentOrder" resultMap="PaymentOrderResult">
-        select
-        <include refid="Base_Column_List"/>
-        from sys_payment_order
-        <where>
-            <if test="orderNo != null and orderNo != ''">
-                AND order_no like concat('%', #{orderNo}, '%')
-            </if>
-            <if test="paymentType != null and paymentType != ''">
-                AND payment_type = #{paymentType}
-            </if>
-            <if test="status != null and status != ''">
-                AND status = #{status}
-            </if>
-            <if test="productName != null and productName != ''">
-                AND product_name like concat('%', #{productName}, '%')
-            </if>
-            <if test="createTime != null">
-                AND create_time >= #{createTime}
-            </if>
-            <if test="updateTime != null">
-                AND update_time <= #{updateTime}
-            </if>
-        </where>
-        order by create_time desc
-    </select>
+    <delete id="deleteSysPaymentOrderById" parameterType="Long">
+        delete from sys_payment_order where id = #{id}
+    </delete>
 
-    <!-- 根据ID查询支付订单 -->
-    <select id="selectPaymentOrderById" parameterType="Long" resultMap="PaymentOrderResult">
-        select
-        <include refid="Base_Column_List"/>
-        from sys_payment_order
-        where id = #{id}
-    </select>
-
-    <!-- 批量删除支付订单 -->
-    <delete id="deletePaymentOrderByIds" parameterType="Long">
-        delete from sys_payment_order where id in
-        <foreach collection="array" item="id" open="(" separator="," close=")">
+    <delete id="deleteSysPaymentOrderByIds" parameterType="String">
+        delete from sys_payment_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>

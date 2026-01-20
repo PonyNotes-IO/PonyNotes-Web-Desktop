@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AppVersionMapper">
+    
+    <resultMap type="AppVersion" id="AppVersionResult">
+        <result property="id"    column="id"    />
+        <result property="versionName"    column="version_name"    />
+        <result property="versionType"    column="version_type"    />
+        <result property="versionCode"    column="version_code"    />
+        <result property="updateDesc"    column="update_desc"    />
+        <result property="updateDescFile"    column="update_desc_file"    />
+        <result property="packageUrl"    column="package_url"    />
+        <result property="systemType"    column="system_type"    />
+        <result property="status"    column="status"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="operator"    column="operator"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="operatorName"    column="operator_name"    />
+    </resultMap>
+
+    <sql id="selectAppVersionVo">
+        select av.id, av.version_name, av.version_type, av.version_code, av.update_desc, av.update_desc_file, av.package_url, av.system_type, av.status, av.created_time, av.operator, av.del_flag, u.user_name as operator_name from app_version av left join sys_user u on av.operator = u.user_id
+    </sql>
+
+    <select id="selectAppVersionList" parameterType="AppVersion" resultMap="AppVersionResult">
+        <include refid="selectAppVersionVo"/>
+        <where>  
+            <if test="versionName != null  and versionName != ''"> and version_name like concat('%', #{versionName}, '%')</if>
+            <if test="versionType != null  and versionType != ''"> and version_type = #{versionType}</if>
+            <if test="versionCode != null "> and version_code = #{versionCode}</if>
+            <if test="updateDesc != null  and updateDesc != ''"> and update_desc = #{updateDesc}</if>
+            <if test="updateDescFile != null  and updateDescFile != ''"> and update_desc_file = #{updateDescFile}</if>
+            <if test="packageUrl != null  and packageUrl != ''"> and package_url = #{packageUrl}</if>
+            <if test="systemType != null  and systemType != ''"> and system_type = #{systemType}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+        </where>
+    </select>
+    
+    <select id="selectAppVersionById" parameterType="Long" resultMap="AppVersionResult">
+        <include refid="selectAppVersionVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAppVersion" parameterType="AppVersion" useGeneratedKeys="true" keyProperty="id">
+        insert into app_version
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            version_name,
+            version_type,
+            version_code,
+            update_desc,
+            update_desc_file,
+            package_url,
+            system_type,
+            status,
+            created_time,
+            operator,
+            del_flag
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{versionName},
+            #{versionType},
+            #{versionCode},
+            #{updateDesc},
+            #{updateDescFile},
+            #{packageUrl},
+            #{systemType},
+            #{status},
+            #{createdTime},
+            #{operator},
+            #{delFlag}
+        </trim>
+    </insert>
+
+    <update id="updateAppVersion" parameterType="AppVersion">
+        update app_version
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="versionName != null and versionName != ''">version_name = #{versionName},</if>
+            <if test="versionType != null and versionType != ''">version_type = #{versionType},</if>
+            <if test="versionCode != null">version_code = #{versionCode},</if>
+            <if test="updateDesc != null">update_desc = #{updateDesc},</if>
+            <if test="updateDescFile != null">update_desc_file = #{updateDescFile},</if>
+            <if test="packageUrl != null and packageUrl != ''">package_url = #{packageUrl},</if>
+            <if test="systemType != null and systemType != ''">system_type = #{systemType},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="operator != null">operator = #{operator},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAppVersionById" parameterType="Long">
+        delete from app_version where id = #{id}
+    </delete>
+
+    <delete id="deleteAppVersionByIds" parameterType="String">
+        delete from app_version where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

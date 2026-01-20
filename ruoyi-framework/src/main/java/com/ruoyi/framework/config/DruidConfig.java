@@ -9,15 +9,18 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.sql.DataSource;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
-import com.alibaba.druid.spring.boot.autoconfigure.properties.DruidStatProperties;
 import com.alibaba.druid.util.Utils;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.spring.SpringUtils;
@@ -32,8 +35,22 @@ import org.springframework.transaction.PlatformTransactionManager;
  * @author ruoyi
  */
 @Configuration
-public class DruidConfig
+public class DruidConfig implements ApplicationContextAware
 {
+    private ApplicationContext applicationContext;
+
+    public DruidConfig()
+    {
+        System.out.println("DruidConfig: 构造函数被调用");
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
+    {
+        this.applicationContext = applicationContext;
+        System.out.println("DruidConfig: setApplicationContext 被调用");
+    }
+
     @Bean
     @ConfigurationProperties("spring.datasource.druid.master")
     public DataSource masterDataSource(DruidProperties druidProperties)
@@ -43,22 +60,57 @@ public class DruidConfig
     }
 
     @Bean
-    @ConfigurationProperties("spring.datasource.druid.slave")
-    @ConditionalOnProperty(prefix = "spring.datasource.druid.slave", name = "enabled", havingValue = "true")
-    public DataSource slaveDataSource(DruidProperties druidProperties)
+    public DataSource slaveDataSource(DruidProperties druidProperties, Environment env)
     {
-        DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
-        return druidProperties.dataSource(dataSource);
+        System.out.println("DruidConfig: 正在创建 slaveDataSource Bean");
+        DruidDataSource dataSource = new DruidDataSource();
+        try
+        {
+            dataSource.setDriverClassName(env.getProperty("spring.datasource.druid.slave.driver-class-name"));
+            dataSource.setUrl(env.getProperty("spring.datasource.druid.slave.url"));
+            dataSource.setUsername(env.getProperty("spring.datasource.druid.slave.username"));
+            dataSource.setPassword(env.getProperty("spring.datasource.druid.slave.password"));
+            
+            DataSource result = druidProperties.dataSource(dataSource);
+            System.out.println("DruidConfig: slaveDataSource Bean 创建成功: " + result);
+            return result;
+        }
+        catch (Exception e)
+        {
+            System.out.println("DruidConfig: 创建 slaveDataSource Bean 失败: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Bean(name = "dynamicDataSource")
     @Primary
-    public DynamicDataSource dataSource(DataSource masterDataSource)
+    @org.springframework.context.annotation.DependsOn("slaveDataSource")
+    @org.springframework.beans.factory.annotation.Autowired
+    public DynamicDataSource dataSource(@org.springframework.beans.factory.annotation.Qualifier("masterDataSource") DataSource masterDataSource,
+                                    @org.springframework.beans.factory.annotation.Qualifier("slaveDataSource") DataSource slaveDataSource)
     {
+        System.out.println("DruidConfig: dataSource 方法被调用");
+        System.out.println("DruidConfig: masterDataSource = " + masterDataSource);
+        System.out.println("DruidConfig: slaveDataSource = " + slaveDataSource);
+        
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataSourceType.MASTER.name(), masterDataSource);
-        setDataSource(targetDataSources, DataSourceType.SLAVE.name(), "slaveDataSource");
-        return new DynamicDataSource(masterDataSource, targetDataSources);
+        System.out.println("DruidConfig: 添加主数据源 MASTER");
+        
+        if (slaveDataSource != null)
+        {
+            targetDataSources.put(DataSourceType.SLAVE.name(), slaveDataSource);
+            System.out.println("DruidConfig: 添加从数据源 SLAVE");
+        }
+        else
+        {
+            System.out.println("DruidConfig: 从数据源 SLAVE 为 null，跳过添加");
+        }
+        
+        DynamicDataSource dynamicDataSource = new DynamicDataSource(masterDataSource, targetDataSources);
+        System.out.println("DruidConfig: DynamicDataSource 创建完成");
+        return dynamicDataSource;
     }
 
     /**
@@ -83,9 +135,12 @@ public class DruidConfig
         {
             DataSource dataSource = SpringUtils.getBean(beanName);
             targetDataSources.put(sourceName, dataSource);
+            System.out.println("DruidConfig: 成功添加数据源 " + sourceName + " -> " + beanName);
         }
         catch (Exception e)
         {
+            System.out.println("DruidConfig: 添加数据源失败 " + sourceName + " -> " + beanName + ", 错误: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -95,12 +150,11 @@ public class DruidConfig
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Bean
     @ConditionalOnProperty(name = "spring.datasource.druid.statViewServlet.enabled", havingValue = "true")
-    public FilterRegistrationBean removeDruidFilterRegistrationBean(DruidStatProperties properties)
+    public FilterRegistrationBean removeDruidFilterRegistrationBean()
     {
-        // 获取web监控页面的参数
-        DruidStatProperties.StatViewServlet config = properties.getStatViewServlet();
+        System.out.println("DruidConfig: 创建 removeDruidFilterRegistrationBean");
         // 提取common.js的配置路径
-        String pattern = config.getUrlPattern() != null ? config.getUrlPattern() : "/druid/*";
+        String pattern = "/druid/*";
         String commonJsPattern = pattern.replaceAll("\\*", "js/common.js");
         final String filePath = "support/http/resources/js/common.js";
         // 创建filter进行过滤
@@ -132,6 +186,7 @@ public class DruidConfig
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(filter);
         registrationBean.addUrlPatterns(commonJsPattern);
+        System.out.println("DruidConfig: removeDruidFilterRegistrationBean 创建完成");
         return registrationBean;
     }
 }

@@ -155,4 +155,4 @@
             #{id}
         </foreach>
     </delete>
-}
+</mapper>

@@ -92,8 +92,4 @@ public class AlipayConfig {
     public String getGatewayUrl() {
         return gatewayUrl;
     }
-
-    public String getReturnUrl() {
-        return returnUrl;
-    }
 }

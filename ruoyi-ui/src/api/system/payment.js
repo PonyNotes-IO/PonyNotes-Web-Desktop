@@ -27,29 +27,29 @@ export function checkPaymentStatus(orderNo) {
 export function pollPaymentStatus(orderNo, onSuccess, onError, onTimeout) {
   const maxAttempts = 100; // 5分钟 = 300秒，每3秒一次 = 100次
   let attempts = 0;
-
+  
   const poll = () => {
     checkPaymentStatus(orderNo).then(response => {
       const status = response.data;
-
+      
       // 支付成功
       if (status === 'success') {
         onSuccess && onSuccess(response);
         return;
       }
-
+      
       // 支付失败或过期
       if (status === 'failed' || status === 'expired') {
         onError && onError(status);
         return;
       }
-
+      
       // 达到最大尝试次数
       if (++attempts >= maxAttempts) {
         onTimeout && onTimeout();
         return;
       }
-
+      
       // 继续轮询
       if (status === 'pending') {
         setTimeout(poll, 3000);
@@ -58,7 +58,7 @@ export function pollPaymentStatus(orderNo, onSuccess, onError, onTimeout) {
       onError && onError(error);
     });
   };
-
+  
   // 开始轮询
   poll();
 }

@@ -61,7 +61,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-register-footer">
-      <span>小马笔记管理系统</span>
+      <span>Copyright © 2018-2025 ruoyi.vip All Rights Reserved.</span>
     </div>
   </div>
 </template>

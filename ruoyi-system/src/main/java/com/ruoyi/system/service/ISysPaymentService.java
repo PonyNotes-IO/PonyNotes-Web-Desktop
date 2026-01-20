@@ -1,6 +1,7 @@
 package com.ruoyi.system.service;
 
-import com.ruoyi.system.domain.SysPaymentOrder;
+import com.ruoyi.system.domain.PaymentOrder;
+import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
 
 import java.math.BigDecimal;
 
@@ -10,13 +11,12 @@ import java.util.List;
 
 public interface ISysPaymentService {
 
-    void insert(SysPaymentOrder order);
 
-    SysPaymentOrder selectOne(String orderNo);
+    void insert(PaymentOrder order);
 
-    int updateById(SysPaymentOrder order);
+    PaymentOrder selectOne(String orderNo);
 
-    List<SysPaymentOrder> selectExpiredOrders(String pending, Date expireTime);
+    int updateById(PaymentOrder order);
 
-    SysPaymentOrder getPaymentOrder(String tradeNo);
+    List<PaymentOrder> selectExpiredOrders(String pending, Date expireTime);
 }

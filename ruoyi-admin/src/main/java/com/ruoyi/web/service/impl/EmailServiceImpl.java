@@ -55,11 +55,8 @@ public class EmailServiceImpl implements EmailService {
             message.setTo(email);
             message.setSubject(verifySubject);
             message.setText("您的验证码是：" + verifyCode + "，有效期为5分钟，请尽快使用。");
+            
             mailSender.send(message);
-            redisTemplate.opsForValue().set(email, verifyCode, 5, TimeUnit.MINUTES);
-            // 立即读取验证
-            String check = redisTemplate.opsForValue().get(email);
-            System.out.println("存入Redis的验证码：" + check); // 若为null则存入失败
             return true;
         } catch (Exception e) {
             throw new ServiceException("邮件发送失败: " + e.getMessage());
@@ -75,10 +72,12 @@ public class EmailServiceImpl implements EmailService {
         if (inputCode == null || inputCode.isEmpty()) {
             return false;
         }
+        
         // 验证码不正确
         if (!inputCode.equals(storedCode)) {
             return false;
         }
+        
         return true;
     }
 
@@ -86,8 +85,8 @@ public class EmailServiceImpl implements EmailService {
     public boolean verifyEmailCode(String email, String inputCode) {
          String key = "email:verify:" + email;
 //        String storedCode = redisTemplate.opsForValue().get(key);
-        Object storedObj = redisTemplate.opsForValue().get(email);
-        String storedCode = (storedObj != null ? storedObj.toString() : null);
+        Object storedObj = redisTemplate.opsForValue().get(key);
+        String storedCode = storedObj != null ? storedObj.toString() : null;
         if (storedCode == null) {
             return false;
         }

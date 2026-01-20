@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.xmbj.mapper.AfUserMapper">
+    
+    <resultMap type="AfUser" id="AfUserResult">
+        <result property="uid"    column="uid"    />
+        <result property="uuid"    column="uuid"    />
+        <result property="email"    column="email"    />
+        <result property="password"    column="password"    />
+        <result property="name"    column="name"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="metadata"    column="metadata"    />
+        <result property="encryptionSign"    column="encryption_sign"    />
+        <result property="deletedAt"    column="deleted_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="phone"    column="phone"    />
+    </resultMap>
+
+    <sql id="selectAfUserVo">
+        select uid, uuid, email, password, name, avatar, metadata, encryption_sign, deleted_at, updated_at, created_at, phone from af_user
+    </sql>
+
+    <select id="selectAfUserList" parameterType="AfUser" resultMap="AfUserResult">
+        <include refid="selectAfUserVo"/>
+        <where>  
+            <if test="uuid != null  and uuid != ''"> and uuid = #{uuid}</if>
+            <if test="email != null  and email != ''"> and email like concat('%', #{email}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="metadata != null  and metadata != ''"> and metadata like concat('%', #{metadata}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+        </where>
+        order by created_at desc
+    </select>
+    
+    <select id="selectAfUserByUid" parameterType="Long" resultMap="AfUserResult">
+        <include refid="selectAfUserVo"/>
+        where uid = #{uid}
+    </select>
+
+    <insert id="insertAfUser" parameterType="AfUser" useGeneratedKeys="true" keyProperty="uid">
+        insert into af_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null and uuid != ''">uuid,</if>
+            <if test="email != null">email,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="metadata != null">metadata,</if>
+            <if test="encryptionSign != null">encryption_sign,</if>
+            <if test="deletedAt != null">deleted_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="phone != null">phone,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null and uuid != ''">#{uuid},</if>
+            <if test="email != null">#{email},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="metadata != null">#{metadata},</if>
+            <if test="encryptionSign != null">#{encryptionSign},</if>
+            <if test="deletedAt != null">#{deletedAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="phone != null">#{phone},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAfUser" parameterType="AfUser">
+        update af_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uuid != null and uuid != ''">uuid = #{uuid},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="metadata != null">metadata = #{metadata},</if>
+            <if test="encryptionSign != null">encryption_sign = #{encryptionSign},</if>
+            <if test="deletedAt != null">deleted_at = #{deletedAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="phone != null">phone = #{phone},</if>
+        </trim>
+        where uid = #{uid}
+    </update>
+
+    <delete id="deleteAfUserByUid" parameterType="Long">
+        delete from af_user where uid = #{uid}
+    </delete>
+
+    <delete id="deleteAfUserByUids" parameterType="String">
+        delete from af_user where uid in 
+        <foreach item="uid" collection="array" open="(" separator="," close=")">
+            #{uid}
+        </foreach>
+    </delete>
+</mapper>

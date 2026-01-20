@@ -110,13 +110,8 @@ public class SysLoginController
         } else if ("email".equals(request.getAccountType())) {
             user = userService.selectUserByEmail(request.getAccount());
         }
-
         if (user != null) {
-            AjaxResult ajax = AjaxResult.success(user);
-            // 登录 - 不需要密码验证，因为是通过账号查询直接登录
-            String token = loginService.loginWithAccountType(user.getUserName(), user.getPassword(), false);
-            ajax.put(Constants.TOKEN, token);
-            return ajax;
+            return AjaxResult.success(user);
         } else {
             return AjaxResult.error("Account is not existing");
         }
@@ -146,8 +141,8 @@ public class SysLoginController
             return AjaxResult.error("username or password is error");
         }
         AjaxResult ajax = AjaxResult.success(user);
-        // 登录 - 需要密码验证，因为是通过密码直接登录
-        String token = loginService.loginWithAccountType(user.getUserName(), user.getPassword(), true);
+        // 登录
+        String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
@@ -159,17 +154,14 @@ public class SysLoginController
         if (StringUtils.isEmpty(loginVo.getLoginType())) {
             return AjaxResult.error("please input loginType ");
         }
-        if ( StringUtils.isBlank(loginVo.getCode())) {
-            return AjaxResult.error("verify code can't empty");
-        }
         boolean loginType_password = "password".equals(loginVo.getLoginType());
         boolean loginType_code = "code".equals(loginVo.getLoginType());
         SysUser user = null;
         if ("phone".equals(loginVo.getAccountType()) && loginType_code) {
             
             // 参数校验
-            if (StringUtils.isBlank(loginVo.getPhone())) {
-                return AjaxResult.error("phoneNumber  can't empty");
+            if (StringUtils.isBlank(loginVo.getPhone()) || StringUtils.isBlank(loginVo.getCode())) {
+                return AjaxResult.error("phoneNumber and verify code can't empty");
             }
 
             // 验证验证码
@@ -193,9 +185,10 @@ public class SysLoginController
 
         }else if ("email".equals(loginVo.getAccountType()) && loginType_code) {
                // 参数校验
-            if (StringUtils.isBlank(loginVo.getEmail())) {
-                return AjaxResult.error("email can't empty!");
+            if (StringUtils.isBlank(loginVo.getEmail()) || StringUtils.isBlank(loginVo.getCode())) {
+                return AjaxResult.error("email and verify code can't empty!");
             }
+
             // 验证验证码
             boolean verifyResult = emailService.verifyEmailCode(loginVo.getEmail(), loginVo.getCode());
             if (!verifyResult) {
@@ -224,8 +217,7 @@ public class SysLoginController
         }
     
         AjaxResult ajax = AjaxResult.success(user);
-        // 登录 - 不需要密码验证，因为是通过验证码登录
-        String token = loginService.loginWithAccountType(user.getUserName(), user.getPassword(), false);
+        String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
@@ -346,8 +338,7 @@ public class SysLoginController
         }
 //        return AjaxResult.success(user);
          AjaxResult ajax = AjaxResult.success(user);
-         // 登录 - 不需要密码验证，因为是刚设置完密码直接登录
-         String token = loginService.loginWithAccountType(user.getUserName(), user.getPassword(), false);
+         String token = loginService.loginWithAccountType(user.getUserName(),user.getPassword());
          ajax.put(Constants.TOKEN, token);
          return ajax;
     }

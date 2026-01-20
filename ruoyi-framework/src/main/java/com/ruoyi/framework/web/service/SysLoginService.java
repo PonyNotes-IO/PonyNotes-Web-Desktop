@@ -114,27 +114,19 @@ public class SysLoginService
      * 
      * @param username 用户名
      * @param password 密码
-     * @param needPasswordValidation 是否需要验证密码
      * @return 结果
      */
-    public String loginWithAccountType(String username, String password, boolean needPasswordValidation)
+    public String loginWithAccountType(String username, String password)
     {
         SysUser user = userService.selectUserByUserName(username);
         if (user == null) {
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.not.exists")));
             throw new UserNotExistsException();
         }
-        // 需要验证密码的情况
-        if (needPasswordValidation) {
-            if (!SecurityUtils.matchesPassword(password, user.getPassword())) {
-                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
-                throw new UserPasswordNotMatchException();
-            }
-        }
-        // 查询用户权限
-        Collection<? extends GrantedAuthority> authorities = userService.getAuthorities(user.getUserId());
+        // 4. 手动查询用户权限（替代UserDetailsServiceImpl中的权限查询）
+        Collection<? extends GrantedAuthority> authorities = userService.getAuthorities(user.getUserId()); // 注入userService获取权限
 
-        // 构建LoginUser对象
+        // 5. 构建LoginUser对象（核心：封装用户信息和权限，用于生成token）
         LoginUser loginUser = new LoginUser(
                 user.getUserId(),
                 user.getDeptId(),
@@ -142,32 +134,20 @@ public class SysLoginService
                 authorities
         );
         loginUser.setUser(user);
-        // 构建Authentication对象
+        // 6. 手动构建Authentication对象（替代AuthenticationManager.authenticate的结果）
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 loginUser,       //  principal：用户信息
-                password,        //  credentials：密码
+                password,        //  credentials：密码（可传null，不影响token生成）
                 authorities      //  authorities：用户权限
         );
 
-        // 记录登录日志、更新登录信息
+        // 7. 记录登录日志、更新登录信息（与原逻辑一致）
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS,
                 MessageUtils.message("user.login.success")));
         recordLoginInfo(loginUser.getUserId());
         loginUser = (LoginUser) authentication.getPrincipal();
-        // 生成token
+        // 8. 生成token（基于手动构建的LoginUser）
         return tokenService.createToken(loginUser);
-    }
-    
-    /**
-     * 登录验证（默认需要密码验证）
-     * 
-     * @param username 用户名
-     * @param password 密码
-     * @return 结果
-     */
-    public String loginWithAccountType(String username, String password)
-    {
-        return loginWithAccountType(username, password, true);
     }
 
     /**

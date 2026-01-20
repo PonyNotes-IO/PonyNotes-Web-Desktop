@@ -1,7 +1,7 @@
 package com.ruoyi.quartz.task;
 
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.system.domain.SysPaymentOrder;
+import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.service.ISysPaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class PaymentOrderTimer {
     @Scheduled(cron = "0 0 * * * ?")
     public void handleExpiredOrders() {
         Date expireTime = DateUtils.addMinutes(new Date(), -15);
-        List<SysPaymentOrder> expiredOrders = paymentService.selectExpiredOrders("pending", expireTime);
+        List<PaymentOrder> expiredOrders = paymentService.selectExpiredOrders("pending", expireTime);
         if (!expiredOrders.isEmpty()) {
             log.info("处理过期订单数量：{}", expiredOrders.size());
             expiredOrders.forEach(order -> {
