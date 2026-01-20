@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.xmbj.mapper.AfSubscriptionPlansMapper">
+
+    <resultMap id="AfSubscriptionPlansResult" type="com.ruoyi.xmbj.domain.AfSubscriptionPlans">
+        <result property="id" column="id"/>
+        <result property="planCode" column="plan_code"/>
+        <result property="planName" column="plan_name"/>
+        <result property="planNameCn" column="plan_name_cn"/>
+        <result property="monthlyPriceYuan" column="monthly_price_yuan"/>
+        <result property="yearlyPriceYuan" column="yearly_price_yuan"/>
+        <result property="cloudStorageGb" column="cloud_storage_gb"/>
+        <result property="hasInbox" column="has_inbox"/>
+        <result property="hasMultiDeviceSync" column="has_multi_device_sync"/>
+        <result property="hasApiSupport" column="has_api_support"/>
+        <result property="versionHistoryDays" column="version_history_days"/>
+        <result property="chatCountPerMonth" column="chat_count_per_month"/>
+        <result property="aiImageGenerationPerMonth" column="ai_image_generation_per_month"/>
+        <result property="hasShareLink" column="has_share_link"/>
+        <result property="hasPublish" column="has_publish"/>
+        <result property="workspaceMemberLimit" column="workspace_member_limit"/>
+        <result property="collaborativeWorkspaceLimit" column="collaborative_workspace_limit"/>
+        <result property="pagePermissionGuestEditors" column="page_permission_guest_editors"/>
+        <result property="hasSpaceMemberManagement" column="has_space_member_management"/>
+        <result property="hasSpaceMemberGrouping" column="has_space_member_grouping"/>
+        <result property="isActive" column="is_active"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <resultMap id="AfSubscriptionAddonsResult" type="com.ruoyi.xmbj.domain.AfSubscriptionAddons">
+        <result property="id" column="id"/>
+        <result property="addonCode" column="addon_code"/>
+        <result property="addonName" column="addon_name"/>
+        <result property="addonNameCn" column="addon_name_cn"/>
+        <result property="addonType" column="addon_type"/>
+        <result property="priceYuan" column="price_yuan"/>
+        <result property="storageGb" column="storage_gb"/>
+        <result property="aiChatCount" column="ai_chat_count"/>
+        <result property="aiImageCount" column="ai_image_count"/>
+        <result property="isActive" column="is_active"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <resultMap id="AddonResult" type="com.ruoyi.xmbj.domain.Addon">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="description" column="description"/>
+        <result property="price" column="price"/>
+        <result property="unit" column="unit"/>
+        <result property="status" column="status"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- 查询所有活跃的订阅计划 -->
+    <select id="selectActiveSubscriptionPlans" resultMap="AfSubscriptionPlansResult">
+        SELECT * FROM af_subscription_plans
+        WHERE is_active = true
+        ORDER BY monthly_price_yuan ASC
+    </select>
+
+    <!-- 按名称查询订阅计划 -->
+    <select id="selectByName" parameterType="String" resultMap="AfSubscriptionPlansResult">
+        SELECT * FROM af_subscription_plans
+        WHERE plan_name = #{planName}
+        AND is_active = true
+    </select>
+
+    <!-- 查询所有活跃的补充包 (返回 AfSubscriptionAddons) -->
+    <select id="selectActiveAddons" resultMap="AfSubscriptionAddonsResult">
+        SELECT * FROM af_subscription_addons
+        WHERE is_active = true
+        ORDER BY price_yuan ASC
+    </select>
+
+    <!-- 按类型查询补充包 (返回 Addon) -->
+    <select id="selectAddonsByType" parameterType="String" resultMap="AddonResult">
+        SELECT * FROM addons
+        WHERE type = #{type}
+        AND status = 'active'
+        ORDER BY price ASC
+    </select>
+
+</mapper>

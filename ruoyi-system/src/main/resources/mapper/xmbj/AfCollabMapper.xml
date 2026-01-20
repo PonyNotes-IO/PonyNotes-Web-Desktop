@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.xmbj.mapper.AfCollabMapper">
+
+    <resultMap id="AfCollabResult" type="com.ruoyi.xmbj.domain.AfCollab">
+        <result property="oid" column="oid"/>
+        <result property="workspaceId" column="workspace_id"/>
+        <result property="ownerUid" column="owner_uid"/>
+        <result property="partitionKey" column="partition_key"/>
+        <result property="len" column="len"/>
+        <result property="blob" column="blob"/>
+        <result property="deletedAt" column="deleted_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <resultMap id="NoteBookResultMap" type="com.ruoyi.xmbj.domain.NoteBook">
+        <result property="oid" column="oid" />
+        <result property="workspaceId" column="workspace_id" />
+        <result property="ownerUid" column="owner_uid" />
+        <result property="partitionKey" column="partition_key" />
+        <result property="len" column="len" />
+        <result property="blob" column="blob" jdbcType="BLOB" />
+        <result property="deletedAt" column="deleted_at" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+        <result property="indexedAt" column="indexed_at" />
+        <result property="title" column="title" />
+        <result property="notebookType" column="notebook_type" />
+        <result property="data" column="data" jdbcType="VARCHAR" />
+    </resultMap>
+    <!-- 联合查询af_collab和af_quick_note表 -->
+    <select id="getNotesByWorkspaceId" resultMap="NoteBookResultMap">
+        SELECT
+        -- af_collab 表字段
+        c.oid,
+        c.workspace_id,
+        c.owner_uid,
+        c.partition_key,
+        c.len,
+        c.blob,
+        c.deleted_at,
+        c.created_at,
+        c.updated_at,
+        c.indexed_at,
+        NULL as title,  -- af_collab没有title，从FolderView获取
+        'afCollab' as notebook_type,
+        NULL as data    -- af_collab没有data字段
+
+        FROM af_collab c
+        WHERE c.workspace_id = #{workspaceId}
+        AND c.owner_uid = #{ownerUid}
+        AND c.deleted_at IS NULL
+        AND c.partition_key = 0  -- 只查询文档笔记（Document类型）
+
+        UNION ALL
+
+        SELECT
+        -- af_quick_note 表字段
+        q.quick_note_id as oid,
+        q.workspace_id,
+        q.uid as owner_uid,
+        NULL as partition_key,  -- quick_note没有partition_key
+        NULL as len,            -- quick_note没有len
+        NULL as blob,           -- quick_note没有blob
+        NULL as deleted_at,     -- quick_note没有deleted_at
+        q.created_at,
+        q.updated_at,
+        NULL as indexed_at,     -- quick_note没有indexed_at
+        NULL as title,          -- 需要从data字段提取或从其他地方获取
+        'quickNote' as notebook_type,
+        q.data::text as data    -- JSON格式的数据
+
+        FROM af_quick_note q
+        WHERE q.workspace_id = #{workspaceId}
+        AND q.uid = #{ownerUid}
+    </select>
+
+    <select id="selectNotesByWorkspace" resultMap="NoteBookResultMap">
+        SELECT
+        -- af_collab 表字段
+        c.oid,
+        c.workspace_id,
+        c.owner_uid,
+        c.partition_key,
+        c.len,
+        c.blob,
+        c.deleted_at,
+        c.created_at,
+        c.updated_at,
+        c.indexed_at,
+        NULL as title,
+        'afCollab' as notebook_type,
+        NULL as data
+
+        FROM af_collab c
+        WHERE c.workspace_id = #{workspaceId}
+        AND c.deleted_at IS NULL
+        AND c.partition_key = 0
+
+        UNION ALL
+
+        SELECT
+        -- af_quick_note 表字段
+        q.quick_note_id as oid,
+        q.workspace_id,
+        q.uid as owner_uid,
+        NULL as partition_key,
+        NULL as len,
+        NULL as blob,
+        NULL as deleted_at,
+        q.created_at,
+        q.updated_at,
+        NULL as indexed_at,
+        NULL as title,
+        'quickNote' as notebook_type,
+        q.data::text as data
+
+        FROM af_quick_note q
+        WHERE q.workspace_id = #{workspaceId}
+    </select>
+
+    <select id="getNotesByNoteId" resultMap="NoteBookResultMap">
+        SELECT
+        -- af_collab 表字段
+        c.oid,
+        c.workspace_id,
+        c.owner_uid,
+        c.partition_key,
+        c.len,
+        c.blob,
+        c.deleted_at,
+        c.created_at,
+        c.updated_at,
+        c.indexed_at,
+        NULL as title,
+        'afCollab' as notebook_type,
+        NULL as data
+
+        FROM af_collab c
+        WHERE c.oid = #{oid}
+        AND c.deleted_at IS NULL
+        AND c.partition_key = 0
+
+        UNION ALL
+
+        SELECT
+        -- af_quick_note 表字段
+        q.quick_note_id as oid,
+        q.workspace_id,
+        q.uid as owner_uid,
+        NULL as partition_key,
+        NULL as len,
+        NULL as blob,
+        NULL as deleted_at,
+        q.created_at,
+        q.updated_at,
+        NULL as indexed_at,
+        NULL as title,
+        'quickNote' as notebook_type,
+        q.data::text as data
+
+        FROM af_quick_note q
+        WHERE q.quick_note_id = #{oid}
+        limit 1;
+    </select>
+</mapper>

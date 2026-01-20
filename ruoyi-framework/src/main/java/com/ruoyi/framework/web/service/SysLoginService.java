@@ -134,7 +134,7 @@ public class SysLoginService
         // 查询用户权限
         Collection<? extends GrantedAuthority> authorities = userService.getAuthorities(user.getUserId());
 
-        // 构建LoginUser对象
+        // 5. 构建LoginUser对象（核心：封装用户信息和权限，用于生成token）
         LoginUser loginUser = new LoginUser(
                 user.getUserId(),
                 user.getDeptId(),
@@ -142,19 +142,19 @@ public class SysLoginService
                 authorities
         );
         loginUser.setUser(user);
-        // 构建Authentication对象
+        // 6. 手动构建Authentication对象（替代AuthenticationManager.authenticate的结果）
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 loginUser,       //  principal：用户信息
-                password,        //  credentials：密码
+                password,        //  credentials：密码（可传null，不影响token生成）
                 authorities      //  authorities：用户权限
         );
 
-        // 记录登录日志、更新登录信息
+        // 7. 记录登录日志、更新登录信息（与原逻辑一致）
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS,
                 MessageUtils.message("user.login.success")));
         recordLoginInfo(loginUser.getUserId());
         loginUser = (LoginUser) authentication.getPrincipal();
-        // 生成token
+        // 8. 生成token（基于手动构建的LoginUser）
         return tokenService.createToken(loginUser);
     }
     

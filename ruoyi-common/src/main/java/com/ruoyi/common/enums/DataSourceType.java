@@ -10,10 +10,10 @@ public enum DataSourceType
     /**
      * 主库
      */
-    MASTER,
+    master,
 
     /**
      * 从库
      */
-    SLAVE
+    slave
 }

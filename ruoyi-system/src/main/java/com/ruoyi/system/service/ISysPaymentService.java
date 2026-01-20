@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
+import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.SysPaymentOrder;
+import com.ruoyi.system.domain.vo.PaymentOrderVo;
 
 import java.math.BigDecimal;
 
@@ -19,4 +21,6 @@ public interface ISysPaymentService {
     List<SysPaymentOrder> selectExpiredOrders(String pending, Date expireTime);
 
     SysPaymentOrder getPaymentOrder(String tradeNo);
+
+    List<PaymentOrderVo> userPaymentOrders(PaymentOrderVo paymentOrderVo);
 }

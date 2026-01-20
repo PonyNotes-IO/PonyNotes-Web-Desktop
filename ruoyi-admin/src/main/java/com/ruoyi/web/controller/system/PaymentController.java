@@ -7,13 +7,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.SysPaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentResult;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.web.service.PaymentService;
 
+import com.ruoyi.xmbj.api.service.XmbjAuthService;
+import com.ruoyi.xmbj.domain.ClientUser;
+import com.ruoyi.xmbj.service.ClientUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -47,6 +52,15 @@ public class PaymentController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private ISysUserService userService;
+
+    @Autowired
+    private XmbjAuthService xmbjAuthService;
+
+    @Autowired
+    private ClientUserService clientUserService;
+
     @GetMapping("/wxConfig")
     public AjaxResult getWechatPayConfig(@RequestParam String url) {
         // 1. 获取当前页面的URL，用于生成签名
@@ -55,6 +69,7 @@ public class PaymentController {
         Map<String, String> config = paymentService.getJsApiConfig(url);
         return AjaxResult.success(config);
     }
+
     @GetMapping("/wechat/openid")
     public AjaxResult getOpenid(@RequestParam String code) {
         JSONObject json = paymentService.getOpenid(code);
@@ -64,25 +79,39 @@ public class PaymentController {
             return AjaxResult.error("获取 openid 失败");
         }
     }
+
     /**
      * 创建支付订单
      */
     @PostMapping("/create")
     @ApiOperation("创建订单")
     public AjaxResult createPayment(
-            @RequestParam @ApiParam("订单金额") BigDecimal amount,
-            @RequestParam @ApiParam("支付方式类型,alipay 支付宝") String paymentType,
-            @RequestParam @ApiParam("用户标识") String userInfo,
+            @RequestParam BigDecimal amount,
+            @RequestParam String paymentType,
+            @RequestParam String userInfo,
             @RequestParam(required = false) String productName,
+            @RequestParam(required = false) String planId,
+            @RequestParam(required = false) String billingType,
+            @RequestParam(required = false) String addonId,
             @RequestParam(required = false) String openid,
             @RequestParam(required = false) String url,
             HttpServletRequest httpServletRequest) {
         try {
-//            String userInfo = tokenService.getUserInfoFromToken(httpServletRequest).toString();
-            if (StringUtils.isEmpty(userInfo)){
+            // String userInfo =
+            // tokenService.getUserInfoFromToken(httpServletRequest).toString();
+            if (StringUtils.isEmpty(userInfo)) {
                 return AjaxResult.error("用户未登录,请登录");
             }
-            PaymentResult paymentResult = paymentService.createPayment(amount, paymentType,userInfo, productName,openid,url,
+            SysUser user = userService.getUserByUserInfo(userInfo);
+            if (user == null) {
+                return AjaxResult.error("用户不存在");
+            }
+            ClientUser clientUser = clientUserService.getClientUserByUserInfo(userInfo);
+            if (clientUser == null) {
+                return AjaxResult.error("小马笔记客户端用户不存在");
+            }
+            PaymentResult paymentResult = paymentService.createPayment(amount, paymentType, user, clientUser,
+                    productName, openid, url, planId,billingType, addonId,
                     httpServletRequest);
             return AjaxResult.success(paymentResult);
         } catch (IllegalArgumentException e) {
@@ -203,15 +232,6 @@ public class PaymentController {
         }
     }
 
-    // http://test.xiaomabiji.com:8080/api/payment/return/alipay?charset=UTF-8&
-    // out_trade_no=alipay_1763484986907_11_b0_000&
-    // method=alipay.trade.page.pay.return&
-    // total_amount=0.01&
-    // sign=Y25CFjvWfL0JV9fKFZWkvhV2TGur7wZzuZhQDsXYbmcrhTVsUMqj5iM%2FeLjSNxTSMrA3WNQfdTq41RRsEd47%2FhhHUyAQ0hpGHpuhFK6kEtpL1Lo9%2BXkBwOCzCtw1JCdmPLd7y%2BQ%2BseATEVI76uTTYFbOZT0XYgNjaRRqkRRJxPVqr9lG3B9AtfFhRHBBcB74yLD28fD%2Fp0FZwiAf7adnmj90zHiZnhmvQQJocKSz5M2R4Qf3YsrI6G63lqaXOebB6BxMkGpNHztruoCl3q38mlBvIS2fnJB%2FtD5sKKB2ps%2BoSObPTsUNeQa9NLAVTgc4eV%2B7NsMhi5D9ujnfSYcnzQ%3D%3D&
-    // trade_no=2025111922001429691409195713&
-    // auth_app_id=2021005187696622&version=1.0&
-    // app_id=2021005187696622&sign_type=RSA2
-    // &seller_id=2088970023817737&timestamp=2025-11-19+01%3A03%3A45
     /**
      * 微信支付回调接口
      */

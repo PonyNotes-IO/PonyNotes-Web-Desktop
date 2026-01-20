@@ -13,10 +13,19 @@ public class PaymentOrder {
     private Date createTime;
     private Date updateTime;
     private Date payTime;
-
+    private String userId;
     private String userInfo;
     private String productName; // 商品名称
+    private String ClientUserId; // 客户端用户ID
+    private String ClientSubscriptionId; // 订阅订单ID
+    private String ClientUserAddonId; // 补充包订单ID
 
+    private String planId;
+    private String addonId;
+
+    private String billingType;
+
+    private Integer quantity;
     public Long getId() {
         return id;
     }
@@ -103,5 +112,62 @@ public class PaymentOrder {
 
     public void setUserInfo(String userInfo) {
         this.userInfo = userInfo;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    public String getClientUserId() {
+        return ClientUserId;
+    }
+    public void setClientUserId(String clientUserId) {
+        ClientUserId = clientUserId;
+    }
+    public String getClientSubscriptionId() {
+        return ClientSubscriptionId;
+    }
+    public void setClientSubscriptionId(String clientSubscriptionId) {
+        ClientSubscriptionId = clientSubscriptionId;
+    }
+    public String getClientUserAddonId() {
+        return ClientUserAddonId;
+    }
+    public void setClientUserAddonId(String clientUserAddonId) {
+        ClientUserAddonId = clientUserAddonId;
+    }
+
+    public String getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
+
+    public String getAddonId() {
+        return addonId;
+    }
+
+    public void setAddonId(String addonId) {
+        this.addonId = addonId;
+    }
+
+    public String getBillingType() {
+        return billingType;
+    }
+
+    public void setBillingType(String billingType) {
+        this.billingType = billingType;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

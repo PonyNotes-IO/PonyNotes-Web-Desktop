@@ -11,8 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
  * 
  * @author ruoyi
  */
-public interface ISysUserService
-{
+public interface ISysUserService {
     /**
      * 根据条件分页查询用户列表
      * 
@@ -134,7 +133,7 @@ public interface ISysUserService
     /**
      * 用户授权角色
      * 
-     * @param userId 用户ID
+     * @param userId  用户ID
      * @param roleIds 角色组
      */
     public void insertUserAuth(Long userId, Long[] roleIds);
@@ -167,8 +166,8 @@ public interface ISysUserService
     /**
      * 更新用户登录信息（IP和登录时间）
      * 
-     * @param userId 用户ID
-     * @param loginIp 登录IP地址
+     * @param userId    用户ID
+     * @param loginIp   登录IP地址
      * @param loginDate 登录时间
      * @return 结果
      */
@@ -185,7 +184,7 @@ public interface ISysUserService
     /**
      * 重置用户密码
      * 
-     * @param userId 用户ID
+     * @param userId   用户ID
      * @param password 密码
      * @return 结果
      */
@@ -210,9 +209,9 @@ public interface ISysUserService
     /**
      * 导入用户数据
      * 
-     * @param userList 用户数据列表
+     * @param userList        用户数据列表
      * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
-     * @param operName 操作用户
+     * @param operName        操作用户
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
@@ -226,4 +225,12 @@ public interface ISysUserService
     public SysUser loginEmailPassword(String email, String password);
 
     Collection<? extends GrantedAuthority> getAuthorities(Long userId);
+
+    /**
+     * 根据用户信息获取用户
+     * 
+     * @param userInfo 用户信息（手机号、邮箱、用户名等）
+     * @return 用户对象信息
+     */
+    SysUser getUserByUserInfo(String userInfo);
 }

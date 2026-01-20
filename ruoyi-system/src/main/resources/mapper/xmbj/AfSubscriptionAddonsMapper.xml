@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.xmbj.mapper.AfSubscriptionAddonsMapper">
+
+    <resultMap id="AfSubscriptionAddonsResult" type="com.ruoyi.xmbj.domain.AfSubscriptionAddons">
+        <result property="id" column="id"/>
+        <result property="addonCode" column="addon_code"/>
+        <result property="addonName" column="addon_name"/>
+        <result property="addonNameCn" column="addon_name_cn"/>
+        <result property="addonType" column="addon_type"/>
+        <result property="priceYuan" column="price_yuan"/>
+        <result property="storageGb" column="storage_gb"/>
+        <result property="aiChatCount" column="ai_chat_count"/>
+        <result property="aiImageCount" column="ai_image_count"/>
+        <result property="isActive" column="is_active"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- 查询所有活跃的补充包 -->
+    <select id="selectActiveAddons" resultMap="AfSubscriptionAddonsResult">
+        SELECT * FROM af_subscription_addons
+        WHERE is_active = true
+        ORDER BY price_yuan ASC
+    </select>
+
+    <!-- 按类型查询补充包 -->
+    <select id="selectAddonsByType" parameterType="String" resultMap="AfSubscriptionAddonsResult">
+        SELECT * FROM af_subscription_addons
+        WHERE addon_type = #{type}
+        AND is_active = true
+        ORDER BY price_yuan ASC
+    </select>
+
+    <!-- 更新补充包信息 -->
+    <update id="updateAfSubscriptionAddons" parameterType="com.ruoyi.xmbj.domain.AfSubscriptionAddons">
+        UPDATE af_subscription_addons
+        <set>
+            <if test="addonCode != null and addonCode != ''">addon_code = #{addonCode},</if>
+            <if test="addonName != null and addonName != ''">addon_name = #{addonName},</if>
+            <if test="addonNameCn != null and addonNameCn != ''">addon_name_cn = #{addonNameCn},</if>
+            <if test="addonType != null and addonType != ''">addon_type = #{addonType},</if>
+            <if test="priceYuan != null">price_yuan = #{priceYuan},</if>
+            <if test="storageGb != null">storage_gb = #{storageGb},</if>
+            <if test="aiChatCount != null">ai_chat_count = #{aiChatCount},</if>
+            <if test="aiImageCount != null">ai_image_count = #{aiImageCount},</if>
+            <if test="isActive != null">is_active = #{isActive},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

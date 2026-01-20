@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.ruoyi.xmbj.domain.ClientUser;
+import com.ruoyi.xmbj.service.ClientUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,8 @@ import com.ruoyi.web.service.SmsService;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysMenuService;
+import com.ruoyi.xmbj.api.service.XmbjAuthService;
+import com.ruoyi.xmbj.api.protocol.PhoneLoginResponse;
 import org.springframework.http.MediaType;
 
 /**
@@ -48,8 +52,7 @@ import org.springframework.http.MediaType;
 @Api(
         value = "系统用户", tags = {"用户"}
 )
-public class SysLoginController
-{
+public class SysLoginController {
     @Autowired
     private SysLoginService loginService;
 
@@ -77,16 +80,21 @@ public class SysLoginController
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+    @Autowired
+    private XmbjAuthService xmbjAuthService;
+
+    @Autowired
+    private ClientUserService clientUserService;
+
     @GetMapping("/api/health")
     @ResponseBody
     @Anonymous
-    public AjaxResult health()
-    {
+    public AjaxResult health() {
         AjaxResult ajax = AjaxResult.success("test success");
         System.out.println("test success");
-     return ajax;
+        return ajax;
     }
-    
+
     /**
      * 登录方法
      * 
@@ -168,14 +176,16 @@ public class SysLoginController
         if (StringUtils.isEmpty(loginVo.getLoginType())) {
             return AjaxResult.error("please input loginType ");
         }
-        if ( StringUtils.isBlank(loginVo.getCode())) {
+        if (StringUtils.isBlank(loginVo.getCode())) {
             return AjaxResult.error("verify code can't empty");
         }
         boolean loginType_password = "password".equals(loginVo.getLoginType());
         boolean loginType_code = "code".equals(loginVo.getLoginType());
         SysUser user = null;
+        String xmbjAccessToken = null; // 用于保存 XMBJ token
+
         if ("phone".equals(loginVo.getAccountType()) && loginType_code) {
-            
+
             // 参数校验
             if (StringUtils.isBlank(loginVo.getPhone())) {
                 return AjaxResult.error("phoneNumber  can't empty");
@@ -188,7 +198,7 @@ public class SysLoginController
             }
 
             // 查询用户
-             user = userService.selectUserByPhone(loginVo.getPhone());
+            user = userService.selectUserByPhone(loginVo.getPhone());
             if (user == null) {
                 // 用户为空注册用户
                 user = new SysUser();
@@ -197,11 +207,10 @@ public class SysLoginController
                 user.setPhonenumber(loginVo.getPhone());
                 user.setNewAccount(true);
                 userService.registerUser(user);
-                // return AjaxResult.error("该手机号未注册");
             }
 
-        }else if ("email".equals(loginVo.getAccountType()) && loginType_code) {
-               // 参数校验
+        } else if ("email".equals(loginVo.getAccountType()) && loginType_code) {
+            // 参数校验
             if (StringUtils.isBlank(loginVo.getEmail())) {
                 return AjaxResult.error("email can't empty!");
             }
@@ -213,9 +222,6 @@ public class SysLoginController
 
             // 查询用户
             user = userService.selectUserByEmail(loginVo.getEmail());
-            // if (user == null) {
-            //     return AjaxResult.error("该邮箱未注册");
-            // }
 
             if (user == null) {
                 // 用户为空注册用户
@@ -225,20 +231,32 @@ public class SysLoginController
                 user.setFirstEmailLogin(true);
                 user.setUserName(loginVo.getEmail());
                 userService.registerUser(user);
-                // return AjaxResult.error("该手机号未注册");
             }
 
-        }else {
+            // 【新增】如果有手机号，尝试获取 XMBJ token（邮箱不支持直接登录 XMBJ）
+            // 实际中可能需要额外的登录机制，暂时跳过
+            System.out.println("邮箱登录暂不同步 XMBJ token，需要额外认证");
+
+        } else {
             return AjaxResult.error("please input right accountType");
         }
-    
+        ClientUser clientUser = clientUserService.getClientUserByUserInfo((StringUtils.isEmpty(loginVo.getPhone())?loginVo.getPhone():loginVo.getEmail()));
+        if (clientUser ==null){
+            return AjaxResult.error("客户端用户未注册");
+        }
         AjaxResult ajax = AjaxResult.success(user);
-        // 登录 - 不需要密码验证，因为是通过验证码登录
-        String token = loginService.loginWithAccountType(user.getUserName(), user.getPassword(), false);
+        String token = loginService.loginWithAccountType(user.getUserName(), user.getPassword());
         ajax.put(Constants.TOKEN, token);
+
+        // 【新增】如果成功获取了 XMBJ token，也返回给客户端
+        if (xmbjAccessToken != null && !xmbjAccessToken.isEmpty()) {
+            ajax.put("xmbj_access_token", xmbjAccessToken);
+            ajax.put("xmbj_token_type", "Bearer");
+        }
+
         return ajax;
     }
-    
+
     @Anonymous
     @ApiOperation("注册用户")
     @PostMapping(value ="/api/registerUser", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -363,9 +381,6 @@ public class SysLoginController
          ajax.put(Constants.TOKEN, token);
          return ajax;
     }
-    
-
-
 
     @Anonymous
     @ApiOperation("绑定手机号")
@@ -374,19 +389,20 @@ public class SysLoginController
         if (StringUtils.isEmpty(loginVo.getLoginType())) {
             return AjaxResult.error("Please enter your loginType");
         }
-        if(StringUtils.isEmpty(loginVo.getEmail()) || StringUtils.isEmpty(loginVo.getPhone())){
+        if (StringUtils.isEmpty(loginVo.getEmail()) || StringUtils.isEmpty(loginVo.getPhone())) {
             return AjaxResult.error("Please enter the correct account type");
         }
         boolean loginType_code = "code".equals(loginVo.getLoginType());
         SysUser user = null;
-        if ( !"email".equals(loginVo.getAccountType()) || !loginType_code) {
-            return AjaxResult.error("Please enter the correct account type, email login, mobile phone verification code");
+        if (!"email".equals(loginVo.getAccountType()) || !loginType_code) {
+            return AjaxResult
+                    .error("Please enter the correct account type, email login, mobile phone verification code");
         }
 
         String key = "sms:verify:" + loginVo.getPhone();
         String storedCode = redisTemplate.opsForValue().get(key);
         // 验证验证码
-        boolean verifyResult = smsService.verifySmsCode(loginVo.getPhone(), loginVo.getCode(),storedCode);
+        boolean verifyResult = smsService.verifySmsCode(loginVo.getPhone(), loginVo.getCode(), storedCode);
         if (!verifyResult) {
             return AjaxResult.error("The verification code is incorrect or has expired\n");
         }
@@ -395,7 +411,7 @@ public class SysLoginController
         user = userService.selectUserByPhone(loginVo.getPhone());
         if (user != null) {
             user.setEmail(loginVo.getEmail());
-        }else{
+        } else {
             // 查询用户
             user = userService.selectUserByEmail(loginVo.getEmail());
         }
@@ -417,7 +433,6 @@ public class SysLoginController
         AjaxResult ajax = AjaxResult.success(loginVo);
         return ajax;
     }
-    
 
     @Anonymous
     @ApiOperation("绑定邮箱")
@@ -429,7 +444,7 @@ public class SysLoginController
         if (StringUtils.isBlank(loginVo.getEmail()) || StringUtils.isBlank(loginVo.getCode())) {
             return AjaxResult.error("Email and verification code cannot be empty");
         }
-        if(StringUtils.isEmpty(loginVo.getUsername())){
+        if (StringUtils.isEmpty(loginVo.getUsername())) {
             return AjaxResult.error("please enter username");
         }
         // 验证验证码
@@ -437,14 +452,14 @@ public class SysLoginController
         if (!verifyResult) {
             return AjaxResult.error("The verification code is incorrect or has expired\n");
         }
-        SysUser user  = userService.selectUserByUserName(loginVo.getUsername());
-        if(user ==null){
+        SysUser user = userService.selectUserByUserName(loginVo.getUsername());
+        if (user == null) {
             return AjaxResult.error("user not exist");
         }
         SysUser userByEmail = userService.selectUserByEmail(loginVo.getEmail());
 
-        if (userByEmail!=null && user!=null && !user.getUserId().equals(userByEmail.getUserId()) ){
-            return AjaxResult.error("The email address is already linked to another account" );
+        if (userByEmail != null && user != null && !user.getUserId().equals(userByEmail.getUserId())) {
+            return AjaxResult.error("The email address is already linked to another account");
         }
         user.setEmail(loginVo.getEmail());
         user.setFirstEmailLogin(true);
@@ -474,10 +489,6 @@ public class SysLoginController
         userService.updateUser(user);
         return AjaxResult.success(user);
     }
-
-
-
-
 
     /**
      * 获取用户信息
@@ -521,22 +532,19 @@ public class SysLoginController
         List<SysMenu> menus = menuService.selectMenuTreeByUserId(userId);
         return AjaxResult.success(menuService.buildMenus(menus));
     }
-    
+
     // 检查初始密码是否提醒修改
-    public boolean initPasswordIsModify(Date pwdUpdateDate)
-    {
+    public boolean initPasswordIsModify(Date pwdUpdateDate) {
         Integer initPasswordModify = Convert.toInt(configService.selectConfigByKey("sys.account.initPasswordModify"));
         return initPasswordModify != null && initPasswordModify == 1 && pwdUpdateDate == null;
     }
 
     // 检查密码是否过期
-    public boolean passwordIsExpiration(Date pwdUpdateDate)
-    {
-        Integer passwordValidateDays = Convert.toInt(configService.selectConfigByKey("sys.account.passwordValidateDays"));
-        if (passwordValidateDays != null && passwordValidateDays > 0)
-        {
-            if (StringUtils.isNull(pwdUpdateDate))
-            {
+    public boolean passwordIsExpiration(Date pwdUpdateDate) {
+        Integer passwordValidateDays = Convert
+                .toInt(configService.selectConfigByKey("sys.account.passwordValidateDays"));
+        if (passwordValidateDays != null && passwordValidateDays > 0) {
+            if (StringUtils.isNull(pwdUpdateDate)) {
                 // 如果从未修改过初始密码，直接提醒过期
                 return true;
             }

@@ -1,5 +1,7 @@
 package com.ruoyi.system.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -13,6 +15,8 @@ import java.util.Date;
  * 
  * @author ruoyi
  */
+@Getter
+@Setter
 public class SysPaymentOrder extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -59,113 +63,16 @@ public class SysPaymentOrder extends BaseEntity
 
     private String userInfo;
 
-    public String getUserInfo() {
-        return userInfo;
-    }
+    private String userId;
+    private String ClientUserId; // 客户端用户ID
+    private String ClientSubscriptionId; // 订阅订单ID
+    private String ClientUserAddonId; // 补充包订单ID
+    private String planId;
+    private String addonId;
 
-    public void setUserInfo(String userInfo) {
-        this.userInfo = userInfo;
-    }
+    private String billingType;
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setOrderNo(String orderNo)
-    {
-        this.orderNo = orderNo;
-    }
-
-    public String getOrderNo()
-    {
-        return orderNo;
-    }
-
-    public void setAmount(BigDecimal amount)
-    {
-        this.amount = amount;
-    }
-
-    public BigDecimal getAmount()
-    {
-        return amount;
-    }
-
-    public void setPaymentType(String paymentType)
-    {
-        this.paymentType = paymentType;
-    }
-
-    public String getPaymentType()
-    {
-        return paymentType;
-    }
-
-    public void setQrCodeUrl(String qrCodeUrl)
-    {
-        this.qrCodeUrl = qrCodeUrl;
-    }
-
-    public String getQrCodeUrl()
-    {
-        return qrCodeUrl;
-    }
-
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
-
-    public String getStatus()
-    {
-        return status;
-    }
-
-    public void setProductName(String productName)
-    {
-        this.productName = productName;
-    }
-
-    public String getProductName()
-    {
-        return productName;
-    }
-
-    public void setCreateTime(Date createTime)
-    {
-        this.createTime = createTime;
-    }
-
-    public Date getCreateTime()
-    {
-        return createTime;
-    }
-
-    public void setUpdateTime(Date updateTime)
-    {
-        this.updateTime = updateTime;
-    }
-
-    public Date getUpdateTime()
-    {
-        return updateTime;
-    }
-
-    public void setPayTime(Date payTime)
-    {
-        this.payTime = payTime;
-    }
-
-    public Date getPayTime()
-    {
-        return payTime;
-    }
+    private Integer quantity;
 
     @Override
     public String toString() {

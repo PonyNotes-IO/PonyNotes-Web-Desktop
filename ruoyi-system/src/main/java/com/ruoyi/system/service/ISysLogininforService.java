@@ -4,7 +4,7 @@ import java.util.List;
 import com.ruoyi.system.domain.SysLogininfor;
 
 /**
- * 系统访问记录服务接口
+ * 系统访问日志情况信息 服务层
  * 
  * @author ruoyi
  */
