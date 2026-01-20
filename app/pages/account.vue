@@ -106,11 +106,11 @@ const fetchUserInfo = async () => {
 const handleAction = (item) => {
     currentAction.value = item.id
 
-    if (item.id === 'email' && !item.isBound) {
+    if (item.id === 'phone') {
         showVerifyModal.value = true
-        showBindEmailModal.value = true
-    } else {
-        showVerifyModal.value = true
+        showBindEmailModal.value = false
+    } else if (item.id === 'email') {
+        showVerifyModal.value = false
         showBindEmailModal.value = true
     }
 }

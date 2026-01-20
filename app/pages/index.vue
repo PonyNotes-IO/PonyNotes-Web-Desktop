@@ -492,6 +492,6 @@ h3 {
 }
 
 .custom-floating-shadow {
-  box-shadow: 0 -40px 100px -10px rgba(0, 0, 0, 0.5), 0 30px 100px -20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 -20px 50px -10px rgba(0, 0, 0, 0.5);
 }
 </style>

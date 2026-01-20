@@ -59,8 +59,8 @@ const handleClose = () => {
         <div v-if="isVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
             @click.self="handleClose">
 
-            <!-- 弹窗容器 - 左侧定位 -->
-            <div class="absolute left-1/2 top-[15vh] -translate-x-[calc(100%+1rem)] bg-white rounded-[24px] w-full max-w-[500px] mx-4 p-8 shadow-2xl"
+            <!-- 弹窗容器 - 居中定位 -->
+            <div class="bg-white rounded-[24px] w-full max-w-[500px] mx-4 p-8 shadow-2xl relative"
                 @click.stop>
 
                 <!-- 关闭按钮 -->
