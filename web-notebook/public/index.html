@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="referrer " content="no-referrer">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <script src="<%= BASE_URL %>flexible.js"></script>
+    <script>
+      // 设备检测函数
+      function detectDevice() {
+        var ua = navigator.userAgent;
+        var isMobile = /Mobile|Android|iP(hone|od)|Windows Phone/i.test(ua);
+        return isMobile ? 'mobile' : 'pc';
+      }
+
+      // 页面加载前进行设备检测和重定向
+      var deviceType = detectDevice();
+      // 支持 hash 路由下的 noteshare 访问
+      var hashPath = window.location.hash || '';
+      var noteshare = hashPath.includes('/noteshare');
+      if (deviceType === 'mobile' && !window.location.pathname.startsWith('/mobile') && !noteshare) {
+        window.location.href = '/mobile/home';
+      }
+    </script>
+    <style type="text/css">
+        body {
+          margin: 0;
+        }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

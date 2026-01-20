@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysWorkspaceMapper">
+    <resultMap type="SysWorkspace" id="SysWorkspaceResult">
+        <id     property="workspaceId"      column="workspace_id"     />
+        <result property="databaseStorageId" column="database_storage_id" />
+        <result property="ownerUid"         column="owner_uid"         />
+        <result property="createdAt"        column="created_at"        />
+        <result property="workspaceType"    column="workspace_type"    />
+        <result property="deletedAt"        column="deleted_at"        />
+        <result property="workspaceName"    column="workspace_name"    />
+        <result property="icon"             column="icon"             />
+        <result property="settings"         column="settings"         />
+        <result property="isInitialized"    column="is_initialized"    />
+        <result property="defaultPublishedViewId" column="default_published_view_id" />
+    </resultMap>
+
+    <sql id="selectWorkspaceVo">
+        select workspace_id, database_storage_id, owner_uid, created_at, workspace_type, deleted_at, workspace_name, icon, settings, is_initialized, default_published_view_id 
+        from af_workspace
+    </sql>
+
+    <select id="selectWorkspaceById" parameterType="String" resultMap="SysWorkspaceResult">
+        <include refid="selectWorkspaceVo" />
+        where workspace_id = #{workspaceId}
+    </select>
+
+    <select id="selectWorkspaceList" parameterType="SysWorkspace" resultMap="SysWorkspaceResult">
+        <include refid="selectWorkspaceVo" />
+        <where>
+            <if test="workspaceName != null and workspaceName != ''">
+                AND workspace_name like concat('%', #{workspaceName}, '%')
+            </if>
+            <if test="workspaceType != null">
+                AND workspace_type = #{workspaceType}
+            </if>
+            <if test="ownerUid != null">
+                AND owner_uid = #{ownerUid}
+            </if>
+            <if test="deletedAt == null">
+                AND deleted_at is null
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertWorkspace" parameterType="SysWorkspace" useGeneratedKeys="false">
+        insert into af_workspace
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id,</if>
+            <if test="databaseStorageId != null">database_storage_id,</if>
+            <if test="ownerUid != null">owner_uid,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="workspaceType != null">workspace_type,</if>
+            <if test="workspaceName != null">workspace_name,</if>
+            <if test="icon != null">icon,</if>
+            <if test="settings != null">settings,</if>
+            <if test="isInitialized != null">is_initialized,</if>
+            <if test="defaultPublishedViewId != null">default_published_view_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">#{workspaceId},</if>
+            <if test="databaseStorageId != null">#{databaseStorageId},</if>
+            <if test="ownerUid != null">#{ownerUid},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="workspaceType != null">#{workspaceType},</if>
+            <if test="workspaceName != null">#{workspaceName},</if>
+            <if test="icon != null">#{icon},</if>
+            <if test="settings != null">#{settings},</if>
+            <if test="isInitialized != null">#{isInitialized},</if>
+            <if test="defaultPublishedViewId != null">#{defaultPublishedViewId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateWorkspace" parameterType="SysWorkspace">
+        update af_workspace
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="databaseStorageId != null">database_storage_id = #{databaseStorageId},</if>
+            <if test="ownerUid != null">owner_uid = #{ownerUid},</if>
+            <if test="workspaceType != null">workspace_type = #{workspaceType},</if>
+            <if test="deletedAt != null">deleted_at = #{deletedAt},</if>
+            <if test="workspaceName != null">workspace_name = #{workspaceName},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="settings != null">settings = #{settings},</if>
+            <if test="isInitialized != null">is_initialized = #{isInitialized},</if>
+            <if test="defaultPublishedViewId != null">default_published_view_id = #{defaultPublishedViewId},</if>
+        </trim>
+        where workspace_id = #{workspaceId}
+    </update>
+
+    <delete id="deleteWorkspaceById" parameterType="String">
+        delete from af_workspace where workspace_id = #{workspaceId}
+    </delete>
+
+    <delete id="deleteWorkspaceByIds" parameterType="String">
+        delete from af_workspace where workspace_id in 
+        <foreach item="workspaceId" collection="array" open="(" separator="," close=")">
+            #{workspaceId}
+        </foreach>
+    </delete>
+</mapper>

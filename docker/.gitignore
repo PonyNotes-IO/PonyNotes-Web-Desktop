@@ -1,0 +1,7 @@
+nginx/manager/
+nginx/www/
+server/target/
+xm-web/web/manager/
+xm-web/web/www/
+xm-web/web/web/
+*.tar

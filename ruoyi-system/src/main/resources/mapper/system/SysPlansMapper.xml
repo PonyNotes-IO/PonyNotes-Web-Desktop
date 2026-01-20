@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysPlansMapper">
+
+    <resultMap type="SysPlans" id="SysPlansResult">
+        <id     property="id"                    column="id"                    />
+        <result property="planCode"              column="plan_code"             />
+        <result property="planName"              column="plan_name"             />
+        <result property="planNameCn"            column="plan_name_cn"          />
+        <result property="monthlyPriceYuan"      column="monthly_price_yuan"    />
+        <result property="yearlyPriceYuan"       column="yearly_price_yuan"     />
+        <result property="cloudStorageGb"        column="cloud_storage_gb"      />
+        <result property="hasInbox"              column="has_inbox"             />
+        <result property="hasMultiDeviceSync"    column="has_multi_device_sync" />
+        <result property="hasApiSupport"         column="has_api_support"       />
+        <result property="versionHistoryDays"    column="version_history_days"  />
+        <result property="aiChatCountPerMonth"   column="ai_chat_count_per_month" />
+        <result property="aiImageGenerationPerMonth" column="ai_image_generation_per_month" />
+        <result property="hasShareLink"          column="has_share_link"        />
+        <result property="hasPublish"            column="has_publish"           />
+        <result property="workspaceMemberLimit"  column="workspace_member_limit" />
+        <result property="collaborativeWorkspaceLimit" column="collaborative_workspace_limit" />
+        <result property="hasSpaceMemberManagement" column="has_space_member_management" />
+        <result property="hasSpaceMemberGrouping" column="has_space_member_grouping" />
+        <result property="isActive"              column="is_active"             />
+        <result property="createBy"              column="create_by"             />
+        <result property="createTime"            column="create_time"           />
+        <result property="updateBy"              column="update_by"             />
+        <result property="updateTime"            column="update_time"           />
+    </resultMap>
+
+    <sql id="selectPlansVo">
+        select id, plan_code, plan_name, plan_name_cn, monthly_price_yuan, yearly_price_yuan, 
+               cloud_storage_gb, has_inbox, has_multi_device_sync, has_api_support, 
+               version_history_days, ai_chat_count_per_month, ai_image_generation_per_month, 
+               has_share_link, has_publish, workspace_member_limit, collaborative_workspace_limit, 
+               has_space_member_management, has_space_member_grouping, is_active, 
+               create_by, create_time, update_by, update_time
+        from sys_plans
+    </sql>
+
+    <select id="selectPlansList" parameterType="SysPlans" resultMap="SysPlansResult">
+        <include refid="selectPlansVo"/>
+        <where>
+            <if test="planCode != null and planCode != ''">
+                AND plan_code like concat('%', #{planCode}, '%')
+            </if>
+            <if test="planName != null and planName != ''">
+                AND plan_name like concat('%', #{planName}, '%')
+            </if>
+            <if test="planNameCn != null and planNameCn != ''">
+                AND plan_name_cn like concat('%', #{planNameCn}, '%')
+            </if>
+            <if test="isActive != null">
+                AND is_active = #{isActive}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPlansById" parameterType="Long" resultMap="SysPlansResult">
+        <include refid="selectPlansVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPlans" parameterType="SysPlans" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_plans
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="planCode != null and planCode != ''">plan_code,</if>
+            <if test="planName != null and planName != ''">plan_name,</if>
+            <if test="planNameCn != null and planNameCn != ''">plan_name_cn,</if>
+            <if test="monthlyPriceYuan != null">monthly_price_yuan,</if>
+            <if test="yearlyPriceYuan != null">yearly_price_yuan,</if>
+            <if test="cloudStorageGb != null">cloud_storage_gb,</if>
+            <if test="hasInbox != null">has_inbox,</if>
+            <if test="hasMultiDeviceSync != null">has_multi_device_sync,</if>
+            <if test="hasApiSupport != null">has_api_support,</if>
+            <if test="versionHistoryDays != null">version_history_days,</if>
+            <if test="aiChatCountPerMonth != null">ai_chat_count_per_month,</if>
+            <if test="aiImageGenerationPerMonth != null">ai_image_generation_per_month,</if>
+            <if test="hasShareLink != null">has_share_link,</if>
+            <if test="hasPublish != null">has_publish,</if>
+            <if test="workspaceMemberLimit != null">workspace_member_limit,</if>
+            <if test="collaborativeWorkspaceLimit != null">collaborative_workspace_limit,</if>
+            <if test="hasSpaceMemberManagement != null">has_space_member_management,</if>
+            <if test="hasSpaceMemberGrouping != null">has_space_member_grouping,</if>
+            <if test="isActive != null">is_active,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="planCode != null and planCode != ''">#{planCode},</if>
+            <if test="planName != null and planName != ''">#{planName},</if>
+            <if test="planNameCn != null and planNameCn != ''">#{planNameCn},</if>
+            <if test="monthlyPriceYuan != null">#{monthlyPriceYuan},</if>
+            <if test="yearlyPriceYuan != null">#{yearlyPriceYuan},</if>
+            <if test="cloudStorageGb != null">#{cloudStorageGb},</if>
+            <if test="hasInbox != null">#{hasInbox},</if>
+            <if test="hasMultiDeviceSync != null">#{hasMultiDeviceSync},</if>
+            <if test="hasApiSupport != null">#{hasApiSupport},</if>
+            <if test="versionHistoryDays != null">#{versionHistoryDays},</if>
+            <if test="aiChatCountPerMonth != null">#{aiChatCountPerMonth},</if>
+            <if test="aiImageGenerationPerMonth != null">#{aiImageGenerationPerMonth},</if>
+            <if test="hasShareLink != null">#{hasShareLink},</if>
+            <if test="hasPublish != null">#{hasPublish},</if>
+            <if test="workspaceMemberLimit != null">#{workspaceMemberLimit},</if>
+            <if test="collaborativeWorkspaceLimit != null">#{collaborativeWorkspaceLimit},</if>
+            <if test="hasSpaceMemberManagement != null">#{hasSpaceMemberManagement},</if>
+            <if test="hasSpaceMemberGrouping != null">#{hasSpaceMemberGrouping},</if>
+            <if test="isActive != null">#{isActive},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePlans" parameterType="SysPlans">
+        update sys_plans
+        <trim prefix="set" suffix="where id = #{id}" suffixOverrides=",">
+            <if test="planCode != null and planCode != ''">plan_code = #{planCode},</if>
+            <if test="planName != null and planName != ''">plan_name = #{planName},</if>
+            <if test="planNameCn != null and planNameCn != ''">plan_name_cn = #{planNameCn},</if>
+            <if test="monthlyPriceYuan != null">monthly_price_yuan = #{monthlyPriceYuan},</if>
+            <if test="yearlyPriceYuan != null">yearly_price_yuan = #{yearlyPriceYuan},</if>
+            <if test="cloudStorageGb != null">cloud_storage_gb = #{cloudStorageGb},</if>
+            <if test="hasInbox != null">has_inbox = #{hasInbox},</if>
+            <if test="hasMultiDeviceSync != null">has_multi_device_sync = #{hasMultiDeviceSync},</if>
+            <if test="hasApiSupport != null">has_api_support = #{hasApiSupport},</if>
+            <if test="versionHistoryDays != null">version_history_days = #{versionHistoryDays},</if>
+            <if test="aiChatCountPerMonth != null">ai_chat_count_per_month = #{aiChatCountPerMonth},</if>
+            <if test="aiImageGenerationPerMonth != null">ai_image_generation_per_month = #{aiImageGenerationPerMonth},</if>
+            <if test="hasShareLink != null">has_share_link = #{hasShareLink},</if>
+            <if test="hasPublish != null">has_publish = #{hasPublish},</if>
+            <if test="workspaceMemberLimit != null">workspace_member_limit = #{workspaceMemberLimit},</if>
+            <if test="collaborativeWorkspaceLimit != null">collaborative_workspace_limit = #{collaborativeWorkspaceLimit},</if>
+            <if test="hasSpaceMemberManagement != null">has_space_member_management = #{hasSpaceMemberManagement},</if>
+            <if test="hasSpaceMemberGrouping != null">has_space_member_grouping = #{hasSpaceMemberGrouping},</if>
+            <if test="isActive != null">is_active = #{isActive},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+    </update>
+
+    <delete id="deletePlansById" parameterType="Long">
+        delete from sys_plans where id = #{id}
+    </delete>
+
+    <delete id="deletePlansByIds" parameterType="Long[]">
+        delete from sys_plans where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+}
