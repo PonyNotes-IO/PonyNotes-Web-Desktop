@@ -158,9 +158,7 @@ onUnmounted(() => {
     <section class="pt-12 pb-20 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6">
         <div class="mb-12 text-center md:text-left" data-aos="fade-right">
-          <h2
-            class="text-[42px] font-bold mb-6 bg-gradient-to-r from-[#4facfe] to-[#00f2fe] bg-clip-text text-transparent tracking-tight">
-            模块化笔记</h2>
+          <img src="/images/index/biji.png" alt="模块化笔记" class="h-[52px] w-auto mb-6 mx-auto md:mx-0" />
           <div class="space-y-1 font-medium leading-snug">
             <p class="text-[20px] text-gray-400 mb-2">像搭积木一样编辑笔记</p>
             <p class="text-[26px] text-white font-bold mb-1">一键插入文字、表格、代码、音视频、网页等</p>
@@ -177,9 +175,7 @@ onUnmounted(() => {
     <section class="py-16 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6">
         <div class="mb-10 text-center md:text-left" data-aos="fade-right">
-          <h2
-            class="text-[36px] font-bold mb-4 bg-gradient-to-r from-[#FF8B3C] to-[#77FF6E] bg-clip-text text-transparent">
-            多维表</h2>
+          <img src="/images/index/duowei.png" alt="多维表" class="h-[48px] w-auto mb-4 mx-auto md:mx-0" />
           <div class="space-y-1 font-medium leading-tight">
             <p class="text-[18px] text-gray-400">支持类似 Notion 的多视图数据库</p>
             <p class="text-[24px] text-white font-bold">用表格、看板、日历等方式查看同一组数据</p>
@@ -195,9 +191,7 @@ onUnmounted(() => {
     <section class="py-16 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6 flex flex-col items-center md:items-end">
         <div class="mb-10 text-center md:text-right" data-aos="fade-left">
-          <h2
-            class="text-[42px] font-bold mb-6 bg-gradient-to-r from-[#F97316] to-[#EF4444] bg-clip-text text-transparent animate-gradient-x">
-            任务系统</h2>
+          <img src="/images/index/mission.png" alt="任务系统" class="h-[52px] w-auto mb-6 mx-auto md:ml-auto md:mr-0" />
           <div class="space-y-1 font-medium leading-snug">
             <p class="text-[20px] text-gray-400">内置任务管理功能支持待办事项、多状态、优</p>
             <p class="text-[26px] text-white font-bold">先级、截止日期笔记即项目管理</p>
@@ -213,9 +207,7 @@ onUnmounted(() => {
     <section class="py-16 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6 flex flex-col items-center md:items-end">
         <div class="mb-10 text-center md:text-right" data-aos="fade-left">
-          <h2
-            class="text-[42px] font-bold mb-6 bg-gradient-to-r from-[#00F8FF] to-[#3CF9FF] bg-clip-text text-transparent animate-gradient-x">
-            知识站点</h2>
+          <img src="/images/index/knowledge.png" alt="知识站点" class="h-[52px] w-auto mb-6 mx-auto md:ml-auto md:mr-0" />
           <div class="space-y-1 font-medium leading-snug">
             <p class="text-[20px] text-gray-400">将笔记一键发布为静态网站打造专属知识库或</p>
             <p class="text-[26px] text-white font-bold">项目主页，支持自定义域名和样式</p>

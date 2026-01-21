@@ -81,7 +81,7 @@
     <div class="section_7 flex-col">
       <div class="box_3 flex-row">
         <div class="text-group_1 flex-col">
-          <span class="text_11">模块化笔记</span>
+          <img src="/images/index/biji.png" alt="模块化笔记" class="h-8 w-auto mb-2" />
           <div class="text-wrapper_4">
             <span class="text_12">像搭积木一样编辑笔记</span>
             <span class="paragraph_3"><br /></span>
@@ -94,7 +94,7 @@
     <div class="section_9 flex-col">
       <div class="block_1 flex-row">
         <div class="text-group_2 flex-col">
-          <span class="text_14">多维表</span>
+          <img src="/images/index/duowei.png" alt="多维表" class="h-8 w-auto mb-2" />
           <div class="text-wrapper_5">
             <span class="text_15">像搭积木一样编辑笔记</span>
             <span class="paragraph_4"><br /></span>
@@ -107,7 +107,7 @@
     <div class="section_11 flex-col">
       <div class="section_12 flex-row">
         <div class="text-group_3 flex-col">
-          <span class="text_17">任务系统</span>
+          <img src="/images/index/mission.png" alt="任务系统" class="h-8 w-auto mb-2" />
           <div class="text-wrapper_6">
             <span class="paragraph_5">
               内置任务管理功能
@@ -145,7 +145,7 @@
     <div class="section_16 flex-col">
       <div class="box_6 flex-row">
         <div class="text-group_5 flex-col">
-          <span class="text_19">知识站点</span>
+          <img src="/images/index/knowledge.png" alt="知识站点" class="h-8 w-auto mb-2" />
           <div class="text-wrapper_8">
             <span class="paragraph_9">
               将笔记一键发布为静态网站
