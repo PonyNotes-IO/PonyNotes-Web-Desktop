@@ -52,12 +52,14 @@ const typeWriter = () => {
 }
 
 onMounted(() => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
   // 初始化 AOS 配置
   AOS.init({
     duration: 1000,
     easing: 'ease-out-quint',
-    once: false,
-    offset: 120,
+    once: isMobile, // 移动端只触发一次，防止往复滚动时消失
+    offset: isMobile ? 20 : 120, // 移动端触发偏移量调小，让内容出现得更早
     delay: 0,
     anchorPlacement: 'top-bottom',
   })
@@ -163,12 +165,16 @@ onUnmounted(() => {
     <!-- 1. 模块化笔记 -->
     <section class="pt-12 pb-20 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6">
-        <div class="mb-12 text-center md:text-left" data-aos="fade-right">
-          <img src="/images/index/biji.png" alt="模块化笔记" class="h-[52px] w-auto mb-6 mx-auto md:mx-0" />
-          <div class="space-y-1 font-medium leading-snug">
+        <div class="mb-12 text-left" data-aos="fade-right">
+          <img src="/images/index/biji.png" alt="模块化笔记" class="h-[52px] w-auto mb-6 ml-0" />
+          <div class="space-y-1 font-medium leading-snug text-left">
             <p class="text-[20px] text-gray-400 mb-2">像搭积木一样编辑笔记</p>
-            <p class="text-[26px] text-white font-bold mb-1">一键插入文字、表格、代码、音视频、网页等</p>
-            <p class="text-[26px] text-white font-bold">内容，自由组合，灵活创作</p>
+            <p class="text-[26px] text-white font-bold mb-1 hidden md:block">一键插入文字、表格、代码、音视频、网页等</p>
+            <p class="text-[26px] text-white font-bold hidden md:block">内容，自由组合，灵活创作</p>
+            <!-- 移动端专用的紧凑换行排版 -->
+            <p class="text-[24px] text-white font-bold md:hidden leading-tight">一键插入文字、表格、代码、</p>
+            <p class="text-[24px] text-white font-bold md:hidden leading-tight">音视频、网页等内容，</p>
+            <p class="text-[24px] text-white font-bold md:hidden leading-tight">自由组合，灵活创作</p>
           </div>
         </div>
         <div class="flex justify-center" data-aos="fade-up">
@@ -180,11 +186,14 @@ onUnmounted(() => {
     <!-- 2. 多维表 -->
     <section class="py-16 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6">
-        <div class="mb-10 text-center md:text-left" data-aos="fade-right">
-          <img src="/images/index/duowei.png" alt="多维表" class="h-[48px] w-auto mb-4 mx-auto md:mx-0" />
-          <div class="space-y-1 font-medium leading-tight">
-            <p class="text-[18px] text-gray-400">支持类似 Notion 的多视图数据库</p>
-            <p class="text-[24px] text-white font-bold">用表格、看板、日历等方式查看同一组数据</p>
+        <div class="mb-10 text-left" data-aos="fade-right">
+          <img src="/images/index/duowei.png" alt="多维表" class="h-[48px] w-auto mb-4 ml-0" />
+          <div class="space-y-1 font-medium leading-tight text-left">
+            <p class="text-[18px] text-gray-400 mb-2">支持类似 Notion 的多视图数据库</p>
+            <p class="text-[24px] text-white font-bold hidden md:block">用表格、看板、日历等方式查看同一组数据</p>
+            <!-- 移动端专用的紧凑换行排版 -->
+            <p class="text-[22px] text-white font-bold md:hidden leading-tight">用表格、看板、日历等方式</p>
+            <p class="text-[22px] text-white font-bold md:hidden leading-tight">查看同一组数据</p>
           </div>
         </div>
         <div class="flex justify-center" data-aos="fade-up">
@@ -196,11 +205,13 @@ onUnmounted(() => {
     <!-- 3. 任务系统 -->
     <section class="py-16 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6 flex flex-col items-center md:items-end">
-        <div class="mb-10 text-center md:text-right" data-aos="fade-left">
-          <img src="/images/index/mission.png" alt="任务系统" class="h-[52px] w-auto mb-6 mx-auto md:ml-auto md:mr-0" />
-          <div class="space-y-1 font-medium leading-snug">
-            <p class="text-[20px] text-gray-400">内置任务管理功能支持待办事项、多状态、优</p>
-            <p class="text-[26px] text-white font-bold">先级、截止日期笔记即项目管理</p>
+        <div class="mb-10 text-left md:text-right w-full md:w-auto" data-aos="fade-left">
+          <img src="/images/index/mission.png" alt="任务系统" class="h-[52px] w-auto mb-6 ml-0 md:ml-auto md:mr-0" />
+          <div class="space-y-1 font-medium leading-snug text-left md:text-right">
+            <p class="text-[20px] text-gray-400 mb-2">内置任务管理功能支持待办事项、多状态、优</p>
+            <p class="text-[26px] text-white font-bold hidden md:block">先级、截止日期笔记即项目管理</p>
+            <!-- 移动端专用的紧凑换行排版 -->
+            <p class="text-[24px] text-white font-bold md:hidden leading-tight">先级、截止日期笔记即项目管理</p>
           </div>
         </div>
         <div class="flex justify-center md:justify-start w-full" data-aos="fade-up">
@@ -212,11 +223,13 @@ onUnmounted(() => {
     <!-- 4. 知识站点 -->
     <section class="py-16 bg-black text-white w-full">
       <div class="max-w-[1100px] mx-auto px-6 flex flex-col items-center md:items-end">
-        <div class="mb-10 text-center md:text-right" data-aos="fade-left">
-          <img src="/images/index/knowledge.png" alt="知识站点" class="h-[52px] w-auto mb-6 mx-auto md:ml-auto md:mr-0" />
-          <div class="space-y-1 font-medium leading-snug">
-            <p class="text-[20px] text-gray-400">将笔记一键发布为静态网站打造专属知识库或</p>
-            <p class="text-[26px] text-white font-bold">项目主页，支持自定义域名和样式</p>
+        <div class="mb-10 text-left md:text-right w-full md:w-auto" data-aos="fade-left">
+          <img src="/images/index/knowledge.png" alt="知识站点" class="h-[52px] w-auto mb-6 ml-0 md:ml-auto md:mr-0" />
+          <div class="space-y-1 font-medium leading-snug text-left md:text-right">
+            <p class="text-[20px] text-gray-400 mb-2">将笔记一键发布为静态网站打造专属知识库或</p>
+            <p class="text-[26px] text-white font-bold hidden md:block">项目主页，支持自定义域名和样式</p>
+            <!-- 移动端专用的紧凑换行排版 -->
+            <p class="text-[24px] text-white font-bold md:hidden leading-tight">项目主页，支持自定义域名和样式</p>
           </div>
         </div>
         <div class="flex justify-center md:justify-start w-full" data-aos="fade-up">

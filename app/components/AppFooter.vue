@@ -13,9 +13,13 @@
                             alt="小马笔记 Logo" />
                         <span class="text-[26px] font-bold tracking-tight">小马笔记</span>
                     </div>
-                    <p class="text-gray-600 text-[13px] tracking-wide ml-1">
+                    <p class="text-gray-600 text-[13px] tracking-wide ml-1 mb-6">
                         京ICP备2025131868号
                     </p>
+                    <div class="flex items-center gap-2 ml-1">
+                        <img src="/images/ioi.png" class="w-5 h-auto object-contain opacity-80" alt="Company Logo" />
+                        <span class="text-gray-500 text-[14px] font-medium">北京爱欧爱科技有限公司</span>
+                    </div>
                 </div>
 
                 <!-- 右侧：三个列。移动端使用 grid 布局，确保在窄屏下也能整齐排列 -->
@@ -59,7 +63,7 @@
             <!-- 底部版权声明 -->
             <div class="border-t border-white/5 mt-8 pt-6 text-center">
                 <p class="text-gray-600 text-[12px] tracking-wide">
-                    © 2024 小马笔记 PonyNotes. 让记录更简单。
+                    © 2026 小马笔记 PonyNotes. 让记录更简单。
                 </p>
             </div>
 

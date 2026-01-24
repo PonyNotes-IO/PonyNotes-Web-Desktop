@@ -56,7 +56,7 @@ onMounted(() => {
                     下载
                 </h1>
 
-                <!-- 芯片版本选择按钮 -->
+                <!-- 芯片版本选择按钮 (已注释)
                 <div class="flex justify-center gap-6 mb-24" data-aos="zoom-in" data-aos-delay="100">
                     <button class="bg-gradient-to-r from-[#FF8F00] to-[#FF4D00] text-white px-12 py-4 rounded-xl font-bold text-[18px] transition-transform hover:scale-105 active:scale-95 border-none shadow-none">
                         Intel芯片版
@@ -65,6 +65,7 @@ onMounted(() => {
                         Apple芯片版
                     </button>
                 </div>
+                -->
             </div>
         </section>
 
@@ -97,7 +98,7 @@ onMounted(() => {
                                     ? 'bg-[#FF4D00] text-white px-12 py-3 rounded-[18px] text-[18px]' 
                                     : 'bg-transparent text-[#FF4D00] text-[20px] hover:underline p-0'"
                             >
-                                立即下载
+                                {{ ['Android/Pad', 'iPhone/iPad'].includes(item.name) ? '敬请期待' : '立即下载' }}
                             </button>
                         </div>
                     </div>

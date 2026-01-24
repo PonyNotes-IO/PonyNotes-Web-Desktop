@@ -223,22 +223,22 @@ onMounted(() => {
                     <!-- 调整 py-6 缩短高度，mb 缩短间距 -->
                     <div class="bg-white rounded-2xl py-6 px-8 border border-[#FFD9C6] text-center shadow-none"
                         data-aos="fade-up" data-aos-delay="100">
-                        <p class="text-[15px] font-bold text-gray-900 mb-2">100次对话/10张图片</p>
+                        <p class="text-[15px] font-bold text-gray-900 mb-2">基础-500次</p>
                         <div class="text-[28px] font-bold mb-5 text-gray-900 leading-none">¥ 10</div>
                         <button
                             class="w-full bg-[#E5E7EB] text-gray-900 py-2.5 rounded-xl font-bold border-none shadow-none text-sm">购买</button>
                     </div>
                     <div class="bg-white rounded-2xl py-6 px-8 border border-[#FFD9C6] text-center shadow-none"
                         data-aos="fade-up" data-aos-delay="200">
-                        <p class="text-[15px] font-bold text-gray-900 mb-2">400次对话/20张图片</p>
+                        <p class="text-[15px] font-bold text-gray-900 mb-2">标准-1500次</p>
                         <div class="text-[28px] font-bold mb-5 text-gray-900 leading-none">¥ 30</div>
                         <button
                             class="w-full bg-[#E5E7EB] text-gray-900 py-2.5 rounded-xl font-bold border-none shadow-none text-sm">购买</button>
                     </div>
                     <div class="bg-white rounded-2xl py-6 px-8 border border-[#FFD9C6] text-center shadow-none"
                         data-aos="fade-up" data-aos-delay="300">
-                        <p class="text-[15px] font-bold text-gray-900 mb-2">1000次对话/50张图片</p>
-                        <div class="text-[28px] font-bold mb-5 text-gray-900 leading-none">¥ 50</div>
+                        <p class="text-[15px] font-bold text-gray-900 mb-2">高级-3000次</p>
+                        <div class="text-[28px] font-bold mb-5 text-gray-900 leading-none">¥ 58</div>
                         <button
                             class="w-full bg-[#E5E7EB] text-gray-900 py-2.5 rounded-xl font-bold border-none shadow-none text-sm">购买</button>
                     </div>
