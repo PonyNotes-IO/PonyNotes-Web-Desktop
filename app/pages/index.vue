@@ -10,7 +10,7 @@ useSeoMeta({
 
 // --- 1. 原始数据 (用于轮播图逻辑) ---
 const rawSlides = [
-  { id: 1, title: '导入或者迁移', desc: '从其他应用和文件导入数据到 小马笔记', type: 'import' },
+  { id: 1, title: '导入或者迁移', desc: '从其他应用 and 文件导入数据到 小马笔记', type: 'import' },
   { id: 2, title: '无限画布', desc: '打破页面限制，随心所欲布局你的灵感', type: 'canvas' },
   { id: 3, title: '多维表数据库', desc: '用表格、看板、日历管理你的结构化数据', type: 'table' },
   { id: 4, title: 'AI 智能助手', desc: '利用大模型能力，一键总结、润色与续写', type: 'ai' },
@@ -84,6 +84,10 @@ onUnmounted(() => {
          Hero 区域
     ========================================================= -->
     <div class="relative w-full bg-no-repeat bg-cover bg-top" style="background-image: url('/images/topbg.png');">
+      
+      <!-- 柔化遮罩：使用多重渐变层叠实现自然淡出，性能极高且无闪烁 -->
+      <div class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white via-white/60 to-transparent pointer-events-none z-10"></div>
+
       <div class="relative z-10">
         <!-- 导航栏 (已移至 Layout) -->
 
@@ -101,8 +105,10 @@ onUnmounted(() => {
                 让笔记更简单、让知识更智慧，开源、本地优先、云同步，多模态记录与 AI 并存，助你高效构建个人与团队的知识系统
               </p>
               <div class="pt-4" data-aos="zoom-in-up" data-aos-delay="800">
-                <button
-                  class="bg-[#FF4D00] text-white px-16 py-2.5 rounded-xl text-[15px] font-bold transition-all duration-500 hover:translate-y-[-4px] border-none shadow-none">免费下载使用</button>
+                <NuxtLink to="/download"
+                  class="inline-block bg-[#FF4D00] text-white px-16 py-2.5 rounded-xl text-[15px] font-bold transition-all duration-500 hover:translate-y-[-4px] border-none shadow-none">
+                  免费下载使用
+                </NuxtLink>
               </div>
             </div>
             <div class="flex-1 relative w-full max-w-[650px]" data-aos="fade-left" data-aos-duration="1200"

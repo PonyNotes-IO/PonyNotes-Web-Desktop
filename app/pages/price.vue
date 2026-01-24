@@ -72,7 +72,7 @@ onMounted(() => {
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch -mt-56">
 
                 <!-- 免费版 -->
-                <div @click="selectedPlan = 0"
+                <div @mouseenter="selectedPlan = 0"
                     :class="[selectedPlan === 0 ? 'border-2 border-[#FF4D00]' : 'border border-[#FFD9C6]']"
                     class="bg-white rounded-2xl p-5 pb-6 flex flex-col h-full shadow-none cursor-pointer transition-all duration-300">
                     <div class="h-24 mt-1">
@@ -83,7 +83,8 @@ onMounted(() => {
                         </div>
                     </div>
                     <button
-                        class="w-full bg-[#FF4D00] text-white py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px]">立即开始</button>
+                        :class="[selectedPlan === 0 ? 'bg-[#FF4D00] text-white' : 'bg-[#F3F4F6] text-gray-600']"
+                        class="w-full py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px] transition-colors duration-300">立即开始</button>
                     <ul :class="[selectedPlan === 0 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                         class="space-y-2.5 text-[13px] px-1 transition-colors duration-300">
                         <li>本地免费使用</li>
@@ -94,19 +95,20 @@ onMounted(() => {
                 </div>
 
                 <!-- 学生版 -->
-                <div @click="selectedPlan = 1"
+                <div @mouseenter="selectedPlan = 1"
                     :class="[selectedPlan === 1 ? 'border-2 border-[#FF4D00]' : 'border border-[#FFD9C6]']"
                     class="bg-white rounded-2xl p-5 pb-6 flex flex-col h-full shadow-none cursor-pointer transition-all duration-300">
                     <div class="h-24 mt-1">
                         <h3 class="text-[16px] font-medium text-gray-900 mb-1">学生版</h3>
                         <div class="flex items-baseline gap-0.5">
                             <span class="text-[14px] font-bold">¥</span>
-                            <span class="text-[34px] font-bold leading-none text-gray-900">3</span>
+                            <span class="text-[34px] font-bold leading-none text-gray-900">{{ billingCycle === 0 ? '3' : '30' }}</span>
                             <span class="text-[#FF4D00] text-[12px] font-bold ml-1">每月2G存储空间</span>
                         </div>
                     </div>
                     <button
-                        class="w-full bg-[#E5E7EB] text-gray-900 py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px]">去升级</button>
+                        :class="[selectedPlan === 1 ? 'bg-[#FF4D00] text-white' : 'bg-[#F3F4F6] text-gray-600']"
+                        class="w-full py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px] transition-colors duration-300">去升级</button>
                     <ul :class="[selectedPlan === 1 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                         class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
                         <li>轻装上阵，AI助学</li>
@@ -118,19 +120,20 @@ onMounted(() => {
                 </div>
 
                 <!-- 标准版 -->
-                <div @click="selectedPlan = 2"
+                <div @mouseenter="selectedPlan = 2"
                     :class="[selectedPlan === 2 ? 'border-2 border-[#FF4D00]' : 'border border-[#FFD9C6]']"
                     class="bg-white rounded-2xl p-5 pb-6 flex flex-col h-full shadow-none cursor-pointer transition-all duration-300">
                     <div class="h-24 mt-1">
                         <h3 class="text-[16px] font-medium text-gray-900 mb-1">标准版</h3>
                         <div class="flex items-baseline gap-0.5">
                             <span class="text-[14px] font-bold">¥</span>
-                            <span class="text-[34px] font-bold leading-none text-gray-900">8</span>
+                            <span class="text-[34px] font-bold leading-none text-gray-900">{{ billingCycle === 0 ? '8' : '80' }}</span>
                             <span class="text-[#FF4D00] text-[12px] font-bold ml-1">每月10G存储空间</span>
                         </div>
                     </div>
                     <button
-                        class="w-full bg-[#E5E7EB] text-gray-900 py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px]">去升级</button>
+                        :class="[selectedPlan === 2 ? 'bg-[#FF4D00] text-white' : 'bg-[#F3F4F6] text-gray-600']"
+                        class="w-full py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px] transition-colors duration-300">去升级</button>
                     <ul :class="[selectedPlan === 2 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                         class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
                         <li>面向内容创作者</li>
@@ -142,19 +145,20 @@ onMounted(() => {
                 </div>
 
                 <!-- 团队版 -->
-                <div @click="selectedPlan = 3"
+                <div @mouseenter="selectedPlan = 3"
                     :class="[selectedPlan === 3 ? 'border-2 border-[#FF4D00]' : 'border border-[#FFD9C6]']"
                     class="bg-white rounded-2xl p-5 pb-6 flex flex-col h-full shadow-none cursor-pointer transition-all duration-300">
                     <div class="h-24 mt-1">
                         <h3 class="text-[16px] font-medium text-gray-900 mb-1">团队版</h3>
                         <div class="flex items-baseline gap-0.5">
                             <span class="text-[14px] font-bold">¥</span>
-                            <span class="text-[34px] font-bold leading-none text-gray-900">18</span>
+                            <span class="text-[34px] font-bold leading-none text-gray-900">{{ billingCycle === 0 ? '18' : '180' }}</span>
                             <span class="text-[#FF4D00] text-[12px] font-bold ml-1">每月20G存储空间</span>
                         </div>
                     </div>
                     <button
-                        class="w-full bg-[#E5E7EB] text-gray-900 py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px]">去升级</button>
+                        :class="[selectedPlan === 3 ? 'bg-[#FF4D00] text-white' : 'bg-[#F3F4F6] text-gray-600']"
+                        class="w-full py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px] transition-colors duration-300">去升级</button>
                     <ul :class="[selectedPlan === 3 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                         class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
                         <li>团队协作不止是共享</li>

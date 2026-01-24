@@ -7,6 +7,7 @@ const isModalVisible = ref(false)
 const isConfirmVisible = ref(false)
 const isScrolled = ref(false)
 const userStore = useUserStore()
+const route = useRoute()
 
 // 用 computed 确保响应式追踪
 const isLoggedIn = computed(() => userStore.isLoggedIn.value)
@@ -23,43 +24,24 @@ onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll)
 })
 
-const openModal = () => {
-    isModalVisible.value = true
-}
-
-const closeModal = () => {
-    isModalVisible.value = false
-}
-
-const handleLogout = () => {
-    isConfirmVisible.value = true
-}
-
-const confirmLogout = async () => {
-    isConfirmVisible.value = false
-    
-    // 清空用户状态（内存 + localStorage）
-    userStore.clearUser()
-    
-    // 使用 Nuxt 路由跳转，不刷新页面
-    await navigateTo('/', { replace: true })
-}
-
-const cancelLogout = () => {
-    isConfirmVisible.value = false
+const handleLogoClick = (e) => {
+    if (route.path === '/') {
+        e.preventDefault()
+        window.location.reload()
+    }
 }
 </script>
 
 <template>
     <!-- 统一的顶部导航组件：滚动时显示半透明背景，z-[100] 确保在最上层 -->
     <nav 
-        class="w-full h-20 fixed top-0 z-[100] transition-all duration-300"
-        :class="[isScrolled ? 'bg-white/90 backdrop-blur-md' : 'bg-transparent']"
+        class="w-full h-20 fixed top-0 z-[100] transition-all duration-300 bg-white"
+        :class="[isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-white']"
     >
         <div class="max-w-[1140px] mx-auto px-6 h-full flex items-center justify-between">
 
             <!-- 左侧 Logo 区域：点击回首页 -->
-            <NuxtLink to="/" class="flex items-center gap-2 group cursor-pointer">
+            <NuxtLink to="/" class="flex items-center gap-2 group cursor-pointer" @click="handleLogoClick">
                 <img src="/images/ico.png"
                     class="w-8 h-8 object-contain transition-transform duration-1000 group-hover:rotate-[360deg] border-none shadow-none"
                     alt="小马笔记 Logo" />

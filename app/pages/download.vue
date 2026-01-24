@@ -80,7 +80,7 @@ onMounted(() => {
                     <div 
                         v-for="item in platforms" 
                         :key="item.name"
-                        @click="activePlatform = item.name"
+                        @mouseenter="activePlatform = item.name"
                         class="bg-[#F8F9FA] rounded-[28px] py-10 px-8 text-center border-[1.5px] flex flex-col items-center cursor-pointer select-none"
                         :class="activePlatform === item.name ? 'border-[#FF4D00]' : 'border-transparent'"
                         style="transition: border-color 0.2s ease;"
