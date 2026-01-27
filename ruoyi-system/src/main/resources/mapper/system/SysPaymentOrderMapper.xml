@@ -108,7 +108,7 @@
                 AND create_time >= #{createTime}
             </if>
             <if test="updateTime != null">
-                AND update_time <= #{updateTime}
+                AND update_time &lt;= #{updateTime}
             </if>
         </where>
         order by create_time desc
