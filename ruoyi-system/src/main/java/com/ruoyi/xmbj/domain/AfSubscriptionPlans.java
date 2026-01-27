@@ -3,6 +3,8 @@ package com.ruoyi.xmbj.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -14,6 +16,8 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author 张继科
  * @date 2026-01-21
  */
+@Getter
+@Setter
 public class AfSubscriptionPlans extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -47,15 +51,15 @@ public class AfSubscriptionPlans extends BaseEntity
 
     /** 是否支持收件箱（0否 1是） */
     @Excel(name = "是否支持收件箱", readConverterExp = "0=否,1=是")
-    private Integer hasInbox;
+    private Boolean hasInbox;
 
     /** 是否支持多设备同步 */
     @Excel(name = "是否支持多设备同步")
-    private Integer hasMultiDeviceSync;
+    private Boolean hasMultiDeviceSync;
 
     /** 是否支持API */
     @Excel(name = "是否支持API")
-    private Integer hasApiSupport;
+    private Boolean hasApiSupport;
 
     /** 版本历史保留天数 */
     @Excel(name = "版本历史保留天数")
@@ -71,11 +75,11 @@ public class AfSubscriptionPlans extends BaseEntity
 
     /** 是否支持分享链接 */
     @Excel(name = "是否支持分享链接")
-    private Integer hasShareLink;
+    private Boolean hasShareLink;
 
     /** 是否支持发布 */
     @Excel(name = "是否支持发布")
-    private Integer hasPublish;
+    private Boolean hasPublish;
 
     /** 工作空间成员上限 */
     @Excel(name = "工作空间成员上限")
@@ -91,15 +95,15 @@ public class AfSubscriptionPlans extends BaseEntity
 
     /** 是否支持空间成员管理 */
     @Excel(name = "是否支持空间成员管理")
-    private Integer hasSpaceMemberManagement;
+    private Boolean hasSpaceMemberManagement;
 
     /** 是否支持空间成员分组 */
     @Excel(name = "是否支持空间成员分组")
-    private Integer hasSpaceMemberGrouping;
+    private Boolean hasSpaceMemberGrouping;
 
     /** 是否启用（1是 0否） */
     @Excel(name = "是否启用", readConverterExp = "1=是,0=否")
-    private Integer isActive;
+    private Boolean isActive;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -111,235 +115,6 @@ public class AfSubscriptionPlans extends BaseEntity
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedAt;
 
-    public void setId(Long id) 
-    {
-        this.id = id;
-    }
-
-    public Long getId() 
-    {
-        return id;
-    }
-
-    public void setPlanCode(String planCode) 
-    {
-        this.planCode = planCode;
-    }
-
-    public String getPlanCode() 
-    {
-        return planCode;
-    }
-
-    public void setPlanName(String planName) 
-    {
-        this.planName = planName;
-    }
-
-    public String getPlanName() 
-    {
-        return planName;
-    }
-
-    public void setPlanNameCn(String planNameCn) 
-    {
-        this.planNameCn = planNameCn;
-    }
-
-    public String getPlanNameCn() 
-    {
-        return planNameCn;
-    }
-
-    public void setMonthlyPriceYuan(BigDecimal monthlyPriceYuan) 
-    {
-        this.monthlyPriceYuan = monthlyPriceYuan;
-    }
-
-    public BigDecimal getMonthlyPriceYuan() 
-    {
-        return monthlyPriceYuan;
-    }
-
-    public void setYearlyPriceYuan(BigDecimal yearlyPriceYuan) 
-    {
-        this.yearlyPriceYuan = yearlyPriceYuan;
-    }
-
-    public BigDecimal getYearlyPriceYuan() 
-    {
-        return yearlyPriceYuan;
-    }
-
-    public void setCloudStorageGb(Long cloudStorageGb) 
-    {
-        this.cloudStorageGb = cloudStorageGb;
-    }
-
-    public Long getCloudStorageGb() 
-    {
-        return cloudStorageGb;
-    }
-
-    public void setHasInbox(Integer hasInbox) 
-    {
-        this.hasInbox = hasInbox;
-    }
-
-    public Integer getHasInbox() 
-    {
-        return hasInbox;
-    }
-
-    public void setHasMultiDeviceSync(Integer hasMultiDeviceSync) 
-    {
-        this.hasMultiDeviceSync = hasMultiDeviceSync;
-    }
-
-    public Integer getHasMultiDeviceSync() 
-    {
-        return hasMultiDeviceSync;
-    }
-
-    public void setHasApiSupport(Integer hasApiSupport) 
-    {
-        this.hasApiSupport = hasApiSupport;
-    }
-
-    public Integer getHasApiSupport() 
-    {
-        return hasApiSupport;
-    }
-
-    public void setVersionHistoryDays(Long versionHistoryDays) 
-    {
-        this.versionHistoryDays = versionHistoryDays;
-    }
-
-    public Long getVersionHistoryDays() 
-    {
-        return versionHistoryDays;
-    }
-
-    public void setAiChatCountPerMonth(Long aiChatCountPerMonth) 
-    {
-        this.aiChatCountPerMonth = aiChatCountPerMonth;
-    }
-
-    public Long getAiChatCountPerMonth() 
-    {
-        return aiChatCountPerMonth;
-    }
-
-    public void setAiImageGenerationPerMonth(Long aiImageGenerationPerMonth) 
-    {
-        this.aiImageGenerationPerMonth = aiImageGenerationPerMonth;
-    }
-
-    public Long getAiImageGenerationPerMonth() 
-    {
-        return aiImageGenerationPerMonth;
-    }
-
-    public void setHasShareLink(Integer hasShareLink) 
-    {
-        this.hasShareLink = hasShareLink;
-    }
-
-    public Integer getHasShareLink() 
-    {
-        return hasShareLink;
-    }
-
-    public void setHasPublish(Integer hasPublish) 
-    {
-        this.hasPublish = hasPublish;
-    }
-
-    public Integer getHasPublish() 
-    {
-        return hasPublish;
-    }
-
-    public void setWorkspaceMemberLimit(Long workspaceMemberLimit) 
-    {
-        this.workspaceMemberLimit = workspaceMemberLimit;
-    }
-
-    public Long getWorkspaceMemberLimit() 
-    {
-        return workspaceMemberLimit;
-    }
-
-    public void setCollaborativeWorkspaceLimit(Long collaborativeWorkspaceLimit) 
-    {
-        this.collaborativeWorkspaceLimit = collaborativeWorkspaceLimit;
-    }
-
-    public Long getCollaborativeWorkspaceLimit() 
-    {
-        return collaborativeWorkspaceLimit;
-    }
-
-    public void setPagePermissionGuestEditors(Long pagePermissionGuestEditors) 
-    {
-        this.pagePermissionGuestEditors = pagePermissionGuestEditors;
-    }
-
-    public Long getPagePermissionGuestEditors() 
-    {
-        return pagePermissionGuestEditors;
-    }
-
-    public void setHasSpaceMemberManagement(Integer hasSpaceMemberManagement) 
-    {
-        this.hasSpaceMemberManagement = hasSpaceMemberManagement;
-    }
-
-    public Integer getHasSpaceMemberManagement() 
-    {
-        return hasSpaceMemberManagement;
-    }
-
-    public void setHasSpaceMemberGrouping(Integer hasSpaceMemberGrouping) 
-    {
-        this.hasSpaceMemberGrouping = hasSpaceMemberGrouping;
-    }
-
-    public Integer getHasSpaceMemberGrouping() 
-    {
-        return hasSpaceMemberGrouping;
-    }
-
-    public void setIsActive(Integer isActive) 
-    {
-        this.isActive = isActive;
-    }
-
-    public Integer getIsActive() 
-    {
-        return isActive;
-    }
-
-    public void setCreatedAt(Date createdAt) 
-    {
-        this.createdAt = createdAt;
-    }
-
-    public Date getCreatedAt() 
-    {
-        return createdAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) 
-    {
-        this.updatedAt = updatedAt;
-    }
-
-    public Date getUpdatedAt() 
-    {
-        return updatedAt;
-    }
 
     @Override
     public String toString() {

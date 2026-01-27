@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.xmbj.mapper.AfSubscriptionPlansMapper">
-    
+
     <resultMap type="AfSubscriptionPlans" id="AfSubscriptionPlansResult">
         <result property="id"    column="id"    />
         <result property="planCode"    column="plan_code"    />
@@ -30,6 +30,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updatedAt"    column="updated_at"    />
     </resultMap>
 
+
+    <resultMap id="AfSubscriptionAddonsResult" type="com.ruoyi.xmbj.domain.AfSubscriptionAddons">
+        <result property="id" column="id"/>
+        <result property="addonCode" column="addon_code"/>
+        <result property="addonName" column="addon_name"/>
+        <result property="addonNameCn" column="addon_name_cn"/>
+        <result property="addonType" column="addon_type"/>
+        <result property="priceYuan" column="price_yuan"/>
+        <result property="storageGb" column="storage_gb"/>
+        <result property="aiChatCount" column="ai_chat_count"/>
+        <result property="aiImageCount" column="ai_image_count"/>
+        <result property="isActive" column="is_active"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
     <sql id="selectAfSubscriptionPlansVo">
         select id, plan_code, plan_name, plan_name_cn, monthly_price_yuan, yearly_price_yuan, cloud_storage_gb, 
         CASE WHEN has_inbox THEN 1 ELSE 0 END as has_inbox, 
@@ -70,7 +85,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
         </where>
     </select>
-    
+
+    <!-- 查询所有活跃的订阅计划 -->
+    <select id="selectActiveSubscriptionPlans" resultMap="AfSubscriptionPlansResult">
+        SELECT * FROM af_subscription_plans
+        WHERE is_active = true
+        ORDER BY monthly_price_yuan ASC
+    </select>
+
+    <!-- 查询所有活跃的补充包 (返回 AfSubscriptionAddons) -->
+    <select id="selectActiveAddons" resultMap="AfSubscriptionAddonsResult">
+        SELECT * FROM af_subscription_addons
+        WHERE is_active = true
+        ORDER BY price_yuan ASC
+    </select>
+
     <select id="selectAfSubscriptionPlansById" parameterType="Long" resultMap="AfSubscriptionPlansResult">
         <include refid="selectAfSubscriptionPlansVo"/>
         where id = #{id}
