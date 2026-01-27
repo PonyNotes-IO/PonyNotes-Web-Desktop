@@ -31,6 +31,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/system/order")
 public class SysPaymentOrderController extends BaseController
 {
+
+
     @Autowired
     private ISysPaymentOrderService sysPaymentOrderService;
 
