@@ -62,13 +62,26 @@ public class SysLogininforController extends BaseController
         return toAjax(logininforService.deleteLogininforByIds(infoIds));
     }
 
+    @Log(title = "系统访问记录", businessType = BusinessType.DELETE)
+    @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
+    @DeleteMapping("/batch")
+    public AjaxResult remove(String ids)
+    {
+        String[] idArray = ids.split(",");
+        Long[] longIds = new Long[idArray.length];
+        for (int i = 0; i < idArray.length; i++) {
+            longIds[i] = Long.parseLong(idArray[i]);
+        }
+        return toAjax(logininforService.deleteLogininforByIds(longIds));
+    }
+
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
     @Log(title = "登录日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
     public AjaxResult clean()
     {
         logininforService.cleanLogininfor();
-        return success();
+        return AjaxResult.success();
     }
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:unlock')")

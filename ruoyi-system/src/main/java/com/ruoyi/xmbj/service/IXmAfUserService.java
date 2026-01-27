@@ -1,15 +1,15 @@
-package com.ruoyi.xmbj.mapper;
+package com.ruoyi.xmbj.service;
 
 import java.util.List;
-import com.ruoyi.xmbj.domain.AfUser;
+import com.ruoyi.xmbj.domain.XmAfUser;
 
 /**
- * 用户管理11Mapper接口
+ * 用户管理11Service接口
  * 
  * @author ruoyi
  * @date 2026-01-21
  */
-public interface AfUserMapper 
+public interface IXmAfUserService
 {
     /**
      * 查询用户管理11
@@ -17,7 +17,7 @@ public interface AfUserMapper
      * @param uid 用户管理11主键
      * @return 用户管理11
      */
-    public AfUser selectAfUserByUid(Long uid);
+    public XmAfUser selectAfUserByUid(Long uid);
 
     /**
      * 查询用户管理11列表
@@ -25,7 +25,7 @@ public interface AfUserMapper
      * @param afUser 用户管理11
      * @return 用户管理11集合
      */
-    public List<AfUser> selectAfUserList(AfUser afUser);
+    public List<XmAfUser> selectAfUserList(XmAfUser afUser);
 
     /**
      * 新增用户管理11
@@ -33,7 +33,7 @@ public interface AfUserMapper
      * @param afUser 用户管理11
      * @return 结果
      */
-    public int insertAfUser(AfUser afUser);
+    public int insertAfUser(XmAfUser afUser);
 
     /**
      * 修改用户管理11
@@ -41,21 +41,21 @@ public interface AfUserMapper
      * @param afUser 用户管理11
      * @return 结果
      */
-    public int updateAfUser(AfUser afUser);
+    public int updateAfUser(XmAfUser afUser);
 
     /**
-     * 删除用户管理11
+     * 批量删除用户管理11
+     * 
+     * @param uids 需要删除的用户管理11主键集合
+     * @return 结果
+     */
+    public int deleteAfUserByUids(Long[] uids);
+
+    /**
+     * 删除用户管理11信息
      * 
      * @param uid 用户管理11主键
      * @return 结果
      */
     public int deleteAfUserByUid(Long uid);
-
-    /**
-     * 批量删除用户管理11
-     * 
-     * @param uids 需要删除的数据主键集合
-     * @return 结果
-     */
-    public int deleteAfUserByUids(Long[] uids);
 }

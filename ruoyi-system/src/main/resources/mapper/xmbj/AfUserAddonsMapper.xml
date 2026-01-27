@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.xmbj.mapper.AfUserAddonsMapper">
+
+    <resultMap id="AfUserAddonsResult" type="com.ruoyi.xmbj.domain.AfUserAddons">
+        <result property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="addonId" column="addon_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="status" column="status"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+</mapper>

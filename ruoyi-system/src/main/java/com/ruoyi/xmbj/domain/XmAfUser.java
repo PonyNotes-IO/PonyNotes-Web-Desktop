@@ -13,7 +13,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author ruoyi
  * @date 2026-01-21
  */
-public class AfUser extends BaseEntity
+public class XmAfUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 

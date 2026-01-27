@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.xmbj.mapper.ClientUserMapper">
+
+    <!-- 客户端用户结果集映射 -->
+    <resultMap id="ClientUserResult" type="com.ruoyi.xmbj.domain.ClientUser">
+        <result property="uid" column="uid" />
+        <result property="uuid" column="uuid" />
+        <result property="email" column="email" />
+        <result property="password" column="password" />
+        <result property="name" column="name" />
+        <result property="metadata" column="metadata" />
+        <result property="encryptionSign" column="encryption_sign" />
+        <result property="deletedAt" column="deleted_at" />
+        <result property="updatedAt" column="updated_at" />
+        <result property="createdAt" column="created_at" />
+        <result property="phone" column="phone" />
+    </resultMap>
+
+    <!-- 查询字段 -->
+    <sql id="selectClientUserVo"> select uid, uuid, email, password, name, metadata,
+        encryption_sign, deleted_at, updated_at, created_at, phone from af_user </sql>
+
+    <!-- 根据用户信息（如邮箱/手机/用户名）查询客户端用户 -->
+    <select id="getClientUserByUserInfo" parameterType="java.lang.String"
+        resultMap="ClientUserResult">
+        <include refid="selectClientUserVo" /> WHERE (email = #{userInfo} OR phone = #{userInfo} OR
+        name = #{userInfo}) AND deleted_at IS NULL LIMIT 1 </select>
+
+    <!-- 查询客户端用户列表 -->
+    <select id="selectAfUserList" parameterType="com.ruoyi.xmbj.domain.ClientUser"
+        resultMap="ClientUserResult">
+        <include refid="selectClientUserVo" />
+        <where>
+            <if test="uid != null">and uid = #{uid}</if>
+            <if test="uuid != null and uuid != ''">and uuid = #{uuid}</if>
+            <if test="email != null and email != ''">and email like
+        concat('%',#{email}, '%')</if>
+            <if test="phone != null and phone != ''">and phone like
+        concat('%',#{phone}, '%')</if>
+            <if test="name != null and name != ''">and name like
+        concat('%', #{name},'%')</if>
+            <if test="deletedAt != null">and deleted_at = #{deletedAt}</if>
+            <if
+                test="updatedAt != null">and updated_at = #{updatedAt}</if>
+            <if
+                test="createdAt != null">and created_at = #{createdAt}</if>
+        </where> order by
+        uid desc </select>
+
+    <!-- 查询客户端用户列表总数 -->
+    <select id="selectAfUserList_COUNT" parameterType="com.ruoyi.xmbj.domain.ClientUser"
+        resultType="java.lang.Long"> select count(0) from af_user <where>
+            <if test="uid != null">and uid = #{uid}</if>
+            <if test="uuid != null and uuid != ''">and
+        uuid = #{uuid}</if>
+            <if test="email != null and email != ''">and email like concat('%',
+        #{email}, '%')</if>
+            <if test="phone != null and phone != ''">and phone like concat('%',
+        #{phone}, '%')</if>
+            <if test="name != null and name != ''">and name like concat('%',
+        #{name},'%')</if>
+            <if test="deletedAt != null">and deleted_at = #{deletedAt}</if>
+           
+            <if test="updatedAt != null">and
+        updated_at = #{updatedAt}</if>
+            <if test="createdAt != null">and created_at = #{createdAt}</if>
+        </where>
+    </select>
+    <!-- 根据用户ID查询客户端用户 -->
+    <select id="selectAfUserById" parameterType="java.lang.Long" resultMap="ClientUserResult">
+        <include refid="selectClientUserVo" /> where uid = #{afuserId} </select>
+
+    <!-- 更新客户端用户信息 -->
+    <update id="updateAfUser" parameterType="com.ruoyi.xmbj.domain.ClientUser"> update af_user <set>
+            <if test="uuid != null and uuid != ''">uuid = #{uuid},</if>
+            <if
+                test="email != null and email != ''">email = #{email},</if>
+            <if
+                test="password != null and password != ''">password = #{password},</if>
+            <if
+                test="name != null and name != ''">name = #{name},</if>
+            <if test="metadata != null">metadata
+        = #{metadata},</if>
+            <if test="encryptionSign != null and encryptionSign != ''">encryption_sign
+        = #{encryptionSign},</if>
+            <if test="deletedAt != null">deleted_at = #{deletedAt},</if>
+            <if
+                test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="createdAt != null">created_at
+        = #{createdAt},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+        </set>
+        where uid = #{uid} </update>
+
+    <!-- 逻辑删除客户端用户（设置删除时间） -->
+    <update id="remove" parameterType="java.lang.Long"> update af_user set deleted_at =
+        CURRENT_TIMESTAMP where uid in <foreach collection="array" item="afuserId" open="("
+            separator="," close=")"> #{afuserId} </foreach>
+    </update>
+
+    <!-- 切换客户端用户状态（激活/停用） -->
+    <update id="changestatus" parameterType="java.lang.Long"> update af_user set deleted_at = case
+        when deleted_at is null then CURRENT_TIMESTAMP else null end where uid in <foreach
+            collection="array" item="afuserId" open="(" separator="," close=")"> #{afuserId} </foreach>
+    </update>
+
+</mapper>

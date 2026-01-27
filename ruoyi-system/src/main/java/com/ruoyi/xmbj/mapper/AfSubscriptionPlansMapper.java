@@ -1,6 +1,8 @@
 package com.ruoyi.xmbj.mapper;
 
 import java.util.List;
+
+import com.ruoyi.xmbj.domain.AfSubscriptionAddons;
 import com.ruoyi.xmbj.domain.AfSubscriptionPlans;
 
 /**
@@ -66,4 +68,14 @@ public interface AfSubscriptionPlansMapper
      * @return 订阅数量
      */
     public int countUserSubscriptionsByPlanId(Long id);
+
+    AfSubscriptionPlans selectById(Long planId);
+
+    List<AfSubscriptionPlans> selectActiveSubscriptionPlans();
+
+    AfSubscriptionPlans selectByName(String planName);
+
+    int updateById(AfSubscriptionPlans item);
+
+    List<AfSubscriptionAddons> selectActiveAddons();
 }

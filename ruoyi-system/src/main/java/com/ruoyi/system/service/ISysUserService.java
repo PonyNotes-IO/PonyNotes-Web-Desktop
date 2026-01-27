@@ -226,4 +226,12 @@ public interface ISysUserService
     public SysUser loginEmailPassword(String email, String password);
 
     Collection<? extends GrantedAuthority> getAuthorities(Long userId);
+
+    /**
+     * 根据用户信息获取用户
+     * 
+     * @param userInfo 用户信息（手机号、邮箱、用户名等）
+     * @return 用户对象信息
+     */
+    SysUser getUserByUserInfo(String userInfo);
 }

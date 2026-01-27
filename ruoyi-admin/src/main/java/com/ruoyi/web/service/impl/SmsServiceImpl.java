@@ -120,4 +120,13 @@ public class SmsServiceImpl implements SmsService {
         }
         return verified;
     }
+
+    @Override
+    public <R> R executeWithAli(AliExecutor<R> executor) {
+        try {
+            return executor.execute(accessKeyId,accessKeySecret);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

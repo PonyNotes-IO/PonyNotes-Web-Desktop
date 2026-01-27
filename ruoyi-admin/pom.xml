@@ -92,6 +92,11 @@
             <version>1.1.0</version>
         </dependency>
         <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>docmind_api20220711</artifactId>
+            <version>2.0.12</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
@@ -122,6 +127,11 @@
             <groupId>com.github.wechatpay-apiv3</groupId>
             <artifactId>wechatpay-java</artifactId>
             <version>0.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>4.4.0</version> <!-- 4.0+版本支持V3接口 -->
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>net.unmz.java.wechat.pay</groupId>-->
@@ -159,21 +169,45 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
         </dependency>
-
-        <!-- Spring Web -->
+        <!-- 阿里云SDK核心库 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.aliyun</groupId>
+            <artifactId>tea-openapi</artifactId>
+            <version>0.2.5</version>
         </dependency>
-
-        <!-- Spring Security -->
+        <!-- 阿里云文档智能SDK -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>com.aliyun</groupId>
+            <artifactId>docmind_api20220711</artifactId>
+            <version>2.0.12</version>
+        </dependency>
+        <!-- 可选：JSON处理库 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>2.0.50</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wechatpay-apiv3</groupId>
+            <artifactId>wechatpay-java-core</artifactId>
+            <version>0.2.9</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wechatpay-apiv3</groupId>
+            <artifactId>wechatpay-java-core</artifactId>
+            <version>0.2.17</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wechatpay-apiv3</groupId>
+            <artifactId>wechatpay-java-core</artifactId>
+            <version>0.2.17</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <repositories>
-        <!-- 优先从中央仓库下载依赖 -->
+        <!-- 优先从中央仓库下载微信支付SDK -->
         <repository>
             <id>central-wechat</id>
             <url>https://repo1.maven.org/maven2/</url>
@@ -189,6 +223,17 @@
         <repository>
             <id>nexus-aliyun</id>
             <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>wechat-pay-maven</id>
+            <url>https://maven.weixin.qq.com/repository/releases/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>

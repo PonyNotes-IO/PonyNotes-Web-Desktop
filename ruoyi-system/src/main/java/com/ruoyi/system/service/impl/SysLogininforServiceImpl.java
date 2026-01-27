@@ -30,6 +30,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService
         logininforMapper.insertLogininfor(logininfor);
     }
 
+
     /**
      * 查询系统登录日志集合
      * 

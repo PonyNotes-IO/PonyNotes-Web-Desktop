@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Map;
 
 @Configuration
-public class AlipayConfig {
+public class XmAlipayConfig {
     // 编码格式常量
     private static final String CHARSET = "UTF-8";
     // 签名算法常量
     private static final String SIGN_TYPE = "RSA2";
 
-    private static final Logger log = LoggerFactory.getLogger(AlipayConfig.class);
+    private static final Logger log = LoggerFactory.getLogger(XmAlipayConfig.class);
     @Value("${payment.alipay.app-id}")
     private String appId;
 
@@ -91,5 +91,37 @@ public class AlipayConfig {
 
     public String getGatewayUrl() {
         return gatewayUrl;
+    }
+
+    public String getReturnUrl() {
+        return returnUrl;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public void setGatewayUrl(String gatewayUrl) {
+        this.gatewayUrl = gatewayUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
     }
 }

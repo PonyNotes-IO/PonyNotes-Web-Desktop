@@ -80,7 +80,9 @@ public class AjaxResult extends HashMap<String, Object> implements java.io.Seria
     {
         return AjaxResult.success("操作成功", data);
     }
-
+    public static<T> AjaxResult success(Supplier<T> getter) {
+        return success("操作成功",getter.get());
+    }
     /**
      * 返回成功消息
      * 

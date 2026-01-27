@@ -75,7 +75,81 @@ public class SysPaymentOrder extends BaseEntity
     @Excel(name = "到期时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
-    public void setId(Long id) 
+    private String addonId;
+    private String planId;
+
+    private String userId;
+    private String clientUserId;
+    private String billingType;
+    private Integer quantity;
+    private String clientUserAddonId;
+    private String clientSubscriptionId;
+
+    public String getClientSubscriptionId() {
+        return clientSubscriptionId;
+    }
+
+    public void setClientSubscriptionId(String clientSubscriptionId) {
+        this.clientSubscriptionId = clientSubscriptionId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getClientUserId() {
+        return clientUserId;
+    }
+
+    public void setClientUserId(String clientUserId) {
+        this.clientUserId = clientUserId;
+    }
+
+    public String getBillingType() {
+        return billingType;
+    }
+
+    public void setBillingType(String billingType) {
+        this.billingType = billingType;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getClientUserAddonId() {
+        return clientUserAddonId;
+    }
+
+    public void setClientUserAddonId(String clientUserAddonId) {
+        this.clientUserAddonId = clientUserAddonId;
+    }
+
+    public String getAddonId() {
+        return addonId;
+    }
+
+    public void setAddonId(String addonId) {
+        this.addonId = addonId;
+    }
+
+    public String getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

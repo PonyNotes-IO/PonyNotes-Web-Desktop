@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.xmbj.mapper.AfUserWorkspaceMapper">
+
+    <resultMap id="AfUserWorkspaceResult" type="com.ruoyi.xmbj.domain.AfUserWorkspace">
+        <result property="workspaceId" column="workspace_id"/>
+        <result property="ownerUid" column="owner_uid"/>
+        <result property="workspaceName" column="workspace_name"/>
+        <result property="memberCount" column="member_count"/>
+        <result property="memberIds" column="member_ids"/>
+        <result property="afCollabCount" column="af_collab_count"/>
+        <result property="afCollabIds" column="af_collab_ids"/>
+        <result property="afInvitationCount" column="af_invitation_count"/>
+        <result property="afInvitationIds" column="af_invitation_ids"/>
+        <result property="afUserSubscriptionsIds" column="af_user_subscriptions_ids"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+    </resultMap>
+
+</mapper>

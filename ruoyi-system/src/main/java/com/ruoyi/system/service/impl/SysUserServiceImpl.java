@@ -609,6 +609,14 @@ public class SysUserServiceImpl implements ISysUserService
         // 5. 转换为GrantedAuthority集合
         return convertToAuthorities(permissions);
     }
+
+    @Override
+    public SysUser getUserByUserInfo(String userInfo) {
+        SysUser userEmail = userMapper.selectUserByEmail(userInfo);
+        SysUser userPhone = userMapper.selectUserByEmail(userInfo);
+        return (userPhone !=null?userPhone:userEmail);
+    }
+
     /**
      * 将权限字符串集合转换为Spring Security的GrantedAuthority
      */

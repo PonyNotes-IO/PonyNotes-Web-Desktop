@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.xmbj.mapper.UserUsageMapper">
+    
+    <resultMap id="UserUsageResult" type="com.ruoyi.xmbj.domain.UserUsage">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="storageUsed" column="storage_used"/>
+        <result property="aiCallsMade" column="ai_calls_made"/>
+        <result property="priorityCount" column="priority_count"/>
+        <result property="lastUpdated" column="last_updated"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <!-- 查询用户使用统计 -->
+    <select id="selectUserUsage" parameterType="Long" resultMap="UserUsageResult">
+        SELECT * FROM user_usage 
+        WHERE user_id = #{userId}
+        LIMIT 1
+    </select>
+    
+    <!-- 增加存储使用量 -->
+    <update id="addStorageUsage" parameterType="map">
+        UPDATE user_usage 
+        SET storage_used = storage_used + #{bytes}, updated_at = NOW() 
+        WHERE user_id = #{userId}
+    </update>
+    
+    <!-- 增加AI调用次数 -->
+    <update id="addAiCalls" parameterType="map">
+        UPDATE user_usage 
+        SET ai_calls_made = ai_calls_made + #{count}, updated_at = NOW() 
+        WHERE user_id = #{userId}
+    </update>
+    
+    <!-- 初始化用户使用统计记录 -->
+    <insert id="initUserUsage" parameterType="Long">
+        INSERT INTO user_usage (user_id, created_at, updated_at) 
+        VALUES (#{userId}, NOW(), NOW())
+    </insert>
+    
+</mapper>

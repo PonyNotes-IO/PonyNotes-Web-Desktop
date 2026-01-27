@@ -18,4 +18,14 @@ public interface AfSubscriptionAddonsMapper
     public int deleteAfSubscriptionAddonsById(Long id);
 
     public int deleteAfSubscriptionAddonsByIds(Long[] ids);
+
+    AfSubscriptionAddons selectById(Long addonId);
+
+    List<AfSubscriptionAddons> selectByIds(String addonId);
+
+    int deleteById(Long id);
+
+    int insert(AfSubscriptionAddons addon);
+
+    List<AfSubscriptionAddons> selectAddonsByType(String type);
 }

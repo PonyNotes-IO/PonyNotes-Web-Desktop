@@ -1,6 +1,8 @@
 package com.ruoyi.xmbj.mapper;
 
 import java.util.List;
+
+import com.ruoyi.xmbj.domain.AfUserWorkspace;
 import com.ruoyi.xmbj.domain.AfWorkspace;
 import com.ruoyi.xmbj.domain.vo.AfWorkspaceVo;
 
@@ -19,4 +21,6 @@ public interface AfWorkspaceMapper
     public int deleteAfWorkspaceByWorkspaceId(String workspaceId);
 
     public int deleteAfWorkspaceByWorkspaceIds(String[] workspaceIds);
+
+    List<AfUserWorkspace> selectAfUserWorkspaceList(AfUserWorkspace afUserWorkspace);
 }

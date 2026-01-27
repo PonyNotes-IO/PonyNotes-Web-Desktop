@@ -4,7 +4,9 @@ package com.ruoyi.web.service;
  * 短信服务接口
  */
 public interface SmsService {
-
+    interface AliExecutor<T> {
+        T execute(String accessKey,String accessSecret) throws Exception;
+    }
     /**
      * 生成随机验证码
      * @return 6位数字验证码
@@ -29,4 +31,6 @@ public interface SmsService {
     boolean verifySmsCode(String phoneNumber, String inputCode, String storedCode);
 
     boolean verifyLoginCode(String phone, String code);
+
+    <R> R executeWithAli(AliExecutor<R> executor);
 }

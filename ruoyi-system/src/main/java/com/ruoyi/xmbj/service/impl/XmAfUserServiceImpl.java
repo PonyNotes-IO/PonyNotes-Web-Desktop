@@ -1,13 +1,14 @@
 package com.ruoyi.xmbj.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.xmbj.domain.XmAfUser;
+import com.ruoyi.xmbj.mapper.XmAfUserMapper;
+import com.ruoyi.xmbj.service.IXmAfUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
-import com.ruoyi.xmbj.mapper.AfUserMapper;
-import com.ruoyi.xmbj.domain.AfUser;
-import com.ruoyi.xmbj.service.IAfUserService;
 
 /**
  * 用户管理11Service业务层处理
@@ -17,10 +18,10 @@ import com.ruoyi.xmbj.service.IAfUserService;
  */
 @Service
 @DataSource(DataSourceType.SLAVE)
-public class AfUserServiceImpl implements IAfUserService 
+public class XmAfUserServiceImpl implements IXmAfUserService
 {
     @Autowired
-    private AfUserMapper afUserMapper;
+    private XmAfUserMapper afUserMapper;
 
     /**
      * 查询用户管理11
@@ -29,7 +30,7 @@ public class AfUserServiceImpl implements IAfUserService
      * @return 用户管理11
      */
     @Override
-    public AfUser selectAfUserByUid(Long uid)
+    public XmAfUser selectAfUserByUid(Long uid)
     {
         return afUserMapper.selectAfUserByUid(uid);
     }
@@ -41,7 +42,7 @@ public class AfUserServiceImpl implements IAfUserService
      * @return 用户管理11
      */
     @Override
-    public List<AfUser> selectAfUserList(AfUser afUser)
+    public List<XmAfUser> selectAfUserList(XmAfUser afUser)
     {
         return afUserMapper.selectAfUserList(afUser);
     }
@@ -53,7 +54,7 @@ public class AfUserServiceImpl implements IAfUserService
      * @return 结果
      */
     @Override
-    public int insertAfUser(AfUser afUser)
+    public int insertAfUser(XmAfUser afUser)
     {
         return afUserMapper.insertAfUser(afUser);
     }
@@ -65,7 +66,7 @@ public class AfUserServiceImpl implements IAfUserService
      * @return 结果
      */
     @Override
-    public int updateAfUser(AfUser afUser)
+    public int updateAfUser(XmAfUser afUser)
     {
         return afUserMapper.updateAfUser(afUser);
     }

@@ -1,16 +1,25 @@
 package com.ruoyi.web.service;
 
-import com.ruoyi.system.domain.vo.PaymentQrCodeVO;
+import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.system.domain.PaymentOrder;
+import com.ruoyi.system.domain.SysPaymentOrder;
+import com.ruoyi.system.domain.vo.PaymentOrderVo;
+import com.ruoyi.system.domain.vo.PaymentResult;
+import com.ruoyi.xmbj.domain.AfSubscriptionAddons;
+import com.ruoyi.xmbj.domain.AfSubscriptionPlans;
+import com.ruoyi.xmbj.domain.ClientUser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 public interface PaymentService {
     /**
      * 创建支付订单并生成二维码
      */
-    PaymentQrCodeVO createPayment(BigDecimal amount, String paymentType);
+    PaymentResult createPayment(BigDecimal amount, String paymentType, SysUser sysUser, ClientUser clientUser, String productName, String openid, String url, String planId, String billingType,String addonId, HttpServletRequest request);
 
     /**
      * 查询支付状态
@@ -28,4 +37,23 @@ public interface PaymentService {
     boolean verifySign(String paymentType, String orderNo, Map<String, String> sign);
 
     Map<String, String> getWechatParams(HttpServletRequest request);
+
+    /**
+     * 获取支付订单信息
+     */
+    SysPaymentOrder getPaymentOrder(String outTradeNo);
+
+    JSONObject getOpenid(String code);
+
+    Map<String, String> getJsApiConfig(String url);
+
+    /**
+     * 获取用户下带分页的支付订单信息
+     * @param paymentOrderVo
+     * @return
+     */
+    List<PaymentOrderVo> userPaymentOrders(PaymentOrderVo paymentOrderVo);
+
+    List<PaymentOrderVo> serPaymentOrders(PaymentOrderVo paymentOrderVo);
+
 }

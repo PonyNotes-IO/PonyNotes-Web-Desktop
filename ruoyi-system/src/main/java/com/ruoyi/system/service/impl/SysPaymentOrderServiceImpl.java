@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,11 @@ public class SysPaymentOrderServiceImpl implements ISysPaymentOrderService
     public SysPaymentOrder selectSysPaymentOrderById(Long id)
     {
         return sysPaymentOrderMapper.selectSysPaymentOrderById(id);
+    }
+
+    @Override
+    public SysPaymentOrder selectPaymentOrderByOrderNo(String orderNo) {
+        return null;
     }
 
     /**
@@ -68,6 +76,26 @@ public class SysPaymentOrderServiceImpl implements ISysPaymentOrderService
     {
         sysPaymentOrder.setUpdateTime(DateUtils.getNowDate());
         return sysPaymentOrderMapper.updateSysPaymentOrder(sysPaymentOrder);
+    }
+
+    @Override
+    public List<SysPaymentOrder> selectExpiredOrders(Date payTime) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public SysPaymentOrder getPaymentOrderByTradeNo(String tradeNo) {
+        return null;
+    }
+
+    @Override
+    public List<SysPaymentOrder> selectPaymentOrderList(SysPaymentOrder paymentOrder) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public SysPaymentOrder selectPaymentOrderById(Long id) {
+        return null;
     }
 
     /**
