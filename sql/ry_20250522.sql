@@ -717,3 +717,71 @@ CREATE TABLE `sys_payment_order` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_order_no` (`order_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '支付订单表';
+
+drop table if exists sys_plans;
+CREATE TABLE `sys_plans` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '套餐ID',
+  `plan_code` varchar(30) NOT NULL COMMENT '套餐编码',
+  `plan_name` varchar(50) NOT NULL COMMENT '套餐名称(英文)',
+  `plan_name_cn` varchar(50) NOT NULL COMMENT '套餐名称(中文)',
+  `monthly_price_yuan` decimal(10,2) NOT NULL COMMENT '月付价格(元)',
+  `yearly_price_yuan` decimal(10,2) NOT NULL COMMENT '年付价格(元)',
+  `cloud_storage_gb` int(11) NOT NULL COMMENT '云存储容量(GB)',
+  `has_inbox` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支持收件箱(0:不支持,1:支持)',
+  `has_multi_device_sync` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支持多设备同步(0:不支持,1:支持)',
+  `has_api_support` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支持API(0:不支持,1:支持)',
+  `version_history_days` int(11) NOT NULL DEFAULT '30' COMMENT '版本历史保留天数',
+  `ai_chat_count_per_month` int(11) NOT NULL DEFAULT '0' COMMENT '每月AI聊天次数限制(0:无限制)',
+  `ai_image_generation_per_month` int(11) NOT NULL DEFAULT '0' COMMENT '每月AI图片生成次数限制(0:无限制)',
+  `has_share_link` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支持分享链接(0:不支持,1:支持)',
+  `has_publish` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支持发布功能(0:不支持,1:支持)',
+  `workspace_member_limit` int(11) NOT NULL DEFAULT '0' COMMENT '工作区成员限制(0:无限制)',
+  `collaborative_workspace_limit` int(11) NOT NULL DEFAULT '0' COMMENT '协作工作区限制(0:无限制)',
+  `has_space_member_management` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支持空间成员管理(0:不支持,1:支持)',
+  `has_space_member_grouping` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支持空间成员分组(0:不支持,1:支持)',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用(0:禁用,1:启用)',
+  `created_at` datetime NOT NULL COMMENT '创建时间',
+  `updated_at` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_plan_code` (`plan_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '套餐信息表';
+
+-- ----------------------------
+-- 初始化-套餐表数据
+-- ----------------------------
+insert into sys_plans values(1, 'student', 'Student Plan', '学生版', 3.00, 30.00, 5, 1, 1, 0, 30, 100, 10, 1, 0, 1, 0, 0, 0, 1, sysdate(), sysdate());
+insert into sys_plans values(2, 'standard', 'Standard Plan', '标准版', 8.00, 80.00, 50, 1, 1, 1, 90, 500, 50, 1, 1, 3, 1, 1, 1, 1, sysdate(), sysdate());
+insert into sys_plans values(3, 'team', 'Team Plan', '团队版', 18.00, 180.00, 200, 1, 1, 1, 180, 1000, 100, 1, 1, 10, 3, 1, 1, 1, sysdate(), sysdate());
+
+-- ----------------------------
+-- 21、笔记信息表
+-- ----------------------------
+drop table if exists sys_notes;
+CREATE TABLE `sys_notes` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '笔记ID',
+  `title` varchar(200) NOT NULL COMMENT '笔记标题',
+  `content` longtext COMMENT '笔记内容',
+  `user_id` bigint(20) NOT NULL COMMENT '创建者ID',
+  `user_name` varchar(64) NOT NULL COMMENT '创建者名称',
+  `category_id` bigint(20) DEFAULT NULL COMMENT '分类ID',
+  `tags` varchar(200) DEFAULT NULL COMMENT '标签（逗号分隔）',
+  `is_public` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否公开(0:私有,1:公开)',
+  `status` char(1) NOT NULL DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `del_flag` char(1) NOT NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `create_by` varchar(64) DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_by` varchar(64) DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_category_id` (`category_id`),
+  KEY `idx_create_time` (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='笔记信息表';
+
+-- ----------------------------
+-- 初始化-笔记表数据
+-- ----------------------------
+insert into sys_notes values(1, '测试笔记', '这是一条测试笔记内容', 1, '小马笔记', null, '测试,笔记', 0, '0', '0', 'admin', sysdate(), '', null, '测试用笔记');
+insert into sys_notes values(2, '系统架构设计', '若依框架系统架构设计文档...', 1, '小马笔记', null, '架构,设计', 1, '0', '0', 'admin', sysdate(), '', null, '系统架构设计笔记');
+insert into sys_notes values(3, '数据库优化', '数据库性能优化技巧...', 2, '小马笔记', null, '数据库,优化', 0, '0', '0', 'ry', sysdate(), '', null, '数据库优化笔记');

@@ -44,14 +44,22 @@ public class SysLogininforController extends BaseController
         return getDataTable(list);
     }
 
-    @Log(title = "系统访问记录", businessType = BusinessType.EXPORT)
+    @Log(title = "登录日志", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysLogininfor logininfor)
     {
         List<SysLogininfor> list = logininforService.selectLogininforList(logininfor);
         ExcelUtil<SysLogininfor> util = new ExcelUtil<SysLogininfor>(SysLogininfor.class);
-        util.exportExcel(response, list, "系统访问记录");
+        util.exportExcel(response, list, "登录日志");
+    }
+
+    @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
+    @Log(title = "登录日志", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{infoIds}")
+    public AjaxResult remove(@PathVariable Long[] infoIds)
+    {
+        return toAjax(logininforService.deleteLogininforByIds(infoIds));
     }
 
     @Log(title = "系统访问记录", businessType = BusinessType.DELETE)
@@ -67,8 +75,8 @@ public class SysLogininforController extends BaseController
         return toAjax(logininforService.deleteLogininforByIds(longIds));
     }
 
-    @Log(title = "系统访问记录", businessType = BusinessType.CLEAN)
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
+    @Log(title = "登录日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
     public AjaxResult clean()
     {

@@ -4,6 +4,7 @@ import java.util.TimeZone;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
@@ -14,9 +15,11 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  */
 @Configuration
 // 表示通过aop框架暴露该代理对象,AopContext能够访问
-@EnableAspectJAutoProxy(exposeProxy = true)
+@EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 // 指定要扫描的Mapper类的包的路径
 @MapperScan("com.ruoyi.**.mapper")
+// 指定要扫描的组件类的包的路径
+@ComponentScan(basePackages = {"com.ruoyi.framework.aspectj", "com.ruoyi"})
 public class ApplicationConfig
 {
     /**

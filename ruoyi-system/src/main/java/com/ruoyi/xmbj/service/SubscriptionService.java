@@ -10,13 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
  * 订阅相关业务逻辑 - 数据库版本
  * 替代了原来调用XMBJ API的方式，所有数据从本地数据库读取
  * 
- * 注意：所有查询操作都配置为使用 PostgreSQL 从库数据源（@DataSource(DataSourceType.slave)）
+ * 注意：所有查询操作都配置为使用 PostgreSQL 从库数据源（@DataSource(DataSourceType.SLAVE)）
  * 所有写入操作使用主库数据源（MySQL）
  */
 @Slf4j
@@ -46,7 +47,7 @@ public class SubscriptionService {
      * 原来: ponynotesService.getSubscriptionPlans() API调用
      * 现在: 从 PostgreSQL 从库读取
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfSubscriptionPlans> getSubscriptionPlans() {
         log.info("从 PostgreSQL 从库查询所有活跃的订阅计划");
         return afSubscriptionPlansMapper.selectActiveSubscriptionPlans();
@@ -55,7 +56,7 @@ public class SubscriptionService {
     /**
      * 按ID获取订阅计划
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public AfSubscriptionPlans getSubscriptionPlanById(Long planId) {
         return afSubscriptionPlansMapper.selectById(planId);
     }
@@ -63,7 +64,7 @@ public class SubscriptionService {
     /**
      * 按名称获取订阅计划
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public AfSubscriptionPlans getSubscriptionPlanByName(String planName) {
         return afSubscriptionPlansMapper.selectByName(planName);
     }
@@ -75,7 +76,7 @@ public class SubscriptionService {
      * 原来: ponynotesService.getAddons() API调用
      * 现在: 从数据库读取
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfSubscriptionAddons> getAllAddons() {
         log.info("从数据库查询所有活跃的补充包");
         return afSubscriptionPlansMapper.selectActiveAddons();
@@ -86,7 +87,7 @@ public class SubscriptionService {
      * 原来: ponynotesService.getAddonsByType() API调用
      * 现在: 从数据库读取
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfSubscriptionAddons> getAddonsByType(String type) {
         log.info("从数据库查询类型为 {} 的补充包", type);
         return afSubscriptionAddonsMapper.selectAddonsByType(type);
@@ -95,7 +96,7 @@ public class SubscriptionService {
     /**
      * 按ID获取补充包
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public AfSubscriptionAddons getAddonById(Long addonId) {
         return afSubscriptionAddonsMapper.selectById(addonId);
     }
@@ -105,8 +106,8 @@ public class SubscriptionService {
      */
     public int addAfSubscriptionAddons(AfSubscriptionAddons addon) {
         log.info("新增补充包: {}", addon.getAddonCode());
-        addon.setCreatedAt(LocalDateTime.now());
-        addon.setUpdatedAt(LocalDateTime.now());
+        addon.setCreatedAt(new Date());
+        addon.setUpdatedAt(new Date());
         return afSubscriptionAddonsMapper.insert(addon);
     }
 
@@ -196,7 +197,7 @@ public class SubscriptionService {
      * 原来: ponynotesService.getCurrentSubscription() API调用
      * 现在: 从数据库读取
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public AfUserSubscriptions getCurrentSubscription(Long userId) {
         // 检查并更新已过期的订阅
         afUserSubscriptionsMapper.updateExpiredSubscriptions(userId);
@@ -207,7 +208,7 @@ public class SubscriptionService {
     /**
      * 检查用户是否有有效的订阅
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public boolean hasValidSubscription(Long userId) {
         AfUserSubscriptions subscription = getCurrentSubscription(userId);
         if (subscription == null) {
@@ -221,7 +222,7 @@ public class SubscriptionService {
     /**
      * 获取用户订阅历史
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfUserSubscriptions> getSubscriptionHistory(Long userId) {
         return afUserSubscriptionsMapper.selectUserSubscriptions(userId);
     }
@@ -268,7 +269,7 @@ public class SubscriptionService {
      * 原来: ponynotesService.getMyAddons() API调用
      * 现在: 从数据库读取
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfUserAddons> getMyAddons(Long userId) {
         // 检查并更新已过期的补充包
         afUserAddonsMapper.updateExpiredAddons(userId);
@@ -279,7 +280,7 @@ public class SubscriptionService {
     /**
      * 按状态获取用户补充包
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfUserAddons> getMyAddonsByStatus(Long userId, String status) {
         return afUserAddonsMapper.selectUserAddonsByStatus(userId, status);
     }
@@ -287,7 +288,7 @@ public class SubscriptionService {
     /**
      * 获取用户已购买的特定补充包
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public AfUserAddons getUserAddon(Long userId, Long addonId) {
         return afUserAddonsMapper.selectUserAddon(userId, addonId);
     }
@@ -299,7 +300,7 @@ public class SubscriptionService {
      * 原来: ponynotesService.getUsage() API调用
      * 现在: 从数据库读取
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public UserUsage getUsage(Long userId) {
         log.info("获取用户 {} 的使用统计", userId);
         UserUsage usage = userUsageMapper.selectUserUsage(userId);
@@ -322,7 +323,7 @@ public class SubscriptionService {
     /**
      * 获取订阅计划（分页）
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfSubscriptionPlans> getSubscriptionPlansPaged() {
         List<AfSubscriptionPlans> list = afSubscriptionPlansMapper.selectActiveSubscriptionPlans();
         return list;
@@ -331,7 +332,7 @@ public class SubscriptionService {
     /**
      * 获取订阅计划（分页） - 带参数版本
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfSubscriptionPlans> getSubscriptionPlansPaged(int page, int size) {
         return getSubscriptionPlansPaged(); // 调用无参数版本
     }
@@ -339,7 +340,7 @@ public class SubscriptionService {
     /**
      * 获取用户订阅历史（分页）
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfUserSubscriptions> getSubscriptionHistoryPaged(Long userId) {
         List<AfUserSubscriptions> list = afUserSubscriptionsMapper.selectUserSubscriptions(userId);
         return list;
@@ -350,7 +351,7 @@ public class SubscriptionService {
      * 原来: ponynotesService.recordUsage() API调用
      * 现在: 直接写入本地数据库
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public void recordUsage(Long userId, String usageType, Long quantity) {
         log.info("记录用户 {} 的使用: 类型={}, 数量={}", userId, usageType, quantity);
 
@@ -388,7 +389,7 @@ public class SubscriptionService {
     /**
      * 计算订阅结束日期
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     private LocalDateTime calculateSubscriptionEndDate(LocalDateTime startDate, String billingType) {
         if ("monthly".equalsIgnoreCase(billingType)) {
             return startDate.plusMonths(1);
@@ -402,27 +403,27 @@ public class SubscriptionService {
     /**
      * 计算补充包过期日期（默认90天）
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     private LocalDateTime calculateAddonExpirationDate(LocalDateTime purchaseDate) {
         return purchaseDate.plusDays(90);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public AfUserSubscriptions selectUserSubscription(String clientSubscriptionId) {
         return afUserSubscriptionsMapper.selectUserSubscriptionById(Long.valueOf(clientSubscriptionId));
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public AfUserAddons selectUserAddon(String clientUserAddonId) {
         return afUserAddonsMapper.selectUserAddonById(Long.valueOf(clientUserAddonId));
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int update(AfUserAddons item) {
         return afUserAddonsMapper.updateById(item);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int updateAfSubscriptionAddons(AfSubscriptionAddons item) {
         return afSubscriptionAddonsMapper.updateAfSubscriptionAddons(item);
     }
@@ -431,12 +432,12 @@ public class SubscriptionService {
         return afSubscriptionPlansMapper.updateById(item);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public AfSubscriptionPlans getAfSubscriptionPlansById(String planId) {
-        return afSubscriptionPlansMapper.selectById(planId);
+        return afSubscriptionPlansMapper.selectById(Long.valueOf(planId));
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfSubscriptionAddons> getAfSubscriptionAddons(String addonId) {
         return afSubscriptionAddonsMapper.selectByIds(addonId);
     }

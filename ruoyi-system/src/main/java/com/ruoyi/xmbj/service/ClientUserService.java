@@ -25,39 +25,39 @@ public class ClientUserService {
 
     /**
      * 从 PostgreSQL 从库查询客户端用户信息
-     * 使用 @DataSource(DataSourceType.slave) 注解确保此方法使用从库数据源
+     * 使用 @DataSource(DataSourceType.SLAVE) 注解确保此方法使用从库数据源
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public ClientUser getClientUserByUserInfo(String userInfo) {
         return clientUserMapper.getClientUserByUserInfo(userInfo);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<ClientUser> selectAfUserList(ClientUser clientUser) {
         return clientUserMapper.selectAfUserList(clientUser);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public ClientUser selectAfUserById(Long afuserId) {
         return clientUserMapper.selectAfUserById(afuserId);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int updateAfUser(ClientUser clientUser) {
         return clientUserMapper.updateAfUser(clientUser);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int remove(Long[] afuserIds) {
         return clientUserMapper.remove(afuserIds);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int changestatus(Long[] afuserIds) {
         return clientUserMapper.changestatus(afuserIds);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfWorkspace> selectAfWorkspaceList(AfWorkspace afWorkspace) {
         return afWorkspaceMapper.selectAfWorkspaceList(afWorkspace);
     }

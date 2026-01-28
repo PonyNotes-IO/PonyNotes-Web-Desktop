@@ -45,9 +45,4 @@ export default {
       method: 'get'
     })
   }
-<<<<<<< HEAD
-=======
-
-  getAfW
->>>>>>> 694369914507b779589b6d0d7034a90c7c321bb3
 }

@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/system/paymentOrder")
-public class SysPaymentOrderController extends BaseController
+public class RySysPaymentOrderController extends BaseController
 {
     private String prefix = "system/paymentOrder";
 
@@ -83,7 +83,7 @@ public class SysPaymentOrderController extends BaseController
     @ResponseBody
     public AjaxResult addSave(@Validated SysPaymentOrder paymentOrder)
     {
-        return toAjax(paymentOrderService.insertPaymentOrder(paymentOrder));
+        return toAjax(paymentOrderService.insertSysPaymentOrder(paymentOrder));
     }
 
     /**
@@ -106,7 +106,7 @@ public class SysPaymentOrderController extends BaseController
     @ResponseBody
     public AjaxResult editSave(@Validated SysPaymentOrder paymentOrder)
     {
-        return toAjax(paymentOrderService.updatePaymentOrderById(paymentOrder));
+        return toAjax(paymentOrderService.updateSysPaymentOrder(paymentOrder));
     }
 
     /**
@@ -116,9 +116,9 @@ public class SysPaymentOrderController extends BaseController
     @PreAuthorize("hasPermi('system:paymentOrder:remove')")
     @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
+    public AjaxResult remove(Long ids)
     {
-        return toAjax(paymentOrderService.deletePaymentOrderByIds(ids));
+        return toAjax(paymentOrderService.deleteSysPaymentOrderById(ids));
     }
 
     /**

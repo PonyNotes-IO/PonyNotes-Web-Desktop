@@ -1,6 +1,7 @@
 package com.ruoyi.xmbj.mapper;
 
-import com.ruoyi.xmbj.domain.AppVersion;
+import com.ruoyi.xmbj.domain.XmAppVersion;
+
 import java.util.List;
 
 /**
@@ -8,14 +9,14 @@ import java.util.List;
  *
  * @author ruoyi
  */
-public interface AppVersionMapper {
+public interface XmAppVersionMapper {
     /**
      * 查询应用版本
      *
      * @param id 应用版本主键
      * @return 应用版本
      */
-    public AppVersion selectAppVersionById(Long id);
+    public XmAppVersion selectAppVersionById(Long id);
 
     /**
      * 查询应用版本列表
@@ -23,7 +24,7 @@ public interface AppVersionMapper {
      * @param appVersion 应用版本
      * @return 应用版本集合
      */
-    public List<AppVersion> selectAppVersionList(AppVersion appVersion);
+    public List<XmAppVersion> selectAppVersionList(XmAppVersion appVersion);
 
     /**
      * 新增应用版本
@@ -31,7 +32,7 @@ public interface AppVersionMapper {
      * @param appVersion 应用版本
      * @return 结果
      */
-    public int insertAppVersion(AppVersion appVersion);
+    public int insertAppVersion(XmAppVersion appVersion);
 
     /**
      * 修改应用版本
@@ -39,7 +40,7 @@ public interface AppVersionMapper {
      * @param appVersion 应用版本
      * @return 结果
      */
-    public int updateAppVersion(AppVersion appVersion);
+    public int updateAppVersion(XmAppVersion appVersion);
 
     /**
      * 删除应用版本
@@ -62,5 +63,5 @@ public interface AppVersionMapper {
      *
      * @return 应用版本集合
      */
-    public List<AppVersion> selectActiveAppVersions();
+    public List<XmAppVersion> selectActiveAppVersions();
 }

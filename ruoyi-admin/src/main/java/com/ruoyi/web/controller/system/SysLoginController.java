@@ -187,8 +187,8 @@ public class SysLoginController {
         if ("phone".equals(loginVo.getAccountType()) && loginType_code) {
 
             // 参数校验
-            if (StringUtils.isBlank(loginVo.getPhone())) {
-                return AjaxResult.error("phoneNumber  can't empty");
+            if (StringUtils.isBlank(loginVo.getPhone()) || StringUtils.isBlank(loginVo.getCode())) {
+                return AjaxResult.error("phoneNumber and verify code can't empty");
             }
 
             // 验证验证码
@@ -198,7 +198,7 @@ public class SysLoginController {
             }
 
             // 查询用户
-            user = userService.selectUserByPhone(loginVo.getPhone());
+             user = userService.selectUserByPhone(loginVo.getPhone());
             if (user == null) {
                 // 用户为空注册用户
                 user = new SysUser();
@@ -209,11 +209,12 @@ public class SysLoginController {
                 userService.registerUser(user);
             }
 
-        } else if ("email".equals(loginVo.getAccountType()) && loginType_code) {
-            // 参数校验
-            if (StringUtils.isBlank(loginVo.getEmail())) {
-                return AjaxResult.error("email can't empty!");
+        }else if ("email".equals(loginVo.getAccountType()) && loginType_code) {
+               // 参数校验
+            if (StringUtils.isBlank(loginVo.getEmail()) || StringUtils.isBlank(loginVo.getCode())) {
+                return AjaxResult.error("email and verify code can't empty!");
             }
+
             // 验证验证码
             boolean verifyResult = emailService.verifyEmailCode(loginVo.getEmail(), loginVo.getCode());
             if (!verifyResult) {
@@ -394,15 +395,14 @@ public class SysLoginController {
         }
         boolean loginType_code = "code".equals(loginVo.getLoginType());
         SysUser user = null;
-        if (!"email".equals(loginVo.getAccountType()) || !loginType_code) {
-            return AjaxResult
-                    .error("Please enter the correct account type, email login, mobile phone verification code");
+        if ( !"email".equals(loginVo.getAccountType()) || !loginType_code) {
+            return AjaxResult.error("Please enter the correct account type, email login, mobile phone verification code");
         }
 
         String key = "sms:verify:" + loginVo.getPhone();
         String storedCode = redisTemplate.opsForValue().get(key);
         // 验证验证码
-        boolean verifyResult = smsService.verifySmsCode(loginVo.getPhone(), loginVo.getCode(), storedCode);
+        boolean verifyResult = smsService.verifySmsCode(loginVo.getPhone(), loginVo.getCode(),storedCode);
         if (!verifyResult) {
             return AjaxResult.error("The verification code is incorrect or has expired\n");
         }

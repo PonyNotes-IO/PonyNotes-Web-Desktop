@@ -215,4 +215,18 @@ payment:
 # xiaomabiji@1521503155920564.onaliyun.com
 
 
+# 七牛云配置
+qiniu:
+  enabled: true
+  domain: t8udshr57.hb-bkt.clouddn.com
+  access-key: Wq1jOYS5ERxXfMrSt2resSFMHr5sA7i4lDNx_dtv
+  secret-key: cuKLUlHsPgxr5Ugn2DJlsoefMv79Jso5Ct3JHrwC
+  bucket: ponynotes-ai-files
+  region: z1
+  s3-endpoint: https://s3-cn-north-1.qiniucs.com
+  bucket-private: false
+  url-expire-seconds: 3600
+  use-https: false
+  total-capacity: 16777216000000000
+
 # 4#mMi!slhT8SqC6Y@}QXkkgTfIe9BoGH

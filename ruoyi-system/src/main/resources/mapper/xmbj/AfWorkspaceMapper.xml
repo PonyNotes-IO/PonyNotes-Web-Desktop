@@ -1,181 +1,157 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.xmbj.mapper.AfWorkspaceMapper">
-
-
-    <resultMap  id="AfWorkspaceResult" type="com.ruoyi.xmbj.domain.AfWorkspace">
-        <result property="workspaceId" column="workspace_id" />
-        <result property="databaseStorageId" column="database_storage_id" />
-        <result property="ownerUid" column="owner_uid" />
-        <result property="createdAt" column="created_at" />
-        <result property="workspaceType" column="workspace_type" />
-        <result property="deletedAt" column="deleted_at" />
-        <result property="workspaceName" column="workspace_name" />
-        <result property="icon" column="icon" />
-        <result property="settings" column="settings" />
-        <result property="isInitialized" column="is_initialized" />
-        <result property="default_published_view_id" column="default_published_view_id" />
+    
+    <resultMap type="AfWorkspace" id="AfWorkspaceResult">
+        <result property="workspaceId"    column="workspace_id"    />
+        <result property="databaseStorageId"    column="database_storage_id"    />
+        <result property="ownerUid"    column="owner_uid"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="workspaceType"    column="workspace_type"    />
+        <result property="deletedAt"    column="deleted_at"    />
+        <result property="workspaceName"    column="workspace_name"    />
+        <result property="icon"    column="icon"    />
+        <result property="settings"    column="settings"    />
+        <result property="isInitialized"    column="is_initialized"    />
+        <result property="defaultPublishedViewId"    column="default_published_view_id"    />
     </resultMap>
 
-    <resultMap  id="AfUserWorkspaceResult" type="com.ruoyi.xmbj.domain.AfUserWorkspace">
-        <result property="workspaceId" column="workspace_id"/>
-        <result property="ownerUid" column="owner_uid"/>
-        <result property="workspaceName" column="workspace_name"/>
-        <result property="memberCount" column="member_count"/>
-        <result property="memberIds" column="member_ids"/>
-        <result property="afCollabCount" column="af_collab_count"/>
-        <result property="afCollabIds" column="af_collab_ids"/>
-        <result property="afInvitationCount" column="af_invitation_count"/>
-        <result property="afInvitationIds" column="af_invitation_ids"/>
-        <result property="afUserSubscriptionsIds" column="af_user_subscriptions_ids"/>
-        <result property="startDate" column="start_date"/>
-        <result property="endDate" column="end_date"/>
+    <resultMap type="com.ruoyi.xmbj.domain.vo.AfWorkspaceVo" id="AfWorkspaceVoResult">
+        <result property="workspaceId"    column="workspace_id"    />
+        <result property="workspaceName"    column="workspace_name"    />
+        <result property="icon"    column="icon"    />
+        <result property="workspaceType"    column="workspace_type"    />
+        <result property="memberCount"    column="member_count"    />
+        <result property="guestEditPermissionCount"    column="guest_edit_permission_count"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="expiredAt"    column="expired_at"    />
     </resultMap>
 
     <sql id="selectAfWorkspaceVo">
-        select workspace_id, database_storage_id, owner_uid, created_at, workspace_type, deleted_at, workspace_name, icon, settings, is_initialized, default_published_view_id from af_workspace
+        select w.workspace_id, w.database_storage_id, w.owner_uid, au.name as owner_name, w.created_at, w.workspace_type, w.deleted_at, w.workspace_name, w.icon, w.settings, 
+        CASE WHEN w.is_initialized = true THEN 1 ELSE 0 END as is_initialized, 
+        w.default_published_view_id 
+        from af_workspace w
+        left join af_user au on w.owner_uid = au.uid
     </sql>
-
-    <sql id="selectAfUserWorkspaceVo">
-        select workspace_id, owner_uid, workspace_name, member_count, member_ids, af_collab_count, af_collab_ids, af_invitation_count, af_invitation_ids, af_user_subscriptions_ids, start_date, end_date from af_user_workspace
-    </sql>
-
-    <select id="selectAfWorkspaceByWorkspaceId" parameterType="String" resultMap="AfWorkspaceResult">
-        <include refid="selectAfWorkspaceVo"/>
-        where workspace_id = #{workspaceId}
-    </select>
 
     <select id="selectAfWorkspaceList" parameterType="AfWorkspace" resultMap="AfWorkspaceResult">
         <include refid="selectAfWorkspaceVo"/>
-        <where>
-            <if test="workspaceId != null and workspaceId != ''">
-                and workspace_id = #{workspaceId}
-            </if>
-            <if test="databaseStorageId != null and databaseStorageId != ''">
-                and database_storage_id = #{databaseStorageId}
-            </if>
-            <if test="ownerUid != null and ownerUid != ''">
-                and owner_uid = #{ownerUid}
-            </if>
-            <if test="workspaceType != null">
-                and workspace_type = #{workspaceType}
-            </if>
-            <if test="deletedAt != null">
-                and deleted_at = #{deletedAt}
-            </if>
-            <if test="workspaceName != null and workspaceName != ''">
-                and workspace_name like concat('%', #{workspaceName}, '%')
-            </if>
-            <if test="icon != null and icon != ''">
-                and icon = #{icon}
-            </if>
-            <if test="isInitialized != null">
-                and is_initialized = #{isInitialized}
-            </if>
-            <if test="default_published_view_id != null and default_published_view_id != ''">
-                and default_published_view_id = #{default_published_view_id}
-            </if>
+        <where>  
+            <if test="databaseStorageId != null and databaseStorageId != ''"> and w.database_storage_id = #{databaseStorageId}</if>
+            <if test="ownerUid != null"> and w.owner_uid = #{ownerUid}</if>
+            <if test="createdAt != null"> and w.created_at = #{createdAt}</if>
+            <if test="workspaceType != null"> and w.workspace_type = #{workspaceType}</if>
+            <if test="deletedAt != null"> and w.deleted_at = #{deletedAt}</if>
+            <if test="workspaceName != null and workspaceName != ''"> and w.workspace_name like concat('%', #{workspaceName}, '%')</if>
+            <if test="icon != null and icon != ''"> and w.icon = #{icon}</if>
+            <if test="settings != null and settings != ''"> and w.settings = #{settings}</if>
+            <if test="isInitialized != null"> and w.is_initialized = #{isInitialized}::boolean</if>
+            <if test="defaultPublishedViewId != null and defaultPublishedViewId != ''"> and w.default_published_view_id = #{defaultPublishedViewId}</if>
         </where>
     </select>
 
+    <select id="selectAfWorkspaceVoList" parameterType="AfWorkspace" resultMap="AfWorkspaceVoResult">
+        SELECT 
+            w.workspace_id,
+            w.workspace_name,
+            w.icon,
+            w.workspace_type,
+            COALESCE(wm.member_count, 0) as member_count,
+            COALESCE(perm.guest_edit_permission_count, 0) as guest_edit_permission_count,
+            w.created_at,
+            w.expired_at
+        FROM af_workspace w
+        LEFT JOIN (
+            SELECT workspace_id, COUNT(*) as member_count
+            FROM af_workspace_member
+            GROUP BY workspace_id
+        ) wm ON w.workspace_id = wm.workspace_id
+        LEFT JOIN (
+            SELECT 
+                wmr.workspace_id,
+                COUNT(*) as guest_edit_permission_count
+            FROM af_workspace_member wmr
+            INNER JOIN af_roles ar ON wmr.role_id = ar.id
+            INNER JOIN af_permissions ap ON ar.id = ap.role_id
+            WHERE ap.permission_name = 'guest_edit'
+            GROUP BY wmr.workspace_id
+        ) perm ON w.workspace_id = perm.workspace_id
+        <where>  
+            <if test="databaseStorageId != null and databaseStorageId != ''"> and w.database_storage_id = #{databaseStorageId}</if>
+            <if test="ownerUid != null"> and w.owner_uid = #{ownerUid}</if>
+            <if test="createdAt != null"> and w.created_at = #{createdAt}</if>
+            <if test="workspaceType != null"> and w.workspace_type = #{workspaceType}</if>
+            <if test="deletedAt != null"> and w.deleted_at = #{deletedAt}</if>
+            <if test="workspaceName != null and workspaceName != ''"> and w.workspace_name like concat('%', #{workspaceName}, '%')</if>
+            <if test="icon != null and icon != ''"> and w.icon = #{icon}</if>
+            <if test="settings != null and settings != ''"> and w.settings = #{settings}</if>
+        </where>
+    </select>
+    
+    <select id="selectAfWorkspaceByWorkspaceId" parameterType="String" resultMap="AfWorkspaceResult">
+        <include refid="selectAfWorkspaceVo"/>
+        where w.workspace_id = #{workspaceId}::uuid
+    </select>
 
-
-    <insert id="insertAfWorkspace" parameterType="AfWorkspace" useGeneratedKeys="false">
+    <insert id="insertAfWorkspace" parameterType="AfWorkspace">
         insert into af_workspace
-        (workspace_id, database_storage_id, owner_uid, created_at, workspace_type, deleted_at, workspace_name, icon, settings, is_initialized, default_published_view_id)
-        values(#{workspaceId}, #{databaseStorageId}, #{ownerUid}, #{createdAt}, #{workspaceType}, #{deletedAt}, #{workspaceName}, #{icon}, #{settings}, #{isInitialized}, #{default_published_view_id})
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id,</if>
+            <if test="databaseStorageId != null and databaseStorageId != ''">database_storage_id,</if>
+            <if test="ownerUid != null">owner_uid,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="workspaceType != null">workspace_type,</if>
+            <if test="deletedAt != null">deleted_at,</if>
+            <if test="workspaceName != null">workspace_name,</if>
+            <if test="icon != null and icon != ''">icon,</if>
+            <if test="settings != null">settings,</if>
+            <if test="isInitialized != null">is_initialized,</if>
+            <if test="defaultPublishedViewId != null">default_published_view_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">#{workspaceId},</if>
+            <if test="databaseStorageId != null and databaseStorageId != ''">#{databaseStorageId}::uuid,</if>
+            <if test="ownerUid != null">#{ownerUid},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="workspaceType != null">#{workspaceType},</if>
+            <if test="deletedAt != null">#{deletedAt},</if>
+            <if test="workspaceName != null">#{workspaceName},</if>
+            <if test="icon != null and icon != ''">#{icon},</if>
+            <if test="settings != null">#{settings},</if>
+            <if test="isInitialized != null">#{isInitialized}::boolean,</if>
+            <if test="defaultPublishedViewId != null">#{defaultPublishedViewId}::uuid,</if>
+         </trim>
     </insert>
 
     <update id="updateAfWorkspace" parameterType="AfWorkspace">
         update af_workspace
-        <set>
-            <if test="databaseStorageId != null and databaseStorageId != ''">
-                database_storage_id = #{databaseStorageId},
-            </if>
-            <if test="ownerUid != null and ownerUid != ''">
-                owner_uid = #{ownerUid},
-            </if>
-            <if test="workspaceType != null">
-                workspace_type = #{workspaceType},
-            </if>
-            <if test="deletedAt != null">
-                deleted_at = #{deletedAt},
-            </if>
-            <if test="workspaceName != null and workspaceName != ''">
-                workspace_name = #{workspaceName},
-            </if>
-            <if test="icon != null and icon != ''">
-                icon = #{icon},
-            </if>
-            <if test="settings != null and settings != ''">
-                settings = #{settings},
-            </if>
-            <if test="isInitialized != null">
-                is_initialized = #{isInitialized},
-            </if>
-            <if test="default_published_view_id != null and default_published_view_id != ''">
-                default_published_view_id = #{default_published_view_id},
-            </if>
-        </set>
-        where workspace_id = #{workspaceId}
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="databaseStorageId != null and databaseStorageId != ''">database_storage_id = #{databaseStorageId}::uuid,</if>
+            <if test="ownerUid != null">owner_uid = #{ownerUid},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="workspaceType != null">workspace_type = #{workspaceType},</if>
+            <if test="deletedAt != null">deleted_at = #{deletedAt},</if>
+            <if test="workspaceName != null">workspace_name = #{workspaceName},</if>
+            <if test="icon != null and icon != ''">icon = #{icon},</if>
+            <if test="settings != null">settings = #{settings},</if>
+            <if test="isInitialized != null">is_initialized = #{isInitialized}::boolean,</if>
+            <if test="defaultPublishedViewId != null and defaultPublishedViewId != ''">default_published_view_id = #{defaultPublishedViewId}::uuid,</if>
+        </trim>
+        where workspace_id = #{workspaceId}::uuid
     </update>
 
     <delete id="deleteAfWorkspaceByWorkspaceId" parameterType="String">
-        delete from af_workspace where workspace_id = #{workspaceId}
+        delete from af_workspace where workspace_id = #{workspaceId}::uuid
     </delete>
 
     <delete id="deleteAfWorkspaceByWorkspaceIds" parameterType="String">
-        delete from af_workspace where workspace_id in
+        delete from af_workspace where workspace_id in 
         <foreach item="workspaceId" collection="array" open="(" separator="," close=")">
-            #{workspaceId}
+            #{workspaceId}::uuid
         </foreach>
     </delete>
-    
-
-
-    <select id="selectAfUserWorkspaceList" parameterType="AfUserWorkspace" resultMap="AfUserWorkspaceResult">
-        SELECT
-            w.workspace_id,
-            w.owner_uid,
-            w.workspace_name,
-            COUNT(DISTINCT m.uid) AS member_count,
-            COALESCE(array_to_string(array_agg(DISTINCT m.uid), ','), '') AS member_ids,
-            CASE 
-                WHEN COUNT(DISTINCT ac.oid) > 0 THEN CAST(COUNT(DISTINCT ac.oid) AS VARCHAR)
-                ELSE '不限' 
-            END AS af_collab_count,
-            COALESCE(array_to_string(array_agg(DISTINCT ac.oid), ','), '') AS af_collab_ids,
-            CASE 
-                WHEN COUNT(DISTINCT i.id) > 0 THEN CONCAT(COUNT(DISTINCT i.id), '/10') -- 假设上限为10，可替换为实际配置
-                ELSE '无权限' 
-            END AS af_invitation_count,
-            COALESCE(array_to_string(array_agg(DISTINCT i.id), ','), '') AS af_invitation_ids,
-            COALESCE(array_to_string(array_agg(DISTINCT us.id), ','), '') AS af_user_subscriptions_ids,
-            us_latest.start_date AS start_date,
-            us_latest.end_date AS end_date
-        FROM af_workspace w
-        LEFT JOIN af_workspace_member m ON w.workspace_id = m.workspace_id
-        LEFT JOIN af_workspace_invitation i ON w.workspace_id = i.workspace_id 
-        LEFT JOIN af_collab ac ON w.workspace_id = ac.workspace_id
-        LEFT JOIN (
-            SELECT 
-                us.uid,
-                us.id,
-                us.start_date,
-                us.end_date
-            FROM af_user_subscriptions us
-            INNER JOIN (
-                SELECT uid, MAX(end_date) AS max_end_date
-                FROM af_user_subscriptions
-                WHERE status = 'active'
-                GROUP BY uid
-            ) us_max ON us.uid = us_max.uid AND us.end_date = us_max.max_end_date
-            WHERE us.status = 'active'
-        ) us_latest ON w.owner_uid = us_latest.uid
-        LEFT JOIN af_user_subscriptions us ON w.owner_uid = us.uid AND us.status = 'active'
-        where w.owner_uid = #{ownerUid}
-        GROUP BY w.workspace_id, w.owner_uid, w.workspace_name, us_latest.start_date, us_latest.end_date
-    </select>
 </mapper>

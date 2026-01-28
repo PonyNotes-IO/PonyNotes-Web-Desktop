@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.ponynotes;
 import java.util.List;
 
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.xmbj.domain.XmAppVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +20,6 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.xmbj.domain.AppVersion;
 import com.ruoyi.xmbj.service.AppVersionService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/api/ponynotes/appVersion")
-public class AppVersionController extends BaseController {
+public class XmAppVersionController extends BaseController {
     @Autowired
     private AppVersionService appVersionService;
 
@@ -40,9 +40,9 @@ public class AppVersionController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('ponynotes:appversion:list')")
     @GetMapping("/list")
-    public TableDataInfo list(AppVersion appVersion) {
+    public TableDataInfo list(XmAppVersion appVersion) {
         startPage();
-        List<AppVersion> list = appVersionService.selectAppVersionList(appVersion);
+        List<XmAppVersion> list = appVersionService.selectAppVersionList(appVersion);
         return getDataTable(list);
     }
 
@@ -52,9 +52,9 @@ public class AppVersionController extends BaseController {
     @PreAuthorize("@ss.hasPermi('ponynotes:appversion:export')")
     @Log(title = "应用版本", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, AppVersion appVersion) {
-        List<AppVersion> list = appVersionService.selectAppVersionList(appVersion);
-        ExcelUtil<AppVersion> util = new ExcelUtil<AppVersion>(AppVersion.class);
+    public void export(HttpServletResponse response, XmAppVersion appVersion) {
+        List<XmAppVersion> list = appVersionService.selectAppVersionList(appVersion);
+        ExcelUtil<XmAppVersion> util = new ExcelUtil<XmAppVersion>(XmAppVersion.class);
         util.exportExcel(response, list, "应用版本数据");
     }
 
@@ -73,7 +73,7 @@ public class AppVersionController extends BaseController {
     @PreAuthorize("@ss.hasPermi('ponynotes:appversion:add')")
     @Log(title = "应用版本", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@Validated @RequestBody AppVersion appVersion) {
+    public AjaxResult add(@Validated @RequestBody XmAppVersion appVersion) {
         return toAjax(appVersionService.insertAppVersion(appVersion));
     }
 
@@ -83,7 +83,7 @@ public class AppVersionController extends BaseController {
     @PreAuthorize("@ss.hasPermi('ponynotes:appversion:edit')")
     @Log(title = "应用版本", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@Validated @RequestBody AppVersion appVersion) {
+    public AjaxResult edit(@Validated @RequestBody XmAppVersion appVersion) {
         return toAjax(appVersionService.updateAppVersion(appVersion));
     }
 
@@ -122,7 +122,7 @@ public class AppVersionController extends BaseController {
      */
     @GetMapping("/active")
     public AjaxResult getActive() {
-        List<AppVersion> list = appVersionService.selectActiveAppVersions();
+        List<XmAppVersion> list = appVersionService.selectActiveAppVersions();
         return success(list);
     }
 }

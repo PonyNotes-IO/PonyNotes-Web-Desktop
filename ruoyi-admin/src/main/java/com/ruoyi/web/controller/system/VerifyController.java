@@ -31,7 +31,7 @@ public class VerifyController {
     private RedisTemplate<String, String> redisTemplate;
 
     // 验证码有效期 5分钟
-    private static final long VERIFY_CODE_EXPIRE = 15;
+    private static final long VERIFY_CODE_EXPIRE = 5;
 
     /**
      * 发送短信验证码

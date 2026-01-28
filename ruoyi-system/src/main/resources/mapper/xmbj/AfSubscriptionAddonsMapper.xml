@@ -2,43 +2,82 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.ruoyi.xmbj.mapper.AfSubscriptionAddonsMapper">
-
-    <resultMap id="AfSubscriptionAddonsResult" type="com.ruoyi.xmbj.domain.AfSubscriptionAddons">
-        <result property="id" column="id"/>
-        <result property="addonCode" column="addon_code"/>
-        <result property="addonName" column="addon_name"/>
-        <result property="addonNameCn" column="addon_name_cn"/>
-        <result property="addonType" column="addon_type"/>
-        <result property="priceYuan" column="price_yuan"/>
-        <result property="storageGb" column="storage_gb"/>
-        <result property="aiChatCount" column="ai_chat_count"/>
-        <result property="aiImageCount" column="ai_image_count"/>
-        <result property="isActive" column="is_active"/>
-        <result property="createdAt" column="created_at"/>
-        <result property="updatedAt" column="updated_at"/>
+    
+    <resultMap type="AfSubscriptionAddons" id="AfSubscriptionAddonsResult">
+        <result property="id"    column="id"    />
+        <result property="addonCode"    column="addon_code"    />
+        <result property="addonName"    column="addon_name"    />
+        <result property="addonNameCn"    column="addon_name_cn"    />
+        <result property="addonType"    column="addon_type"    />
+        <result property="priceYuan"    column="price_yuan"    />
+        <result property="storageGb"    column="storage_gb"    />
+        <result property="aiChatCount"    column="ai_chat_count"    />
+        <result property="aiImageCount"    column="ai_image_count"    />
+        <result property="isActive"    column="is_active"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
     </resultMap>
 
-    <!-- 查询所有活跃的补充包 -->
-    <select id="selectActiveAddons" resultMap="AfSubscriptionAddonsResult">
-        SELECT * FROM af_subscription_addons
-        WHERE is_active = true
-        ORDER BY price_yuan ASC
+    <sql id="selectAfSubscriptionAddonsVo">
+        select id, addon_code, addon_name, addon_name_cn, addon_type, price_yuan, storage_gb, ai_chat_count, ai_image_count, is_active, created_at, updated_at from af_subscription_addons
+    </sql>
+
+    <select id="selectAfSubscriptionAddonsList" parameterType="AfSubscriptionAddons" resultMap="AfSubscriptionAddonsResult">
+        <include refid="selectAfSubscriptionAddonsVo"/>
+        <where>  
+            <if test="addonCode != null and addonCode != ''"> and addon_code = #{addonCode}</if>
+            <if test="addonName != null and addonName != ''"> and addon_name like concat('%', #{addonName}, '%')</if>
+            <if test="addonNameCn != null and addonNameCn != ''"> and addon_name_cn like concat('%', #{addonNameCn}, '%')</if>
+            <if test="addonType != null and addonType != ''"> and addon_type = #{addonType}</if>
+            <if test="isActive != null"> and is_active = #{isActive}</if>
+        </where>
+        order by created_at desc
+    </select>
+    
+    <select id="selectAfSubscriptionAddonsById" parameterType="Long" resultMap="AfSubscriptionAddonsResult">
+        <include refid="selectAfSubscriptionAddonsVo"/>
+        where id = #{id}
     </select>
 
-    <!-- 按类型查询补充包 -->
-    <select id="selectAddonsByType" parameterType="String" resultMap="AfSubscriptionAddonsResult">
-        SELECT * FROM af_subscription_addons
-        WHERE addon_type = #{type}
-        AND is_active = true
-        ORDER BY price_yuan ASC
+    <select id="selectAfSubscriptionAddonsByAddonCode" parameterType="String" resultMap="AfSubscriptionAddonsResult">
+        <include refid="selectAfSubscriptionAddonsVo"/>
+        where addon_code = #{addonCode}
     </select>
 
-    <!-- 更新补充包信息 -->
-    <update id="updateAfSubscriptionAddons" parameterType="com.ruoyi.xmbj.domain.AfSubscriptionAddons">
-        UPDATE af_subscription_addons
-        <set>
+    <insert id="insertAfSubscriptionAddons" parameterType="AfSubscriptionAddons">
+        insert into af_subscription_addons
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="addonCode != null and addonCode != ''">addon_code,</if>
+            <if test="addonName != null and addonName != ''">addon_name,</if>
+            <if test="addonNameCn != null and addonNameCn != ''">addon_name_cn,</if>
+            <if test="addonType != null and addonType != ''">addon_type,</if>
+            <if test="priceYuan != null">price_yuan,</if>
+            <if test="storageGb != null">storage_gb,</if>
+            <if test="aiChatCount != null">ai_chat_count,</if>
+            <if test="aiImageCount != null">ai_image_count,</if>
+            <if test="isActive != null">is_active,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="addonCode != null and addonCode != ''">#{addonCode},</if>
+            <if test="addonName != null and addonName != ''">#{addonName},</if>
+            <if test="addonNameCn != null and addonNameCn != ''">#{addonNameCn},</if>
+            <if test="addonType != null and addonType != ''">#{addonType},</if>
+            <if test="priceYuan != null">#{priceYuan},</if>
+            <if test="storageGb != null">#{storageGb},</if>
+            <if test="aiChatCount != null">#{aiChatCount},</if>
+            <if test="aiImageCount != null">#{aiImageCount},</if>
+            <if test="isActive != null">#{isActive},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAfSubscriptionAddons" parameterType="AfSubscriptionAddons">
+        update af_subscription_addons
+        <trim prefix="SET" suffixOverrides=",">
             <if test="addonCode != null and addonCode != ''">addon_code = #{addonCode},</if>
             <if test="addonName != null and addonName != ''">addon_name = #{addonName},</if>
             <if test="addonNameCn != null and addonNameCn != ''">addon_name_cn = #{addonNameCn},</if>
@@ -48,10 +87,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="aiChatCount != null">ai_chat_count = #{aiChatCount},</if>
             <if test="aiImageCount != null">ai_image_count = #{aiImageCount},</if>
             <if test="isActive != null">is_active = #{isActive},</if>
-            <if test="createdAt != null">created_at = #{createdAt},</if>
             <if test="updatedAt != null">updated_at = #{updatedAt},</if>
-        </set>
-        WHERE id = #{id}
+        </trim>
+        where id = #{id}
     </update>
 
+    <delete id="deleteAfSubscriptionAddonsById" parameterType="Long">
+        delete from af_subscription_addons where id = #{id}
+    </delete>
+
+    <delete id="deleteAfSubscriptionAddonsByIds" parameterType="Long">
+        delete from af_subscription_addons where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

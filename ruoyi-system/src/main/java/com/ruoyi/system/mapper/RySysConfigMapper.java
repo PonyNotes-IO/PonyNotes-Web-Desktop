@@ -8,7 +8,7 @@ import com.ruoyi.system.domain.SysConfig;
  * 
  * @author ruoyi
  */
-public interface SysConfigMapper
+public interface RySysConfigMapper
 {
     /**
      * 查询参数配置信息

@@ -137,12 +137,7 @@
 
 <script>
 // 引入匹配后端的API
-<<<<<<< HEAD
 import afuserApi from '@/api/client/afUser'
-=======
-import afuserApi from '@/api/client/afuser'
-
->>>>>>> 694369914507b779589b6d0d7034a90c7c321bb3
 export default {
   name: 'UserManagement',
   data() {

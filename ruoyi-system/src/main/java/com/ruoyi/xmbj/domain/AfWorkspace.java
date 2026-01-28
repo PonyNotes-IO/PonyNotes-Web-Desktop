@@ -1,71 +1,188 @@
 package com.ruoyi.xmbj.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ruoyi.common.core.domain.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.experimental.Accessors;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import org.springframework.data.annotation.Id;
-
-import javax.persistence.Column;
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
 
-/**
- * 工作区信息对象 af_workspace
- *
- * @author ruoyi
- * @date 2025-12-20
- */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Accessors(chain = true)
-@EqualsAndHashCode(callSuper = false)
-@TableName("af_workspace")
-public class AfWorkspace extends BaseEntity {
+public class AfWorkspace extends BaseEntity
+{
+    private static final long serialVersionUID = 1L;
 
-    /** 工作区ID */
-    @Column(name = "workspace_id")
     private String workspaceId;
 
-    @Column(name = "database_storage_id")
+    @Excel(name = "数据库存储ID")
     private String databaseStorageId;
 
-    @Column(name = "owner_uid")
-    private String ownerUid;
+    @Excel(name = "工作空间所有者用户ID")
+    private Long ownerUid;
 
-    /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "created_at")
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
 
-    /** 工作区类型 0=免费版，1=基础版，2=专业版，3=团队版 */
-    @Column(name = "workspace_type")
+    @Excel(name = "工作空间类型", readConverterExp = "0=个人空间,1=团队空间")
     private Integer workspaceType;
 
-    @Column(name = "deleted_at")
-    private Integer deletedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "软删除时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date deletedAt;
 
-    /** 发布命名空间 */
-    @Column(name = "workspace_name")
+    @Excel(name = "工作空间名称")
     private String workspaceName;
 
-    /** 工作区配置 */
-    @Column(name = "icon")
-    private String icon; // JSON字符串存储
+    @Excel(name = "工作空间图标")
+    private String icon;
 
-    /** 工作区配置 */
-    @Column(name = "settings")
-    private String settings; // JSON字符串存储
+    @Excel(name = "工作空间配置")
+    private String settings;
 
-    /** 是否初始化 */
-    @Column(name = "is_initialized")
-    private Boolean isInitialized;
+    @Excel(name = "是否已初始化", readConverterExp = "0=未初始化,1=已初始化")
+    private Integer isInitialized;
 
-    @Column(name = "default_published_view_id")
-    private String default_published_view_id;
+    @Excel(name = "默认发布视图ID")
+    private String defaultPublishedViewId;
+
+    @Excel(name = "工作空间所有者")
+    private String ownerName;
+
+    public void setWorkspaceId(String workspaceId) 
+    {
+        this.workspaceId = workspaceId;
+    }
+
+    public String getWorkspaceId() 
+    {
+        return workspaceId;
+    }
+
+    public void setDatabaseStorageId(String databaseStorageId) 
+    {
+        this.databaseStorageId = databaseStorageId;
+    }
+
+    public String getDatabaseStorageId() 
+    {
+        return databaseStorageId;
+    }
+
+    public void setOwnerUid(Long ownerUid) 
+    {
+        this.ownerUid = ownerUid;
+    }
+
+    public Long getOwnerUid() 
+    {
+        return ownerUid;
+    }
+
+    public void setCreatedAt(Date createdAt) 
+    {
+        this.createdAt = createdAt;
+    }
+
+    public Date getCreatedAt() 
+    {
+        return createdAt;
+    }
+
+    public void setWorkspaceType(Integer workspaceType) 
+    {
+        this.workspaceType = workspaceType;
+    }
+
+    public Integer getWorkspaceType() 
+    {
+        return workspaceType;
+    }
+
+    public void setDeletedAt(Date deletedAt) 
+    {
+        this.deletedAt = deletedAt;
+    }
+
+    public Date getDeletedAt() 
+    {
+        return deletedAt;
+    }
+
+    public void setWorkspaceName(String workspaceName) 
+    {
+        this.workspaceName = workspaceName;
+    }
+
+    public String getWorkspaceName() 
+    {
+        return workspaceName;
+    }
+
+    public void setIcon(String icon) 
+    {
+        this.icon = icon;
+    }
+
+    public String getIcon() 
+    {
+        return icon;
+    }
+
+    public void setSettings(String settings) 
+    {
+        this.settings = settings;
+    }
+
+    public String getSettings() 
+    {
+        return settings;
+    }
+
+    public void setIsInitialized(Integer isInitialized) 
+    {
+        this.isInitialized = isInitialized;
+    }
+
+    public Integer getIsInitialized() 
+    {
+        return isInitialized;
+    }
+
+    public void setOwnerName(String ownerName) 
+    {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerName() 
+    {
+        return ownerName;
+    }
+
+    public void setDefaultPublishedViewId(String defaultPublishedViewId) 
+    {
+        this.defaultPublishedViewId = defaultPublishedViewId;
+    }
+
+    public String getDefaultPublishedViewId() 
+    {
+        return defaultPublishedViewId;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+            .append("workspaceId", getWorkspaceId())
+            .append("databaseStorageId", getDatabaseStorageId())
+            .append("ownerUid", getOwnerUid())
+            .append("createdAt", getCreatedAt())
+            .append("workspaceType", getWorkspaceType())
+            .append("deletedAt", getDeletedAt())
+            .append("workspaceName", getWorkspaceName())
+            .append("icon", getIcon())
+            .append("settings", getSettings())
+            .append("isInitialized", getIsInitialized())
+            .append("defaultPublishedViewId", getDefaultPublishedViewId())
+            .append("ownerName", getOwnerName())
+            .toString();
+    }
 }

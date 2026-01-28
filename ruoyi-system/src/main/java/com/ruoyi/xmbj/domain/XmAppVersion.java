@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "auth.app_version")
-public class AppVersion {
+public class XmAppVersion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

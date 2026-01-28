@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ponynotes/afworkspaces")
-public class AfWorkspaceController extends BaseController {
+public class XmAfWorkspaceController extends BaseController {
     @Autowired
     private AfWorkspaceService afWorkspaceService;
 

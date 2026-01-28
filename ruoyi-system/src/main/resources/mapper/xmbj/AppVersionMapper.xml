@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.xmbj.mapper.AppVersionMapper">
+<mapper namespace="com.ruoyi.xmbj.mapper.XmAppVersionMapper">
 
-    <resultMap type="com.ruoyi.xmbj.domain.AppVersion" id="AppVersionResult">
+    <resultMap type="com.ruoyi.xmbj.domain.XmAppVersion" id="AppVersionResult">
         <result property="id" column="id"/>
         <result property="versionName" column="version_name"/>
         <result property="systemType" column="system_type"/>
@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, version_name, system_type, version_code, update_desc, download_url, status, create_time, update_time, operator, operator_id from auth.app_version
     </sql>
 
-    <select id="selectAppVersionList" parameterType="com.ruoyi.xmbj.domain.AppVersion" resultMap="AppVersionResult">
+    <select id="selectAppVersionList" parameterType="com.ruoyi.xmbj.domain.XmAppVersion" resultMap="AppVersionResult">
         <include refid="selectAppVersionVo"/>
         <where>
             <if test="versionName != null and versionName != ''">and version_name like concat('%', #{versionName}, '%')</if>
@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-    <insert id="insertAppVersion" parameterType="com.ruoyi.xmbj.domain.AppVersion" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <insert id="insertAppVersion" parameterType="com.ruoyi.xmbj.domain.XmAppVersion" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into auth.app_version
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="versionName != null">version_name,</if>
@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updateAppVersion" parameterType="com.ruoyi.xmbj.domain.AppVersion">
+    <update id="updateAppVersion" parameterType="com.ruoyi.xmbj.domain.XmAppVersion">
         update auth.app_version
         <trim prefix="SET" suffixOverrides=",">
             <if test="versionName != null">version_name = #{versionName},</if>

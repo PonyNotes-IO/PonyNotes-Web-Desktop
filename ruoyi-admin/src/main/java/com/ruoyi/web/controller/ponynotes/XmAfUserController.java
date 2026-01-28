@@ -26,7 +26,7 @@ import static com.ruoyi.common.utils.PageUtils.startPage;
  */
 @RestController
 @RequestMapping("/api/ponynotes/afusers")
-public class AfUserController extends BaseController {
+public class XmAfUserController extends BaseController {
 
     @Autowired
     private ClientUserService clientUserService;
@@ -156,7 +156,9 @@ public class AfUserController extends BaseController {
             return getDataTable(null); // 返回空数据表信息（适配前端期望的格式）
         }
 
-        List<AfWorkspace> list = clientUserService.selectAfWorkspaceList(new AfWorkspace().setOwnerUid(String.valueOf(afuserId)));
+        AfWorkspace t = new AfWorkspace();
+        t.setOwnerUid(afuserId);
+        List<AfWorkspace> list = clientUserService.selectAfWorkspaceList(t);
 
 //        List<AfWorkspace> list = clientUserService.selectAfWorkspaceList(new AfWorkspace().setUid(afuserId));
 
