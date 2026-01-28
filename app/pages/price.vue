@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 // 引入 AOS 动画库
 import AOS from 'aos'
 import 'aos/dist/aos.css'
@@ -8,12 +8,17 @@ useSeoMeta({
     title: '价格方案 - 小马笔记',
 })
 const api = useApi()
+const router = useRouter()
+const route = useRoute()
 // 计费周期切换：0为月付，1为年付
 const billingCycle = ref(1)
-
+const alipayFormContainer = ref(null);
+const loading = ref(false);
+const loadingText = ref('订单生成中...');
 // 选中的计划索引：0免费, 1学生, 2标准, 3团队
 const selectedPlan = ref(0)
 const plans = ref([]);
+const alipayHtml = ref('');
 const initPlans = () => {
     api.payment.planLists().then(res => {
         console.log('获取价格计划列表',res);
@@ -25,9 +30,39 @@ const initPlans = () => {
 
 const handleSelectPlan = (index) => {
     selectedPlan.value = index;
-    alert(`您选择了 ${plans.value[index].planNameCn}`);
+    // alert(`您选择了 ${plans.value[index].planNameCn}`);
+    loading.value = true;
+    api.payment.createPayment({
+        planId: plans.value[index].id,
+        billingType: billingCycle.value,
+        userInfo: '',
+        'paymentType':'alipay',
+    }).then(res => {
+        console.log('创建支付订单',alipayFormContainer.value,alipayFormContainer,res);
+        proccessResult(res);
+    }).finally(() => {
+        loading.value = false;
+    })
 }
-
+const proccessResult = res => {
+    if (res.code === 200) {
+        alipayHtml.value = res.data.payUrl;
+        // 使用nextTick确保DOM更新后再获取表单
+        nextTick(() => {
+            const form = alipayFormContainer.value.querySelector("form");
+            
+            if (form) {
+                loadingText.value = '即将跳转支付页面...';
+                setTimeout(() => {
+                    form.submit(); // 自动提交表单
+                }, 500);
+            } else {
+                console.error("未找到支付宝返回的表单");
+            }
+        });
+        // router.push(res.data.paymentUrl)
+    }
+}
 onMounted(() => {
     // 初始化 AOS 配置
     AOS.init({
@@ -37,7 +72,22 @@ onMounted(() => {
         offset: 50,
         anchorPlacement: 'top-bottom',
     })
-
+    const query = route.query;
+    if(query.planId && query.billingType !== undefined && query.userInfo) {
+        loading.value = true;
+        api.payment.createPayment({
+            planId: query.planId,
+            billingType: query.billingType,
+            userInfo: query.userInfo,
+            'paymentType':'alipay',
+        }).then(res => {
+            console.log('创建支付订单',alipayFormContainer.value,alipayFormContainer,res);
+            proccessResult(res);
+        }).finally(() => {
+            loading.value = false;
+        })
+    }
+    console.log('query',query);
     initPlans();
 })
 </script>
@@ -45,6 +95,14 @@ onMounted(() => {
 <template>
     <!-- 全局容器 -->
     <div class="w-full bg-white min-h-screen font-sans overflow-x-hidden selection:bg-[#FF4D00] selection:text-white">
+
+        <!-- 加载提示 -->
+        <div v-if="loading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+            <div class="bg-white rounded-2xl px-8 py-6 flex flex-col items-center gap-4 shadow-2xl">
+                <div class="w-12 h-12 border-4 border-[#FF4D00] border-t-transparent rounded-full animate-spin"></div>
+                <span class="text-gray-900 font-medium text-[16px]">{{ loadingText }}</span>
+            </div>
+        </div>
 
         <!-- =========================================================
              顶部区域 (底部边缘自然淡出背景)
@@ -531,7 +589,7 @@ onMounted(() => {
         </section>
 
 
-
+        <div ref="alipayFormContainer" v-html="alipayHtml"></div>
     </div>
 </template>
 

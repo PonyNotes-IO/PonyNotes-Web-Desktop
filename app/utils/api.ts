@@ -67,11 +67,12 @@ export const get = <T = any>(url: string, params?: Record<string, any>) => {
 /**
  * POST 请求
  */
-export const post = <T = any>(url: string, data?: any, params?: Record<string, any>) => {
+export const post = <T = any>(url: string, data?: any, params?: Record<string, any>,headers?: Record<string, any>) => {
   return request<T>(url, {
     method: 'POST',
     body: data,
     params,
+    headers,
   })
 }
 
