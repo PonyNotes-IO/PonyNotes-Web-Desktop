@@ -16,7 +16,58 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="payTime"    column="pay_time"    />
         <result property="productName"    column="product_name"    />
         <result property="userInfo"    column="user_info"    />
+        <result property="addonId"    column="addon_id"    />
+        <result property="planId"    column="plan_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="clientUserId"    column="client_user_id"    />
+        <result property="billingType"    column="billing_type"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="clientUserAddonId"    column="client_user_addon_id"    />
+        <result property="clientSubscriptionId"    column="client_subscription_id"    />
     </resultMap>
+
+
+    <!-- 新增支付订单 -->
+    <insert id="insert" parameterType="PaymentOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_payment_order (
+        <if test="orderNo != null and orderNo != ''">order_no,</if>
+        <if test="amount != null">amount,</if>
+        <if test="paymentType != null and paymentType != ''">payment_type,</if>
+        <if test="qrCodeUrl != null and qrCodeUrl != ''">qr_code_url,</if>
+        <if test="productName != null and productName != ''">product_name,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="userInfo != null">user_info,</if>
+        <if test="addonId != null">addon_id,</if>
+        <if test="planId != null">plan_id,</if>
+        <if test="userId != null">user_id,</if>
+        <if test="clientUserId != null">client_user_id,</if>
+        <if test="billingType != null">billing_type,</if>
+        <if test="quantity != null">quantity,</if>
+        <if test="clientUserAddonId != null">client_user_addon_id,</if>
+        <if test="clientSubscriptionId != null">client_subscription_id,</if>
+        update_time
+        ) values (
+        <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
+        <if test="amount != null">#{amount},</if>
+        <if test="paymentType != null and paymentType != ''">#{paymentType},</if>
+        <if test="qrCodeUrl != null and qrCodeUrl != ''">#{qrCodeUrl},</if>
+        <if test="productName != null and productName != ''">#{productName},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createTime != null">#{createTime},</if>
+        <if test="userInfo != null">#{userInfo},</if>
+        <if test="addonId != null">#{addonId},</if>
+        <if test="planId != null">#{planId},</if>
+        <if test="userId != null">#{userId},</if>
+        <if test="clientUserId != null">#{clientUserId},</if>
+        <if test="billingType != null">#{billingType},</if>
+        <if test="quantity != null">#{quantity},</if>
+        <if test="clientUserAddonId != null">#{clientUserAddonId},</if>
+        <if test="clientSubscriptionId != null">#{clientSubscriptionId},</if>
+        sysdate()
+        )
+    </insert>
+
 
     <sql id="selectSysPaymentOrderVo">
         select id, order_no, amount, payment_type, qr_code_url, status, create_time, update_time, pay_time, product_name, user_info from sys_payment_order
@@ -55,6 +106,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payTime != null">pay_time,</if>
             <if test="productName != null">product_name,</if>
             <if test="userInfo != null">user_info,</if>
+            <if test="addonId != null">addon_id,</if>
+            <if test="planId != null">plan_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="clientUserId != null">client_user_id,</if>
+            <if test="billingType != null">billing_type,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="clientUserAddonId != null">client_user_addon_id,</if>
+            <if test="clientSubscriptionId != null">client_subscription_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
@@ -67,6 +126,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payTime != null">#{payTime},</if>
             <if test="productName != null">#{productName},</if>
             <if test="userInfo != null">#{userInfo},</if>
+            <if test="addonId != null">#{addonId},</if>
+            <if test="planId != null">#{planId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="clientUserId != null">#{clientUserId},</if>
+            <if test="billingType != null">#{billingType},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="clientUserAddonId != null">#{clientUserAddonId},</if>
+            <if test="clientSubscriptionId != null">#{clientSubscriptionId},</if>
          </trim>
     </insert>
 
@@ -83,6 +150,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payTime != null">pay_time = #{payTime},</if>
             <if test="productName != null">product_name = #{productName},</if>
             <if test="userInfo != null">user_info = #{userInfo},</if>
+            <if test="addonId != null">addon_id = #{addonId},</if>
+            <if test="planId != null">plan_id = #{planId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="clientUserId != null">client_user_id = #{clientUserId},</if>
+            <if test="billingType != null">billing_type = #{billingType},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="clientUserAddonId != null">client_user_addon_id = #{clientUserAddonId},</if>
+            <if test="clientSubscriptionId != null">client_subscription_id = #{clientSubscriptionId},</if>
         </trim>
         where id = #{id}
     </update>

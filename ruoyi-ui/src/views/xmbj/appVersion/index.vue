@@ -208,7 +208,7 @@
           <file-upload v-model="form.updateDescFile" :file-size="5" :file-type="['png', 'jpg', 'jpeg', 'gif', 'bmp', 'zip', 'rar', '7z', 'doc', 'docx', 'pdf', 'xls', 'xlsx']"/>
         </el-form-item>
         <el-form-item label="上传文件包" prop="packageUrl">
-          <file-upload v-model="form.packageUrl" :file-size="200" :file-type="['ipa', 'apk', 'hap']"/>
+          <file-upload v-model="form.packageUrl" :file-size="200" :file-type="['ipa', 'apk', 'hap', 'dmg', 'exe', 'msi', 'zip']"/>
         </el-form-item>
         <el-form-item label="系统类型" prop="systemType">
           <el-select v-model="form.systemType" placeholder="请选择系统类型">
