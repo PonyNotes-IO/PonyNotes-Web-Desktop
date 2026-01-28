@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.QiniuCapacityHistoryMapper">
+
+    <resultMap type="QiniuCapacityHistory" id="QiniuCapacityHistoryResult">
+        <result property="historyId"    column="history_id"    />
+        <result property="recordDate"   column="record_date"   />
+        <result property="capacityBytes" column="capacity_bytes" />
+        <result property="capacityTb"   column="capacity_tb"   />
+        <result property="fileCount"    column="file_count"    />
+        <result property="usageRate"    column="usage_rate"    />
+        <result property="createTime"   column="create_time"   />
+    </resultMap>
+
+    <sql id="selectQiniuCapacityHistoryVo">
+        select history_id, record_date, capacity_bytes, capacity_tb, file_count, usage_rate, create_time
+        from qiniu_capacity_history
+    </sql>
+
+    <select id="selectQiniuCapacityHistoryList" parameterType="QiniuCapacityHistory" resultMap="QiniuCapacityHistoryResult">
+        <include refid="selectQiniuCapacityHistoryVo"/>
+        <where>
+            <if test="recordDate != null and recordDate != ''">
+                AND record_date = #{recordDate}
+            </if>
+        </where>
+        order by record_date desc
+    </select>
+
+    <select id="selectQiniuCapacityHistoryById" parameterType="Long" resultMap="QiniuCapacityHistoryResult">
+        <include refid="selectQiniuCapacityHistoryVo"/>
+        where history_id = #{historyId}
+    </select>
+
+    <select id="selectByRecordDate" parameterType="String" resultMap="QiniuCapacityHistoryResult">
+        <include refid="selectQiniuCapacityHistoryVo"/>
+        where record_date = #{recordDate}
+        limit 1
+    </select>
+
+    <select id="selectRecentHistory" parameterType="int" resultMap="QiniuCapacityHistoryResult">
+        <include refid="selectQiniuCapacityHistoryVo"/>
+        order by record_date desc
+        limit #{months}
+    </select>
+
+    <select id="selectHistoryByDateRange" resultMap="QiniuCapacityHistoryResult">
+        <include refid="selectQiniuCapacityHistoryVo"/>
+        where record_date between #{startDate} and #{endDate}
+        order by record_date asc
+    </select>
+
+    <insert id="insertQiniuCapacityHistory" parameterType="QiniuCapacityHistory">
+        insert into qiniu_capacity_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordDate != null and recordDate != ''">record_date,</if>
+            <if test="capacityBytes != null">capacity_bytes,</if>
+            <if test="capacityTb != null">capacity_tb,</if>
+            <if test="fileCount != null">file_count,</if>
+            <if test="usageRate != null">usage_rate,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordDate != null and recordDate != ''">#{recordDate},</if>
+            <if test="capacityBytes != null">#{capacityBytes},</if>
+            <if test="capacityTb != null">#{capacityTb},</if>
+            <if test="fileCount != null">#{fileCount},</if>
+            <if test="usageRate != null">#{usageRate},</if>
+            sysdate()
+        </trim>
+        on duplicate key update
+        capacity_bytes = values(capacity_bytes),
+        capacity_tb = values(capacity_tb),
+        file_count = values(file_count),
+        usage_rate = values(usage_rate),
+        create_time = sysdate()
+    </insert>
+
+    <update id="updateQiniuCapacityHistory" parameterType="QiniuCapacityHistory">
+        update qiniu_capacity_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recordDate != null and recordDate != ''">record_date = #{recordDate},</if>
+            <if test="capacityBytes != null">capacity_bytes = #{capacityBytes},</if>
+            <if test="capacityTb != null">capacity_tb = #{capacityTb},</if>
+            <if test="fileCount != null">file_count = #{fileCount},</if>
+            <if test="usageRate != null">usage_rate = #{usageRate},</if>
+        </trim>
+        where history_id = #{historyId}
+    </update>
+
+    <delete id="deleteQiniuCapacityHistoryById" parameterType="Long">
+        delete from qiniu_capacity_history where history_id = #{historyId}
+    </delete>
+
+    <delete id="deleteQiniuCapacityHistoryByIds" parameterType="Long">
+        delete from qiniu_capacity_history where history_id in
+        <foreach item="historyId" collection="array" open="(" separator="," close=")">
+            #{historyId}
+        </foreach>
+    </delete>
+</mapper>

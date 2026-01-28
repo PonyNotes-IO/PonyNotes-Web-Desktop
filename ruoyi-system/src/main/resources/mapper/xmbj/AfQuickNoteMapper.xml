@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.xmbj.mapper.AfQuickNoteMapper">
+    
+    <resultMap type="AfQuickNote" id="AfQuickNoteResult">
+        <result property="id"    column="id"    />
+        <result property="uid"    column="uid"    />
+        <result property="workspaceId"    column="workspace_id"    />
+        <result property="content"    column="content"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectAfQuickNoteVo">
+        select id, uid, workspace_id, content, created_at, updated_at from af_quick_note
+    </sql>
+
+    <select id="selectAfQuickNoteList" parameterType="AfQuickNote" resultMap="AfQuickNoteResult">
+        <include refid="selectAfQuickNoteVo"/>
+        <where>  
+            <if test="uid != null "> and uid = #{uid}</if>
+            <if test="workspaceId != null  and workspaceId != ''"> and workspace_id = #{workspaceId}::uuid</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+        </where>
+    </select>
+    
+    <select id="selectAfQuickNoteById" parameterType="String" resultMap="AfQuickNoteResult">
+        <include refid="selectAfQuickNoteVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAfQuickNote" parameterType="AfQuickNote">
+        insert into af_quick_note
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="uid != null">uid,</if>
+            <if test="workspaceId != null and workspaceId != ''">workspace_id,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="uid != null">#{uid},</if>
+            <if test="workspaceId != null and workspaceId != ''">#{workspaceId}::uuid,</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAfQuickNote" parameterType="AfQuickNote">
+        update af_quick_note
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="workspaceId != null and workspaceId != ''">workspace_id = #{workspaceId}::uuid,</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAfQuickNoteById" parameterType="String">
+        delete from af_quick_note where id = #{id}
+    </delete>
+
+    <delete id="deleteAfQuickNoteByIds" parameterType="String">
+        delete from af_quick_note where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AfUserMapper">
+    
+    <resultMap type="AfUser" id="AfUserResult">
+    	<id     property="uid"            column="uid"            />
+        <result property="uuid"           column="uuid"           />
+        <result property="email"          column="email"          />
+        <result property="password"       column="password"       />
+        <result property="name"           column="name"           />
+        <result property="metadata"       column="metadata"       />
+        <result property="avatar"         column="avatar"         />
+        <result property="encryptionSign" column="encryption_sign" />
+        <result property="deletedAt"      column="deleted_at"     />
+        <result property="updatedAt"      column="updated_at"     />
+        <result property="createdAt"      column="created_at"     />
+        <result property="phone"          column="phone"          />
+    </resultMap>
+    
+    <sql id="selectUserVo">
+        select uid, uuid, email, password, name, metadata, avatar, encryption_sign, deleted_at, updated_at, created_at, phone 
+		from af_user
+    </sql>
+    
+    <!-- 查询条件 -->
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="uid !=null">
+				and uid = #{uid}
+			</if>
+			<if test="uuid !=null and uuid != ''">
+				and uuid = #{uuid}
+			</if>
+			<if test="email !=null and email != ''">
+				and email = #{email}
+			</if>
+		</where>
+	</sql>
+    
+    <select id="selectUser" parameterType="AfUser" resultMap="AfUserResult">
+        <include refid="selectUserVo"/>
+        <include refid="sqlwhereSearch"/>
+    </select>
+    
+    <select id="selectUserList" parameterType="AfUser" resultMap="AfUserResult">
+        <include refid="selectUserVo"/>
+        <where>
+			<if test="name != null and name != ''">
+				AND name like concat('%', #{name}, '%')
+			</if>
+			<if test="email != null and email != ''">
+				AND email like concat('%', #{email}, '%')
+			</if>
+			<if test="phone != null and phone != ''">
+				AND phone like concat('%', #{phone}, '%')
+			</if>
+			<if test="params.beginTime != null and params.beginTime != ''">
+				and date_format(created_at,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''">
+				and date_format(created_at,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
+			</if>
+		</where>
+    </select>
+    
+    <select id="selectUserById" parameterType="Long" resultMap="AfUserResult">
+        <include refid="selectUserVo"/>
+        where uid = #{uid}
+    </select>
+	
+    <select id="checkUuidUnique" parameterType="String" resultMap="AfUserResult">
+        <include refid="selectUserVo"/>
+        where uuid = #{uuid} limit 1
+    </select>
+    
+    <select id="checkEmailUnique" parameterType="String" resultMap="AfUserResult">
+        <include refid="selectUserVo"/>
+        where email = #{email} limit 1
+    </select>
+    
+    <insert id="insertUser" parameterType="AfUser">
+        insert into af_user (
+			<if test="uuid != null and uuid != '' ">uuid,</if>
+			<if test="email != null and email != '' ">email,</if>
+			<if test="password != null and password != '' ">password,</if>
+			<if test="name != null and name != '' ">name,</if>
+			<if test="metadata != null and metadata != '' ">metadata,</if>
+			<if test="avatar != null and avatar != '' ">avatar,</if>
+			<if test="encryptionSign != null and encryptionSign != '' ">encryption_sign,</if>
+			<if test="phone != null and phone != '' ">phone,</if>
+ 			created_at, updated_at
+        )values(
+			<if test="uuid != null and uuid != ''">#{uuid},</if>
+			<if test="email != null and email != ''">#{email},</if>
+			<if test="password != null and password != ''">#{password},</if>
+			<if test="name != null and name != ''">#{name},</if>
+			<if test="metadata != null and metadata != ''">#{metadata},</if>
+			<if test="avatar != null and avatar != ''">#{avatar},</if>
+			<if test="encryptionSign != null and encryptionSign != ''">#{encryptionSign},</if>
+			<if test="phone != null and phone != ''">#{phone},</if>
+ 			sysdate(), sysdate()
+		)
+    </insert>
+	 
+    <update id="updateUser" parameterType="AfUser">
+        update af_user 
+        <set>
+            <if test="uuid != null and uuid != ''">uuid = #{uuid},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="metadata != null and metadata != ''">metadata = #{metadata},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+            <if test="encryptionSign != null and encryptionSign != ''">encryption_sign = #{encryptionSign},</if>
+            <if test="deletedAt != null">deleted_at = #{deletedAt},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            updated_at = sysdate()
+        </set>
+        where uid = #{uid}
+    </update>
+    
+    <delete id="deleteUserById" parameterType="Long">
+        delete from af_user where uid = #{uid}
+    </delete>
+    
+    <delete id="deleteUserByIds" parameterType="Long[]">
+        delete from af_user where uid in 
+        <foreach item="uid" collection="array" open="(" separator="," close=")">
+            #{uid}
+        </foreach>
+    </delete>
+</mapper>
