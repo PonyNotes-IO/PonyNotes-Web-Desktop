@@ -207,8 +207,8 @@ payment:
     #    public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnJYoYx+F0ROBH8JkefGCxL0ydmxPMNlNt9o3Mb7J9Kh+cAnqxPIe+wWv7g6OubkQ23uzxNPomFm0CKKrLiBgHxBjDU33QtvQcCbMs8YySp9oQXh4vMG/c9YVJ6R3QvlDaDKQwXFg3nb3OgSrSRpgqduWrQvJjCxrFdY6YEUrDcjCzkh/LFWZMV+9h6A7Vt2mVsJV6MQbDRI3EGkL3H7Wvz/zI/AYJ0/lefCeV//mX2f7nAFS5NMYPTnleSmbqgXS8DB8KDWFLNFZxIrxGGTULpafX0pgPnpHlsx/6gT1OQUdBYVPbaBflXB9P6cgo6kHVm7cgcfyghgbjk61Xz7qcwIDAQAB
     gateway-url: https://openapi.alipay.com/gateway.do # 支付宝网关（沙箱环境用dev，生产环境去掉dev）
     notify-url: http://www.xiaomabiji.com/api/payment/callback/alipay
-#    return-url: https://www.xiaomabiji.com/#/price
-    return-url: http://localhost:8080/api/payment/return/alipay
+    return-url: https://www.xiaomabiji.com/price
+#    return-url: http://localhost:8080/api/payment/return/alipay
     connect-timeout: 30000  # 连接超时时间，30秒
     read-timeout: 30000
 #    http://your-domain.com/api/payment/callback/alipay  # 支付宝回调地址（需公网可访问）

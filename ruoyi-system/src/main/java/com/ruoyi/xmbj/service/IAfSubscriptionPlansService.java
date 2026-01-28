@@ -1,5 +1,6 @@
 package com.ruoyi.xmbj.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.ruoyi.xmbj.domain.AfSubscriptionPlans;
 
@@ -66,4 +67,6 @@ public interface IAfSubscriptionPlansService
      * @return 订阅数量
      */
     public int countUserSubscriptionsByPlanId(Long id);
+
+    BigDecimal getAmountByIdAndBliingType(String planId, String billingType);
 }

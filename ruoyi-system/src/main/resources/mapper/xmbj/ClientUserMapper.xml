@@ -28,6 +28,12 @@
         <include refid="selectClientUserVo" /> WHERE (email = #{userInfo} OR phone = #{userInfo} OR
         name = #{userInfo}) AND deleted_at IS NULL LIMIT 1 </select>
 
+    <select id="getClientUserByUuid" parameterType="java.lang.String"
+            resultMap="ClientUserResult">
+        <include refid="selectClientUserVo" />
+        WHERE uuid = #{userInfo}::uuid AND deleted_at IS NULL LIMIT 1
+    </select>
+
     <!-- 查询客户端用户列表 -->
     <select id="selectAfUserList" parameterType="com.ruoyi.xmbj.domain.ClientUser"
         resultMap="ClientUserResult">

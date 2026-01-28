@@ -19,7 +19,7 @@ public interface PaymentService {
     /**
      * 创建支付订单并生成二维码
      */
-    PaymentResult createPayment(BigDecimal amount, String paymentType, SysUser sysUser, ClientUser clientUser, String productName, String openid, String url, String planId, String billingType,String addonId, HttpServletRequest request);
+    PaymentResult createPayment(String paymentType, SysUser sysUser, ClientUser clientUser, String openid, String url, String planId, String billingType,String addonId, HttpServletRequest request);
 
     /**
      * 查询支付状态

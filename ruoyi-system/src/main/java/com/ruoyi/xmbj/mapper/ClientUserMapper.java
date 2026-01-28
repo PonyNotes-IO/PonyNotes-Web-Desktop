@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ClientUserMapper extends BaseMapper<ClientUser> {
     ClientUser getClientUserByUserInfo(String userInfo);
+    ClientUser getClientUserByUuid(String uuid);
 
     List<ClientUser> selectAfUserList(ClientUser clientUser);
 

@@ -31,6 +31,10 @@ public class ClientUserService {
     public ClientUser getClientUserByUserInfo(String userInfo) {
         return clientUserMapper.getClientUserByUserInfo(userInfo);
     }
+    @DataSource(DataSourceType.SLAVE)
+    public ClientUser getClientUserByUuid(String userInfo) {
+        return clientUserMapper.getClientUserByUuid(userInfo);
+    }
 
     @DataSource(DataSourceType.SLAVE)
     public List<ClientUser> selectAfUserList(ClientUser clientUser) {

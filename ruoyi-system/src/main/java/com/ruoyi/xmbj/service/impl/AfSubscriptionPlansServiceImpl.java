@@ -1,5 +1,6 @@
 package com.ruoyi.xmbj.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,5 +113,13 @@ public class AfSubscriptionPlansServiceImpl implements IAfSubscriptionPlansServi
     public int countUserSubscriptionsByPlanId(Long id)
     {
         return afSubscriptionPlansMapper.countUserSubscriptionsByPlanId(id);
+    }
+
+    @Override
+    public BigDecimal getAmountByIdAndBliingType(String planId, String billingType) {
+        AfSubscriptionPlans plan = afSubscriptionPlansMapper.selectById(Long.valueOf(planId));
+        if(plan == null) throw new RuntimeException("参数错误,planId不存在");
+
+        return "0".equals(billingType) ? plan.getMonthlyPriceYuan(): plan.getYearlyPriceYuan();// null;
     }
 }
