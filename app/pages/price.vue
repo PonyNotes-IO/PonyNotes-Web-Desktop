@@ -7,12 +7,26 @@ import 'aos/dist/aos.css'
 useSeoMeta({
     title: '价格方案 - 小马笔记',
 })
-
+const api = useApi()
 // 计费周期切换：0为月付，1为年付
 const billingCycle = ref(1)
 
 // 选中的计划索引：0免费, 1学生, 2标准, 3团队
 const selectedPlan = ref(0)
+const plans = ref([]);
+const initPlans = () => {
+    api.payment.planLists().then(res => {
+        console.log('获取价格计划列表',res);
+        if (res.code === 200) {
+            plans.value = res.rows || [];
+        }
+    })
+};
+
+const handleSelectPlan = (index) => {
+    selectedPlan.value = index;
+    alert(`您选择了 ${plans.value[index].planNameCn}`);
+}
 
 onMounted(() => {
     // 初始化 AOS 配置
@@ -23,6 +37,8 @@ onMounted(() => {
         offset: 50,
         anchorPlacement: 'top-bottom',
     })
+
+    initPlans();
 })
 </script>
 
@@ -70,9 +86,60 @@ onMounted(() => {
         <!-- ================= 核心价格卡片区域 (手动展开所有卡片) ================= -->
         <section class="relative z-10 max-w-[1140px] mx-auto px-6" data-aos="fade-up" data-aos-delay="200">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch -mt-56">
+                <div v-for="(plan, index) in plans" :key="index">
+                    <div @mouseenter="selectedPlan = index"
+                        :class="[selectedPlan === index ? 'border-2 border-[#FF4D00]' : 'border border-[#FFD9C6]']"
+                        class="bg-white rounded-2xl p-5 pb-6 flex flex-col h-full shadow-none cursor-pointer transition-all duration-300">
+                        <div class="h-24 mt-1">
+                            <h3 class="text-[16px] font-medium text-gray-900 mb-1">{{ plan.planNameCn }}</h3>
+                            <div class="flex items-baseline gap-0.5">
+                                <span class="text-[14px] font-bold">¥</span>
+                                <span class="text-[34px] font-bold leading-none text-gray-900">{{billingCycle === 0 ? plan.monthlyPriceYuan : plan.yearlyPriceYuan}}</span>
+                            </div>
+                        </div>
+                        <button @click="handleSelectPlan(index)"
+                            :class="[selectedPlan === index ? 'bg-[#FF4D00] text-white' : 'bg-[#F3F4F6] text-gray-600']"
+                            class="w-full py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px] transition-colors duration-300">立即开始</button>
+                        <ul v-if="plan.planNameCn === '标准版'" :class="[selectedPlan === 2 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
+                            class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
+                            <li>面向内容创作者</li>
+                            <li>与高效工作者的智能笔记</li>
+                            <li>空间丰富AI+10GB云同步</li>
+                            <li>助你随时记录、随处创作</li>
+                            <li>一站整合写作、整理、归档</li>
+                        </ul>
+                        <ul v-if="plan.planNameCn === '学生版'" :class="[selectedPlan === 2 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
+                            class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
+                            <li>面向内容创作者</li>
+                            <li>与高效工作者的智能笔记</li>
+                            <li>空间丰富AI+10GB云同步</li>
+                            <li>助你随时记录、随处创作</li>
+                            <li>一站整合写作、整理、归档</li>
+                        </ul>
+                        <ul v-if="plan.planNameCn === '免费版'" :class="[selectedPlan === 0 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
+                            class="space-y-2.5 text-[13px] px-1 transition-colors duration-300">
+                            <li>本地免费使用</li>
+                            <li>你的随身知识库系统</li>
+                            <li>AI图文生成 + 云存储</li>
+                            <li>开启智能学习体验</li>
+                        </ul>
+                        <ul v-if="plan.planNameCn === '团队版'" :class="[selectedPlan === 3 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
+                        class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
+                            <li>团队协作不止是共享</li>
+                            <li>更是高效共创</li>
+                            <li>专属权限+共享工作区</li>
+                            <li>大容量云空间轻松协同办公</li>
+                            <li>配套AI能力为团队注入内容</li>
+                        </ul>
+                        <ul :class="[selectedPlan === index ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
+                            class="space-y-2.5 text-[13px] px-1 transition-colors duration-300">
+                            <li v-for="feature in plan.features" :key="feature">{{ feature }}</li>
+                        </ul>
+                    </div>
 
+                </div>
                 <!-- 免费版 -->
-                <div @mouseenter="selectedPlan = 0"
+                <!-- <div @mouseenter="selectedPlan = 0"
                     :class="[selectedPlan === 0 ? 'border-2 border-[#FF4D00]' : 'border border-[#FFD9C6]']"
                     class="bg-white rounded-2xl p-5 pb-6 flex flex-col h-full shadow-none cursor-pointer transition-all duration-300">
                     <div class="h-24 mt-1">
@@ -92,10 +159,10 @@ onMounted(() => {
                         <li>AI图文生成 + 云存储</li>
                         <li>开启智能学习体验</li>
                     </ul>
-                </div>
+                </div> -->
 
                 <!-- 学生版 -->
-                <div @mouseenter="selectedPlan = 1"
+                <!-- <div @mouseenter="selectedPlan = 1"
                     :class="[selectedPlan === 1 ? 'border-2 border-[#FF4D00]' : 'border border-[#FFD9C6]']"
                     class="bg-white rounded-2xl p-5 pb-6 flex flex-col h-full shadow-none cursor-pointer transition-all duration-300">
                     <div class="h-24 mt-1">
@@ -117,10 +184,10 @@ onMounted(() => {
                         <li>AI图文生成 + 云存储</li>
                         <li>开启智能学习体验</li>
                     </ul>
-                </div>
+                </div> -->
 
                 <!-- 标准版 -->
-                <div @mouseenter="selectedPlan = 2"
+                <!-- <div @mouseenter="selectedPlan = 2"
                     :class="[selectedPlan === 2 ? 'border-2 border-[#FF4D00]' : 'border border-[#FFD9C6]']"
                     class="bg-white rounded-2xl p-5 pb-6 flex flex-col h-full shadow-none cursor-pointer transition-all duration-300">
                     <div class="h-24 mt-1">
@@ -142,10 +209,10 @@ onMounted(() => {
                         <li>助你随时记录、随处创作</li>
                         <li>一站整合写作、整理、归档</li>
                     </ul>
-                </div>
+                </div> -->
 
                 <!-- 团队版 -->
-                <div @mouseenter="selectedPlan = 3"
+                <!-- <div @mouseenter="selectedPlan = 3"
                     :class="[selectedPlan === 3 ? 'border-2 border-[#FF4D00]' : 'border border-[#FFD9C6]']"
                     class="bg-white rounded-2xl p-5 pb-6 flex flex-col h-full shadow-none cursor-pointer transition-all duration-300">
                     <div class="h-24 mt-1">
@@ -167,7 +234,7 @@ onMounted(() => {
                         <li>大容量云空间轻松协同办公</li>
                         <li>配套AI能力为团队注入内容</li>
                     </ul>
-                </div>
+                </div> -->
             </div>
         </section>
 
