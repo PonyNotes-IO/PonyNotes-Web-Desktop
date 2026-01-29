@@ -93,6 +93,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
+    <select id="selectExpiredOrders" resultMap="SysPaymentOrderResult">
+        <include refid="selectSysPaymentOrderVo"/>
+        where status  = 'pending' and
+        pay_time  &lt;= #{payTime}
+    </select>
+
     <insert id="insertSysPaymentOrder" parameterType="SysPaymentOrder" useGeneratedKeys="true" keyProperty="id">
         insert into sys_payment_order
         <trim prefix="(" suffix=")" suffixOverrides=",">

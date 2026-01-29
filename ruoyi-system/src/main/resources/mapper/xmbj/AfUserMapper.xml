@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.xmbj.mapper.XmAfUserMapper">
     
-    <resultMap type="AfUser" id="AfUserResult">
+    <resultMap type="XmAfUser" id="AfUserResult">
         <result property="uid"    column="uid"    />
         <result property="uuid"    column="uuid"    />
         <result property="email"    column="email"    />
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select uid, uuid, email, password, name, avatar, metadata, encryption_sign, deleted_at, updated_at, created_at, phone from af_user
     </sql>
 
-    <select id="selectAfUserList" parameterType="AfUser" resultMap="AfUserResult">
+    <select id="selectAfUserList" parameterType="XmAfUser" resultMap="AfUserResult">
         <include refid="selectAfUserVo"/>
         <where>  
             <if test="uuid != null  and uuid != ''"> and uuid = #{uuid}</if>
@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where uid = #{uid}
     </select>
 
-    <insert id="insertAfUser" parameterType="AfUser" useGeneratedKeys="true" keyProperty="uid">
+    <insert id="insertAfUser" parameterType="XmAfUser" useGeneratedKeys="true" keyProperty="uid">
         insert into af_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="uuid != null and uuid != ''">uuid,</if>
@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateAfUser" parameterType="AfUser">
+    <update id="updateAfUser" parameterType="XmAfUser">
         update af_user
         <trim prefix="SET" suffixOverrides=",">
             <if test="uuid != null and uuid != ''">uuid = #{uuid},</if>
