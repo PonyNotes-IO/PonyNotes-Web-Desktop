@@ -132,6 +132,7 @@ mybatis:
 pagehelper:
   helperDialect: mysql
   supportMethodsArguments: true
+  autoRuntimeDialect: true
   params: count=countSql
 
 # Swagger配置
