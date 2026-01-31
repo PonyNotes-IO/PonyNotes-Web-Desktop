@@ -131,6 +131,7 @@ mybatis:
 # PageHelper分页插件
 pagehelper:
   supportMethodsArguments: true
+  autoRuntimeDialect: true
   params: count=countSql
 
 # Swagger配置
