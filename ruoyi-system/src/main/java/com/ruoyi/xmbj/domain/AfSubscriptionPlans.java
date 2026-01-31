@@ -3,8 +3,6 @@ package com.ruoyi.xmbj.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -12,12 +10,10 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 订阅套餐对象 af_subscription_plans
- * 
+ *
  * @author 张继科
  * @date 2026-01-21
  */
-@Getter
-@Setter
 public class AfSubscriptionPlans extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -47,19 +43,19 @@ public class AfSubscriptionPlans extends BaseEntity
 
     /** 云存储容量（GB） */
     @Excel(name = "云存储容量", readConverterExp = "G=B")
-    private Long cloudStorageGb;
+    private BigDecimal cloudStorageGb;
 
     /** 是否支持收件箱（0否 1是） */
     @Excel(name = "是否支持收件箱", readConverterExp = "0=否,1=是")
-    private Boolean hasInbox;
+    private Integer hasInbox;
 
     /** 是否支持多设备同步 */
     @Excel(name = "是否支持多设备同步")
-    private Boolean hasMultiDeviceSync;
+    private Integer hasMultiDeviceSync;
 
     /** 是否支持API */
     @Excel(name = "是否支持API")
-    private Boolean hasApiSupport;
+    private Integer hasApiSupport;
 
     /** 版本历史保留天数 */
     @Excel(name = "版本历史保留天数")
@@ -75,11 +71,11 @@ public class AfSubscriptionPlans extends BaseEntity
 
     /** 是否支持分享链接 */
     @Excel(name = "是否支持分享链接")
-    private Boolean hasShareLink;
+    private Integer hasShareLink;
 
     /** 是否支持发布 */
     @Excel(name = "是否支持发布")
-    private Boolean hasPublish;
+    private Integer hasPublish;
 
     /** 工作空间成员上限 */
     @Excel(name = "工作空间成员上限")
@@ -95,15 +91,15 @@ public class AfSubscriptionPlans extends BaseEntity
 
     /** 是否支持空间成员管理 */
     @Excel(name = "是否支持空间成员管理")
-    private Boolean hasSpaceMemberManagement;
+    private Integer hasSpaceMemberManagement;
 
     /** 是否支持空间成员分组 */
     @Excel(name = "是否支持空间成员分组")
-    private Boolean hasSpaceMemberGrouping;
+    private Integer hasSpaceMemberGrouping;
 
     /** 是否启用（1是 0否） */
     @Excel(name = "是否启用", readConverterExp = "1=是,0=否")
-    private Boolean isActive;
+    private Integer isActive;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -115,33 +111,262 @@ public class AfSubscriptionPlans extends BaseEntity
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedAt;
 
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    public Long getId()
+    {
+        return id;
+    }
+
+    public void setPlanCode(String planCode)
+    {
+        this.planCode = planCode;
+    }
+
+    public String getPlanCode()
+    {
+        return planCode;
+    }
+
+    public void setPlanName(String planName)
+    {
+        this.planName = planName;
+    }
+
+    public String getPlanName()
+    {
+        return planName;
+    }
+
+    public void setPlanNameCn(String planNameCn)
+    {
+        this.planNameCn = planNameCn;
+    }
+
+    public String getPlanNameCn()
+    {
+        return planNameCn;
+    }
+
+    public void setMonthlyPriceYuan(BigDecimal monthlyPriceYuan)
+    {
+        this.monthlyPriceYuan = monthlyPriceYuan;
+    }
+
+    public BigDecimal getMonthlyPriceYuan()
+    {
+        return monthlyPriceYuan;
+    }
+
+    public void setYearlyPriceYuan(BigDecimal yearlyPriceYuan)
+    {
+        this.yearlyPriceYuan = yearlyPriceYuan;
+    }
+
+    public BigDecimal getYearlyPriceYuan()
+    {
+        return yearlyPriceYuan;
+    }
+
+    public void setCloudStorageGb(BigDecimal cloudStorageGb)
+    {
+        this.cloudStorageGb = cloudStorageGb;
+    }
+
+    public BigDecimal getCloudStorageGb()
+    {
+        return cloudStorageGb;
+    }
+
+    public void setHasInbox(Integer hasInbox)
+    {
+        this.hasInbox = hasInbox;
+    }
+
+    public Integer getHasInbox()
+    {
+        return hasInbox;
+    }
+
+    public void setHasMultiDeviceSync(Integer hasMultiDeviceSync)
+    {
+        this.hasMultiDeviceSync = hasMultiDeviceSync;
+    }
+
+    public Integer getHasMultiDeviceSync()
+    {
+        return hasMultiDeviceSync;
+    }
+
+    public void setHasApiSupport(Integer hasApiSupport)
+    {
+        this.hasApiSupport = hasApiSupport;
+    }
+
+    public Integer getHasApiSupport()
+    {
+        return hasApiSupport;
+    }
+
+    public void setVersionHistoryDays(Long versionHistoryDays)
+    {
+        this.versionHistoryDays = versionHistoryDays;
+    }
+
+    public Long getVersionHistoryDays()
+    {
+        return versionHistoryDays;
+    }
+
+    public void setAiChatCountPerMonth(Long aiChatCountPerMonth)
+    {
+        this.aiChatCountPerMonth = aiChatCountPerMonth;
+    }
+
+    public Long getAiChatCountPerMonth()
+    {
+        return aiChatCountPerMonth;
+    }
+
+    public void setAiImageGenerationPerMonth(Long aiImageGenerationPerMonth)
+    {
+        this.aiImageGenerationPerMonth = aiImageGenerationPerMonth;
+    }
+
+    public Long getAiImageGenerationPerMonth()
+    {
+        return aiImageGenerationPerMonth;
+    }
+
+    public void setHasShareLink(Integer hasShareLink)
+    {
+        this.hasShareLink = hasShareLink;
+    }
+
+    public Integer getHasShareLink()
+    {
+        return hasShareLink;
+    }
+
+    public void setHasPublish(Integer hasPublish)
+    {
+        this.hasPublish = hasPublish;
+    }
+
+    public Integer getHasPublish()
+    {
+        return hasPublish;
+    }
+
+    public void setWorkspaceMemberLimit(Long workspaceMemberLimit)
+    {
+        this.workspaceMemberLimit = workspaceMemberLimit;
+    }
+
+    public Long getWorkspaceMemberLimit()
+    {
+        return workspaceMemberLimit;
+    }
+
+    public void setCollaborativeWorkspaceLimit(Long collaborativeWorkspaceLimit)
+    {
+        this.collaborativeWorkspaceLimit = collaborativeWorkspaceLimit;
+    }
+
+    public Long getCollaborativeWorkspaceLimit()
+    {
+        return collaborativeWorkspaceLimit;
+    }
+
+    public void setPagePermissionGuestEditors(Long pagePermissionGuestEditors)
+    {
+        this.pagePermissionGuestEditors = pagePermissionGuestEditors;
+    }
+
+    public Long getPagePermissionGuestEditors()
+    {
+        return pagePermissionGuestEditors;
+    }
+
+    public void setHasSpaceMemberManagement(Integer hasSpaceMemberManagement)
+    {
+        this.hasSpaceMemberManagement = hasSpaceMemberManagement;
+    }
+
+    public Integer getHasSpaceMemberManagement()
+    {
+        return hasSpaceMemberManagement;
+    }
+
+    public void setHasSpaceMemberGrouping(Integer hasSpaceMemberGrouping)
+    {
+        this.hasSpaceMemberGrouping = hasSpaceMemberGrouping;
+    }
+
+    public Integer getHasSpaceMemberGrouping()
+    {
+        return hasSpaceMemberGrouping;
+    }
+
+    public void setIsActive(Integer isActive)
+    {
+        this.isActive = isActive;
+    }
+
+    public Integer getIsActive()
+    {
+        return isActive;
+    }
+
+    public void setCreatedAt(Date createdAt)
+    {
+        this.createdAt = createdAt;
+    }
+
+    public Date getCreatedAt()
+    {
+        return createdAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt)
+    {
+        this.updatedAt = updatedAt;
+    }
+
+    public Date getUpdatedAt()
+    {
+        return updatedAt;
+    }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("planCode", getPlanCode())
-            .append("planName", getPlanName())
-            .append("planNameCn", getPlanNameCn())
-            .append("monthlyPriceYuan", getMonthlyPriceYuan())
-            .append("yearlyPriceYuan", getYearlyPriceYuan())
-            .append("cloudStorageGb", getCloudStorageGb())
-            .append("hasInbox", getHasInbox())
-            .append("hasMultiDeviceSync", getHasMultiDeviceSync())
-            .append("hasApiSupport", getHasApiSupport())
-            .append("versionHistoryDays", getVersionHistoryDays())
-            .append("aiChatCountPerMonth", getAiChatCountPerMonth())
-            .append("aiImageGenerationPerMonth", getAiImageGenerationPerMonth())
-            .append("hasShareLink", getHasShareLink())
-            .append("hasPublish", getHasPublish())
-            .append("workspaceMemberLimit", getWorkspaceMemberLimit())
-            .append("collaborativeWorkspaceLimit", getCollaborativeWorkspaceLimit())
-            .append("pagePermissionGuestEditors", getPagePermissionGuestEditors())
-            .append("hasSpaceMemberManagement", getHasSpaceMemberManagement())
-            .append("hasSpaceMemberGrouping", getHasSpaceMemberGrouping())
-            .append("isActive", getIsActive())
-            .append("createdAt", getCreatedAt())
-            .append("updatedAt", getUpdatedAt())
-            .toString();
+                .append("id", getId())
+                .append("planCode", getPlanCode())
+                .append("planName", getPlanName())
+                .append("planNameCn", getPlanNameCn())
+                .append("monthlyPriceYuan", getMonthlyPriceYuan())
+                .append("yearlyPriceYuan", getYearlyPriceYuan())
+                .append("cloudStorageGb", getCloudStorageGb())
+                .append("hasInbox", getHasInbox())
+                .append("hasMultiDeviceSync", getHasMultiDeviceSync())
+                .append("hasApiSupport", getHasApiSupport())
+                .append("versionHistoryDays", getVersionHistoryDays())
+                .append("aiChatCountPerMonth", getAiChatCountPerMonth())
+                .append("aiImageGenerationPerMonth", getAiImageGenerationPerMonth())
+                .append("hasShareLink", getHasShareLink())
+                .append("hasPublish", getHasPublish())
+                .append("workspaceMemberLimit", getWorkspaceMemberLimit())
+                .append("collaborativeWorkspaceLimit", getCollaborativeWorkspaceLimit())
+                .append("pagePermissionGuestEditors", getPagePermissionGuestEditors())
+                .append("hasSpaceMemberManagement", getHasSpaceMemberManagement())
+                .append("hasSpaceMemberGrouping", getHasSpaceMemberGrouping())
+                .append("isActive", getIsActive())
+                .append("createdAt", getCreatedAt())
+                .append("updatedAt", getUpdatedAt())
+                .toString();
     }
 }
