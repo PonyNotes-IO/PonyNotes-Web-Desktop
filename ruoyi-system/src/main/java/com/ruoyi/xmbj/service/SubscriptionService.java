@@ -200,7 +200,7 @@ public class SubscriptionService {
     @DataSource(DataSourceType.SLAVE)
     public AfUserSubscriptions getCurrentSubscription(Long userId) {
         // 检查并更新已过期的订阅
-        afUserSubscriptionsMapper.updateExpiredSubscriptions(userId);
+//        afUserSubscriptionsMapper.updateExpiredSubscriptions(userId);
 
         return afUserSubscriptionsMapper.selectCurrentActiveSubscription(userId);
     }

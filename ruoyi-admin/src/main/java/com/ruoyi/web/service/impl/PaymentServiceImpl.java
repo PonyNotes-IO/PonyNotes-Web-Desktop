@@ -27,6 +27,8 @@ import com.ruoyi.web.config.WechatPayConfig;
 import com.ruoyi.web.config.XmAlipayConfig;
 import com.ruoyi.web.service.PaymentService;
 import com.ruoyi.web.util.OrderNoGenerator;
+import com.ruoyi.xmbj.api.protocol.subscription.PurchaseAddonRequest;
+import com.ruoyi.xmbj.api.protocol.subscription.SubscribeRequest;
 import com.ruoyi.xmbj.api.service.PonynotesService;
 import com.ruoyi.xmbj.domain.*;
 import com.ruoyi.xmbj.service.IAfSubscriptionPlansService;
@@ -98,6 +100,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private IAfSubscriptionPlansService iAfSubscriptionPlansService;
+
 
     /**
      * 创建支付订单并生成二维码（微信/支付宝真实调用）
@@ -364,7 +367,7 @@ public class PaymentServiceImpl implements PaymentService {
     public String createAlipayPagePayUrl(String orderNo, BigDecimal amount,ClientUser clientUser,AfSubscriptionPlans plan) {
         // 1. 构建请求参数
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
-        request.setReturnUrl(alipayConfig.getReturnUrl()+"?orderNo="+orderNo); // 支付成功后前端跳转地址（如：https://xxx.com/pay/result）
+        request.setReturnUrl(alipayConfig.getReturnUrl()); // 支付成功后前端跳转地址（如：https://xxx.com/pay/result）
         request.setNotifyUrl(alipayConfig.getNotifyUrl()); // 支付结果回调地址（后端接口）
 
         // 2. 业务参数
@@ -646,10 +649,9 @@ public class PaymentServiceImpl implements PaymentService {
             paymentService.updateById(order);
             result = true;
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return result;
+            log.error("更新订单状态异常",e);
         }
+        return result;
     }
 
     @Override
