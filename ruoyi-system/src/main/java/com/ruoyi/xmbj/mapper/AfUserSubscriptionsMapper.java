@@ -1,15 +1,18 @@
 package com.ruoyi.xmbj.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.xmbj.domain.AfUserSubscriptions;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 /**
- * AfUserSubscriptions数据访问接口
+ * AfUserSubscriptions 数据访问接口
  */
 @Mapper
+@DataSource(DataSourceType.SLAVE)
 public interface AfUserSubscriptionsMapper extends BaseMapper<AfUserSubscriptions> {
     AfUserSubscriptions selectCurrentActiveSubscription(Long userId);
 
@@ -27,6 +30,7 @@ public interface AfUserSubscriptionsMapper extends BaseMapper<AfUserSubscription
      * 更新订阅状态为过期
      */
     int updateExpiredSubscriptions(Long userId);
+    int updateUserSubscriptions(AfUserSubscriptions entity);
 
     AfUserSubscriptions selectUserSubscriptionById(Long clientSubscriptionId);
 }

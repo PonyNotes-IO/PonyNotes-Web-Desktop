@@ -214,7 +214,7 @@ public class PaymentController {
             // 构建前端跳转URL
             String redirectUrl = String.format(
                     frontendDomain
-                            + "/#/paymentSuccess?orderNo=%s&amount=%s&paymentType=%s&productName=%s&payTime=%s&status=%s",
+                            + "/price?orderNo=%s&amount=%s&paymentType=%s&productName=%s&payTime=%s&status=%s",
                     URLEncoder.encode(outTradeNo, StandardCharsets.UTF_8.name()),
                     paymentOrder.getAmount(),
                     URLEncoder.encode(paymentOrder.getPaymentType(), StandardCharsets.UTF_8.name()),

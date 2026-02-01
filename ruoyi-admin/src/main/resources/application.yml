@@ -207,8 +207,9 @@ payment:
     public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlw6mERajnAfXHAtPs7BE2mKVhp7JS6B5iGmU+3K+H2gTKem3kSbqw/1cmwPGOfFUazihMLE10X7Tx2PSeBXtVIvPC8945a6V/HmfbfyvRL5z6Fbh9IM1Sq+q4VWpKthRd1HjdZkena0gXqxXdyMIe5dH97pqI3zhgYWQ39o2qSr5/kzRXRAtGOwcgl4CtMMUeYGIwttAwkd575EtNekMu4JJS34BYRkg4k6LmD6ccEkyGp3ed+/eIg1Wb4LQC5NzpbixMiXX/7apVVBItR56uMt1nyIF42BrKBt91RGR0TMmLb3C8GNuw0ZV6Z619QvLp2PK1jhgc7y3ouIlSUgs7QIDAQAB  # 支付宝公钥（替换为真实值）
     #    public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnJYoYx+F0ROBH8JkefGCxL0ydmxPMNlNt9o3Mb7J9Kh+cAnqxPIe+wWv7g6OubkQ23uzxNPomFm0CKKrLiBgHxBjDU33QtvQcCbMs8YySp9oQXh4vMG/c9YVJ6R3QvlDaDKQwXFg3nb3OgSrSRpgqduWrQvJjCxrFdY6YEUrDcjCzkh/LFWZMV+9h6A7Vt2mVsJV6MQbDRI3EGkL3H7Wvz/zI/AYJ0/lefCeV//mX2f7nAFS5NMYPTnleSmbqgXS8DB8KDWFLNFZxIrxGGTULpafX0pgPnpHlsx/6gT1OQUdBYVPbaBflXB9P6cgo6kHVm7cgcfyghgbjk61Xz7qcwIDAQAB
     gateway-url: https://openapi.alipay.com/gateway.do # 支付宝网关（沙箱环境用dev，生产环境去掉dev）
-    notify-url: http://www.xiaomabiji.com/api/payment/callback/alipay
-    return-url: https://www.xiaomabiji.com/price
+    notify-url: https://www.xiaomabiji.com/prod-api/api/payment/callback/alipay
+    return-url: https://www.xiaomabiji.com/prod-api/api/payment/return/alipay
+#    return-url: https://www.xiaomabiji.com/price
 #    return-url: http://localhost:8080/api/payment/return/alipay
     connect-timeout: 30000  # 连接超时时间，30秒
     read-timeout: 30000
