@@ -79,7 +79,7 @@ public class SubscriptionService {
     @DataSource(DataSourceType.SLAVE)
     public List<AfSubscriptionAddons> getAllAddons() {
         log.info("从数据库查询所有活跃的补充包");
-        return afSubscriptionPlansMapper.selectActiveAddons();
+        return afSubscriptionAddonsMapper.selectActiveAddons();
     }
 
     /**

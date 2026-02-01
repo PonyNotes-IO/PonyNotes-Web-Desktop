@@ -28,4 +28,6 @@ public interface AfSubscriptionAddonsMapper
     int insert(AfSubscriptionAddons addon);
 
     List<AfSubscriptionAddons> selectAddonsByType(String type);
+
+    List<AfSubscriptionAddons> selectActiveAddons();
 }

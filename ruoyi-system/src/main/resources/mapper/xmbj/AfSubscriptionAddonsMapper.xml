@@ -34,6 +34,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by created_at desc
     </select>
+
+    <!-- 查询所有活跃的补充包 (返回 AfSubscriptionAddons) -->
+    <select id="selectActiveAddons" resultMap="AfSubscriptionAddonsResult">
+        SELECT * FROM af_subscription_addons
+        WHERE is_active = true
+        ORDER BY price_yuan ASC
+    </select>
     
     <select id="selectAfSubscriptionAddonsById" parameterType="Long" resultMap="AfSubscriptionAddonsResult">
         <include refid="selectAfSubscriptionAddonsVo"/>

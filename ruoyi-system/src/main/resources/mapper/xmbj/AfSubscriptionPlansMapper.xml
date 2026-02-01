@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.xmbj.mapper.AfSubscriptionPlansMapper">
 
     <resultMap type="AfSubscriptionPlans" id="AfSubscriptionPlansResult">
@@ -46,23 +46,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
     <sql id="selectAfSubscriptionPlansVo">
-        select id, plan_code, plan_name, plan_name_cn, monthly_price_yuan, yearly_price_yuan, cloud_storage_gb, 
-        CASE WHEN has_inbox THEN 1 ELSE 0 END as has_inbox, 
-        CASE WHEN has_multi_device_sync THEN 1 ELSE 0 END as has_multi_device_sync, 
-        CASE WHEN has_api_support THEN 1 ELSE 0 END as has_api_support, 
-        version_history_days, ai_chat_count_per_month, ai_image_generation_per_month, 
-        CASE WHEN has_share_link THEN 1 ELSE 0 END as has_share_link, 
-        CASE WHEN has_publish THEN 1 ELSE 0 END as has_publish, 
-        workspace_member_limit, collaborative_workspace_limit, page_permission_guest_editors, 
-        CASE WHEN has_space_member_management THEN 1 ELSE 0 END as has_space_member_management, 
-        CASE WHEN has_space_member_grouping THEN 1 ELSE 0 END as has_space_member_grouping, 
-        CASE WHEN is_active THEN 1 ELSE 0 END as is_active, 
+        select id, plan_code, plan_name, plan_name_cn, monthly_price_yuan, yearly_price_yuan, cloud_storage_gb,
+        CASE WHEN has_inbox THEN 1 ELSE 0 END as has_inbox,
+        CASE WHEN has_multi_device_sync THEN 1 ELSE 0 END as has_multi_device_sync,
+        CASE WHEN has_api_support THEN 1 ELSE 0 END as has_api_support,
+        version_history_days, ai_chat_count_per_month, ai_image_generation_per_month,
+        CASE WHEN has_share_link THEN 1 ELSE 0 END as has_share_link,
+        CASE WHEN has_publish THEN 1 ELSE 0 END as has_publish,
+        workspace_member_limit, collaborative_workspace_limit, page_permission_guest_editors,
+        CASE WHEN has_space_member_management THEN 1 ELSE 0 END as has_space_member_management,
+        CASE WHEN has_space_member_grouping THEN 1 ELSE 0 END as has_space_member_grouping,
+        CASE WHEN is_active THEN 1 ELSE 0 END as is_active,
         created_at, updated_at from af_subscription_plans
     </sql>
 
     <select id="selectAfSubscriptionPlansList" parameterType="AfSubscriptionPlans" resultMap="AfSubscriptionPlansResult">
         <include refid="selectAfSubscriptionPlansVo"/>
-        <where>  
+        <where>
             <if test="planName != null  and planName != ''"> and plan_name like concat('%', #{planName}, '%')</if>
             <if test="planNameCn != null  and planNameCn != ''"> and plan_name_cn = #{planNameCn}</if>
             <if test="monthlyPriceYuan != null "> and monthly_price_yuan = #{monthlyPriceYuan}</if>
@@ -84,20 +84,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createdAt != null "> and created_at = #{createdAt}</if>
             <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
         </where>
+        order by CASE WHEN is_active THEN 1 ELSE 0 END desc, updated_at desc
     </select>
 
     <!-- 查询所有活跃的订阅计划 -->
     <select id="selectActiveSubscriptionPlans" resultMap="AfSubscriptionPlansResult">
-        SELECT * FROM af_subscription_plans
+        <include refid="selectAfSubscriptionPlansVo"/>
         WHERE is_active = true
         ORDER BY monthly_price_yuan ASC
-    </select>
-
-    <!-- 查询所有活跃的补充包 (返回 AfSubscriptionAddons) -->
-    <select id="selectActiveAddons" resultMap="AfSubscriptionAddonsResult">
-        SELECT * FROM af_subscription_addons
-        WHERE is_active = true
-        ORDER BY price_yuan ASC
     </select>
 
     <select id="selectAfSubscriptionPlansById" parameterType="Long" resultMap="AfSubscriptionPlansResult">
@@ -130,7 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isActive != null">is_active,</if>
             <if test="createdAt != null">created_at,</if>
             <if test="updatedAt != null">updated_at,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="planCode != null and planCode != ''">#{planCode},</if>
             <if test="planName != null and planName != ''">#{planName},</if>
@@ -154,7 +148,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isActive != null">CASE WHEN #{isActive} = 1 THEN TRUE ELSE FALSE END,</if>
             <if test="createdAt != null">#{createdAt},</if>
             <if test="updatedAt != null">#{updatedAt},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateAfSubscriptionPlans" parameterType="AfSubscriptionPlans">
@@ -181,7 +175,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hasSpaceMemberGrouping != null">has_space_member_grouping = CASE WHEN #{hasSpaceMemberGrouping} = 1 THEN TRUE ELSE FALSE END,</if>
             <if test="isActive != null">is_active = CASE WHEN #{isActive} = 1 THEN TRUE ELSE FALSE END,</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
-            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            updated_at = CURRENT_TIMESTAMP
         </trim>
         where id = #{id}
     </update>
@@ -191,7 +185,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAfSubscriptionPlansByIds" parameterType="String">
-        delete from af_subscription_plans where id in 
+        delete from af_subscription_plans where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
