@@ -4,6 +4,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
   modules: ['@nuxtjs/tailwindcss'],
+  tailwindcss: {
+    config: {
+      // 配置项
+    }
+  },
   app: {
     head: {
       title: '基础开发框架 - Vue3 + Nuxt3',

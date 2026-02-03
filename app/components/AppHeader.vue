@@ -29,6 +29,13 @@ const handleLogout = () => {
     isConfirmVisible.value = false
 }
 
+const cancelLogout = () => {
+    isConfirmVisible.value = false
+}
+
+const confirmLogout = () => {
+    handleLogout()
+}   
 
 const openModal = () => {
     isModalVisible.value = true

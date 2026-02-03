@@ -10,5 +10,8 @@ export const paymentApi = {
   },
   planLists() {
     return get<Record<string, any>>('/api/ponynotes/plans/list')
+  },
+  paymentStatus(orderNo: string) {
+    return get<Record<string, any>>(`/api/payment/status?orderNo=${orderNo}`)
   }
 }

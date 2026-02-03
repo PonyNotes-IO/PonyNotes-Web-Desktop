@@ -2,6 +2,7 @@
 import { ref, onMounted, nextTick } from 'vue'
 // 引入 AOS 动画库
 import AOS from 'aos'
+import Toast from '../utils/toast'
 import 'aos/dist/aos.css'
 
 useSeoMeta({
@@ -19,6 +20,9 @@ const loadingText = ref('订单生成中...');
 const selectedPlan = ref(0)
 const plans = ref([]);
 const alipayHtml = ref('');
+
+
+
 const initPlans = () => {
     api.payment.planLists().then(res => {
         console.log('获取价格计划列表',res);
@@ -63,6 +67,42 @@ const proccessResult = res => {
         // router.push(res.data.paymentUrl)
     }
 }
+
+
+// Toast工具已直接导入，可通过 Toast.success() 等方法调用
+const openApp = ()=> {
+    var iframe = document.createElement('iframe');
+    const appUrl = `ponynotes://payment-success`;
+    iframe.style.display = 'none';
+    iframe.src = appUrl;
+    document.body.appendChild(iframe);
+
+    // 尝试唤起应用
+    // window.location.href = appUrl;
+    // 设置超时时间（例如500ms）
+    const timeout = 1000;
+    const downloadUrl = location.origin + '/download';
+    const timer = setTimeout(() => {
+        // 超时后执行回退逻辑（如跳转到下载页）
+        Toast.warning('打开App超时，请检查是否已安装PonyNotes,即将跳转下载页面');
+        setTimeout(() => {
+            window.location.href = downloadUrl;
+        }, 2500);
+    }, timeout);
+
+    // 如果页面失去焦点（应用成功打开），则清除超时
+    window.onblur = function() {
+        clearTimeout(timer);
+    };
+};
+
+const proccessPaymentResult = res => {
+    if (res.code === 200 && res.data == 'success') {
+        Toast.success('支付成功');
+        openApp();
+        // alipayHtml.value = res.data.payUrl;
+    }
+}
 onMounted(() => {
     // 初始化 AOS 配置
     AOS.init({
@@ -88,7 +128,19 @@ onMounted(() => {
         })
     }
     console.log('query',query);
-    initPlans();
+    if(query.orderNo && query.paymentType && query.status) {
+        // return;
+        loadingText.value = '查询订单支付结果中...';
+        // loading.value = true;
+        api.payment.paymentStatus(query.orderNo).then(res => {
+            console.log('查询支付订单',res);
+            proccessPaymentResult(res);
+        }).finally(() => {
+            loading.value = false;
+        })
+    } else {
+        initPlans();
+    }
 })
 </script>
 
