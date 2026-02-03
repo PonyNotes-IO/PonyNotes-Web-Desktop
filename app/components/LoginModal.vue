@@ -76,58 +76,41 @@ const handleRegister = async () => {
     }
 
     // --- 临时跳过验证逻辑 (仅内存有效，刷新即消失) ---
-    userStore.isLoggedIn.value = true
-    userStore.userInfo.value = { username: '小马用户', phone: '18888888888' }
-    userStore.token.value = 'mock-token-123'
+    // userStore.isLoggedIn.value = true
+    // userStore.userInfo.value = { username: '小马用户', phone: '18888888888' }
+    // userStore.token.value = 'mock-token-123'
     
-    alert('登录成功 (已跳过验证)')
-    emit('close')
-    router.push('/account')
-    return;
+    // alert('登录成功 (已跳过验证)')
+    // emit('close')
+    // router.push('/account')
+    // return;
     // -----------------------
 
     try {
         loading.value = true
         const isPhone = /^1[3-9]\d{9}$/.test(phoneNumber.value.trim())
         
-        // const res = await api.user.loginWithCode({
-        //     'accountType':isPhone ? 'phone' : 'email',
-        //     [isPhone ? 'phone' : 'email']: phoneNumber.value.trim(),
-        //     inputValue: phoneNumber.value.trim(),
-        //     loginType: 'code',
-        //     code: verificationCode.value.trim()
-        // })
-        // console.log(res)
-        // if (res.code == 200) {
-            const loginWithCodeResponse  = await api.user.doCodeLogin({
-                accountType: isPhone ? 'phone' : 'email',
-                inputValue: phoneNumber.value.trim(),
-                code: verificationCode.value.trim()
-            });
-            console.log(loginWithCodeResponse,'loginWithCodeResponse');
-            if(loginWithCodeResponse.code !== 200){
-                alert(loginWithCodeResponse.msg || '登录失败，请重试')
-                return false;
-            }else{
-                // 登录成功，存入token到localStorage
-                const token = loginWithCodeResponse.token;
-                console.log("登录成功，token："+token,loginWithCodeResponse)
-                userStore.setUser(loginWithCodeResponse.data, loginWithCodeResponse.token)
-                // localStorage.setItem(TokenKey, token); 
-                // localStorage.setItem(UserInfoKey, inputValue);
-                // setToken(token);
-                // setUserInfo(inputValue);
-                // 同时存入authToken（可能为兼容其他逻辑）
-                localStorage.setItem('authToken',token);
-                alert('登录成功!')
-                emit('close')
-                router.push('/account')
-            }
-            // userStore.setUser(res.data.user, res.data.token)
-
-        // } else {
-        //   alert(res.msg || '登录失败，请重试')
-        // }
+        const loginWithCodeResponse  = await api.user.doCodeLogin({
+            accountType: isPhone ? 'phone' : 'email',
+            inputValue: phoneNumber.value.trim(),
+            code: verificationCode.value.trim()
+        });
+        console.log(loginWithCodeResponse,'loginWithCodeResponse');
+        if(loginWithCodeResponse.code !== 200){
+            alert(loginWithCodeResponse.msg || '登录失败，请重试')
+            return false;
+        }else{
+            // 登录成功，存入token到localStorage
+            const token = loginWithCodeResponse.token;
+            console.log("登录成功，token："+token,loginWithCodeResponse)
+            userStore.setUser(loginWithCodeResponse.data, loginWithCodeResponse.token)
+               
+            localStorage.setItem('authToken',token);
+            // alert('登录成功!')
+            emit('close')
+            router.push('/account')
+        }
+        
     } catch (error) {
         console.error('登录失败:', error)
         alert('登录失败，请检查验证码是否正确')

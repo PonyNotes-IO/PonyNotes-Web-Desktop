@@ -24,6 +24,19 @@ onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll)
 })
 
+const handleLogout = () => {
+    userStore.clearUser()
+    isConfirmVisible.value = false
+}
+
+
+const openModal = () => {
+    isModalVisible.value = true
+}
+const closeModal = () => {
+    isModalVisible.value = false
+}
+
 const handleLogoClick = (e) => {
     if (route.path === '/') {
         e.preventDefault()
