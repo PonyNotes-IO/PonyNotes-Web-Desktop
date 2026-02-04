@@ -180,8 +180,8 @@ verify:
 # 前端配置
 frontend:
   # 前端域名地址（用于支付成功跳转等）
-  # domain: https://www.xiaomabiji.com
-  domain: https://localhost:8081
+  domain: https://www.xiaomabiji.com
+#  domain: https://localhost:8081
 
 # 支付配置
 payment:

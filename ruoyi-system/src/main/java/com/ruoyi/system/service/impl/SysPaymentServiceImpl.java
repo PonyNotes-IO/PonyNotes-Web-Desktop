@@ -26,12 +26,12 @@ public class SysPaymentServiceImpl  implements ISysPaymentService {
 
     @Override
     public SysPaymentOrder selectOne(String orderNo) {
-        return sysPaymentOrderMapper.selectOne(orderNo);
+        return sysPaymentOrderMapper.getPaymentOrder(orderNo);
     }
 
     @Override
     public int updateById(SysPaymentOrder order) {
-        return  sysPaymentOrderMapper.updateById(order);
+        return  sysPaymentOrderMapper.updateSysPaymentOrder(order);
     }
 
     @Override

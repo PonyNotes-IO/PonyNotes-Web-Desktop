@@ -117,7 +117,7 @@ public class AfSubscriptionPlansServiceImpl implements IAfSubscriptionPlansServi
 
     @Override
     public BigDecimal getAmountByIdAndBliingType(String planId, String billingType) {
-        AfSubscriptionPlans plan = afSubscriptionPlansMapper.selectById(Long.valueOf(planId));
+        AfSubscriptionPlans plan = afSubscriptionPlansMapper.selectAfSubscriptionPlansById(Long.valueOf(planId));
         if(plan == null) throw new RuntimeException("参数错误,planId不存在");
 
         return "0".equals(billingType) ? plan.getMonthlyPriceYuan(): plan.getYearlyPriceYuan();// null;

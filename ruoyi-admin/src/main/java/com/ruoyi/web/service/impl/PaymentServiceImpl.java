@@ -52,6 +52,7 @@ import com.wechat.pay.java.service.payments.h5.model.SceneInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -73,6 +74,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static final String REDIS_KEY_JSAPI_TICKET = "wx_jsapi_ticket";
     private static final Object TICKET_EXPIRE_SEC = 5000;
+
+    @Value("${ruoyi.payment-debug:Y}")
+    private String paymentDebug;
 
     @Autowired
     private com.wechat.pay.java.service.partnerpayments.nativepay.NativePayService wechatNativePayService;
@@ -113,7 +117,7 @@ public class PaymentServiceImpl implements PaymentService {
         AfSubscriptionPlans plan = iAfSubscriptionPlansService.selectAfSubscriptionPlansById(Long.valueOf(planId));
         if(plan == null) throw new IllegalArgumentException("参数非法,planId错误");
 
-        BigDecimal amount = "0".equals(billingType) ? plan.getMonthlyPriceYuan():  plan.getYearlyPriceYuan();
+        BigDecimal amount = "Y".equals(paymentDebug) ? BigDecimal.valueOf(0.01) : "0".equals(billingType) ? plan.getMonthlyPriceYuan():  plan.getYearlyPriceYuan();
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             log.error("支付金额非法：{}", amount);
             throw new IllegalArgumentException("支付金额必须大于0");
@@ -173,7 +177,7 @@ public class PaymentServiceImpl implements PaymentService {
         order.setClientUserId(String.valueOf(clientUser.getUid()));
         order.setPlanId(planId);
         order.setAddonId(addonId);
-        order.setBillingType(billingType);
+        order.setBillingType("0".equals(billingType) ? "monthly":"yearly");
         order.setQuantity(0);
         paymentService.insert(order);
 
