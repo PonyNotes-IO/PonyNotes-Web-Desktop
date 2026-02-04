@@ -2,10 +2,13 @@ package com.ruoyi.xmbj.mapper;
 
 import java.util.List;
 
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.xmbj.domain.AfUserWorkspace;
 import com.ruoyi.xmbj.domain.AfWorkspace;
 import com.ruoyi.xmbj.domain.vo.AfWorkspaceVo;
 
+@DataSource(DataSourceType.SLAVE)
 public interface AfWorkspaceMapper 
 {
     public AfWorkspace selectAfWorkspaceByWorkspaceId(String workspaceId);

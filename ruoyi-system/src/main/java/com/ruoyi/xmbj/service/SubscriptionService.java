@@ -2,6 +2,7 @@ package com.ruoyi.xmbj.service;
 
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.xmbj.domain.*;
 import com.ruoyi.xmbj.mapper.*;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +59,7 @@ public class SubscriptionService {
      */
     @DataSource(DataSourceType.SLAVE)
     public AfSubscriptionPlans getSubscriptionPlanById(Long planId) {
-        return afSubscriptionPlansMapper.selectById(planId);
+        return afSubscriptionPlansMapper.selectAfSubscriptionPlansById(planId);
     }
 
     /**
@@ -126,11 +127,12 @@ public class SubscriptionService {
      * 原来: ponynotesService.subscribe() API调用
      * 现在: 直接写入本地数据库
      */
+    @DataSource(DataSourceType.SLAVE)
     public AfUserSubscriptions subscribe(Long userId, Long planId, String billingType) {
         log.info("用户 {} 订阅计划 {} (计费方式: {})", userId, planId, billingType);
 
         // 验证订阅计划
-        AfSubscriptionPlans plan = afSubscriptionPlansMapper.selectById(planId);
+        AfSubscriptionPlans plan = afSubscriptionPlansMapper.selectAfSubscriptionPlansById(planId);
         if (plan == null) {
             throw new RuntimeException("订阅计划不存在");
         }
@@ -139,19 +141,20 @@ public class SubscriptionService {
         AfUserSubscriptions currentSubscription = afUserSubscriptionsMapper.selectCurrentActiveSubscription(userId);
         if (currentSubscription != null) {
             currentSubscription.setStatus("cancelled");
-            currentSubscription.setUpdatedAt(LocalDateTime.now());
-            afUserSubscriptionsMapper.updateById(currentSubscription);
+            currentSubscription.setUpdatedAt(new Date());
+            afUserSubscriptionsMapper.updateUserSubscriptions(currentSubscription);
         }
 
         // 创建新订阅
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime endDate = calculateSubscriptionEndDate(now, billingType);
+        Date now = new Date();
+        Date endDate = calculateSubscriptionEndDate(now, billingType);
 
         AfUserSubscriptions subscription = AfUserSubscriptions.builder()
                 .uid(userId)
                 .planId(planId)
                 .startDate(now)
                 .endDate(endDate)
+                .billingType(billingType)
                 .status("active")
                 .createdAt(now)
                 .updatedAt(now)
@@ -162,15 +165,7 @@ public class SubscriptionService {
         // 初始化用户使用统计（如果不存在）
         UserUsage usage = userUsageMapper.selectUserUsage(userId);
         if (usage == null) {
-            UserUsage newUsage = UserUsage.builder()
-                    .userId(userId)
-                    .storageUsed(0L)
-                    .aiCallsMade(0)
-                    .priorityCount(0)
-                    .createdAt(now)
-                    .updatedAt(now)
-                    .build();
-            userUsageMapper.insert(newUsage);
+            userUsageMapper.initUserUsage(userId);
         }
 
         log.info("用户 {} 订阅成功，订阅ID: {}", userId, subscription.getId());
@@ -187,8 +182,8 @@ public class SubscriptionService {
         AfUserSubscriptions subscription = afUserSubscriptionsMapper.selectCurrentActiveSubscription(userId);
         if (subscription != null) {
             subscription.setStatus("cancelled");
-            subscription.setUpdatedAt(LocalDateTime.now());
-            afUserSubscriptionsMapper.updateById(subscription);
+            subscription.setUpdatedAt(new Date());
+            afUserSubscriptionsMapper.updateUserSubscriptions(subscription);
         }
     }
 
@@ -215,8 +210,8 @@ public class SubscriptionService {
             return false;
         }
 
-        LocalDateTime now = LocalDateTime.now();
-        return subscription.getEndDate().isAfter(now);
+//        LocalDateTime now = LocalDateTime.now();
+        return new Date().before(subscription.getEndDate());
     }
 
     /**
@@ -244,8 +239,8 @@ public class SubscriptionService {
         }
 
         // 创建购买记录
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expirationDate = calculateAddonExpirationDate(now);
+        Date now = new Date();
+        Date expirationDate = calculateAddonExpirationDate(now);
 
         AfUserAddons userAddon = AfUserAddons.builder()
                 .uid(userId)
@@ -306,16 +301,8 @@ public class SubscriptionService {
         UserUsage usage = userUsageMapper.selectUserUsage(userId);
         if (usage == null) {
             log.warn("用户 {} 的使用统计不存在，创建新记录", userId);
-            UserUsage newUsage = UserUsage.builder()
-                    .userId(userId)
-                    .storageUsed(0L)
-                    .aiCallsMade(0)
-                    .priorityCount(0)
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(LocalDateTime.now())
-                    .build();
-            userUsageMapper.insert(newUsage);
-            return newUsage;
+            userUsageMapper.initUserUsage(userId);
+            return userUsageMapper.selectUserUsage(userId);
         }
         return usage;
     }
@@ -390,22 +377,22 @@ public class SubscriptionService {
      * 计算订阅结束日期
      */
     @DataSource(DataSourceType.SLAVE)
-    private LocalDateTime calculateSubscriptionEndDate(LocalDateTime startDate, String billingType) {
-        if ("monthly".equalsIgnoreCase(billingType)) {
-            return startDate.plusMonths(1);
-        } else if ("annual".equalsIgnoreCase(billingType)) {
-            return startDate.plusYears(1);
+    private Date calculateSubscriptionEndDate(Date startDate, String billingType) {
+        if ("monthly".equalsIgnoreCase(billingType) || "0".equals(billingType)) {
+            return DateUtils.addMonths(startDate,1);// startDate.plusMonths(1);
+        } else if ("annual".equalsIgnoreCase(billingType) || "1".equals(billingType)) {
+            return DateUtils.addYears(startDate,1);
         }
         // 免费计划默认30天
-        return startDate.plusDays(30);
+        return DateUtils.addDays(startDate,30);
     }
 
     /**
      * 计算补充包过期日期（默认90天）
      */
     @DataSource(DataSourceType.SLAVE)
-    private LocalDateTime calculateAddonExpirationDate(LocalDateTime purchaseDate) {
-        return purchaseDate.plusDays(90);
+    private Date calculateAddonExpirationDate(Date purchaseDate) {
+        return DateUtils.addDays(purchaseDate,90);
     }
 
     @DataSource(DataSourceType.SLAVE)
@@ -420,7 +407,7 @@ public class SubscriptionService {
 
     @DataSource(DataSourceType.SLAVE)
     public int update(AfUserAddons item) {
-        return afUserAddonsMapper.updateById(item);
+        return afUserAddonsMapper.update(item);
     }
 
     @DataSource(DataSourceType.SLAVE)
@@ -429,12 +416,12 @@ public class SubscriptionService {
     }
 
     public int updateAfSubscriptionPlans(AfSubscriptionPlans item) {
-        return afSubscriptionPlansMapper.updateById(item);
+        return afSubscriptionPlansMapper.insertAfSubscriptionPlans(item);
     }
 
     @DataSource(DataSourceType.SLAVE)
     public AfSubscriptionPlans getAfSubscriptionPlansById(String planId) {
-        return afSubscriptionPlansMapper.selectById(Long.valueOf(planId));
+        return afSubscriptionPlansMapper.selectAfSubscriptionPlansById(Long.valueOf(planId));
     }
 
     @DataSource(DataSourceType.SLAVE)

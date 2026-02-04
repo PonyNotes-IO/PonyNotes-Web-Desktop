@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 用户附加服务表实体
@@ -32,17 +33,17 @@ public class AfUserAddons implements Serializable {
     private Integer quantity;
 
     /** 生效开始时间 */
-    private LocalDateTime startDate;
+    private Date startDate;
 
     /** 生效到期时间 */
-    private LocalDateTime endDate;
+    private Date endDate;
 
     /** 状态（如：active-生效/expired-过期/canceled-已取消） */
     private String status;
 
     /** 创建时间 */
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     /** 更新时间 */
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 }

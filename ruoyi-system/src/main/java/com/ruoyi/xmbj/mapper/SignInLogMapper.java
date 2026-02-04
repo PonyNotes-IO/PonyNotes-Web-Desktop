@@ -1,6 +1,8 @@
 package com.ruoyi.xmbj.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.xmbj.domain.SignInLog;
 import com.ruoyi.xmbj.domain.SignInLogStatistics;
 import com.ruoyi.xmbj.domain.ThirdPartySign;
@@ -12,6 +14,7 @@ import java.util.List;
  *
  * @author ruoyi
  */
+@DataSource(DataSourceType.SLAVE)
 public interface SignInLogMapper extends BaseMapper<SignInLog> {
     /**
      * 查询登录日志列表

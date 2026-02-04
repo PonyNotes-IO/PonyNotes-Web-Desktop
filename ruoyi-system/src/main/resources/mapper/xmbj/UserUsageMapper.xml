@@ -39,8 +39,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <!-- 初始化用户使用统计记录 -->
     <insert id="initUserUsage" parameterType="Long">
-        INSERT INTO user_usage (user_id, created_at, updated_at) 
-        VALUES (#{userId}, NOW(), NOW())
+        INSERT INTO user_usage (user_id, created_at, updated_at,last_updated)
+        VALUES (#{userId}, NOW(), NOW(),now())
     </insert>
     
 </mapper>

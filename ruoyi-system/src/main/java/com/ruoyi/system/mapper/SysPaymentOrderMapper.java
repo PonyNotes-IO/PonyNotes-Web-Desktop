@@ -22,22 +22,6 @@ public interface SysPaymentOrderMapper
     public int insert(SysPaymentOrder paymentOrder);
 
     /**
-     * 根据订单号查询支付订单
-     * 
-     * @param orderNo 订单编号
-     * @return 支付订单对象
-     */
-    public SysPaymentOrder selectOne(String orderNo);
-
-    /**
-     * 根据ID更新支付订单
-     * 
-     * @param paymentOrder 支付订单对象
-     * @return 结果
-     */
-    public int updateById(SysPaymentOrder paymentOrder);
-
-    /**
      * 查询过期订单
      * 
      * @param payTime 支付时间
@@ -48,7 +32,7 @@ public interface SysPaymentOrderMapper
     /**
      * 根据订单号查询支付订单
      * 
-     * @param tradeNo 交易单号
+     * @param tradeNo 交易单号,orderNo
      * @return 支付订单对象
      */
     public SysPaymentOrder getPaymentOrder(String tradeNo);

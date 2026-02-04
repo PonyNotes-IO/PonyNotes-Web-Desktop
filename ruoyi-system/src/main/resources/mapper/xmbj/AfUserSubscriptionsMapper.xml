@@ -57,5 +57,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where id = #{id}
     </update>
+    <insert id="insert" parameterType="com.ruoyi.xmbj.domain.AfUserSubscriptions">
+        insert into af_user_subscriptions
+        (billing_type, cancel_reason, canceled_at, created_at, end_date, plan_id, start_date, status, uid, updated_at) values
+        (#{billingType},#{cancelReason},#{canceledAt},#{createdAt},#{endDate},#{planId},#{startDate},#{status},#{uid},#{updatedAt})
+    </insert>
 
 </mapper>

@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Mapper
 @DataSource(DataSourceType.SLAVE)
-public interface AfUserSubscriptionsMapper extends BaseMapper<AfUserSubscriptions> {
+public interface AfUserSubscriptionsMapper {
     AfUserSubscriptions selectCurrentActiveSubscription(Long userId);
 
     /**
@@ -33,4 +33,6 @@ public interface AfUserSubscriptionsMapper extends BaseMapper<AfUserSubscription
     int updateUserSubscriptions(AfUserSubscriptions entity);
 
     AfUserSubscriptions selectUserSubscriptionById(Long clientSubscriptionId);
+
+    void insert(AfUserSubscriptions subscription);
 }

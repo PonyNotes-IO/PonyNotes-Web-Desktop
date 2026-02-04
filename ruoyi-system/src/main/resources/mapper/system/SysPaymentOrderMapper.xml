@@ -70,7 +70,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectSysPaymentOrderVo">
-        select id, order_no, amount, payment_type, qr_code_url, status, create_time, update_time, pay_time, product_name, user_info from sys_payment_order
+        select id, order_no, amount, payment_type, qr_code_url, status, create_time, update_time, pay_time,addon_id,
+        plan_id,user_id,client_user_id,billing_type,quantity,client_user_addon_id,client_subscription_id,
+        product_name, user_info from sys_payment_order
     </sql>
 
     <select id="selectSysPaymentOrderList" parameterType="SysPaymentOrder" resultMap="SysPaymentOrderResult">
@@ -85,6 +87,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endPayTime != null "> and pay_time &lt;= #{endPayTime}</if>
             <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
             <if test="userInfo != null  and userInfo != ''"> and user_info = #{userInfo}</if>
+        </where>
+    </select>
+    <select id="getPaymentOrder" parameterType="String" resultMap="SysPaymentOrderResult">
+        <include refid="selectSysPaymentOrderVo"/>
+        <where>
+           order_no = #{tradeNo}
         </where>
     </select>
     

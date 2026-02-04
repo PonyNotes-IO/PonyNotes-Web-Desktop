@@ -1,6 +1,9 @@
 package com.ruoyi.xmbj.mapper;
 
 import java.util.List;
+
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.xmbj.domain.XmAfUser;
 
 /**
@@ -9,6 +12,7 @@ import com.ruoyi.xmbj.domain.XmAfUser;
  * @author ruoyi
  * @date 2026-01-21
  */
+@DataSource(DataSourceType.SLAVE)
 public interface XmAfUserMapper
 {
     /**

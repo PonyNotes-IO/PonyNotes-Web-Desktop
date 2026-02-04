@@ -2,6 +2,8 @@ package com.ruoyi.xmbj.mapper;
 
 import java.util.List;
 
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.xmbj.domain.AfSubscriptionAddons;
 import com.ruoyi.xmbj.domain.AfSubscriptionPlans;
 
@@ -11,6 +13,7 @@ import com.ruoyi.xmbj.domain.AfSubscriptionPlans;
  * @author 张继科
  * @date 2026-01-21
  */
+@DataSource(DataSourceType.SLAVE)
 public interface AfSubscriptionPlansMapper 
 {
     /**
@@ -69,13 +72,11 @@ public interface AfSubscriptionPlansMapper
      */
     public int countUserSubscriptionsByPlanId(Long id);
 
-    AfSubscriptionPlans selectById(Long planId);
-
     List<AfSubscriptionPlans> selectActiveSubscriptionPlans();
 
     AfSubscriptionPlans selectByName(String planName);
 
-    int updateById(AfSubscriptionPlans item);
+//    int updateById(AfSubscriptionPlans item);
 
     List<AfSubscriptionAddons> selectActiveAddons();
 }

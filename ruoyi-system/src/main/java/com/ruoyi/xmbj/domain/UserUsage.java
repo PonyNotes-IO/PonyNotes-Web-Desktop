@@ -1,6 +1,6 @@
 package com.ruoyi.xmbj.domain;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -41,26 +41,28 @@ public class UserUsage {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "last_updated")
-    private LocalDateTime lastUpdated;
+    private Date lastUpdated;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        this.lastUpdated = LocalDateTime.now();
+        Date now = new Date();
+        this.createdAt = now;
+        this.updatedAt = now;
+        this.lastUpdated = now;
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-        this.lastUpdated = LocalDateTime.now();
+        Date now = new Date();
+        this.updatedAt = now;
+        this.lastUpdated = now;
     }
 }
