@@ -102,10 +102,10 @@ const handleLogoClick = (e) => {
                 </div>
 
                 <!-- 用户未登录 -->
-                <button v-show="!isLoggedIn" @click="openModal"
+                <!-- <button v-show="!isLoggedIn" @click="openModal"
                     class="bg-[#FF4D00] text-white px-5 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 active:scale-95 border-none shadow-none">
                     注册/登录
-                </button>
+                </button> -->
             </div>
         </div>
     </nav>

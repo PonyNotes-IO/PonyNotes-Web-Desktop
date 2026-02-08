@@ -36,17 +36,27 @@ const handleSelectPlan = (index) => {
     selectedPlan.value = index;
     // alert(`您选择了 ${plans.value[index].planNameCn}`);
     loading.value = true;
-    api.payment.createPayment({
-        planId: plans.value[index].id,
-        billingType: billingCycle.value,
-        userInfo: '',
-        'paymentType':'alipay',
-    }).then(res => {
-        console.log('创建支付订单',alipayFormContainer.value,alipayFormContainer,res);
-        proccessResult(res);
-    }).finally(() => {
+    setTimeout(() => {
         loading.value = false;
-    })
+        router.push({
+            path: '/download',
+            query: {
+                planId: plans.value[index].id,
+                billingType: billingCycle.value,
+            }
+        })
+    }, 300);
+    // api.payment.createPayment({
+    //     planId: plans.value[index].id,
+    //     billingType: billingCycle.value,
+    //     userInfo: '',
+    //     'paymentType':'alipay',
+    // }).then(res => {
+    //     console.log('创建支付订单',alipayFormContainer.value,alipayFormContainer,res);
+    //     proccessResult(res);
+    // }).finally(() => {
+    //     loading.value = false;
+    // })
 }
 const proccessResult = res => {
     if (res.code === 200) {
@@ -101,6 +111,15 @@ const proccessPaymentResult = res => {
         Toast.success('支付成功');
         openApp();
         // alipayHtml.value = res.data.payUrl;
+    }
+}
+const formatStorage = (gb) => {
+    if (gb >= 1024 *1024) {
+        return (gb / 1024 / 1024).toFixed(2) + 'TB';
+    } else if (gb >= 1024) {
+        return (gb / 1024).toFixed(2) + 'GB';
+    } else {
+        return gb.toFixed(2) + 'MB';
     }
 }
 onMounted(() => {
@@ -209,8 +228,8 @@ onMounted(() => {
                         </div>
                         <button @click="handleSelectPlan(index)"
                             :class="[selectedPlan === index ? 'bg-[#FF4D00] text-white' : 'bg-[#F3F4F6] text-gray-600']"
-                            class="w-full py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px] transition-colors duration-300">立即开始</button>
-                        <ul v-if="plan.planNameCn === '标准版'" :class="[selectedPlan === 2 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
+                            class="w-full py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px] transition-colors duration-300">立即体验</button>
+                        <ul v-if="plan.planCode === 'standard'" :class="[selectedPlan === 2 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                             class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
                             <li>面向内容创作者</li>
                             <li>与高效工作者的智能笔记</li>
@@ -218,7 +237,7 @@ onMounted(() => {
                             <li>助你随时记录、随处创作</li>
                             <li>一站整合写作、整理、归档</li>
                         </ul>
-                        <ul v-if="plan.planNameCn === '学生版'" :class="[selectedPlan === 2 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
+                        <ul v-if="plan.planCode === 'profersor'" :class="[selectedPlan === 2 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                             class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
                             <li>面向内容创作者</li>
                             <li>与高效工作者的智能笔记</li>
@@ -226,14 +245,14 @@ onMounted(() => {
                             <li>助你随时记录、随处创作</li>
                             <li>一站整合写作、整理、归档</li>
                         </ul>
-                        <ul v-if="plan.planNameCn === '免费版'" :class="[selectedPlan === 0 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
+                        <ul v-if="plan.planCode === 'mfb'" :class="[selectedPlan === 0 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                             class="space-y-2.5 text-[13px] px-1 transition-colors duration-300">
                             <li>本地免费使用</li>
                             <li>你的随身知识库系统</li>
                             <li>AI图文生成 + 云存储</li>
                             <li>开启智能学习体验</li>
                         </ul>
-                        <ul v-if="plan.planNameCn === '团队版'" :class="[selectedPlan === 3 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
+                        <ul v-if="plan.planCode === 'hiclass'" :class="[selectedPlan === 3 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                         class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
                             <li>团队协作不止是共享</li>
                             <li>更是高效共创</li>
@@ -353,14 +372,15 @@ onMounted(() => {
 
 
         <!-- ================= 空间补充包 (调整为扁平化比例) ================= -->
-        <section class="max-w-[1140px] mx-auto px-6 mt-16 text-left">
+         <!-- 调整 py-6 缩短高度，mb 缩短间距 -->
+        <!-- <section class="max-w-[1140px] mx-auto px-6 mt-16 text-left">
             <div class="max-w-[950px] ml-0">
                 <div class="mb-6" data-aos="fade-right">
                     <span
                         class="border border-[#FFD9C6] text-[#FF4D00] px-5 py-1 rounded-full font-medium text-[13px]">空间补充包</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- 调整 py-6 缩短高度，mb 缩短间距 -->
+                    
                     <div class="bg-white rounded-2xl py-6 px-8 border border-[#FFD9C6] text-center shadow-none"
                         data-aos="fade-up" data-aos-delay="100">
                         <p class="text-[15px] font-bold text-gray-900 mb-2">云存储空间<span class="text-[#FF4D00]">
@@ -387,17 +407,17 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <!-- ================= 小马AI对话 (调整为扁平化比例) ================= -->
-        <section class="max-w-[1140px] mx-auto px-6 mt-16 text-left">
+        <!-- <section class="max-w-[1140px] mx-auto px-6 mt-16 text-left">
             <div class="max-w-[950px] ml-0">
                 <div class="mb-6" data-aos="fade-right">
                     <span
                         class="border border-[#FFD9C6] text-[#FF4D00] px-5 py-1 rounded-full font-medium text-[13px]">小马AI对话</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- 调整 py-6 缩短高度，mb 缩短间距 -->
+                    
                     <div class="bg-white rounded-2xl py-6 px-8 border border-[#FFD9C6] text-center shadow-none"
                         data-aos="fade-up" data-aos-delay="100">
                         <p class="text-[15px] font-bold text-gray-900 mb-2">基础-500次</p>
@@ -421,7 +441,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <!-- ================= 方案与功能详细对比 (全量手动展开) ================= -->
         <section class="max-w-[1100px] mx-auto px-6 mt-32">
@@ -432,108 +452,99 @@ onMounted(() => {
                 <div
                     class="grid grid-cols-5 bg-[#F5F5F7] py-4 px-6 rounded-2xl items-center text-[16px] font-bold text-gray-900">
                     <div></div>
-                    <div class="text-center">免费版(本地)</div>
-                    <div class="text-center">学生版</div>
-                    <div class="text-center">标准版</div>
-                    <div class="text-center">团队版</div>
+                    <div  v-for="(plan, index) in plans" :key="index" class="text-center">{{plan.planNameCn}}</div>
                 </div>
                 <!-- 基础项 -->
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">页面/块数量</div>
-                    <div class="text-center text-gray-500">无限制</div>
-                    <div class="text-center text-gray-500">无限制</div>
-                    <div class="text-center text-gray-500">无限制</div>
-                    <div class="text-center text-gray-500">无限制</div>
+                    <div v-for="(plan, index) in plans" :key="index" class="text-center text-gray-500">无限制</div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">云存储空间</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="text-center text-gray-900">2GB</div>
-                    <div class="text-center text-gray-900">10GB</div>
-                    <div class="text-center text-gray-900">20GB</div>
+                    <div v-for="(plan, index) in plans" :key="index" class="text-center text-gray-500">{{formatStorage(plan.cloudStorageGb)}}</div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">导入与导出</div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    <div v-for="(plan, index) in plans" :key="index" class="flex justify-center">
+                        <div v-if="!plan.hasInbox" class="text-center text-gray-500">—</div>
+                        <div v-else class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">收件箱</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    <div v-for="(plan, index) in plans" :key="index" class="flex justify-center">
+                        <div v-if="!plan.hasInbox" class="text-center text-gray-500">—</div>
+                        <div v-else class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">多端同步(iPad、Mac、Windows、Web)</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="!plan.hasMultiDeviceSync" class="text-center text-gray-500">—</div>
+                        <div v-else class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">支持 API</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="!plan.hasApiSupport" class="text-center text-gray-500">—</div>
+                        <div v-else class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">版本历史</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="text-center text-gray-900">7天</div>
-                    <div class="text-center text-gray-900">7天</div>
-                    <div class="text-center text-gray-900">30天</div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="plan.planCode == 'mfb'" class="text-center text-gray-500">{{plan.versionHistoryDays}}</div>
+                        <div v-else class="text-center text-gray-900">{{plan.versionHistoryDays}}天</div>
+                    </div>
                 </div>
 
                 <!-- AI 分类 -->
                 <div class="mt-6 mb-2 px-2 text-[#FF4D00] font-bold text-[16px]">AI功能</div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">AI对话</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="text-center text-gray-900">10次/月</div>
-                    <div class="text-center text-gray-900">40次/月</div>
-                    <div class="text-center text-gray-900">120次/月</div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="plan.aiChatCountPerMonth == 0" class="text-center text-gray-500">—</div>
+                        <div v-else class="text-center text-gray-900">{{plan.aiChatCountPerMonth}}次/月</div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">图片生成</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="text-center text-gray-900">10张/月</div>
-                    <div class="text-center text-gray-900">20张/月</div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="plan.aiImageGenerationPerMonth == 0" class="text-center text-gray-500">—</div>
+                        <div v-else class="text-center text-gray-900">{{plan.aiImageGenerationPerMonth}}次/月</div>
+                    </div>
                 </div>
 
                 <!-- 协作 分类 -->
                 <div class="mt-6 mb-2 px-2 text-[#FF4D00] font-bold text-[16px]">共享和协作</div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">分享链接</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="!plan.hasShareLink" class="text-center text-gray-500">—</div>
+                        <div v-else class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">发布</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="!plan.hasPublish" class="text-center text-gray-500">—</div>
+                        <div v-else class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">工作区成员</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="text-center text-gray-900">2</div>
-                    <div class="text-center text-gray-900">5</div>
-                    <div class="text-center text-gray-900">10</div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="plan.workspaceMemberLimit == 0" class="text-center text-gray-500">—</div>
+                        <div v-else class="text-center text-gray-900">{{plan.workspaceMemberLimit}}</div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">协作工作区</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="text-center text-gray-900 font-medium text-[13px]">仅限1</div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="plan.collaborativeWorkspaceLimit == 0" class="text-center text-gray-500">—</div>
+                        <div v-else class="text-center text-gray-900">{{plan.collaborativeWorkspaceLimit}}个</div>
+                    </div>
                 </div>
 
                 <!-- 权限 分类 -->
@@ -547,17 +558,17 @@ onMounted(() => {
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">空间成员管理</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="!plan.hasSpaceMemberManagement" class="text-center text-gray-500">—</div>
+                        <div v-else class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
                     <div class="text-gray-900 font-medium">空间成员分组</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="text-center text-gray-500">—</div>
-                    <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    <div class="flex justify-center" v-for="(plan, index) in plans" :key="index">
+                        <div v-if="!plan.hasSpaceMemberGrouping" class="text-center text-gray-500">—</div>
+                        <div v-else class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
+                    </div>
                 </div>
             </div>
         </section>
