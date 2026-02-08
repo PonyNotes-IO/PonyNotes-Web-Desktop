@@ -1,22 +1,20 @@
 package com.ruoyi.system.service.impl;
 
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.SysPaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentOrderVo;
+import com.ruoyi.system.mapper.SysPaymentMapper;
 import com.ruoyi.system.mapper.SysPaymentOrderMapper;
 import com.ruoyi.system.service.ISysPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class SysPaymentServiceImpl  implements ISysPaymentService {
-
+    @Autowired
+    private SysPaymentMapper sysPaymentMapper;
     @Autowired
     private SysPaymentOrderMapper sysPaymentOrderMapper;
 
@@ -28,12 +26,12 @@ public class SysPaymentServiceImpl  implements ISysPaymentService {
 
     @Override
     public SysPaymentOrder selectOne(String orderNo) {
-        return sysPaymentOrderMapper.selectOne(orderNo);
+        return sysPaymentOrderMapper.getPaymentOrder(orderNo);
     }
 
     @Override
     public int updateById(SysPaymentOrder order) {
-        return  sysPaymentOrderMapper.updateById(order);
+        return  sysPaymentOrderMapper.updateSysPaymentOrder(order);
     }
 
     @Override

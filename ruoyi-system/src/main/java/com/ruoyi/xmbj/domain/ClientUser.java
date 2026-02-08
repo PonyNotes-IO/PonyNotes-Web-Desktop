@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -28,17 +29,17 @@ public class ClientUser {
     private String name;                  // 用户名
     private Object metadata;              // 用户元数据（JSONB）
     private String encryptionSign;        // 加密签名
-    private LocalDateTime deletedAt;      // 删除时间
-    private LocalDateTime updatedAt;      // 更新时间
-    private LocalDateTime createdAt;      // 创建时间
+    private Date deletedAt;      // 删除时间
+    private Date updatedAt;      // 更新时间
+    private Date createdAt;      // 创建时间
     private String phone;                 // 手机号
 
     // 构造函数
     public ClientUser() {}
 
     public ClientUser(Long uid, String uuid, String email, String password, String name,
-                      Object metadata, String encryptionSign, LocalDateTime deletedAt,
-                      LocalDateTime updatedAt, LocalDateTime createdAt, String phone) {
+                      Object metadata, String encryptionSign, Date deletedAt,
+                      Date updatedAt, Date createdAt, String phone) {
         this.uid = uid;
         this.uuid = uuid;
         this.email = email;
@@ -49,106 +50,6 @@ public class ClientUser {
         this.deletedAt = deletedAt;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
-        this.phone = phone;
-    }
-
-    // Getter和Setter方法
-    public Long getUid() {
-        return uid;
-    }
-
-    public void setUid(Long uid) {
-        this.uid = uid;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Object getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(Object metadata) {
-        this.metadata = metadata;
-    }
-
-    @JsonProperty("encryption_sign")
-    public String getEncryptionSign() {
-        return encryptionSign;
-    }
-
-    @JsonProperty("encryption_sign")
-    public void setEncryptionSign(String encryptionSign) {
-        this.encryptionSign = encryptionSign;
-    }
-
-    @JsonProperty("deleted_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
-    @JsonProperty("deleted_at")
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    @JsonProperty("updated_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    @JsonProperty("updated_at")
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @JsonProperty("created_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    @JsonProperty("created_at")
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
         this.phone = phone;
     }
 

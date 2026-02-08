@@ -36,7 +36,7 @@ export function updateWorkspace(data) {
 }
 
 // 删除工作空间
-export function delWorkspace(workspaceId) {
+export function deleteWorkspace(workspaceId) {
   return request({
     url: '/system/workspace/' + workspaceId,
     method: 'delete'

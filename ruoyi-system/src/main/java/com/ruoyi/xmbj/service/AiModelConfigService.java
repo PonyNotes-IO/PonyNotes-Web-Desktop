@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * AI模型配置业务逻辑
- * 所有查询操作使用 PostgreSQL 从库数据源（@DataSource(DataSourceType.slave)）
+ * 所有查询操作使用 PostgreSQL 从库数据源（@DataSource(DataSourceType.SLAVE)）
  * 所有写入操作使用主库数据源（MySQL）
  */
 @Slf4j
@@ -31,7 +31,7 @@ public class AiModelConfigService {
     /**
      * 查询AI模型配置列表
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AiModelConfig> selectAiModelConfigList(AiModelConfig aiModelConfig) {
         return aiModelConfigMapper.selectList(null); // 简化，实际可添加条件查询
     }
@@ -39,7 +39,7 @@ public class AiModelConfigService {
     /**
      * 根据ID查询AI模型配置
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public AiModelConfig selectAiModelConfigById(Long id) {
         return aiModelConfigMapper.selectById(id);
     }
@@ -47,7 +47,7 @@ public class AiModelConfigService {
     /**
      * 新增AI模型配置
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int insertAiModelConfig(AiModelConfig aiModelConfig) {
         aiModelConfig.setCreateTime(LocalDateTime.now());
         aiModelConfig.setUpdateTime(LocalDateTime.now());
@@ -59,7 +59,7 @@ public class AiModelConfigService {
     /**
      * 更新AI模型配置
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int updateAiModelConfig(AiModelConfig aiModelConfig) {
         aiModelConfig.setUpdateTime(LocalDateTime.now());
         aiModelConfig.setOperator(SecurityUtils.getUsername());
@@ -70,7 +70,7 @@ public class AiModelConfigService {
     /**
      * 删除AI模型配置
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int deleteAiModelConfigByIds(Long[] ids) {
         return aiModelConfigMapper.deleteBatchIds(java.util.Arrays.asList(ids));
     }
@@ -78,7 +78,7 @@ public class AiModelConfigService {
     /**
      * 停用AI模型配置
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int disableAiModelConfig(Long id) {
         AiModelConfig aiModelConfig = new AiModelConfig();
         aiModelConfig.setId(id);
@@ -92,7 +92,7 @@ public class AiModelConfigService {
     /**
      * 启用AI模型配置
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int enableAiModelConfig(Long id) {
         AiModelConfig aiModelConfig = new AiModelConfig();
         aiModelConfig.setId(id);
@@ -106,7 +106,7 @@ public class AiModelConfigService {
     /**
      * 查询所有活跃的AI模型配置
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AiModelConfig> selectActiveAiModelConfigs() {
         return aiModelConfigMapper.selectActiveAiModelConfigs();
     }

@@ -168,6 +168,11 @@ export default {
     }
   },
   created() {
+    // 接收从用户管理页面传递的userName参数
+    const userName = this.$route.query.userName
+    if (userName) {
+      this.queryParams.userName = userName
+    }
     this.getList()
   },
   methods: {

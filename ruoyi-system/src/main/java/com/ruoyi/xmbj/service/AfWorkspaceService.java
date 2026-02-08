@@ -40,7 +40,7 @@ public class AfWorkspaceService {
      * @param workspaceId 工作区主键
      * @return 工作区
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public AfWorkspace selectAfWorkspaceByWorkspaceId(String workspaceId) {
         return afWorkspaceMapper.selectAfWorkspaceByWorkspaceId(workspaceId);
     }
@@ -51,7 +51,7 @@ public class AfWorkspaceService {
      * @param afWorkspace 工作区
      * @return 工作区
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfWorkspace> selectAfWorkspaceList(AfWorkspace afWorkspace) {
         return afWorkspaceMapper.selectAfWorkspaceList(afWorkspace);
     }
@@ -62,7 +62,7 @@ public class AfWorkspaceService {
      * @param afWorkspace 工作区
      * @return 结果
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int insertAfWorkspace(AfWorkspace afWorkspace) {
         return afWorkspaceMapper.insertAfWorkspace(afWorkspace);
     }
@@ -73,7 +73,7 @@ public class AfWorkspaceService {
      * @param afWorkspace 工作区
      * @return 结果
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int updateAfWorkspace(AfWorkspace afWorkspace) {
         return afWorkspaceMapper.updateAfWorkspace(afWorkspace);
     }
@@ -84,7 +84,7 @@ public class AfWorkspaceService {
      * @param workspaceIds 需要删除的工作区主键集合
      * @return 结果
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int deleteAfWorkspaceByWorkspaceIds(String[] workspaceIds) {
         return afWorkspaceMapper.deleteAfWorkspaceByWorkspaceIds(workspaceIds);
     }
@@ -95,17 +95,17 @@ public class AfWorkspaceService {
      * @param workspaceId 工作区主键
      * @return 结果
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int deleteAfWorkspaceByWorkspaceId(String workspaceId) {
         return afWorkspaceMapper.deleteAfWorkspaceByWorkspaceId(workspaceId);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<AfUserWorkspace> selectAfUserWorkspaceList(AfUserWorkspace afUserWorkspace) {
         return afWorkspaceMapper.selectAfUserWorkspaceList(afUserWorkspace);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<NoteBook> getNotesByWorkspaceId(String workspaceId, String uid) {
         List<NoteBook> notes = afCollabMapper.getNotesByWorkspaceId(workspaceId, uid);
         return extractNotesContent(notes);

@@ -17,4 +17,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
+    <insert id="insert" parameterType="com.ruoyi.xmbj.domain.AfUserAddons">
+        insert into af_user_addons (addon_id, created_at, end_date, quantity, start_date, status, uid, updated_at) values
+        (#{addonId},#{createdAt},#{endDate},#{quantity},#{startDate},#{status},#{uid},#{updatedAt})
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.xmbj.domain.AfUserAddons">
+        update af_user_addons
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="addonId != null">addon_id = #{addonId},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+
+    </update>
+
 </mapper>

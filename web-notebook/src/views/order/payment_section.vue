@@ -125,6 +125,8 @@ export default {
     // 状态管理
     const isAgreed = ref(props.checked);
     const selectedPayment = ref(''); // 选中的支付方式：wechat/alipay
+    const wechatQrCode = ref(''); // 微信支付二维码
+    const alipayQrCode = ref(''); // 支付宝支付二维码
     const isLoading = ref(false); // 支付加载状态
     const showPaymentToast = ref(false); // 支付提示弹窗
     const paymentToastText = ref(''); // 支付提示文本
@@ -528,6 +530,8 @@ export default {
       openId,
       isAgreed,
       selectedPayment,
+      wechatQrCode,
+      alipayQrCode,
       formattedAmount,
       selectPayment,
       handlePayment,

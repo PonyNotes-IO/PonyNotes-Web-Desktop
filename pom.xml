@@ -6,6 +6,9 @@
     <artifactId>ruoyi</artifactId>
     <version>3.9.1</version>
     <modelVersion>4.0.0</modelVersion>
+
+
+
     <packaging>pom</packaging>
 
     <properties>
@@ -71,7 +74,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
 <!--                <version>2.5.15</version>-->
-                <version>2.6.15</version>
+<!--                <version>2.6.15</version>-->
+                <version>2.7.12</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -309,6 +313,12 @@
                 <groupId>com.google.zxing</groupId>
                 <artifactId>core</artifactId>
                 <version>3.5.1</version>
+            </dependency>
+            <!-- 七牛云SDK -->
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>qiniu-java-sdk</artifactId>
+                <version>7.15.1</version>
             </dependency>
             <dependency>
                 <groupId>com.google.zxing</groupId>

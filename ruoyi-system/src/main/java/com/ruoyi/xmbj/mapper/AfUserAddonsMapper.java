@@ -1,6 +1,8 @@
 package com.ruoyi.xmbj.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.xmbj.domain.AfUserAddons;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,7 +12,8 @@ import java.util.List;
  * AfUserAddons数据访问接口
  */
 @Mapper
-public interface AfUserAddonsMapper extends BaseMapper<AfUserAddons> {
+@DataSource(DataSourceType.SLAVE)
+public interface AfUserAddonsMapper {
     void updateExpiredAddons(Long userId);
 
     List<AfUserAddons> selectActiveUserAddons(Long userId);
@@ -20,4 +23,8 @@ public interface AfUserAddonsMapper extends BaseMapper<AfUserAddons> {
     AfUserAddons selectUserAddon(Long userId, Long addonId);
 
     AfUserAddons selectUserAddonById(Long valueOf);
+
+    void insert(AfUserAddons userAddon);
+
+    int update(AfUserAddons item);
 }

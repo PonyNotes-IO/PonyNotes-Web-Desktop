@@ -29,7 +29,7 @@ public class SignInLogService {
      * @param SignInLogStatistics 登录日志
      * @return 登录日志
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<SignInLogStatistics> selectSignInLogList(SignInLogStatistics signInLogStatistics) {
         return signInLogMapper.selectSignInLogList(signInLogStatistics);
     }
@@ -40,17 +40,17 @@ public class SignInLogService {
      * @param signInLog 登录日志
      * @return 登录概况
      */
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<SignInLog> selectSignInOverview(SignInLog signInLog) {
         return signInLogMapper.selectSignInOverview(signInLog);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public List<ThirdPartySign> signThirdPartList(ThirdPartySign thirdPartySign) {
         return signInLogMapper.signThirdPartList(thirdPartySign);
     }
 
-    @DataSource(DataSourceType.slave)
+    @DataSource(DataSourceType.SLAVE)
     public int unbindThirdPartSign(ThirdPartySign thirdPartySign) {
         return signInLogMapper.unbindThirdPartSign(thirdPartySign);
     }

@@ -65,9 +65,9 @@ spring:
   servlet:
     multipart:
       # 单个文件大小
-      max-file-size: 10MB
+      max-file-size: 200MB
       # 设置总上传的文件大小
-      max-request-size: 20MB
+      max-request-size: 200MB
   # 服务模块
   devtools:
     restart:
@@ -132,6 +132,7 @@ mybatis:
 pagehelper:
   helperDialect: mysql
   supportMethodsArguments: true
+  autoRuntimeDialect: true
   params: count=countSql
 
 # Swagger配置
@@ -179,8 +180,8 @@ verify:
 # 前端配置
 frontend:
   # 前端域名地址（用于支付成功跳转等）
-  # domain: https://www.xiaomabiji.com
-  domain: https://localhost:8081
+  domain: https://www.xiaomabiji.com
+#  domain: https://localhost:8081
 
 # 支付配置
 payment:
@@ -206,13 +207,28 @@ payment:
     public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlw6mERajnAfXHAtPs7BE2mKVhp7JS6B5iGmU+3K+H2gTKem3kSbqw/1cmwPGOfFUazihMLE10X7Tx2PSeBXtVIvPC8945a6V/HmfbfyvRL5z6Fbh9IM1Sq+q4VWpKthRd1HjdZkena0gXqxXdyMIe5dH97pqI3zhgYWQ39o2qSr5/kzRXRAtGOwcgl4CtMMUeYGIwttAwkd575EtNekMu4JJS34BYRkg4k6LmD6ccEkyGp3ed+/eIg1Wb4LQC5NzpbixMiXX/7apVVBItR56uMt1nyIF42BrKBt91RGR0TMmLb3C8GNuw0ZV6Z619QvLp2PK1jhgc7y3ouIlSUgs7QIDAQAB  # 支付宝公钥（替换为真实值）
     #    public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnJYoYx+F0ROBH8JkefGCxL0ydmxPMNlNt9o3Mb7J9Kh+cAnqxPIe+wWv7g6OubkQ23uzxNPomFm0CKKrLiBgHxBjDU33QtvQcCbMs8YySp9oQXh4vMG/c9YVJ6R3QvlDaDKQwXFg3nb3OgSrSRpgqduWrQvJjCxrFdY6YEUrDcjCzkh/LFWZMV+9h6A7Vt2mVsJV6MQbDRI3EGkL3H7Wvz/zI/AYJ0/lefCeV//mX2f7nAFS5NMYPTnleSmbqgXS8DB8KDWFLNFZxIrxGGTULpafX0pgPnpHlsx/6gT1OQUdBYVPbaBflXB9P6cgo6kHVm7cgcfyghgbjk61Xz7qcwIDAQAB
     gateway-url: https://openapi.alipay.com/gateway.do # 支付宝网关（沙箱环境用dev，生产环境去掉dev）
-    notify-url: http://www.xiaomabiji.com/api/payment/callback/alipay
-#    return-url: https://www.xiaomabiji.com/#/price
-    return-url: http://localhost:8080/api/payment/return/alipay
+    notify-url: https://www.xiaomabiji.com/prod-api/api/payment/callback/alipay
+    return-url: https://www.xiaomabiji.com/prod-api/api/payment/return/alipay
+#    return-url: https://www.xiaomabiji.com/price
+#    return-url: http://localhost:8080/api/payment/return/alipay
     connect-timeout: 30000  # 连接超时时间，30秒
     read-timeout: 30000
 #    http://your-domain.com/api/payment/callback/alipay  # 支付宝回调地址（需公网可访问）
 # xiaomabiji@1521503155920564.onaliyun.com
 
+
+# 七牛云配置
+qiniu:
+  enabled: true
+  domain: t8udshr57.hb-bkt.clouddn.com
+  access-key: Wq1jOYS5ERxXfMrSt2resSFMHr5sA7i4lDNx_dtv
+  secret-key: cuKLUlHsPgxr5Ugn2DJlsoefMv79Jso5Ct3JHrwC
+  bucket: ponynotes-ai-files
+  region: z1
+  s3-endpoint: https://s3-cn-north-1.qiniucs.com
+  bucket-private: false
+  url-expire-seconds: 3600
+  use-https: false
+  total-capacity: 16777216000000000
 
 # 4#mMi!slhT8SqC6Y@}QXkkgTfIe9BoGH

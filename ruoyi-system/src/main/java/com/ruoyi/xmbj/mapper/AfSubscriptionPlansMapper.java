@@ -1,23 +1,82 @@
 package com.ruoyi.xmbj.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.xmbj.domain.Addon;
-import com.ruoyi.xmbj.domain.AfSubscriptionAddons;
-import com.ruoyi.xmbj.domain.AfSubscriptionPlans;
-import org.apache.ibatis.annotations.Mapper;
-
 import java.util.List;
 
-/**
- * AfSubscriptionPlans数据访问接口
- */
-@Mapper
-public interface AfSubscriptionPlansMapper extends BaseMapper<AfSubscriptionPlans> {
-    List<AfSubscriptionAddons> selectActiveAddons();
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
+import com.ruoyi.xmbj.domain.AfSubscriptionAddons;
+import com.ruoyi.xmbj.domain.AfSubscriptionPlans;
 
-    List<Addon> selectAddonsByType(String type);
+/**
+ * 订阅套餐Mapper接口
+ * 
+ * @author 张继科
+ * @date 2026-01-21
+ */
+@DataSource(DataSourceType.SLAVE)
+public interface AfSubscriptionPlansMapper 
+{
+    /**
+     * 查询订阅套餐
+     * 
+     * @param id 订阅套餐主键
+     * @return 订阅套餐
+     */
+    public AfSubscriptionPlans selectAfSubscriptionPlansById(Long id);
+
+    /**
+     * 查询订阅套餐列表
+     * 
+     * @param afSubscriptionPlans 订阅套餐
+     * @return 订阅套餐集合
+     */
+    public List<AfSubscriptionPlans> selectAfSubscriptionPlansList(AfSubscriptionPlans afSubscriptionPlans);
+
+    /**
+     * 新增订阅套餐
+     * 
+     * @param afSubscriptionPlans 订阅套餐
+     * @return 结果
+     */
+    public int insertAfSubscriptionPlans(AfSubscriptionPlans afSubscriptionPlans);
+
+    /**
+     * 修改订阅套餐
+     * 
+     * @param afSubscriptionPlans 订阅套餐
+     * @return 结果
+     */
+    public int updateAfSubscriptionPlans(AfSubscriptionPlans afSubscriptionPlans);
+
+    /**
+     * 删除订阅套餐
+     * 
+     * @param id 订阅套餐主键
+     * @return 结果
+     */
+    public int deleteAfSubscriptionPlansById(Long id);
+
+    /**
+     * 批量删除订阅套餐
+     * 
+     * @param ids 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int deleteAfSubscriptionPlansByIds(Long[] ids);
+
+    /**
+     * 检查订阅套餐是否被用户订阅
+     * 
+     * @param id 订阅套餐主键
+     * @return 订阅数量
+     */
+    public int countUserSubscriptionsByPlanId(Long id);
 
     List<AfSubscriptionPlans> selectActiveSubscriptionPlans();
 
     AfSubscriptionPlans selectByName(String planName);
+
+//    int updateById(AfSubscriptionPlans item);
+
+    List<AfSubscriptionAddons> selectActiveAddons();
 }

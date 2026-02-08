@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.RegExUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -27,6 +30,7 @@ import com.ruoyi.common.annotation.Anonymous;
 public class PermitAllUrlProperties implements InitializingBean, ApplicationContextAware
 {
     private static final Pattern PATTERN = Pattern.compile("\\{(.*?)\\}");
+    private static final Logger log = LoggerFactory.getLogger(PermitAllUrlProperties.class);
 
     private ApplicationContext applicationContext;
 
@@ -37,6 +41,7 @@ public class PermitAllUrlProperties implements InitializingBean, ApplicationCont
     @Override
     public void afterPropertiesSet()
     {
+        log.info("PermitAllUrlProperties: 开始扫描 @Anonymous 注解");
         RequestMappingHandlerMapping mapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
         Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
 
@@ -45,18 +50,51 @@ public class PermitAllUrlProperties implements InitializingBean, ApplicationCont
 
             // 获取方法上边的注解 替代path variable 为 *
             Anonymous method = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), Anonymous.class);
-            Optional.ofNullable(method).flatMap(anonymous -> Optional.ofNullable(info.getPatternsCondition()))
-                    .ifPresent(patterns -> patterns.getDirectPaths()
-                    .forEach(url -> urls.add(RegExUtils.replaceAll(url, PATTERN, ASTERISK))));
+            Optional.ofNullable(method).ifPresent(anonymous -> {
+                try
+                {
+                    Object patternsCondition = info.getPatternsCondition();
+                    if (patternsCondition != null)
+                    {
+                        java.lang.reflect.Method getPatternsMethod = patternsCondition.getClass().getMethod("getPatterns");
+                        Set<String> patterns = (Set<String>) getPatternsMethod.invoke(patternsCondition);
+                        patterns.forEach(url -> {
+                            String processedUrl = RegExUtils.replaceAll(url, PATTERN, ASTERISK);
+                            log.info("PermitAllUrlProperties: 找到方法级别的 @Anonymous 注解，URL: {}", processedUrl);
+                            urls.add(processedUrl);
+                        });
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.error("PermitAllUrlProperties: 处理方法级别的 @Anonymous 注解时出错: {}", e.getMessage());
+                }
+            });
 
             // 获取类上边的注解, 替代path variable 为 *
             Anonymous controller = AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), Anonymous.class);
-            Optional.ofNullable(controller).flatMap(anonymous ->
-                    Optional.ofNullable(info.getPatternsCondition())).ifPresent( patterns -> patterns.getDirectPaths()
-                            .forEach(url -> urls.add(RegExUtils.replaceAll(url, PATTERN, ASTERISK)))
-
-                    );
+            Optional.ofNullable(controller).ifPresent(anonymous -> {
+                try
+                {
+                    Object patternsCondition = info.getPatternsCondition();
+                    if (patternsCondition != null)
+                    {
+                        java.lang.reflect.Method getPatternsMethod = patternsCondition.getClass().getMethod("getPatterns");
+                        Set<String> patterns = (Set<String>) getPatternsMethod.invoke(patternsCondition);
+                        patterns.forEach(url -> {
+                            String processedUrl = RegExUtils.replaceAll(url, PATTERN, ASTERISK);
+                            log.info("PermitAllUrlProperties: 找到类级别的 @Anonymous 注解，URL: {}", processedUrl);
+                            urls.add(processedUrl);
+                        });
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.error("PermitAllUrlProperties: 处理类级别的 @Anonymous 注解时出错: {}", e.getMessage());
+                }
+            });
         });
+        log.info("PermitAllUrlProperties: 扫描完成，共找到 {} 个允许匿名访问的 URL", urls.size());
     }
 
     @Override

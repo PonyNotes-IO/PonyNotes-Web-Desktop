@@ -14,9 +14,10 @@ spring:
                 # 从数据源开关/默认关闭 —— 已启用并配置为 Postgres
                 enabled: true
                 driver-class-name: org.postgresql.Driver
-                url: jdbc:postgresql://8.152.101.166:5432/postgres
+                url: jdbc:postgresql://8.152.101.166:5432/xiaomabiji
                 username: xiaomabiji
                 password: Xmbj20251012
+                validationQuery: SELECT 1
             # 初始连接数
             initialSize: 5
             # 最小连接池数量
@@ -36,11 +37,11 @@ spring:
             # 配置一个连接在池中最大生存的时间，单位是毫秒
             maxEvictableIdleTimeMillis: 900000
             # 配置检测连接是否有效
-            validationQuery: SELECT 1 FROM DUAL
+            validationQuery: SELECT 1
             testWhileIdle: true
             testOnBorrow: false
             testOnReturn: false
-            webStatFilter: 
+            webStatFilter:
                 enabled: true
             statViewServlet:
                 enabled: true

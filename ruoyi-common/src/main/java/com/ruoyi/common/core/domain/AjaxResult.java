@@ -91,7 +91,7 @@ public class AjaxResult extends HashMap<String, Object> implements java.io.Seria
      */
     public static AjaxResult success(String msg)
     {
-        return AjaxResult.success(msg, null);
+        return AjaxResult.success(msg, msg);
     }
 
     /**

@@ -19,4 +19,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="cancelReason" column="cancel_reason"/>
     </resultMap>
 
+    <sql id="AfUserSubscriptionsResultVO">
+        select billing_type, cancel_reason, canceled_at, created_at, end_date, id, plan_id, start_date, status, uid, updated_at
+        from af_user_subscriptions t
+    </sql>
+
+    <select id="selectCurrentActiveSubscription" resultMap="AfUserSubscriptionsResult" parameterType="Long">
+        <include refid="AfUserSubscriptionsResultVO" />
+        <where>
+            uid = #{userId} and status = 'active'
+        </where>
+    </select>
+
+    <select id="selectUserSubscriptions" resultMap="AfUserSubscriptionsResult" parameterType="Long">
+        <include refid="AfUserSubscriptionsResultVO" />
+        <where>
+            uid = #{userId}
+        </where>
+    </select>
+    <update id="updateExpiredSubscriptions" parameterType="Long">
+        update af_user_subscriptions set status = 'cancelled' where uid = #{userId} and end_date is not null and
+        end_date &gt; current_date
+    </update>
+    <update id="updateUserSubscriptions" parameterType="com.ruoyi.xmbj.domain.AfUserSubscriptions">
+        update af_user_subscriptions
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="planId != null">plan_id = #{planId},</if>
+            <if test="billingType != null">billing_type = #{billingType},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null and endDate != ''">end_date = #{endDate},</if>
+            <if test="canceledAt != null and canceledAt != ''">canceled_at = #{canceledAt},</if>
+            <if test="createdAt != null and createdAt != ''">created_at = #{createdAt},</if>
+            <if test="updatedAt != null and updatedAt != ''">updated_at = #{updatedAt},</if>
+            <if test="cancelReason != null">cancel_reason = #{cancelReason},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.ruoyi.xmbj.domain.AfUserSubscriptions">
+        insert into af_user_subscriptions
+        (billing_type, cancel_reason, canceled_at, created_at, end_date, plan_id, start_date, status, uid, updated_at) values
+        (#{billingType},#{cancelReason},#{canceledAt},#{createdAt},#{endDate},#{planId},#{startDate},#{status},#{uid},#{updatedAt})
+    </insert>
+
 </mapper>

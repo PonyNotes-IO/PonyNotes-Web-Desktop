@@ -19,6 +19,7 @@ import com.ruoyi.web.service.PaymentService;
 import com.ruoyi.xmbj.api.service.XmbjAuthService;
 import com.ruoyi.xmbj.domain.ClientUser;
 import com.ruoyi.xmbj.service.ClientUserService;
+import com.ruoyi.xmbj.service.IAfSubscriptionPlansService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -60,6 +61,8 @@ public class PaymentController {
 
     @Autowired
     private ClientUserService clientUserService;
+    @Autowired
+    private IAfSubscriptionPlansService iAfSubscriptionPlansService;
 
     @GetMapping("/wxConfig")
     public AjaxResult getWechatPayConfig(@RequestParam String url) {
@@ -86,11 +89,11 @@ public class PaymentController {
     @PostMapping("/create")
     @ApiOperation("创建订单")
     public AjaxResult createPayment(
-            @RequestParam BigDecimal amount,
+//            @RequestParam BigDecimal amount,
             @RequestParam String paymentType,
             @RequestParam String userInfo,
             @RequestParam(required = false) String productName,
-            @RequestParam(required = false) String planId,
+            @RequestParam() String planId,
             @RequestParam(required = false) String billingType,
             @RequestParam(required = false) String addonId,
             @RequestParam(required = false) String openid,
@@ -102,16 +105,16 @@ public class PaymentController {
             if (StringUtils.isEmpty(userInfo)) {
                 return AjaxResult.error("用户未登录,请登录");
             }
-            SysUser user = userService.getUserByUserInfo(userInfo);
-            if (user == null) {
-                return AjaxResult.error("用户不存在");
-            }
-            ClientUser clientUser = clientUserService.getClientUserByUserInfo(userInfo);
+//            SysUser user = userService.getUserByUserInfo(userInfo);
+//            if (user == null) {
+//                return AjaxResult.error("用户不存在");
+//            }
+
+            ClientUser clientUser = clientUserService.getClientUserByUuid(userInfo);
             if (clientUser == null) {
                 return AjaxResult.error("小马笔记客户端用户不存在");
             }
-            PaymentResult paymentResult = paymentService.createPayment(amount, paymentType, user, clientUser,
-                    productName, openid, url, planId,billingType, addonId,
+            PaymentResult paymentResult = paymentService.createPayment( paymentType, null, clientUser, openid, url, planId,billingType, addonId,
                     httpServletRequest);
             return AjaxResult.success(paymentResult);
         } catch (IllegalArgumentException e) {
@@ -211,7 +214,7 @@ public class PaymentController {
             // 构建前端跳转URL
             String redirectUrl = String.format(
                     frontendDomain
-                            + "/#/paymentSuccess?orderNo=%s&amount=%s&paymentType=%s&productName=%s&payTime=%s&status=%s",
+                            + "/price?orderNo=%s&amount=%s&paymentType=%s&productName=%s&payTime=%s&status=%s",
                     URLEncoder.encode(outTradeNo, StandardCharsets.UTF_8.name()),
                     paymentOrder.getAmount(),
                     URLEncoder.encode(paymentOrder.getPaymentType(), StandardCharsets.UTF_8.name()),

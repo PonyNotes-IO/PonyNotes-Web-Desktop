@@ -1,126 +1,372 @@
 package com.ruoyi.xmbj.domain;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.ruoyi.common.core.domain.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 订阅套餐表实体
- * @author ruoyi
+ * 订阅套餐对象 af_subscription_plans
+ *
+ * @author 张继科
+ * @date 2026-01-21
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Accessors(chain = true)
-@EqualsAndHashCode(callSuper = false)
-@TableName("af_subscription_plans")
-public class AfSubscriptionPlans implements Serializable {
+public class AfSubscriptionPlans extends BaseEntity
+{
     private static final long serialVersionUID = 1L;
 
-    /** 主键ID */
-    @TableId(type = IdType.AUTO)
-    @Column(name = "id", nullable = false)
+    /** 套餐ID */
     private Long id;
 
     /** 套餐编码 */
-    @Column(name = "plan_code")
+    @Excel(name = "套餐编码")
     private String planCode;
 
     /** 套餐名称（英文） */
-    @Column(name = "plan_name")
+    @Excel(name = "套餐名称", readConverterExp = "英=文")
     private String planName;
 
     /** 套餐名称（中文） */
-    @Column(name = "plan_name_cn")
+    @Excel(name = "套餐名称", readConverterExp = "中=文")
     private String planNameCn;
 
     /** 月付价格（元） */
-    @Column(name = "monthly_price_yuan")
+    @Excel(name = "月付价格", readConverterExp = "元=")
     private BigDecimal monthlyPriceYuan;
 
     /** 年付价格（元） */
-    @Column(name = "yearly_price_yuan")
+    @Excel(name = "年付价格", readConverterExp = "元=")
     private BigDecimal yearlyPriceYuan;
 
     /** 云存储容量（GB） */
-    @Column(name = "cloud_storage_gb")
-    private Integer cloudStorageGb;
+    @Excel(name = "云存储容量", readConverterExp = "G=B")
+    private BigDecimal cloudStorageGb;
 
-    /** 是否包含收件箱功能 */
-    @Column(name = "has_inbox")
-    private Boolean hasInbox;
+    /** 是否支持收件箱（0否 1是） */
+    @Excel(name = "是否支持收件箱", readConverterExp = "0=否,1=是")
+    private Integer hasInbox;
 
     /** 是否支持多设备同步 */
-    @Column(name = "has_multi_device_sync")
-    private Boolean hasMultiDeviceSync;
+    @Excel(name = "是否支持多设备同步")
+    private Integer hasMultiDeviceSync;
 
     /** 是否支持API */
-    @Column(name = "has_api_support")
-    private Boolean hasApiSupport;
+    @Excel(name = "是否支持API")
+    private Integer hasApiSupport;
 
-    /** 版本历史天数 */
-    @Column(name = "version_history_days")
-    private Integer versionHistoryDays;
+    /** 版本历史保留天数 */
+    @Excel(name = "版本历史保留天数")
+    private Long versionHistoryDays;
 
     /** 每月AI聊天次数 */
-    @Column(name = "chat_count_per_month")
-    private Integer chatCountPerMonth;
+    @Excel(name = "每月AI聊天次数")
+    private Long aiChatCountPerMonth;
 
-    /** 每月AI图片生成次数 */
-    @Column(name = "ai_image_generation_per_month")
-    private Integer aiImageGenerationPerMonth;
+    /** 每月AI生成图片次数 */
+    @Excel(name = "每月AI生成图片次数")
+    private Long aiImageGenerationPerMonth;
 
     /** 是否支持分享链接 */
-    @Column(name = "has_share_link")
-    private Boolean hasShareLink;
+    @Excel(name = "是否支持分享链接")
+    private Integer hasShareLink;
 
-    /** 是否支持发布功能 */
-    @Column(name = "has_publish")
-    private Boolean hasPublish;
+    /** 是否支持发布 */
+    @Excel(name = "是否支持发布")
+    private Integer hasPublish;
 
-    /** 工作空间成员数量限制 */
-    @Column(name = "workspace_member_limit")
-    private Integer workspaceMemberLimit;
+    /** 工作空间成员上限 */
+    @Excel(name = "工作空间成员上限")
+    private Long workspaceMemberLimit;
 
-    /** 协作工作空间数量限制 */
-    @Column(name = "collaborative_workspace_limit")
-    private Integer collaborativeWorkspaceLimit;
+    /** 协作工作空间上限 */
+    @Excel(name = "协作工作空间上限")
+    private Long collaborativeWorkspaceLimit;
 
-    /** 页面权限-访客编辑人数 */
-    @Column(name = "page_permission_guest_editors")
-    private Integer pagePermissionGuestEditors;
+    /** 页面权限访客编辑者上限 */
+    @Excel(name = "页面权限访客编辑者上限")
+    private Long pagePermissionGuestEditors;
 
     /** 是否支持空间成员管理 */
-    @Column(name = "has_space_member_management")
-    private Boolean hasSpaceMemberManagement;
+    @Excel(name = "是否支持空间成员管理")
+    private Integer hasSpaceMemberManagement;
 
     /** 是否支持空间成员分组 */
-    @Column(name = "has_space_member_grouping")
-    private Boolean hasSpaceMemberGrouping;
+    @Excel(name = "是否支持空间成员分组")
+    private Integer hasSpaceMemberGrouping;
 
-    /** 是否启用 */
-    @Column(name = "is_active")
-    private Boolean isActive;
+    /** 是否启用（1是 0否） */
+    @Excel(name = "是否启用", readConverterExp = "1=是,0=否")
+    private Integer isActive;
 
     /** 创建时间 */
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date createdAt;
 
     /** 更新时间 */
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date updatedAt;
+
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    public Long getId()
+    {
+        return id;
+    }
+
+    public void setPlanCode(String planCode)
+    {
+        this.planCode = planCode;
+    }
+
+    public String getPlanCode()
+    {
+        return planCode;
+    }
+
+    public void setPlanName(String planName)
+    {
+        this.planName = planName;
+    }
+
+    public String getPlanName()
+    {
+        return planName;
+    }
+
+    public void setPlanNameCn(String planNameCn)
+    {
+        this.planNameCn = planNameCn;
+    }
+
+    public String getPlanNameCn()
+    {
+        return planNameCn;
+    }
+
+    public void setMonthlyPriceYuan(BigDecimal monthlyPriceYuan)
+    {
+        this.monthlyPriceYuan = monthlyPriceYuan;
+    }
+
+    public BigDecimal getMonthlyPriceYuan()
+    {
+        return monthlyPriceYuan;
+    }
+
+    public void setYearlyPriceYuan(BigDecimal yearlyPriceYuan)
+    {
+        this.yearlyPriceYuan = yearlyPriceYuan;
+    }
+
+    public BigDecimal getYearlyPriceYuan()
+    {
+        return yearlyPriceYuan;
+    }
+
+    public void setCloudStorageGb(BigDecimal cloudStorageGb)
+    {
+        this.cloudStorageGb = cloudStorageGb;
+    }
+
+    public BigDecimal getCloudStorageGb()
+    {
+        return cloudStorageGb;
+    }
+
+    public void setHasInbox(Integer hasInbox)
+    {
+        this.hasInbox = hasInbox;
+    }
+
+    public Integer getHasInbox()
+    {
+        return hasInbox;
+    }
+
+    public void setHasMultiDeviceSync(Integer hasMultiDeviceSync)
+    {
+        this.hasMultiDeviceSync = hasMultiDeviceSync;
+    }
+
+    public Integer getHasMultiDeviceSync()
+    {
+        return hasMultiDeviceSync;
+    }
+
+    public void setHasApiSupport(Integer hasApiSupport)
+    {
+        this.hasApiSupport = hasApiSupport;
+    }
+
+    public Integer getHasApiSupport()
+    {
+        return hasApiSupport;
+    }
+
+    public void setVersionHistoryDays(Long versionHistoryDays)
+    {
+        this.versionHistoryDays = versionHistoryDays;
+    }
+
+    public Long getVersionHistoryDays()
+    {
+        return versionHistoryDays;
+    }
+
+    public void setAiChatCountPerMonth(Long aiChatCountPerMonth)
+    {
+        this.aiChatCountPerMonth = aiChatCountPerMonth;
+    }
+
+    public Long getAiChatCountPerMonth()
+    {
+        return aiChatCountPerMonth;
+    }
+
+    public void setAiImageGenerationPerMonth(Long aiImageGenerationPerMonth)
+    {
+        this.aiImageGenerationPerMonth = aiImageGenerationPerMonth;
+    }
+
+    public Long getAiImageGenerationPerMonth()
+    {
+        return aiImageGenerationPerMonth;
+    }
+
+    public void setHasShareLink(Integer hasShareLink)
+    {
+        this.hasShareLink = hasShareLink;
+    }
+
+    public Integer getHasShareLink()
+    {
+        return hasShareLink;
+    }
+
+    public void setHasPublish(Integer hasPublish)
+    {
+        this.hasPublish = hasPublish;
+    }
+
+    public Integer getHasPublish()
+    {
+        return hasPublish;
+    }
+
+    public void setWorkspaceMemberLimit(Long workspaceMemberLimit)
+    {
+        this.workspaceMemberLimit = workspaceMemberLimit;
+    }
+
+    public Long getWorkspaceMemberLimit()
+    {
+        return workspaceMemberLimit;
+    }
+
+    public void setCollaborativeWorkspaceLimit(Long collaborativeWorkspaceLimit)
+    {
+        this.collaborativeWorkspaceLimit = collaborativeWorkspaceLimit;
+    }
+
+    public Long getCollaborativeWorkspaceLimit()
+    {
+        return collaborativeWorkspaceLimit;
+    }
+
+    public void setPagePermissionGuestEditors(Long pagePermissionGuestEditors)
+    {
+        this.pagePermissionGuestEditors = pagePermissionGuestEditors;
+    }
+
+    public Long getPagePermissionGuestEditors()
+    {
+        return pagePermissionGuestEditors;
+    }
+
+    public void setHasSpaceMemberManagement(Integer hasSpaceMemberManagement)
+    {
+        this.hasSpaceMemberManagement = hasSpaceMemberManagement;
+    }
+
+    public Integer getHasSpaceMemberManagement()
+    {
+        return hasSpaceMemberManagement;
+    }
+
+    public void setHasSpaceMemberGrouping(Integer hasSpaceMemberGrouping)
+    {
+        this.hasSpaceMemberGrouping = hasSpaceMemberGrouping;
+    }
+
+    public Integer getHasSpaceMemberGrouping()
+    {
+        return hasSpaceMemberGrouping;
+    }
+
+    public void setIsActive(Integer isActive)
+    {
+        this.isActive = isActive;
+    }
+
+    public Integer getIsActive()
+    {
+        return isActive;
+    }
+
+    public void setCreatedAt(Date createdAt)
+    {
+        this.createdAt = createdAt;
+    }
+
+    public Date getCreatedAt()
+    {
+        return createdAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt)
+    {
+        this.updatedAt = updatedAt;
+    }
+
+    public Date getUpdatedAt()
+    {
+        return updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+                .append("id", getId())
+                .append("planCode", getPlanCode())
+                .append("planName", getPlanName())
+                .append("planNameCn", getPlanNameCn())
+                .append("monthlyPriceYuan", getMonthlyPriceYuan())
+                .append("yearlyPriceYuan", getYearlyPriceYuan())
+                .append("cloudStorageGb", getCloudStorageGb())
+                .append("hasInbox", getHasInbox())
+                .append("hasMultiDeviceSync", getHasMultiDeviceSync())
+                .append("hasApiSupport", getHasApiSupport())
+                .append("versionHistoryDays", getVersionHistoryDays())
+                .append("aiChatCountPerMonth", getAiChatCountPerMonth())
+                .append("aiImageGenerationPerMonth", getAiImageGenerationPerMonth())
+                .append("hasShareLink", getHasShareLink())
+                .append("hasPublish", getHasPublish())
+                .append("workspaceMemberLimit", getWorkspaceMemberLimit())
+                .append("collaborativeWorkspaceLimit", getCollaborativeWorkspaceLimit())
+                .append("pagePermissionGuestEditors", getPagePermissionGuestEditors())
+                .append("hasSpaceMemberManagement", getHasSpaceMemberManagement())
+                .append("hasSpaceMemberGrouping", getHasSpaceMemberGrouping())
+                .append("isActive", getIsActive())
+                .append("createdAt", getCreatedAt())
+                .append("updatedAt", getUpdatedAt())
+                .toString();
+    }
 }

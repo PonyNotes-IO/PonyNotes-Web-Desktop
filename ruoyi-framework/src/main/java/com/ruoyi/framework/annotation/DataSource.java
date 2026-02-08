@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * 在 Service 或 Mapper 方法上使用该注解，指定该方法使用的数据源
  * 
  * 使用示例：
- * @DataSource(DataSourceType.slave) // 使用从库 (PostgreSQL)
+ * @DataSource(DataSourceType.SLAVE) // 使用从库 (PostgreSQL)
  * public ClientUser getClientUserByUserInfo(String userInfo) {
  * return clientUserMapper.getClientUserByUserInfo(userInfo);
  * }

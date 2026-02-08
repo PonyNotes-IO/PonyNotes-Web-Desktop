@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.xmbj.mapper.AfSubscriptionPlansMapper">
 
-    <resultMap id="AfSubscriptionPlansResult" type="com.ruoyi.xmbj.domain.AfSubscriptionPlans">
-        <result property="id" column="id"/>
-        <result property="planCode" column="plan_code"/>
-        <result property="planName" column="plan_name"/>
-        <result property="planNameCn" column="plan_name_cn"/>
-        <result property="monthlyPriceYuan" column="monthly_price_yuan"/>
-        <result property="yearlyPriceYuan" column="yearly_price_yuan"/>
-        <result property="cloudStorageGb" column="cloud_storage_gb"/>
-        <result property="hasInbox" column="has_inbox"/>
-        <result property="hasMultiDeviceSync" column="has_multi_device_sync"/>
-        <result property="hasApiSupport" column="has_api_support"/>
-        <result property="versionHistoryDays" column="version_history_days"/>
-        <result property="chatCountPerMonth" column="chat_count_per_month"/>
-        <result property="aiImageGenerationPerMonth" column="ai_image_generation_per_month"/>
-        <result property="hasShareLink" column="has_share_link"/>
-        <result property="hasPublish" column="has_publish"/>
-        <result property="workspaceMemberLimit" column="workspace_member_limit"/>
-        <result property="collaborativeWorkspaceLimit" column="collaborative_workspace_limit"/>
-        <result property="pagePermissionGuestEditors" column="page_permission_guest_editors"/>
-        <result property="hasSpaceMemberManagement" column="has_space_member_management"/>
-        <result property="hasSpaceMemberGrouping" column="has_space_member_grouping"/>
-        <result property="isActive" column="is_active"/>
-        <result property="createdAt" column="created_at"/>
-        <result property="updatedAt" column="updated_at"/>
+    <resultMap type="AfSubscriptionPlans" id="AfSubscriptionPlansResult">
+        <result property="id"    column="id"    />
+        <result property="planCode"    column="plan_code"    />
+        <result property="planName"    column="plan_name"    />
+        <result property="planNameCn"    column="plan_name_cn"    />
+        <result property="monthlyPriceYuan"    column="monthly_price_yuan"    />
+        <result property="yearlyPriceYuan"    column="yearly_price_yuan"    />
+        <result property="cloudStorageGb"    column="cloud_storage_gb"    />
+        <result property="hasInbox"    column="has_inbox"    />
+        <result property="hasMultiDeviceSync"    column="has_multi_device_sync"    />
+        <result property="hasApiSupport"    column="has_api_support"    />
+        <result property="versionHistoryDays"    column="version_history_days"    />
+        <result property="aiChatCountPerMonth"    column="ai_chat_count_per_month"    />
+        <result property="aiImageGenerationPerMonth"    column="ai_image_generation_per_month"    />
+        <result property="hasShareLink"    column="has_share_link"    />
+        <result property="hasPublish"    column="has_publish"    />
+        <result property="workspaceMemberLimit"    column="workspace_member_limit"    />
+        <result property="collaborativeWorkspaceLimit"    column="collaborative_workspace_limit"    />
+        <result property="pagePermissionGuestEditors"    column="page_permission_guest_editors"    />
+        <result property="hasSpaceMemberManagement"    column="has_space_member_management"    />
+        <result property="hasSpaceMemberGrouping"    column="has_space_member_grouping"    />
+        <result property="isActive"    column="is_active"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
     </resultMap>
+
 
     <resultMap id="AfSubscriptionAddonsResult" type="com.ruoyi.xmbj.domain.AfSubscriptionAddons">
         <result property="id" column="id"/>
@@ -45,46 +45,153 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
+    <sql id="selectAfSubscriptionPlansVo">
+        select id, plan_code, plan_name, plan_name_cn, monthly_price_yuan, yearly_price_yuan, cloud_storage_gb,
+        CASE WHEN has_inbox THEN 1 ELSE 0 END as has_inbox,
+        CASE WHEN has_multi_device_sync THEN 1 ELSE 0 END as has_multi_device_sync,
+        CASE WHEN has_api_support THEN 1 ELSE 0 END as has_api_support,
+        version_history_days, ai_chat_count_per_month, ai_image_generation_per_month,
+        CASE WHEN has_share_link THEN 1 ELSE 0 END as has_share_link,
+        CASE WHEN has_publish THEN 1 ELSE 0 END as has_publish,
+        workspace_member_limit, collaborative_workspace_limit, page_permission_guest_editors,
+        CASE WHEN has_space_member_management THEN 1 ELSE 0 END as has_space_member_management,
+        CASE WHEN has_space_member_grouping THEN 1 ELSE 0 END as has_space_member_grouping,
+        CASE WHEN is_active THEN 1 ELSE 0 END as is_active,
+        created_at, updated_at from af_subscription_plans
+    </sql>
 
-    <resultMap id="AddonResult" type="com.ruoyi.xmbj.domain.Addon">
-        <result property="id" column="id"/>
-        <result property="name" column="name"/>
-        <result property="type" column="type"/>
-        <result property="description" column="description"/>
-        <result property="price" column="price"/>
-        <result property="unit" column="unit"/>
-        <result property="status" column="status"/>
-        <result property="createdAt" column="created_at"/>
-        <result property="updatedAt" column="updated_at"/>
-    </resultMap>
+    <select id="selectAfSubscriptionPlansList" parameterType="AfSubscriptionPlans" resultMap="AfSubscriptionPlansResult">
+        <include refid="selectAfSubscriptionPlansVo"/>
+        <where>
+            <if test="planName != null  and planName != ''"> and plan_name like concat('%', #{planName}, '%')</if>
+            <if test="planNameCn != null  and planNameCn != ''"> and plan_name_cn = #{planNameCn}</if>
+            <if test="monthlyPriceYuan != null "> and monthly_price_yuan = #{monthlyPriceYuan}</if>
+            <if test="yearlyPriceYuan != null "> and yearly_price_yuan = #{yearlyPriceYuan}</if>
+            <if test="hasInbox != null "> and has_inbox = #{hasInbox}</if>
+            <if test="hasMultiDeviceSync != null "> and has_multi_device_sync = #{hasMultiDeviceSync}</if>
+            <if test="hasApiSupport != null "> and has_api_support = #{hasApiSupport}</if>
+            <if test="versionHistoryDays != null "> and version_history_days = #{versionHistoryDays}</if>
+            <if test="aiChatCountPerMonth != null "> and ai_chat_count_per_month = #{aiChatCountPerMonth}</if>
+            <if test="aiImageGenerationPerMonth != null "> and ai_image_generation_per_month = #{aiImageGenerationPerMonth}</if>
+            <if test="hasShareLink != null "> and has_share_link = #{hasShareLink}</if>
+            <if test="hasPublish != null "> and has_publish = #{hasPublish}</if>
+            <if test="workspaceMemberLimit != null "> and workspace_member_limit = #{workspaceMemberLimit}</if>
+            <if test="collaborativeWorkspaceLimit != null "> and collaborative_workspace_limit = #{collaborativeWorkspaceLimit}</if>
+            <if test="pagePermissionGuestEditors != null "> and page_permission_guest_editors = #{pagePermissionGuestEditors}</if>
+            <if test="hasSpaceMemberManagement != null "> and has_space_member_management = #{hasSpaceMemberManagement}</if>
+            <if test="hasSpaceMemberGrouping != null "> and has_space_member_grouping = #{hasSpaceMemberGrouping}</if>
+            <if test="isActive != null "> and is_active = #{isActive}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+        order by CASE WHEN is_active THEN 1 ELSE 0 END desc, updated_at desc
+    </select>
 
     <!-- 查询所有活跃的订阅计划 -->
     <select id="selectActiveSubscriptionPlans" resultMap="AfSubscriptionPlansResult">
-        SELECT * FROM af_subscription_plans
+        <include refid="selectAfSubscriptionPlansVo"/>
         WHERE is_active = true
         ORDER BY monthly_price_yuan ASC
     </select>
 
-    <!-- 按名称查询订阅计划 -->
-    <select id="selectByName" parameterType="String" resultMap="AfSubscriptionPlansResult">
-        SELECT * FROM af_subscription_plans
-        WHERE plan_name = #{planName}
-        AND is_active = true
+    <select id="selectAfSubscriptionPlansById" parameterType="Long" resultMap="AfSubscriptionPlansResult">
+        <include refid="selectAfSubscriptionPlansVo"/>
+        where id = #{id}
     </select>
 
-    <!-- 查询所有活跃的补充包 (返回 AfSubscriptionAddons) -->
-    <select id="selectActiveAddons" resultMap="AfSubscriptionAddonsResult">
-        SELECT * FROM af_subscription_addons
-        WHERE is_active = true
-        ORDER BY price_yuan ASC
-    </select>
+    <insert id="insertAfSubscriptionPlans" parameterType="AfSubscriptionPlans" useGeneratedKeys="true" keyProperty="id">
+        insert into af_subscription_plans
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="planCode != null and planCode != ''">plan_code,</if>
+            <if test="planName != null and planName != ''">plan_name,</if>
+            <if test="planNameCn != null and planNameCn != ''">plan_name_cn,</if>
+            <if test="monthlyPriceYuan != null">monthly_price_yuan,</if>
+            <if test="yearlyPriceYuan != null">yearly_price_yuan,</if>
+            <if test="cloudStorageGb != null">cloud_storage_gb,</if>
+            <if test="hasInbox != null">has_inbox,</if>
+            <if test="hasMultiDeviceSync != null">has_multi_device_sync,</if>
+            <if test="hasApiSupport != null">has_api_support,</if>
+            <if test="versionHistoryDays != null">version_history_days,</if>
+            <if test="aiChatCountPerMonth != null">ai_chat_count_per_month,</if>
+            <if test="aiImageGenerationPerMonth != null">ai_image_generation_per_month,</if>
+            <if test="hasShareLink != null">has_share_link,</if>
+            <if test="hasPublish != null">has_publish,</if>
+            <if test="workspaceMemberLimit != null">workspace_member_limit,</if>
+            <if test="collaborativeWorkspaceLimit != null">collaborative_workspace_limit,</if>
+            <if test="pagePermissionGuestEditors != null">page_permission_guest_editors,</if>
+            <if test="hasSpaceMemberManagement != null">has_space_member_management,</if>
+            <if test="hasSpaceMemberGrouping != null">has_space_member_grouping,</if>
+            <if test="isActive != null">is_active,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="planCode != null and planCode != ''">#{planCode},</if>
+            <if test="planName != null and planName != ''">#{planName},</if>
+            <if test="planNameCn != null and planNameCn != ''">#{planNameCn},</if>
+            <if test="monthlyPriceYuan != null">#{monthlyPriceYuan},</if>
+            <if test="yearlyPriceYuan != null">#{yearlyPriceYuan},</if>
+            <if test="cloudStorageGb != null">#{cloudStorageGb},</if>
+            <if test="hasInbox != null">CASE WHEN #{hasInbox} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="hasMultiDeviceSync != null">CASE WHEN #{hasMultiDeviceSync} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="hasApiSupport != null">CASE WHEN #{hasApiSupport} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="versionHistoryDays != null">#{versionHistoryDays},</if>
+            <if test="aiChatCountPerMonth != null">#{aiChatCountPerMonth},</if>
+            <if test="aiImageGenerationPerMonth != null">#{aiImageGenerationPerMonth},</if>
+            <if test="hasShareLink != null">CASE WHEN #{hasShareLink} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="hasPublish != null">CASE WHEN #{hasPublish} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="workspaceMemberLimit != null">#{workspaceMemberLimit},</if>
+            <if test="collaborativeWorkspaceLimit != null">#{collaborativeWorkspaceLimit},</if>
+            <if test="pagePermissionGuestEditors != null">#{pagePermissionGuestEditors},</if>
+            <if test="hasSpaceMemberManagement != null">CASE WHEN #{hasSpaceMemberManagement} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="hasSpaceMemberGrouping != null">CASE WHEN #{hasSpaceMemberGrouping} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="isActive != null">CASE WHEN #{isActive} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+        </trim>
+    </insert>
 
-    <!-- 按类型查询补充包 (返回 Addon) -->
-    <select id="selectAddonsByType" parameterType="String" resultMap="AddonResult">
-        SELECT * FROM addons
-        WHERE type = #{type}
-        AND status = 'active'
-        ORDER BY price ASC
-    </select>
+    <update id="updateAfSubscriptionPlans" parameterType="AfSubscriptionPlans">
+        update af_subscription_plans
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="planCode != null and planCode != ''">plan_code = #{planCode},</if>
+            <if test="planName != null and planName != ''">plan_name = #{planName},</if>
+            <if test="planNameCn != null and planNameCn != ''">plan_name_cn = #{planNameCn},</if>
+            <if test="monthlyPriceYuan != null">monthly_price_yuan = #{monthlyPriceYuan},</if>
+            <if test="yearlyPriceYuan != null">yearly_price_yuan = #{yearlyPriceYuan},</if>
+            <if test="cloudStorageGb != null">cloud_storage_gb = #{cloudStorageGb},</if>
+            <if test="hasInbox != null">has_inbox = CASE WHEN #{hasInbox} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="hasMultiDeviceSync != null">has_multi_device_sync = CASE WHEN #{hasMultiDeviceSync} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="hasApiSupport != null">has_api_support = CASE WHEN #{hasApiSupport} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="versionHistoryDays != null">version_history_days = #{versionHistoryDays},</if>
+            <if test="aiChatCountPerMonth != null">ai_chat_count_per_month = #{aiChatCountPerMonth},</if>
+            <if test="aiImageGenerationPerMonth != null">ai_image_generation_per_month = #{aiImageGenerationPerMonth},</if>
+            <if test="hasShareLink != null">has_share_link = CASE WHEN #{hasShareLink} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="hasPublish != null">has_publish = CASE WHEN #{hasPublish} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="workspaceMemberLimit != null">workspace_member_limit = #{workspaceMemberLimit},</if>
+            <if test="collaborativeWorkspaceLimit != null">collaborative_workspace_limit = #{collaborativeWorkspaceLimit},</if>
+            <if test="pagePermissionGuestEditors != null">page_permission_guest_editors = #{pagePermissionGuestEditors},</if>
+            <if test="hasSpaceMemberManagement != null">has_space_member_management = CASE WHEN #{hasSpaceMemberManagement} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="hasSpaceMemberGrouping != null">has_space_member_grouping = CASE WHEN #{hasSpaceMemberGrouping} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="isActive != null">is_active = CASE WHEN #{isActive} = 1 THEN TRUE ELSE FALSE END,</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            updated_at = CURRENT_TIMESTAMP
+        </trim>
+        where id = #{id}
+    </update>
 
+    <delete id="deleteAfSubscriptionPlansById" parameterType="Long">
+        delete from af_subscription_plans where id = #{id}
+    </delete>
+
+    <delete id="deleteAfSubscriptionPlansByIds" parameterType="String">
+        delete from af_subscription_plans where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="countUserSubscriptionsByPlanId" parameterType="Long" resultType="int">
+        select count(*) from af_user_subscriptions where plan_id = #{id}
+    </select>
 </mapper>

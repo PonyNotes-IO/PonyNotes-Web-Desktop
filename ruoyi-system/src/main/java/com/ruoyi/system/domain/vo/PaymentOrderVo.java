@@ -37,8 +37,8 @@ public class PaymentOrderVo {
     private String afstatus;
 
     /** 订阅开通时间 */
-    private LocalDateTime startDate;
+    private Date startDate;
 
     /** 订阅到期时间 */
-    private LocalDateTime endDate;
+    private Date endDate;
 }

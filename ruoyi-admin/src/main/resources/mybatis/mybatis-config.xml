@@ -18,6 +18,11 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<!-- <setting name="mapUnderscoreToCamelCase" value="true"/> -->
 	</settings>
     <plugins>
-        <plugin interceptor="com.ruoyi.framework.datasource.DynamicDataSourceInterceptor" />
+        <!-- <plugin interceptor="com.ruoyi.framework.datasource.DynamicDataSourceInterceptor" /> -->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <property name="reasonable" value="true" />
+            <property name="supportMethodsArguments" value="true" />
+            <property name="params" value="count=countSql" />
+        </plugin>
     </plugins>
 </configuration>

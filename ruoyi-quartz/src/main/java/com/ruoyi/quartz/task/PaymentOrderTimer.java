@@ -25,7 +25,7 @@ public class PaymentOrderTimer {
     /**
      * 每小时检查一次过期订单（15分钟未支付）
      */
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void handleExpiredOrders() {
         Date expireTime = DateUtils.addMinutes(new Date(), -15);
         List<SysPaymentOrder> expiredOrders = paymentService.selectExpiredOrders("pending", expireTime);

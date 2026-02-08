@@ -1,4 +1,5 @@
 import axios from 'axios'
+import JSONBig from 'json-bigint'
 import { Notification, MessageBox, Message, Loading } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
@@ -6,6 +7,12 @@ import errorCode from '@/utils/errorCode'
 import { tansParams, blobValidate } from "@/utils/ruoyi"
 import cache from '@/plugins/cache'
 import { saveAs } from 'file-saver'
+
+// 创建JSONBig实例，用于处理大整数
+const jsonBig = JSONBig({
+  storeAsString: true, // 将大整数存储为字符串
+  alwaysParseAsBig: false // 只将大整数解析为BigInt，小整数保持为数字
+})
 
 let downloadLoadingInstance
 // 是否显示重新登录
@@ -17,7 +24,22 @@ const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL: process.env.VUE_APP_BASE_API,
   // 超时
-  timeout: 10000
+  timeout: 10000,
+  // 自定义JSON解析器，用于处理大整数
+  transformResponse: [function(data) {
+    try {
+      // 尝试使用JSONBig解析数据
+      return jsonBig.parse(data)
+    } catch (e) {
+      try {
+        // 解析失败时，使用默认解析器
+        return JSON.parse(data)
+      } catch (e2) {
+        // 再次解析失败时，返回原始数据
+        return data
+      }
+    }
+  }]
 })
 
 // request拦截器
@@ -87,7 +109,7 @@ service.interceptors.response.use(res => {
         MessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', { confirmButtonText: '重新登录', cancelButtonText: '取消', type: 'warning' }).then(() => {
           isRelogin.show = false
           store.dispatch('LogOut').then(() => {
-            location.href = '/index'
+            location.href = '/login'
           })
       }).catch(() => {
         isRelogin.show = false

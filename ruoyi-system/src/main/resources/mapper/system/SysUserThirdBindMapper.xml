@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysUserThirdBindMapper">
+    
+    <resultMap type="SysUserThirdBind" id="SysUserThirdBindResult">
+        <result property="bindId"    column="bind_id"    />
+        <result property="profileId"    column="profile_id"    />
+        <result property="thirdPlatform"    column="third_platform"    />
+        <result property="thirdUserId"    column="third_user_id"    />
+        <result property="lastLoginTime"    column="last_login_time"    />
+        <result property="nickname"    column="nickname"    />
+        <result property="gender"    column="gender"    />
+    </resultMap>
+
+    <sql id="selectSysUserThirdBindVo">
+        select bind_id, profile_id, third_platform, third_user_id, last_login_time, nickname, gender from sys_user_third_bind
+    </sql>
+
+    <select id="selectSysUserThirdBindList" parameterType="SysUserThirdBind" resultMap="SysUserThirdBindResult">
+        <include refid="selectSysUserThirdBindVo"/>
+        <where>  
+            <if test="profileId != null "> and profile_id = #{profileId}</if>
+            <if test="thirdPlatform != null  and thirdPlatform != ''"> and third_platform = #{thirdPlatform}</if>
+            <if test="thirdUserId != null  and thirdUserId != ''"> and third_user_id = #{thirdUserId}</if>
+            <if test="lastLoginTime != null "> and last_login_time = #{lastLoginTime}</if>
+            <if test="nickname != null  and nickname != ''"> and nickname like concat('%', #{nickname}, '%')</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysUserThirdBindByBindId" parameterType="Long" resultMap="SysUserThirdBindResult">
+        <include refid="selectSysUserThirdBindVo"/>
+        where bind_id = #{bindId}
+    </select>
+
+    <insert id="insertSysUserThirdBind" parameterType="SysUserThirdBind" useGeneratedKeys="true" keyProperty="bindId">
+        insert into sys_user_third_bind
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="profileId != null">profile_id,</if>
+            <if test="thirdPlatform != null and thirdPlatform != ''">third_platform,</if>
+            <if test="thirdUserId != null and thirdUserId != ''">third_user_id,</if>
+            <if test="lastLoginTime != null">last_login_time,</if>
+            <if test="nickname != null">nickname,</if>
+            <if test="gender != null">gender,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="profileId != null">#{profileId},</if>
+            <if test="thirdPlatform != null and thirdPlatform != ''">#{thirdPlatform},</if>
+            <if test="thirdUserId != null and thirdUserId != ''">#{thirdUserId},</if>
+            <if test="lastLoginTime != null">#{lastLoginTime},</if>
+            <if test="nickname != null">#{nickname},</if>
+            <if test="gender != null">#{gender},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysUserThirdBind" parameterType="SysUserThirdBind">
+        update sys_user_third_bind
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="profileId != null">profile_id = #{profileId},</if>
+            <if test="thirdPlatform != null and thirdPlatform != ''">third_platform = #{thirdPlatform},</if>
+            <if test="thirdUserId != null and thirdUserId != ''">third_user_id = #{thirdUserId},</if>
+            <if test="lastLoginTime != null">last_login_time = #{lastLoginTime},</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="gender != null">gender = #{gender},</if>
+        </trim>
+        where bind_id = #{bindId}
+    </update>
+
+    <delete id="deleteSysUserThirdBindByBindId" parameterType="Long">
+        delete from sys_user_third_bind where bind_id = #{bindId}
+    </delete>
+
+    <delete id="deleteSysUserThirdBindByBindIds" parameterType="String">
+        delete from sys_user_third_bind where bind_id in 
+        <foreach item="bindId" collection="array" open="(" separator="," close=")">
+            #{bindId}
+        </foreach>
+    </delete>
+</mapper>

@@ -37,10 +37,6 @@ public class SysUser extends BaseEntity
     @Excel(name = "用户名称")
     private String nickName;
 
-    /** 用户类型（00系统用户） */
-    @Excel(name = "用户类型", readConverterExp = "00=系统用户")
-    private String userType;
-
     /** 用户邮箱 */
     @Excel(name = "用户邮箱")
     private String email;
@@ -193,16 +189,6 @@ public class SysUser extends BaseEntity
     public void setUserName(String userName)
     {
         this.userName = userName;
-    }
-
-    public String getUserType()
-    {
-        return userType;
-    }
-
-    public void setUserType(String userType)
-    {
-        this.userType = userType;
     }
 
     @Email(message = "邮箱格式不正确")
@@ -375,7 +361,6 @@ public class SysUser extends BaseEntity
             .append("deptId", getDeptId())
             .append("userName", getUserName())
             .append("nickName", getNickName())
-            .append("userType", getUserType())
             .append("email", getEmail())
             .append("phonenumber", getPhonenumber())
             .append("sex", getSex())

@@ -75,10 +75,12 @@ public class EmailServiceImpl implements EmailService {
         if (inputCode == null || inputCode.isEmpty()) {
             return false;
         }
+        
         // 验证码不正确
         if (!inputCode.equals(storedCode)) {
             return false;
         }
+        
         return true;
     }
 
@@ -86,8 +88,8 @@ public class EmailServiceImpl implements EmailService {
     public boolean verifyEmailCode(String email, String inputCode) {
          String key = "email:verify:" + email;
 //        String storedCode = redisTemplate.opsForValue().get(key);
-        Object storedObj = redisTemplate.opsForValue().get(email);
-        String storedCode = (storedObj != null ? storedObj.toString() : null);
+        Object storedObj = redisTemplate.opsForValue().get(key);
+        String storedCode = storedObj != null ? storedObj.toString() : null;
         if (storedCode == null) {
             return false;
         }

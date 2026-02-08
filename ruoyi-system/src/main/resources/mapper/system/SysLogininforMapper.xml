@@ -1,139 +1,57 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.xmbj.mapper.SignInLogMapper">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysLogininforMapper">
 
-	<resultMap type="com.ruoyi.xmbj.domain.SignInLog" id="SignInLogResult">
-		<result property="id" column="id" />
-		<result property="userUuid" column="user_uuid" />
-		<result property="userUid" column="user_uid" />
-		<result property="provider" column="provider" />
-		<result property="thirdPartyId" column="third_party_id" />
-		<result property="ipAddress" column="ip_address" />
-		<result property="country" column="country" />
-		<result property="region" column="region" />
-		<result property="city" column="city" />
-		<result property="userAgent" column="user_agent" />
-		<result property="success" column="success" />
-		<result property="errorReason" column="error_reason" />
-		<result property="metadata" column="metadata" />
-		<result property="createdAt" column="created_at" />
+	<resultMap type="SysLogininfor" id="SysLogininforResult">
+		<id     property="infoId"        column="info_id"           />
+		<result property="userName"      column="user_name"         />
+		<result property="status"        column="status"            />
+		<result property="ipaddr"        column="ipaddr"            />
+		<result property="loginLocation" column="login_location"    />
+		<result property="browser"       column="browser"           />
+		<result property="os"            column="os"                />
+		<result property="msg"           column="msg"               />
+		<result property="loginTime"     column="login_time"        />
 	</resultMap>
 
-	<resultMap type="com.ruoyi.xmbj.domain.SignInLogStatistics" id="SignInLogStatisticsResult">
-		<result property="userSource" column="user_source" />
-		<result property="userId" column="user_id" />
-		<result property="phone" column="phone" />
-		<result property="signCount" column="sign_count" />
-		<result property="totalTime" column="total_time" />
-		<result property="registerTime" column="register_time" />
-	</resultMap>
-
-	<resultMap type="com.ruoyi.xmbj.domain.ThirdPartySign" id="ThirdPartySignResult">
-		<result property="thirdPartId" column="third_part_id" />
-		<result property="userUid" column="user_uid" />
-		<result property="lastSignId" column="last_sign_id" />
-		<result property="thirdPartLoginName" column="third_part_login_name" />
-		<result property="thirdPartIdentifier" column="third_part_identifier" />
-		<result property="lastLoginTime" column="last_login_time" />
-		<result property="nickname" column="nickname" />
-		<result property="gender" column="gender" />
-	</resultMap>
-
-	<sql id="selectSignInLogVo"> select id, user_uuid, user_uid, provider, third_party_id, ip_address,
-		country, region, city, user_agent, success, error_reason, metadata, created_at from
-		auth.sign_in_logs </sql>
-
-	<sql id="selectSignInLogStatisticsVo">
-		WITH login_with_rank AS (
-		select
-		s.user_uuid,
-		s.created_at,
-		-- 按用户分组，按登录时间排序
-		ROW_NUMBER() OVER (PARTITION BY s.user_uuid ORDER BY s.created_at) as rn
-		from auth.sign_in_logs s
-		),
-		login_with_duration AS (
-		select
-		l1.user_uuid,
-		l1.created_at as login_time,
-		-- 下一次登录时间（作为本次登出时间）
-		l2.created_at as logout_time,
-		-- 计算本次登录时长（秒）
-		EXTRACT(EPOCH FROM (l2.created_at - l1.created_at)) as duration
-		from login_with_rank l1
-		left join login_with_rank l2
-		on l1.user_uuid = l2.user_uuid
-		and l1.rn = l2.rn - 1 -- 关联下一条记录
-		)
-		select
-		'App' as user_source,
-		s.user_uuid as user_id,
-		s.region,
-		u.phone as phone,
-		count(s.id) as sign_count,
-		SUM(l.duration) as total_time,
-		u.created_at as register_time
-		from auth.sign_in_logs s
-		left join login_with_duration l on s.user_uuid = l.user_uuid
-		left join auth.users u on s.user_uuid = u.id
-		group by s.user_uuid, s.region, u.phone, u.created_at;
-	</sql>
-
-	<sql id="selectThirdPartySignVo">
-		WITH last_login_info AS (
-		SELECT
-		s.third_party_id,
-		afu.uid as user_uid,
-		s.user_uuid as user_uuid,
-		MAX(s.created_at) AS last_login_time
-		FROM auth.sign_in_logs s
-		LEFT JOIN auth.users u ON s.user_uuid = u.id
-		LEFT JOIN public.af_user afu ON afu.uuid = s.user_uuid
-		GROUP BY s.third_party_id, afu.uid,s.user_uuid
-		)
-		SELECT
-		lli.third_party_id AS third_part_id,
-		afu.uid AS user_uid,
-		ss.id AS lastSignId,
-		afu.name AS third_part_login_name,
-		lli.third_party_id AS third_part_identifier,
-		lli.last_login_time,
-		afu.name as nickname,
-		u.role as gender,
-		lli.user_uuid
-		FROM last_login_info lli
-		LEFT JOIN auth.sign_in_logs  ss on ss.created_at = lli.last_login_time
-		and ss.user_uuid = lli.user_uuid and ss.third_party_id = lli.third_party_id
-		LEFT JOIN auth.users u ON lli.user_uuid = u.id
-		LEFT JOIN public.af_user afu ON afu.uuid = lli.user_uuid
-		GROUP BY
-		lli.third_party_id, afu.name, u.role, afu.uid,
-		ss.id, lli.last_login_time, lli.user_uuid;
-	</sql>
-
-	<select id="selectSignInLogList" parameterType="SignInLogStatistics"
-			resultMap="SignInLogStatisticsResult">
-		<include refid="selectSignInLogStatisticsVo" />
-	</select>
-
-	<select id="selectSignInOverview" parameterType="SignInLog" resultMap="SignInLogResult">
-		<include refid="selectSignInLogVo" />
+	<insert id="insertLogininfor" parameterType="SysLogininfor">
+		insert into sys_logininfor (user_name, status, ipaddr, login_location, browser, os, msg, login_time)
+		values (#{userName}, #{status}, #{ipaddr}, #{loginLocation}, #{browser}, #{os}, #{msg}, sysdate())
+	</insert>
+	
+	<select id="selectLogininforList" parameterType="SysLogininfor" resultMap="SysLogininforResult">
+		select info_id, user_name, ipaddr, login_location, browser, os, status, msg, login_time from sys_logininfor
 		<where>
-			<if test="userUuid != null">and user_uuid = #{userUuid}</if>
-			<if test="userUid != null">and
-				user_uid = #{userUid}
+			<if test="ipaddr != null and ipaddr != ''">
+				AND ipaddr like concat('%', #{ipaddr}, '%')
+			</if>
+			<if test="status != null and status != ''">
+				AND status = #{status}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND user_name like concat('%', #{userName}, '%')
+			</if>
+			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND login_time &gt;= #{params.beginTime}
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND login_time &lt;= #{params.endTime}
 			</if>
 		</where>
-		order by created_at desc </select>
-
-	<select id="signThirdPartList" parameterType="ThirdPartySign" resultMap="ThirdPartySignResult">
-		<include refid="selectThirdPartySignVo" />
+		order by info_id desc
 	</select>
-
-	<update id="unbindThirdPartSign" parameterType="ThirdPartySign"> update auth.sign_in_logs <set>
-
-		<if test="thirdPartIdentifier != null"> third_part_identifier = null, </if>
-	</set> where
-		third_part_id = #{thirdPartId} </update>
-
-</mapper>
+	
+	<delete id="deleteLogininforByIds" parameterType="Long">
+ 		delete from sys_logininfor where info_id in
+ 		<foreach collection="array" item="infoId" open="(" separator="," close=")">
+ 			#{infoId}
+        </foreach> 
+ 	</delete>
+    
+    <update id="cleanLogininfor">
+        truncate table sys_logininfor
+    </update>
+    
+</mapper> 

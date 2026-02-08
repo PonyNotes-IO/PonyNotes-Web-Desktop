@@ -1,13 +1,17 @@
 package com.ruoyi.xmbj.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.xmbj.domain.Addon;
 import com.ruoyi.xmbj.domain.ClientUser;
 
 import java.util.List;
 
+@DataSource(DataSourceType.SLAVE)
 public interface ClientUserMapper extends BaseMapper<ClientUser> {
     ClientUser getClientUserByUserInfo(String userInfo);
+    ClientUser getClientUserByUuid(String uuid);
 
     List<ClientUser> selectAfUserList(ClientUser clientUser);
 

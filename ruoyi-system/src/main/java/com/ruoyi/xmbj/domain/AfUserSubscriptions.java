@@ -1,13 +1,11 @@
 package com.ruoyi.xmbj.domain;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.*;
 import lombok.experimental.Accessors;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import javax.persistence.Column;
@@ -50,23 +48,23 @@ public class AfUserSubscriptions extends BaseEntity implements Serializable {
 
     /** 订阅开始时间 */
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private Date startDate;
 
     /** 订阅到期时间 */
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    private Date endDate;
 
     /** 取消时间 */
     @Column(name = "canceled_at")
-    private LocalDateTime canceledAt;
+    private Date canceledAt;
 
     /** 创建时间 */
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     /** 更新时间 */
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 
     /** 取消原因 */
     @Column(name = "cancel_reason")
