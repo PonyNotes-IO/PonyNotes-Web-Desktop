@@ -34,6 +34,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by created_at desc
     </select>
+    <select id="selectAfUserListDTO" parameterType="XmAfUser" resultType="com.ruoyi.xmbj.domain.dto.XmAfUserDTO">
+        select u.uid, u.uuid, u.email, u.password, u.name, u.avatar, u.metadata, u.encryption_sign, u.deleted_at, u.updated_at, u.created_at, u.phone,
+        p.end_date as productEndDate,sp.plan_name_cn as productName
+        from af_user u left join af_user_subscriptions p on (u.uid = p.uid and p.status = 'active' ) left join af_subscription_plans sp
+        on (sp.id = p.plan_id)
+        <where>
+            <if test="uuid != null  and uuid != ''"> and u.uuid = #{uuid}</if>
+            <if test="email != null  and email != ''"> and u.email like concat('%', #{email}, '%')</if>
+            <if test="name != null  and name != ''"> and u.name like concat('%', #{name}, '%')</if>
+            <if test="metadata != null  and metadata != ''"> and u.metadata like concat('%', #{metadata}, '%')</if>
+            <if test="phone != null  and phone != ''"> and u.phone = #{phone}</if>
+        </where>
+        order by created_at desc
+    </select>
     
     <select id="selectAfUserByUid" parameterType="Long" resultMap="AfUserResult">
         <include refid="selectAfUserVo"/>

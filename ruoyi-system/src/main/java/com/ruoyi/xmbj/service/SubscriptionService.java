@@ -147,7 +147,11 @@ public class SubscriptionService {
 
         // 创建新订阅
         Date now = new Date();
-        Date endDate = calculateSubscriptionEndDate(now, billingType);
+        Date endDate = calculateSubscriptionEndDate(
+                (currentSubscription != null
+                        && currentSubscription.getEndDate() != null
+                        && currentSubscription.getEndDate().after(now)
+                ) ? currentSubscription.getEndDate() :now, billingType);
 
         AfUserSubscriptions subscription = AfUserSubscriptions.builder()
                 .uid(userId)

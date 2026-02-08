@@ -112,6 +112,8 @@
 
 
       <el-table-column label="用户手机号" align="center" prop="phone" />
+      <el-table-column label="产品套餐名称" align="center" prop="productName" />
+      <el-table-column label="套餐截止有效期" align="center" prop="productEndDate" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

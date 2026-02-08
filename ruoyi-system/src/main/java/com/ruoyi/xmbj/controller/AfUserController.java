@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.xmbj.domain.XmAfUser;
+import com.ruoyi.xmbj.domain.dto.XmAfUserDTO;
 import com.ruoyi.xmbj.service.IXmAfUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class AfUserController extends BaseController
     public TableDataInfo list(XmAfUser afUser)
     {
         startPage();
-        List<XmAfUser> list = afUserService.selectAfUserList(afUser);
+        List<XmAfUserDTO> list = afUserService.selectAfUserListDTO(afUser);
         return getDataTable(list);
     }
 

@@ -1,8 +1,10 @@
 package com.ruoyi.xmbj.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.ruoyi.xmbj.domain.XmAfUser;
+import com.ruoyi.xmbj.domain.dto.XmAfUserDTO;
 import com.ruoyi.xmbj.mapper.XmAfUserMapper;
 import com.ruoyi.xmbj.service.IXmAfUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +95,10 @@ public class XmAfUserServiceImpl implements IXmAfUserService
     public int deleteAfUserByUid(Long uid)
     {
         return afUserMapper.deleteAfUserByUid(uid);
+    }
+
+    @Override
+    public List<XmAfUserDTO> selectAfUserListDTO(XmAfUser afUser) {
+        return afUserMapper.selectAfUserListDTO(afUser);
     }
 }

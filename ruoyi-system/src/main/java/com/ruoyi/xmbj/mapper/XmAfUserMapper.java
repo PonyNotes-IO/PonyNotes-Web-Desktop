@@ -5,6 +5,7 @@ import java.util.List;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.xmbj.domain.XmAfUser;
+import com.ruoyi.xmbj.domain.dto.XmAfUserDTO;
 
 /**
  * 用户管理11Mapper接口
@@ -62,4 +63,6 @@ public interface XmAfUserMapper
      * @return 结果
      */
     public int deleteAfUserByUids(Long[] uids);
+
+    List<XmAfUserDTO> selectAfUserListDTO(XmAfUser afUser);
 }

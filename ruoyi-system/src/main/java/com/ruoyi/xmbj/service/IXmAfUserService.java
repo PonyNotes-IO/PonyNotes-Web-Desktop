@@ -2,6 +2,7 @@ package com.ruoyi.xmbj.service;
 
 import java.util.List;
 import com.ruoyi.xmbj.domain.XmAfUser;
+import com.ruoyi.xmbj.domain.dto.XmAfUserDTO;
 
 /**
  * 用户管理11Service接口
@@ -58,4 +59,6 @@ public interface IXmAfUserService
      * @return 结果
      */
     public int deleteAfUserByUid(Long uid);
+
+    List<XmAfUserDTO> selectAfUserListDTO(XmAfUser afUser);
 }
