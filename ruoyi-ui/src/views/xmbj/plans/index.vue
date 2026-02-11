@@ -84,27 +84,27 @@
                 <tr>
                   <td class="feature-name">云存储空间</td>
                   <td v-for="plan in plansList" :key="'storage-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
-                    {{ plan.cloudStorageGb ? plan.cloudStorageGb + 'GB' : '-' }}
+                    {{ plan.cloudStorageGb ? plan.cloudStorageGb + '兆' : '-' }}
                   </td>
                 </tr>
                 <tr>
                   <td class="feature-name">收件箱</td>
                   <td v-for="plan in plansList" :key="'inbox-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
-                    <i :class="plan.hasInbox === 1 ? 'el-icon-check' : 'el-icon-minus'"
+                    <i :class="plan.hasInbox === 1 ? 'el-icon-check' : 'el-icon-minus'" 
                        :style="{color: plan.hasInbox === 1 ? '#67C23A' : '#909399'}"></i>
                   </td>
                 </tr>
                 <tr>
                   <td class="feature-name">多端同步</td>
                   <td v-for="plan in plansList" :key="'sync-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
-                    <i :class="plan.hasMultiDeviceSync === 1 ? 'el-icon-check' : 'el-icon-minus'"
+                    <i :class="plan.hasMultiDeviceSync === 1 ? 'el-icon-check' : 'el-icon-minus'" 
                        :style="{color: plan.hasMultiDeviceSync === 1 ? '#67C23A' : '#909399'}"></i>
                   </td>
                 </tr>
                 <tr>
                   <td class="feature-name">支持API</td>
                   <td v-for="plan in plansList" :key="'api-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
-                    <i :class="plan.hasApiSupport === 1 ? 'el-icon-check' : 'el-icon-minus'"
+                    <i :class="plan.hasApiSupport === 1 ? 'el-icon-check' : 'el-icon-minus'" 
                        :style="{color: plan.hasApiSupport === 1 ? '#67C23A' : '#909399'}"></i>
                   </td>
                 </tr>
@@ -135,21 +135,21 @@
                 <tr>
                   <td class="feature-name">分享链接</td>
                   <td v-for="plan in plansList" :key="'share-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
-                    <i :class="plan.hasShareLink === 1 ? 'el-icon-check' : 'el-icon-minus'"
+                    <i :class="plan.hasShareLink === 1 ? 'el-icon-check' : 'el-icon-minus'" 
                        :style="{color: plan.hasShareLink === 1 ? '#67C23A' : '#909399'}"></i>
                   </td>
                 </tr>
                 <tr>
                   <td class="feature-name">发布</td>
                   <td v-for="plan in plansList" :key="'publish-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
-                    <i :class="plan.hasPublish === 1 ? 'el-icon-check' : 'el-icon-minus'"
+                    <i :class="plan.hasPublish === 1 ? 'el-icon-check' : 'el-icon-minus'" 
                        :style="{color: plan.hasPublish === 1 ? '#67C23A' : '#909399'}"></i>
                   </td>
                 </tr>
                 <tr>
                   <td class="feature-name">工作区成员</td>
                   <td v-for="plan in plansList" :key="'member-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
-                    <i :class="plan.workspaceMemberLimit > 0 ? 'el-icon-check' : 'el-icon-minus'"
+                    <i :class="plan.workspaceMemberLimit > 0 ? 'el-icon-check' : 'el-icon-minus'" 
                        :style="{color: plan.workspaceMemberLimit > 0 ? '#67C23A' : '#909399'}"></i>
                   </td>
                 </tr>
@@ -171,14 +171,14 @@
                 <tr>
                   <td class="feature-name">空间成员管理</td>
                   <td v-for="plan in plansList" :key="'space-member-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
-                    <i :class="plan.hasSpaceMemberManagement === 1 ? 'el-icon-check' : 'el-icon-minus'"
+                    <i :class="plan.hasSpaceMemberManagement === 1 ? 'el-icon-check' : 'el-icon-minus'" 
                        :style="{color: plan.hasSpaceMemberManagement === 1 ? '#67C23A' : '#909399'}"></i>
                   </td>
                 </tr>
                 <tr>
                   <td class="feature-name">空间成员分组</td>
                   <td v-for="plan in plansList" :key="'space-group-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
-                    <i :class="plan.hasSpaceMemberGrouping === 1 ? 'el-icon-check' : 'el-icon-minus'"
+                    <i :class="plan.hasSpaceMemberGrouping === 1 ? 'el-icon-check' : 'el-icon-minus'" 
                        :style="{color: plan.hasSpaceMemberGrouping === 1 ? '#67C23A' : '#909399'}"></i>
                   </td>
                 </tr>
@@ -207,7 +207,7 @@
         </el-card>
       </el-col>
     </el-row>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -518,24 +518,24 @@ export default {
       const updateData = {}
       const booleanFields = ['hasInbox', 'hasMultiDeviceSync', 'hasApiSupport', 'hasShareLink', 'hasPublish', 'hasSpaceMemberManagement', 'hasSpaceMemberGrouping', 'isActive']
       const otherFields = ['planCode', 'planName', 'planNameCn', 'monthlyPriceYuan', 'yearlyPriceYuan', 'cloudStorageGb', 'versionHistoryDays', 'aiChatCountPerMonth', 'aiImageGenerationPerMonth', 'workspaceMemberLimit', 'collaborativeWorkspaceLimit', 'pagePermissionGuestEditors', 'createdAt', 'updatedAt']
-
+      
       console.log('getUpdateData: this.form =', JSON.stringify(this.form, null, 2))
       console.log('getUpdateData: this.originalForm =', JSON.stringify(this.originalForm, null, 2))
-
+      
       if (this.originalForm) {
         otherFields.forEach(field => {
           if (this.form[field] !== this.originalForm[field]) {
             updateData[field] = this.form[field]
           }
         })
-
+        
         booleanFields.forEach(field => {
           if (this.form[field] !== this.originalForm[field]) {
             updateData[field] = this.form[field]
           }
         })
       }
-
+      
       updateData.id = this.form.id
       console.log('getUpdateData: updateData =', JSON.stringify(updateData, null, 2))
       return updateData

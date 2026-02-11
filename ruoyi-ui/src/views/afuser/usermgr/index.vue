@@ -97,16 +97,31 @@
       <el-table-column label="用户头像" align="center" width="120">
         <template slot-scope="scope">
           <el-image
-            v-if="scope.row.avatar"
-            :src="scope.row.avatar"
-            :preview-src-list="[scope.row.avatar]"
+            v-if="getAvatarUrl(scope.row)"
+            :src="getAvatarUrl(scope.row)"
+            :preview-src-list="[getAvatarUrl(scope.row)]"
             fit="cover"
             style="width: 40px; height: 40px; border-radius: 50%"
           />
           <span v-else>无头像</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户元数据" align="center" prop="metadata" />
+      <!-- 隐藏元数据列 -->
+      <!-- <el-table-column label="用户元数据" align="center">
+        <template slot-scope="scope">
+          <div v-if="scope.row.metadata">
+            <el-image
+              v-if="getIconUrlFromMetadata(scope.row.metadata)"
+              :src="getIconUrlFromMetadata(scope.row.metadata)"
+              :preview-src-list="[getIconUrlFromMetadata(scope.row.metadata)]"
+              fit="cover"
+              style="width: 40px; height: 40px; border-radius: 50%"
+            />
+            <span v-else>{{ scope.row.metadata }}</span>
+          </div>
+          <span v-else>无元数据</span>
+        </template>
+      </el-table-column> -->
 
 
 
@@ -135,9 +150,7 @@
             size="mini"
             type="text"
             icon="el-icon-document"
-            @click="handleViewOrder(scope.row)"
-            v-hasPermi="['system:order:list']"
-          >订单</el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -385,23 +398,79 @@ export default {
       }, `usermgr_${new Date().getTime()}.xlsx`)
     },
 
-    /** 查看订单操作 */
-    handleViewOrder(row) {
-      // 传递uuid到订单页面
-      const uuid = row.uuid
-      console.log('查看订单，用户UUID:', uuid)
-      if (!uuid) {
-        this.$modal.msgError('用户UUID为空')
-        return
+    /** 获取用户头像URL，优先从avatar字段获取，若为空则从metadata中解析 */
+    getAvatarUrl(row) {
+      // 优先使用avatar字段
+      if (row.avatar) {
+        console.log('Using avatar field:', row.avatar);
+        return row.avatar;
       }
-      // 跳转到订单页面，并传递用户UUID
-      this.$router.push({
-        path: '/system/order/index',
-        query: {
-          uuid: uuid
+      
+      // 从metadata中解析头像URL
+      if (row.metadata) {
+        console.log('Processing metadata:', row.metadata);
+        try {
+          // 清理metadata字符串，移除可能的反引号
+          let cleanMetadata = typeof row.metadata === 'string' ? row.metadata.replace(/`/g, '') : row.metadata;
+          console.log('Cleaned metadata:', cleanMetadata);
+          
+          // 尝试解析metadata为JSON对象
+          const metadata = typeof cleanMetadata === 'string' ? JSON.parse(cleanMetadata) : cleanMetadata;
+          console.log('Parsed metadata:', metadata);
+          
+          // 检查是否存在头像相关字段
+          if (metadata.icon_url) {
+            console.log('Using icon_url from metadata:', metadata.icon_url);
+            return metadata.icon_url;
+          }
+          if (metadata.avatar) {
+            console.log('Using avatar from metadata:', metadata.avatar);
+            return metadata.avatar;
+          }
+          if (metadata.photo) {
+            console.log('Using photo from metadata:', metadata.photo);
+            return metadata.photo;
+          }
+          if (metadata.image) {
+            console.log('Using image from metadata:', metadata.image);
+            return metadata.image;
+          }
+        } catch (e) {
+          // 如果metadata不是有效的JSON，忽略错误
+          console.log('Failed to parse metadata:', e);
         }
-      })
-    }
+      }
+      
+      // 若都不存在，返回空
+      console.log('No avatar found for user:', row.uid);
+      return null;
+    },
+
+    /** 从元数据中提取 icon_url 字段 */
+    getIconUrlFromMetadata(metadata) {
+      if (metadata) {
+        try {
+          // 清理metadata字符串，移除可能的反引号
+          let cleanMetadata = typeof metadata === 'string' ? metadata.replace(/`/g, '') : metadata;
+          
+          // 尝试解析metadata为JSON对象
+          const parsedMetadata = typeof cleanMetadata === 'string' ? JSON.parse(cleanMetadata) : cleanMetadata;
+          
+          // 检查是否存在 icon_url 字段
+          if (parsedMetadata.icon_url) {
+            console.log('Extracted icon_url from metadata:', parsedMetadata.icon_url);
+            return parsedMetadata.icon_url;
+          }
+        } catch (e) {
+          // 如果metadata不是有效的JSON，忽略错误
+          console.log('Failed to parse metadata in getIconUrlFromMetadata:', e);
+        }
+      }
+      
+      // 若不存在，返回空
+      return null;
+    },
+
   }
 }
 </script>

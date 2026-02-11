@@ -102,7 +102,7 @@
         </template>
       </el-table-column>
       <el-table-column label="价格（元）" align="center" prop="priceYuan" width="100" />
-      <el-table-column label="存储空间（GB）" align="center" prop="storageGb" width="120">
+      <el-table-column label="存储空间（兆）" align="center" prop="storageGb" width="120">
         <template slot-scope="scope">
           <span v-if="scope.row.addonType === 'storage'">{{ scope.row.storageGb }}</span>
           <span v-else>-</span>
@@ -184,7 +184,7 @@
         <el-form-item label="价格（元）" prop="priceYuan">
           <el-input-number v-model="form.priceYuan" :precision="2" :min="0" placeholder="请输入价格" />
         </el-form-item>
-        <el-form-item label="存储空间（GB）" prop="storageGb" v-if="form.addonType === 'storage'">
+        <el-form-item label="存储空间（兆）" prop="storageGb" v-if="form.addonType === 'storage'">
           <el-input-number v-model="form.storageGb" :min="0" placeholder="请输入存储空间" />
         </el-form-item>
         <el-form-item label="AI对话次数" prop="aiChatCount" v-if="form.addonType === 'ai_token'">

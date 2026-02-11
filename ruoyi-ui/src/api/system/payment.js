@@ -62,3 +62,20 @@ export function pollPaymentStatus(orderNo, onSuccess, onError, onTimeout) {
   // 开始轮询
   poll();
 }
+
+// 获取支付订单详情
+export function getPaymentOrderDetail(orderNo) {
+  return request({
+    url: '/system/payment/byOrderNo/' + orderNo,
+    method: 'get'
+  })
+}
+
+// 更新订单状态为已支付
+export function updateOrderStatusToSuccess(data) {
+  return request({
+    url: '/system/payment/success',
+    method: 'put',
+    data: data
+  })
+}
