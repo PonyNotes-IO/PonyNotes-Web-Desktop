@@ -10,7 +10,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 订阅套餐对象 af_subscription_plans
- *
+ * 
  * @author 张继科
  * @date 2026-01-21
  */
@@ -41,8 +41,8 @@ public class AfSubscriptionPlans extends BaseEntity
     @Excel(name = "年付价格", readConverterExp = "元=")
     private BigDecimal yearlyPriceYuan;
 
-    /** 云存储容量（GB） */
-    @Excel(name = "云存储容量", readConverterExp = "G=B")
+    /** 云存储容量（兆） */
+    @Excel(name = "云存储容量", readConverterExp = "兆=")
     private BigDecimal cloudStorageGb;
 
     /** 是否支持收件箱（0否 1是） */

@@ -29,7 +29,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/system/order")
-public class SysPaymentOrderController extends BaseController
+public class SystemPaymentOrderController extends BaseController
 {
     @Autowired
     private ISysPaymentOrderService sysPaymentOrderService;

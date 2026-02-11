@@ -99,4 +99,6 @@ public interface ISysPaymentOrderService
      * @return 结果
      */
     public int deleteSysPaymentOrderById(Long id);
+
+    int updateOrderStatusToSuccess(String orderNo, Date payTime, Date memberExpireTime);
 }

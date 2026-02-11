@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.SysPaymentOrderMapper;
@@ -120,5 +121,27 @@ public class SysPaymentOrderServiceImpl implements ISysPaymentOrderService
     public int deleteSysPaymentOrderById(Long id)
     {
         return sysPaymentOrderMapper.deleteSysPaymentOrderById(id);
+    }
+
+    /**
+     * 更新订单状态为已支付
+     * 
+     * @param orderNo 订单编号
+     * @param payTime 支付时间
+     * @param memberExpireTime 会员到期时间
+     * @return 结果
+     */
+    @Override
+    public int updateOrderStatusToSuccess(String orderNo, Date payTime, Date memberExpireTime) {
+        if(StringUtils.isEmpty(orderNo)) {
+            throw new RuntimeException("参数订单号必须不为空");
+        }
+        SysPaymentOrder order = new SysPaymentOrder();
+        order.setOrderNo(orderNo);
+        order.setStatus("success");
+        order.setPayTime(payTime);
+        order.setMemberExpireTime(memberExpireTime);
+        order.setUpdateTime(new java.util.Date());
+        return sysPaymentOrderMapper.updateSysPaymentOrder(order);
     }
 }

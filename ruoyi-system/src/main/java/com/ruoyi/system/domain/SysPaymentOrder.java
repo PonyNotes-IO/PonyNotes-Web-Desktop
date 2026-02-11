@@ -85,6 +85,16 @@ public class SysPaymentOrder extends BaseEntity
     private String clientUserAddonId;
     private String clientSubscriptionId;
 
+    private Date memberExpireTime;
+
+    public Date getMemberExpireTime() {
+        return memberExpireTime;
+    }
+
+    public void setMemberExpireTime(Date memberExpireTime) {
+        this.memberExpireTime = memberExpireTime;
+    }
+
     public String getClientSubscriptionId() {
         return clientSubscriptionId;
     }

@@ -173,7 +173,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="clientUserAddonId != null">client_user_addon_id = #{clientUserAddonId},</if>
             <if test="clientSubscriptionId != null">client_subscription_id = #{clientSubscriptionId},</if>
         </trim>
-        where id = #{id}
+        where 1=1
+        <if test="id != null and id != ''">and id = #{id}</if>
+        <if test="orderNo != null and orderNo != ''">and order_no = #{orderNo}</if>
     </update>
 
     <delete id="deleteSysPaymentOrderById" parameterType="Long">

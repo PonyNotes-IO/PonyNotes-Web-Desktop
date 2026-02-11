@@ -29,7 +29,7 @@ public class AfSubscriptionAddons extends BaseEntity
     @Excel(name = "价格（元）")
     private BigDecimal priceYuan;
 
-    @Excel(name = "存储空间（GB）")
+    @Excel(name = "存储空间（兆）")
     private Integer storageGb;
 
     @Excel(name = "AI对话次数")
