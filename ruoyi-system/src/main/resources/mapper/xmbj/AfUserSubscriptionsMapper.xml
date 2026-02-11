@@ -49,10 +49,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="billingType != null">billing_type = #{billingType},</if>
             <if test="status != null">status = #{status},</if>
             <if test="startDate != null">start_date = #{startDate},</if>
-            <if test="endDate != null and endDate != ''">end_date = #{endDate},</if>
-            <if test="canceledAt != null and canceledAt != ''">canceled_at = #{canceledAt},</if>
-            <if test="createdAt != null and createdAt != ''">created_at = #{createdAt},</if>
-            <if test="updatedAt != null and updatedAt != ''">updated_at = #{updatedAt},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="canceledAt != null">canceled_at = #{canceledAt},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
             <if test="cancelReason != null">cancel_reason = #{cancelReason},</if>
         </trim>
         where id = #{id}

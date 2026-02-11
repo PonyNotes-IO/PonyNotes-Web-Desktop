@@ -140,7 +140,7 @@ public class SubscriptionService {
         // 取消之前的订阅（如果存在）
         AfUserSubscriptions currentSubscription = afUserSubscriptionsMapper.selectCurrentActiveSubscription(userId);
         if (currentSubscription != null) {
-            currentSubscription.setStatus("cancelled");
+            currentSubscription.setStatus("canceled");
             currentSubscription.setUpdatedAt(new Date());
             afUserSubscriptionsMapper.updateUserSubscriptions(currentSubscription);
         }
@@ -185,7 +185,7 @@ public class SubscriptionService {
         log.info("取消用户 {} 的订阅", userId);
         AfUserSubscriptions subscription = afUserSubscriptionsMapper.selectCurrentActiveSubscription(userId);
         if (subscription != null) {
-            subscription.setStatus("cancelled");
+            subscription.setStatus("canceled");
             subscription.setUpdatedAt(new Date());
             afUserSubscriptionsMapper.updateUserSubscriptions(subscription);
         }
