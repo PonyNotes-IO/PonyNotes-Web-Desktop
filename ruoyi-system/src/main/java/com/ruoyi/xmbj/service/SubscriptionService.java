@@ -6,6 +6,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.xmbj.domain.*;
 import com.ruoyi.xmbj.mapper.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -136,22 +137,50 @@ public class SubscriptionService {
         if (plan == null) {
             throw new RuntimeException("订阅计划不存在");
         }
-
+        Date now = new Date();
         // 取消之前的订阅（如果存在）
-        AfUserSubscriptions currentSubscription = afUserSubscriptionsMapper.selectCurrentActiveSubscription(userId);
-        if (currentSubscription != null) {
-            currentSubscription.setStatus("canceled");
-            currentSubscription.setUpdatedAt(new Date());
-            afUserSubscriptionsMapper.updateUserSubscriptions(currentSubscription);
+        List<AfUserSubscriptions> currentSubscriptions = afUserSubscriptionsMapper.selectCurrentActiveSubscription(userId);
+        AfUserSubscriptions target = null;
+        // 先找到匹配当前订阅类型的数据,
+        // 没有则修改所有数据重置为过期或者挂起待生效
+        // 有则将非当前的数据挂起,单独生效最新操作的版本
+        if(currentSubscriptions != null) {
+            target =currentSubscriptions.stream().filter(x -> ObjectUtils.equals(planId, x.getPlanId())).findFirst().orElse(null);
+            for (AfUserSubscriptions currentSubscription : currentSubscriptions) {
+                boolean isExpired = currentSubscription.getEndDate() != null && now.after(currentSubscription.getEndDate());
+                if (target == null) {
+                    if(isExpired) {
+                        currentSubscription.setStatus("expired");
+                        currentSubscription.setUpdatedAt(now);
+                    } else if(!"pending".equals(currentSubscription.getStatus())){
+                        currentSubscription.setStatus("pending");
+                        currentSubscription.setUpdatedAt(now);
+                    }
+                } else {
+                    if(ObjectUtils.equals(target.getPlanId(), currentSubscription.getPlanId())) {
+                        currentSubscription.setStatus("canceled");
+                        currentSubscription.setUpdatedAt(now);
+                    } else if(!"pending".equals(currentSubscription.getStatus())){
+                        currentSubscription.setStatus(isExpired ? "expired" :"pending");
+                        currentSubscription.setUpdatedAt(now);
+                    }
+                }
+                if(currentSubscription.getUpdatedAt() == now) {
+                    afUserSubscriptionsMapper.updateUserSubscriptions(currentSubscription);
+                }
+
+            }
         }
 
+
+
         // 创建新订阅
-        Date now = new Date();
+
         Date endDate = calculateSubscriptionEndDate(
-                (currentSubscription != null
-                        && currentSubscription.getEndDate() != null
-                        && currentSubscription.getEndDate().after(now)
-                ) ? currentSubscription.getEndDate() :now, billingType);
+                (target != null
+                        && target.getEndDate() != null
+                        && target.getEndDate().after(now)
+                ) ? target.getEndDate() :now, billingType);
 
         AfUserSubscriptions subscription = AfUserSubscriptions.builder()
                 .uid(userId)
@@ -183,12 +212,17 @@ public class SubscriptionService {
      */
     public void cancelSubscription(Long userId) {
         log.info("取消用户 {} 的订阅", userId);
-        AfUserSubscriptions subscription = afUserSubscriptionsMapper.selectCurrentActiveSubscription(userId);
-        if (subscription != null) {
-            subscription.setStatus("canceled");
-            subscription.setUpdatedAt(new Date());
-            afUserSubscriptionsMapper.updateUserSubscriptions(subscription);
+        List<AfUserSubscriptions> subscriptions = afUserSubscriptionsMapper.selectCurrentActiveSubscription(userId);
+        if(!subscriptions.isEmpty()) {
+            subscriptions.forEach(subscription -> {
+                if (subscription != null) {
+                    subscription.setStatus("canceled");
+                    subscription.setUpdatedAt(new Date());
+                    afUserSubscriptionsMapper.updateUserSubscriptions(subscription);
+                }
+            });
         }
+
     }
 
     /**
@@ -197,7 +231,7 @@ public class SubscriptionService {
      * 现在: 从数据库读取
      */
     @DataSource(DataSourceType.SLAVE)
-    public AfUserSubscriptions getCurrentSubscription(Long userId) {
+    public List<AfUserSubscriptions> getCurrentSubscription(Long userId) {
         // 检查并更新已过期的订阅
 //        afUserSubscriptionsMapper.updateExpiredSubscriptions(userId);
 
@@ -209,13 +243,15 @@ public class SubscriptionService {
      */
     @DataSource(DataSourceType.SLAVE)
     public boolean hasValidSubscription(Long userId) {
-        AfUserSubscriptions subscription = getCurrentSubscription(userId);
+        List<AfUserSubscriptions> subscription = getCurrentSubscription(userId);
         if (subscription == null) {
             return false;
         }
+        Date now = new Date();
+        return subscription.stream().anyMatch(it -> it.getEndDate() != null && now.before(it.getEndDate()));
 
 //        LocalDateTime now = LocalDateTime.now();
-        return new Date().before(subscription.getEndDate());
+//        return new Date().before(subscription.getEndDate());
     }
 
     /**

@@ -14,7 +14,7 @@ import java.util.List;
 @Mapper
 @DataSource(DataSourceType.SLAVE)
 public interface AfUserSubscriptionsMapper {
-    AfUserSubscriptions selectCurrentActiveSubscription(Long userId);
+    List<AfUserSubscriptions> selectCurrentActiveSubscription(Long userId);
 
     /**
      * 查询用户的所有订阅记录

@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectCurrentActiveSubscription" resultMap="AfUserSubscriptionsResult" parameterType="Long">
         <include refid="AfUserSubscriptionsResultVO" />
         <where>
-            uid = #{userId} and status = 'active'
+            uid = #{userId} and status in ('active','pending')
         </where>
     </select>
 
