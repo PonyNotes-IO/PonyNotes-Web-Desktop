@@ -104,7 +104,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectExpiredOrders" resultMap="SysPaymentOrderResult">
         <include refid="selectSysPaymentOrderVo"/>
         where status  = 'pending' and
-        pay_time  &lt;= #{payTime}
+        create_time  &lt;= #{payTime}
+    </select>
+    <select id="myPaymentList" parameterType="String" resultType="com.ruoyi.system.domain.vo.PaymentListDTO">
+        select o.pay_time as payTime ,o.amount,o.product_name as productName ,o.create_time as createTime ,
+        o.billing_type as billingType , o.payment_type as paymentType ,
+        case when o.status = 'pending' then '支付中' when o.status = 'success' then '支付成功' when o.status = 'expired' then '交易关闭' end as status
+
+        from sys_payment_order o
+
+        where o.user_info = #{userInfo}
     </select>
 
     <insert id="insertSysPaymentOrder" parameterType="SysPaymentOrder" useGeneratedKeys="true" keyProperty="id">

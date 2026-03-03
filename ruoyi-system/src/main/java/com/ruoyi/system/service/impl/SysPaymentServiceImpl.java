@@ -1,6 +1,7 @@
 package com.ruoyi.system.service.impl;
 
 import com.ruoyi.system.domain.SysPaymentOrder;
+import com.ruoyi.system.domain.vo.PaymentListDTO;
 import com.ruoyi.system.domain.vo.PaymentOrderVo;
 import com.ruoyi.system.mapper.SysPaymentMapper;
 import com.ruoyi.system.mapper.SysPaymentOrderMapper;
@@ -8,6 +9,7 @@ import com.ruoyi.system.service.ISysPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -47,5 +49,10 @@ public class SysPaymentServiceImpl  implements ISysPaymentService {
     @Override
     public List<PaymentOrderVo> userPaymentOrders(PaymentOrderVo paymentOrderVo) {
         return sysPaymentOrderMapper.userPaymentOrders(paymentOrderVo);
+    }
+
+    @Override
+    public List<PaymentListDTO> myPaymentList(String subject) {
+        return sysPaymentOrderMapper.myPaymentList(subject);
     }
 }

@@ -2,6 +2,7 @@ package com.ruoyi.common.core.page;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.ServletUtils;
+import com.ruoyi.common.utils.StringUtils;
 
 /**
  * 表格数据处理
@@ -52,5 +53,15 @@ public class TableSupport
     public static PageDomain buildPageRequest()
     {
         return getPageDomain();
+    }
+
+    public static PageDomain buildOrderPageRequest(String orderField,boolean isAsc) {
+        PageDomain pageDomain = getPageDomain();
+        if(StringUtils.isNotEmpty(orderField))
+        {
+            pageDomain.setOrderByColumn(orderField);
+            pageDomain.setIsAsc(isAsc ? "asc": "desc");
+        }
+        return pageDomain;
     }
 }

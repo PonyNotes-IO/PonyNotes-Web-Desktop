@@ -2,16 +2,13 @@ package com.ruoyi.web.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.core.domain.entity.SysUser;
-import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.SysPaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentOrderVo;
 import com.ruoyi.system.domain.vo.PaymentResult;
-import com.ruoyi.xmbj.domain.AfSubscriptionAddons;
-import com.ruoyi.xmbj.domain.AfSubscriptionPlans;
+import com.ruoyi.system.domain.vo.PaymentListDTO;
 import com.ruoyi.xmbj.domain.ClientUser;
 
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -56,4 +53,5 @@ public interface PaymentService {
 
     List<PaymentOrderVo> serPaymentOrders(PaymentOrderVo paymentOrderVo);
 
+    List<PaymentListDTO> myPaymentList(String clientAuth);
 }

@@ -6,6 +6,7 @@ import com.aliyuncs.http.HttpUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.annotation.Anonymous;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.StringUtils;
@@ -41,7 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 @Api(value = "支付",tags = {"支付"})
 @RestController
 @RequestMapping("/api/payment")
-public class PaymentController {
+public class PaymentController extends BaseController {
 
     private Logger log = LoggerFactory.getLogger(PaymentController.class);
 
@@ -130,6 +131,17 @@ public class PaymentController {
     public AjaxResult checkPaymentStatus(@RequestParam String orderNo) {
         String status = paymentService.checkPaymentStatus(orderNo);
         return AjaxResult.success(status);
+    }
+
+    @GetMapping(value = "/myPaymentList")
+    @Anonymous
+    public AjaxResult myPaymentList(@RequestHeader("X-Client-Authorization") String clientAuth
+    ,@RequestParam("pageNum") Integer pageNum
+    ) {
+        return AjaxResult.success(() -> {
+            startOrderPage("create_time",false);
+            return paymentService.myPaymentList(clientAuth);
+        });
     }
 
     /**

@@ -55,6 +55,10 @@ public class BaseController
         PageUtils.startPage();
     }
 
+    protected void startOrderPage(String order,boolean isAsc) {
+        PageUtils.startOrderPage(order,isAsc);
+    }
+
     /**
      * 设置请求排序数据
      */

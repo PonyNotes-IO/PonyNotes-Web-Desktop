@@ -100,7 +100,7 @@
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180" />
       <el-table-column label="支付时间" align="center" prop="payTime" width="180" />
-      <el-table-column label="会员到期时间" align="center" prop="memberExpireTime" width="180" />
+      <!-- <el-table-column label="会员到期时间" align="center" prop="memberExpireTime" width="180" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

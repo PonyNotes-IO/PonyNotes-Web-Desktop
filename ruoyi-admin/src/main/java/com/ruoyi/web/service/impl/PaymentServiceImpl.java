@@ -25,8 +25,10 @@ import com.ruoyi.web.config.RestTemplateConfig;
 import com.ruoyi.system.domain.vo.PaymentResult;
 import com.ruoyi.web.config.WechatPayConfig;
 import com.ruoyi.web.config.XmAlipayConfig;
+import com.ruoyi.system.domain.vo.PaymentListDTO;
 import com.ruoyi.web.service.PaymentService;
 import com.ruoyi.web.util.OrderNoGenerator;
+import com.ruoyi.xmbj.XmJwtUtil;
 import com.ruoyi.xmbj.api.protocol.subscription.PurchaseAddonRequest;
 import com.ruoyi.xmbj.api.protocol.subscription.SubscribeRequest;
 import com.ruoyi.xmbj.api.service.PonynotesService;
@@ -101,6 +103,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @Value("${xm.client.secret:aGVsbG80NTY=}")
+    private String key;
 
     @Autowired
     private IAfSubscriptionPlansService iAfSubscriptionPlansService;
@@ -821,6 +826,12 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
         return list;
+    }
+
+    @Override
+    public List<PaymentListDTO> myPaymentList(String clientAuth) {
+        String subject = XmJwtUtil.getSubject(key, clientAuth);
+        return paymentService.myPaymentList(subject);
     }
 
 

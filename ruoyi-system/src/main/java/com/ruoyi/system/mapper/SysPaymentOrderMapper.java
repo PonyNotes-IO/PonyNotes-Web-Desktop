@@ -3,6 +3,7 @@ package com.ruoyi.system.mapper;
 import java.util.Date;
 import java.util.List;
 import com.ruoyi.system.domain.SysPaymentOrder;
+import com.ruoyi.system.domain.vo.PaymentListDTO;
 import com.ruoyi.system.domain.vo.PaymentOrderVo;
 
 /**
@@ -101,4 +102,5 @@ public interface SysPaymentOrderMapper
 
     int deleteSysPaymentOrderByIds(Long[] ids);
 
+    List<PaymentListDTO> myPaymentList(String userInfo);
 }
