@@ -33,6 +33,9 @@ public interface AfUserSubscriptionsMapper {
     int updateUserSubscriptions(AfUserSubscriptions entity);
 
     AfUserSubscriptions selectUserSubscriptionById(Long clientSubscriptionId);
+    AfUserSubscriptions selectLastPausedList(Long userId);
 
     void insert(AfUserSubscriptions subscription);
+
+    List<AfUserSubscriptions> queryToUpdateSubscriptions();
 }

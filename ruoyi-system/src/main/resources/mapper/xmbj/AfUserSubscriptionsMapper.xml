@@ -37,6 +37,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             uid = #{userId}
         </where>
     </select>
+    <select id="queryToUpdateSubscriptions" resultMap="AfUserSubscriptionsResult">
+        <include refid="AfUserSubscriptionsResultVO" />
+        <where>
+             status = 'active' and end_date &lt; now() ORDER BY end_date LIMIT 50
+        </where>
+    </select>
+    <select id="selectLastPausedList" resultMap="AfUserSubscriptionsResult" parameterType="Long">
+        <include refid="AfUserSubscriptionsResultVO" />
+        <where>
+            status = 'pending' and end_date &lt; now() and uid = #{userId} ORDER BY end_date LIMIT 1
+        </where>
+    </select>
     <update id="updateExpiredSubscriptions" parameterType="Long">
         update af_user_subscriptions set status = 'cancelled' where uid = #{userId} and end_date is not null and
         end_date &gt; current_date
