@@ -4,7 +4,7 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 
 useSeoMeta({
-    title: '分享 - 小马笔记',
+    title: '邀请 - 小马笔记',
 })
 
 const route = useRoute();
