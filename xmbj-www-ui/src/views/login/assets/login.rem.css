@@ -1,0 +1,258 @@
+html {
+  font-size: 37.5px;
+}
+
+.page {
+  background-color: rgba(3, 3, 0, 1);
+  position: relative;
+  width: 24rem;
+  height: 38.4rem;
+  overflow: hidden;
+  padding: 0.134rem 0.56rem 12.64rem 0.56rem;
+}
+
+.box_1 {
+}
+
+.text_14 {
+  height: 0.374rem;
+  overflow-wrap: break-word;
+  color: rgba(0, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.4rem;
+}
+
+.text_15 {
+  height: 0.374rem;
+  overflow-wrap: break-word;
+  color: rgba(0, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.4rem;
+  margin-left: 0.214rem;
+}
+
+.image_8 {
+  width: 0.96rem;
+  height: 0.267rem;
+  margin: 0.054rem 0 0.054rem 17.44rem;
+}
+
+.text_16 {
+  overflow-wrap: break-word;
+  color: rgba(0, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
+  font-weight: NaN;
+  text-align: right;
+  white-space: nowrap;
+  line-height: 0.374rem;
+  margin-left: 0.107rem;
+}
+
+.image_9 {
+  width: 0.72rem;
+  height: 0.32rem;
+  margin: 0.027rem 0 0.027rem 0.08rem;
+}
+
+.image-wrapper_3 {
+  margin: 5.094rem 9.974rem 0 10.24rem;
+}
+
+.image_3 {
+  width: 2.667rem;
+  height: 2.667rem;
+}
+
+.text-wrapper_3 {
+  margin: 0.8rem 8.107rem 0 8.374rem;
+}
+
+.text_4 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 0.8rem;
+  font-family: DingTalk-JinBuTi;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.96rem;
+}
+
+.box_2 {
+  width: 10.134rem;
+  align-self: center;
+  margin-top: 1.334rem;
+}
+
+.text_7 {
+  overflow-wrap: break-word;
+  color: rgba(153, 153, 153, 1);
+  font-size: 0.533rem;
+  font-family: PingFangSC-Medium;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.747rem;
+  padding: 0 0 0 0rem;
+  background: none;
+  border: 0;
+  flex: auto;
+}
+.input_1 {
+  background-color: rgba(35, 35, 35, 1);
+  border-radius: 8px;
+  border: 1px solid rgba(69, 69, 69, 1);
+  padding-left: 0.534rem;
+  width: 10.134rem;
+  height: 1.494rem;
+  padding-right: 0.534rem;
+}
+.input_1>>>.van-field__body {
+  height: 1.494rem;
+}
+
+.box_3 {
+  width: 10.134rem;
+  align-self: center;
+  margin-top: 0.534rem;
+}
+
+.button_1 {
+  background-color: rgba(248, 149, 117, 1);
+  border-radius: 8px;
+  padding: 0.347rem 3.707rem 0.347rem 3.974rem;
+}
+
+.text_8 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 0.533rem;
+  font-family: PingFangSC-Medium;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.747rem;
+}
+
+.box_4 {
+  margin: 0.534rem 7.227rem 0 6.374rem;
+}
+
+.image-text_2 {
+  width: 9.28rem;
+}
+
+.checkbox_1 {
+  border-radius: 50%;
+  width: 0.534rem;
+  height: 0.534rem;
+  border: 2px solid rgba(151, 151, 151, 1);
+  margin: 0.027rem 0 0.027rem 0;
+}
+
+.text-group_1 {
+  width: 8.534rem;
+  height: 0.587rem;
+  overflow-wrap: break-word;
+  font-size: 0;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.587rem;
+}
+
+.text_9 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 0.426rem;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.587rem;
+}
+
+.text_10 {
+  overflow-wrap: break-word;
+  color: rgba(248, 149, 117, 1);
+  font-size: 0.426rem;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.587rem;
+}
+
+.text_11 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 0.426rem;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.587rem;
+}
+
+.text_12 {
+  overflow-wrap: break-word;
+  color: rgba(248, 149, 117, 1);
+  font-size: 0.426rem;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.587rem;
+}
+
+.box_5 {
+  width: 10.134rem;
+  align-self: center;
+  margin-top: 6.16rem;
+}
+
+.image_6 {
+  width: 3.2rem;
+  height: 0.027rem;
+  margin: 0.347rem 0 0.294rem 0;
+}
+
+.text_13 {
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 0.48rem;
+  font-weight: NaN;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.667rem;
+  margin-left: 0.454rem;
+}
+
+.image_7 {
+  width: 3.2rem;
+  height: 0.027rem;
+  margin: 0.347rem 0 0.294rem 0.4rem;
+}
+
+.box_6 {
+  width: 9.6rem;
+  align-self: center;
+  margin-top: 1.067rem;
+}
+
+.image-wrapper_4 {
+  width: 9.6rem;
+  height: 1.867rem;
+  justify-content: space-between;
+}
+
+.icon_1 {
+  width: 1.867rem;
+  height: 1.867rem;
+  margin-right: 2rem;
+}
