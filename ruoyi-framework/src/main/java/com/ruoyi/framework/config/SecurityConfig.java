@@ -92,6 +92,7 @@ public class SecurityConfig
     public SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http) throws Exception {
         http.antMatcher("/api/ponynotes/**")
                 .authorizeHttpRequests(auth -> auth
+                        .antMatchers("/api/ponynotes/plans/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(ponynotesJwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
