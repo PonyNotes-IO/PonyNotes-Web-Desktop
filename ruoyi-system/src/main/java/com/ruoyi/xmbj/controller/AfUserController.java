@@ -30,7 +30,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2026-01-21
  */
 @RestController
-@RequestMapping("/afuser/usermgr")
+@RequestMapping("/xmbj/afuser/usermgr")
 public class AfUserController extends BaseController
 {
     @Autowired

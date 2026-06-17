@@ -1,8 +1,11 @@
 package com.ruoyi.framework.config;
 
+import com.ruoyi.framework.security.filter.PonynotesJwtTokenFilter;
+import com.ruoyi.framework.web.service.PonyNotesTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -56,6 +59,9 @@ public class SecurityConfig
      */
     @Autowired
     private JwtAuthenticationTokenFilter authenticationTokenFilter;
+
+    @Autowired
+    private PonynotesJwtTokenFilter ponynotesJwtTokenFilter;
     
     /**
      * 跨域过滤器
@@ -81,6 +87,22 @@ public class SecurityConfig
         return new ProviderManager(daoAuthenticationProvider);
     }
 
+    @Bean
+    @Order(1) // 优先级高的先匹配
+    public SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.antMatcher("/api/ponynotes/**")
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(ponynotesJwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(corsFilter, PonynotesJwtTokenFilter.class)
+                .addFilterBefore(corsFilter, LogoutFilter.class)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                );
+        return http.build();
+    }
+
     /**
      * anyRequest          |   匹配所有请求路径
      * access              |   SpringEl表达式结果为true时可以访问
@@ -97,6 +119,7 @@ public class SecurityConfig
      * authenticated       |   用户登录后可访问
      */
     @Bean
+    @Order(2)
     protected SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception
     {
         return httpSecurity

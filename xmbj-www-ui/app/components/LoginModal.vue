@@ -21,6 +21,8 @@ const countdown = ref(0)
 const isCodeSent = ref(false)
 const loading = ref(false)
 
+const dyLoginUrl = `https://open.douyin.com/platform/oauth/connect?client_key=awwln96o098l1hik&redirect_uri=https://www.xiaomabiji.com/douyin/callback&scope=user_info&state=t${Date.now().getTime()}`
+
 const isRegisterButtonActive = computed(() => {
     return phoneNumber.value.trim() !== '' && agreeTerms.value && verificationCode.value.trim() !== ''
 })
@@ -131,6 +133,37 @@ const closeModal = () => {
 const stopPropagation = (event) => {
     event.stopPropagation()
 }
+
+const handleDouyinLogin = async () => {
+    try {
+        loading.value = true
+        const windowWidth = 800
+        const windowHeight = 600
+        const left = (window.screen.width - windowWidth) / 2
+        const top = (window.screen.height - windowHeight) / 2
+        const windowFeatures = `width=${windowWidth},height=${windowHeight},left=${left},top=${top},location=no,menubar=no,toolbar=no,resizable=yes,scrollbars=yes`
+        window.open(dyLoginUrl, '_blank', windowFeatures)
+        // const response = await api.user.douyinLogin()
+        
+        // if (response.code === 200) {
+        //     // 抖音登录成功，存入token到localStorage
+        //     const token = response.token
+        //     console.log("抖音登录成功，token：" + token, response)
+        //     userStore.setUser(response.data, response.token)
+            
+        //     localStorage.setItem('authToken', token)
+        //     emit('close')
+        //     router.push('/account')
+        // } else {
+        //     alert(response.msg || '抖音登录失败，请重试')
+        // }
+    } catch (error) {
+        console.error('抖音登录失败:', error)
+        alert('抖音登录失败，请稍后重试')
+    } finally {
+        loading.value = false
+    }
+}
 </script>
 
 <template>
@@ -207,17 +240,17 @@ const stopPropagation = (event) => {
 
 
                 <!-- 社交登录按钮 (还原为圆角胶囊样式) -->
-                <!-- <button
+                <button
                     class="w-full py-3.5 mb-4 rounded-full border border-[#EEEEEE] bg-white text-gray-800 text-[15px] font-bold flex items-center justify-center gap-3 hover:bg-[#F9F9F9] transition-colors shadow-none">
                     <img src="/images/login/weixin.png" class="h-6 w-6" alt="微信登录" />
                     微信登录
                 </button>
 
-                <button
+                <button @click="handleDouyinLogin"
                     class="w-full py-3.5 rounded-full border border-[#EEEEEE] bg-white text-gray-800 text-[15px] font-bold flex items-center justify-center gap-3 hover:bg-[#F9F9F9] transition-colors shadow-none">
                     <img src="/images/login/douyin.png" class="h-6 w-6" alt="抖音登录" />
                     抖音登录
-                </button> -->
+                </button>
 
             </div>
         </div>
