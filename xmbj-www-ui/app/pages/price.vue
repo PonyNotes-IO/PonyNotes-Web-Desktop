@@ -122,44 +122,75 @@ const formatStorage = (gb) => {
         return gb.toFixed(2) + 'MB';
     }
 }
+const isValidBillingType = (val) => {
+    const num = Number(val);
+    return !isNaN(num) && (num === 0 || num === 1);
+};
+
+const handleCreatePayment = () => {
+    const query = route.query;
+    const planId = Number(query.planId);
+    const billingType = Number(query.billingType);
+    const userInfo = query.userInfo;
+
+    if (!planId || isNaN(planId) || !isValidBillingType(billingType) || !userInfo) {
+        return false;
+    }
+
+    loading.value = true;
+    api.payment.createPayment({
+        planId,
+        billingType,
+        userInfo: String(userInfo),
+        paymentType: 'alipay',
+    }).then(res => {
+        console.log('创建支付订单', alipayFormContainer.value, alipayFormContainer, res);
+        proccessResult(res);
+    }).catch(err => {
+        console.error('创建支付订单失败:', err);
+        Toast.error('创建订单失败，请稍后重试');
+    }).finally(() => {
+        loading.value = false;
+    });
+    return true;
+};
+
+const handlePaymentResult = () => {
+    const query = route.query;
+    const orderNo = query.orderNo;
+    const paymentType = query.paymentType;
+    const status = query.status;
+
+    if (!orderNo || !paymentType || !status) {
+        return false;
+    }
+
+    loadingText.value = '查询订单支付结果中...';
+    loading.value = true;
+    api.payment.paymentStatus(String(orderNo)).then(res => {
+        console.log('查询支付订单', res);
+        proccessPaymentResult(res);
+    }).catch(err => {
+        console.error('查询支付结果失败:', err);
+        Toast.error('查询支付结果失败，请刷新页面重试');
+    }).finally(() => {
+        loading.value = false;
+    });
+    return true;
+};
+
 onMounted(() => {
-    // 初始化 AOS 配置
     AOS.init({
         duration: 1000,
         easing: 'ease-out-quint',
         once: false,
         offset: 50,
         anchorPlacement: 'top-bottom',
-    })
-    const query = route.query;
-    if(query.planId && query.billingType !== undefined && query.userInfo) {
-        loading.value = true;
-        api.payment.createPayment({
-            planId: query.planId,
-            billingType: query.billingType,
-            userInfo: query.userInfo,
-            'paymentType':'alipay',
-        }).then(res => {
-            console.log('创建支付订单',alipayFormContainer.value,alipayFormContainer,res);
-            proccessResult(res);
-        }).finally(() => {
-            loading.value = false;
-        })
-    }
-    console.log('query',query);
-    if(query.orderNo && query.paymentType && query.status) {
-        // return;
-        loadingText.value = '查询订单支付结果中...';
-        // loading.value = true;
-        api.payment.paymentStatus(query.orderNo).then(res => {
-            console.log('查询支付订单',res);
-            proccessPaymentResult(res);
-        }).finally(() => {
-            loading.value = false;
-        })
-    } else {
-        initPlans();
-    }
+    });
+
+    handlePaymentResult();
+    handleCreatePayment();
+    initPlans();
 })
 </script>
 

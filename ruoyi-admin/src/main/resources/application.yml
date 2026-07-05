@@ -223,7 +223,8 @@ payment:
 # 七牛云配置
 qiniu:
   enabled: true
-  domain: t8udshr57.hb-bkt.clouddn.com
+#  domain: t8udshr57.hb-bkt.clouddn.com
+  domain: arts.xiaomabiji.com
   access-key: Wq1jOYS5ERxXfMrSt2resSFMHr5sA7i4lDNx_dtv
   secret-key: cuKLUlHsPgxr5Ugn2DJlsoefMv79Jso5Ct3JHrwC
   bucket: ponynotes-ai-files

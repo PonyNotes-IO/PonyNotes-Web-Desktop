@@ -28,9 +28,11 @@ export interface UserEntity {
 }
 
 export interface CreatePaymentParams {
-  amount: number
+  planId: number
+  billingType: number
   paymentType: string
   userInfo: string
+  amount?: number
   productName?: string
   openid?: string
   url?: string
