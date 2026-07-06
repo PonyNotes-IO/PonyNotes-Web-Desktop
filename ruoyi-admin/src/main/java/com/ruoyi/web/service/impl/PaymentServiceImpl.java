@@ -649,12 +649,12 @@ public class PaymentServiceImpl implements PaymentService {
             ponynotesService.purchaseAddon(addon);
         }
 
-        if (!StringUtils.isEmpty(order.getPlanId())) {
+        if (StringUtils.isNotEmpty(order.getPlanId())) {
             AfUserSubscriptions userSubscription = subscriptionService.subscribe(Long.valueOf(order.getClientUserId()),
                     Long.valueOf(order.getPlanId()), order.getBillingType());
             order.setClientSubscriptionId(String.valueOf(userSubscription.getId()));
         }
-        if (!StringUtils.isEmpty(order.getAddonId())) {
+        if (StringUtils.isNotEmpty(order.getAddonId())) {
             AfUserAddons userAddon = subscriptionService.purchaseAddon(Long.valueOf(order.getClientUserId()),
                     Long.valueOf(order.getAddonId()), 1);
             order.setClientUserAddonId(String.valueOf(userAddon.getId()));

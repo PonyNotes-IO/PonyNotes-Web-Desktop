@@ -1,7 +1,9 @@
 package com.ruoyi.web.controller.tool;
 
+import com.aliyun.oss.model.OSSObject;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.utils.qiniu.QiniuUtils;
+import com.ruoyi.xmbj.api.service.OssService;
 import com.ruoyi.xmbj.service.IAfUserSubscriptionsService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,7 +47,8 @@ public class SceneController {
     }
 
     @Autowired
-    private QiniuUtils qiniuUtils;
+    private OssService ossService;
+//    private QiniuUtils qiniuUtils;
     private static final String STORAGE_DIR = "./data/scenes";
     private final Map<String, SceneData> sceneCache = new ConcurrentHashMap<>();
 
@@ -149,7 +152,7 @@ public class SceneController {
     // ===== File upload/download for collaboration images =====
 
     /**
-     * Upload an image file (already encrypted+compressed by client) to Qiniu.
+     * Upload an image file (already encrypted+compressed by client) to Aliyun.
      * Uses multipart/form-data as required by Java file upload.
      *
      * @param roomId collaboration room ID
@@ -165,18 +168,18 @@ public class SceneController {
         try {
             String safeRoomId = sanitizeId(roomId);
             String safeFileId = sanitizeId(fileId);
-            String qiniuKey = buildFileKey(safeRoomId, safeFileId);
+            String ossFileKey = buildFileKey(safeRoomId, safeFileId);
 
-            log.info("Uploading file to Qiniu: roomId={}, fileId={}, size={}", safeRoomId, safeFileId, file.getSize());
+            log.info("Uploading file to Aliyun: roomId={}, fileId={}, size={}", safeRoomId, safeFileId, file.getSize());
 
             try (InputStream is = file.getInputStream()) {
-                qiniuUtils.uploadFile(is, qiniuKey);
+                ossService.uploadFile(ossFileKey,is,file.getSize());
             }
             result.put("success", true);
             result.put( "fileId", safeFileId);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            log.error("Failed to upload file to Qiniu: roomId={}, fileId={}", roomId, fileId, e);
+            log.error("Failed to upload file to Aliyun: roomId={}, fileId={}", roomId, fileId, e);
             result.put("success", false);
             result.put("error", e.getMessage());
             return ResponseEntity.internalServerError().body(result);
@@ -184,7 +187,7 @@ public class SceneController {
     }
 
     /**
-     * Download an image file from Qiniu.
+     * Download an image file from Aliyun.
      * Returns the encrypted binary data as application/octet-stream.
      *
      * @param roomId collaboration room ID
@@ -197,45 +200,48 @@ public class SceneController {
         try {
             String safeRoomId = sanitizeId(roomId);
             String safeFileId = sanitizeId(fileId);
-            String qiniuKey = buildFileKey(safeRoomId, safeFileId);
+            String ossFileKey = buildFileKey(safeRoomId, safeFileId);
 
-            if (!qiniuUtils.fileExists(qiniuKey)) {
-                log.warn("File not found in Qiniu: roomId={}, fileId={}", safeRoomId, safeFileId);
+            if (!ossService.fileExists(ossFileKey)) {
+                log.warn("File not found in Aliyun: roomId={}, fileId={}", safeRoomId, safeFileId);
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
 
-            long contentLength = qiniuUtils.getFileSize(qiniuKey);
+//            long contentLength = ossService.getFileSize(ossFileKey);
 
-            log.info("Downloading file from Qiniu: roomId={}, fileId={}, size={}", safeRoomId, safeFileId, contentLength);
+            OSSObject ossObject = ossService.downloadFile(ossFileKey);
+            long contentLength = ossObject.getObjectMetadata().getContentLength();
+
+            log.info("Downloading file: roomId={}, fileId={}, size={}", safeRoomId, safeFileId, contentLength);
 
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             response.setContentLengthLong(contentLength);
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileId + "\"");
             response.setHeader(HttpHeaders.CACHE_CONTROL, "public, max-age=31536000");
 
-            try (InputStream is = qiniuUtils.downloadFile(qiniuKey)) {
+            try (InputStream is = ossObject.getObjectContent()) {
                 FileCopyUtils.copy(is, response.getOutputStream());
             }
         } catch (Exception e) {
-            log.error("Failed to download file from Qiniu: roomId={}, fileId={}", roomId, fileId, e);
+            log.error("Failed to download file from Aliyun: roomId={}, fileId={}", roomId, fileId, e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Sanitize room/file IDs to prevent path traversal in Qiniu keys.
+     * Sanitize room/file IDs to prevent path traversal in Aliyun keys.
      */
     private String sanitizeId(String id) {
         return id.replaceAll("[^a-zA-Z0-9_-]", "_");
     }
 
     /**
-     * Build the Qiniu object key for a scene file.
+     * Build the Aliyun object key for a scene file.
      *
      * @param roomId collaboration room ID
      * @param fileId excalidraw file ID
-     * @return Qiniu key like "scenes/files/{roomId}/{fileId}"
+     * @return Aliyun key like "scenes/files/{roomId}/{fileId}"
      */
     private String buildFileKey(String roomId, String fileId) {
         return String.format("scenes/files/%s/%s", roomId, fileId);

@@ -61,3 +61,10 @@ spring:
         wall:
           config:
             multi-statement-allow: true
+
+oss:
+#  endpoint: scenes-1521503155920564.oss-cn-beijing-internal.oss-accesspoint.aliyuncs.com
+  endpoint: oss-cn-beijing-internal.aliyuncs.com
+  access-key-id: dds
+  access-key-secret: abb
+  bucket-name: ponynotes-ai-files
