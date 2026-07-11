@@ -185,7 +185,8 @@ public class SubscriptionService {
         AfUserSubscriptions subscription = AfUserSubscriptions.builder()
                 .uid(userId)
                 .planId(planId)
-                .startDate(now)
+                .startDate(target != null && !"mfb".equalsIgnoreCase(target.getBillingType()) && target.getEndDate() != null && target.getEndDate().after(now) ?
+        target.getStartDate() : now )
                 .endDate(endDate)
                 .billingType(billingType)
                 .status("active")
@@ -420,7 +421,7 @@ public class SubscriptionService {
     private Date calculateSubscriptionEndDate(Date startDate, String billingType) {
         if ("monthly".equalsIgnoreCase(billingType) || "0".equals(billingType)) {
             return DateUtils.addMonths(startDate,1);// startDate.plusMonths(1);
-        } else if ("annual".equalsIgnoreCase(billingType) || "1".equals(billingType)) {
+        } else if ("yearly".equalsIgnoreCase(billingType) || "1".equals(billingType)) {
             return DateUtils.addYears(startDate,1);
         }
         // 免费计划默认30天
