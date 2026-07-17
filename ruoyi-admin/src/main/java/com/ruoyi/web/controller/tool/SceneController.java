@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +27,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -34,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @CrossOrigin(origins = "*")
 public class SceneController {
 
-
+    private static final String SHARE_DIR = "./data/share";
     @Autowired
     private IAfUserSubscriptionsService afUserSubscriptionsService;
 
@@ -114,7 +118,7 @@ public class SceneController {
 
         Path filePath = getScenePath(roomId);
         if (Files.exists(filePath)) {
-            String content = String.join("", Files.readAllLines(filePath));
+            List<String> content = Files.readAllLines(filePath);
             SceneData data = parseSceneData(content);
             sceneCache.put(roomId, data);
             return data;
@@ -124,11 +128,13 @@ public class SceneController {
 
     private void saveSceneToFile(String roomId, int sceneVersion, String iv, String ciphertext) throws IOException {
         SceneData data = new SceneData(sceneVersion, iv, ciphertext);
-        sceneCache.put(roomId, data);
+        if(roomId != null) {
+            sceneCache.put(roomId, data);
+            Path filePath = getScenePath(roomId);
+            String content = String.format("%d\n%s\n%s", sceneVersion, iv, ciphertext);
+            Files.write(filePath, content.getBytes(StandardCharsets.UTF_8));
+        }
 
-        Path filePath = getScenePath(roomId);
-        String content = String.format("%d\n%s\n%s", sceneVersion, iv, ciphertext);
-        Files.write(filePath, content.getBytes(StandardCharsets.UTF_8));
     }
 
     private Path getScenePath(String roomId) {
@@ -136,13 +142,12 @@ public class SceneController {
         return Paths.get(STORAGE_DIR, safeRoomId + ".txt");
     }
 
-    private SceneData parseSceneData(String content) {
-        String[] lines = content.split("\n");
-        if (lines.length >= 3) {
+    private SceneData parseSceneData(List<String> content) {
+        if (content != null && content.size() >= 3) {
             return new SceneData(
-                    Integer.parseInt(lines[0].trim()),
-                    lines[1].trim(),
-                    lines[2].trim()
+                    Integer.parseInt(content.get(0)),
+                    content.get(1).trim(),
+                    content.get(2).trim()
             );
         }
         return null;
@@ -227,6 +232,78 @@ public class SceneController {
             log.error("Failed to download file from Aliyun: roomId={}, fileId={}", roomId, fileId, e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * 上传加密画布数据，生成分享链接 ID。
+     * 前端调用方式：fetch(BACKEND_V2_POST, { method: "POST", body: payload.buffer })
+     * 期望返回 JSON：{ "id": "xxx" }
+     */
+    @PostMapping("v2/post")
+    public ResponseEntity<?> createShare(HttpServletRequest request) {
+        Map<String,Object> ret = new HashMap<>();
+        ret.put("success", true);
+        try {
+            String id = UUID.randomUUID().toString().replace("-", "");
+
+            byte[] data = IOUtils.readFully(request.getInputStream(),request.getContentLength());
+
+            if (data.length == 0) {
+                        ret.put("error", true);
+                        ret.put("message", "Empty payload");
+                return ResponseEntity.badRequest().body(ret);
+            }
+
+            Path filePath = getSharePath(id);
+            Files.write(filePath, data);
+
+            log.info("Share created: id={}, size={} bytes", id, data.length);
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("id", id);
+            return ResponseEntity.ok(result);
+
+        } catch (Exception e) {
+            log.error("Failed to create share", e);
+            ret.put("error", true);
+            ret.put("message", e.getMessage());
+            return ResponseEntity.internalServerError().body(ret);
+        }
+    }
+
+    /**
+     * 根据 ID 下载加密画布数据。
+     * 前端调用方式：fetch(BACKEND_V2_GET + id)
+     * 期望返回二进制数据（application/octet-stream）
+     */
+    @GetMapping("v2/{id}")
+    public ResponseEntity<?> getShare(@PathVariable String id) {
+        try {
+            String safeId = sanitizeId(id);
+            Path filePath = getSharePath(safeId);
+
+            if (!Files.exists(filePath)) {
+                return ResponseEntity.notFound().build();
+            }
+
+            byte[] data = Files.readAllBytes(filePath);
+
+            log.info("Share downloaded: id={}, size={} bytes", safeId, data.length);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .header(HttpHeaders.CACHE_CONTROL, "public, max-age=31536000")
+                    .body(data);
+
+        } catch (Exception e) {
+            log.error("Failed to get share: {}", id, e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    private Path getSharePath(String id) {
+        String safeId = sanitizeId(id);
+        return Paths.get(SHARE_DIR, safeId + ".bin");
     }
 
     /**
