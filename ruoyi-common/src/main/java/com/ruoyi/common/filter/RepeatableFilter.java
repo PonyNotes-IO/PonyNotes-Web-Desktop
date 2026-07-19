@@ -29,10 +29,17 @@ public class RepeatableFilter implements Filter
             throws IOException, ServletException
     {
         ServletRequest requestWrapper = null;
-        if (request instanceof HttpServletRequest
-                && StringUtils.startsWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE))
-        {
-            requestWrapper = new RepeatedlyRequestWrapper((HttpServletRequest) request, response);
+        if (request instanceof HttpServletRequest) {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            String contentType = httpRequest.getContentType();
+            String requestUri = httpRequest.getRequestURI();
+            boolean isJsonRequest = StringUtils.startsWithIgnoreCase(contentType, MediaType.APPLICATION_JSON_VALUE);
+            boolean isBinaryShareRequest = requestUri.contains("/api/scenes/v2/post");
+            if (isJsonRequest) {
+                requestWrapper = new RepeatedlyRequestWrapper(httpRequest, response);
+            } else if (isBinaryShareRequest) {
+                requestWrapper = new BinaryRepeatedlyRequestWrapper(httpRequest);
+            }
         }
         if (null == requestWrapper)
         {

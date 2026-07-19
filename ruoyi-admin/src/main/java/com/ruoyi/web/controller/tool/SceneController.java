@@ -61,8 +61,10 @@ public class SceneController {
         try {
             Files.createDirectories(Paths.get(STORAGE_DIR));
             log.info("Storage directory created: {}", STORAGE_DIR);
+            Files.createDirectories(Paths.get(SHARE_DIR));
+            log.info("Share directory created: {}", SHARE_DIR);
         } catch (IOException e) {
-            log.error("Failed to create storage directory", e);
+            log.error("Failed to create storage directories", e);
         }
     }
 
@@ -246,11 +248,11 @@ public class SceneController {
         try {
             String id = UUID.randomUUID().toString().replace("-", "");
 
-            byte[] data = IOUtils.readFully(request.getInputStream(),request.getContentLength());
+            byte[] data = IOUtils.toByteArray(request.getInputStream());
 
             if (data.length == 0) {
-                        ret.put("error", true);
-                        ret.put("message", "Empty payload");
+                ret.put("error", true);
+                ret.put("message", "Empty payload");
                 return ResponseEntity.badRequest().body(ret);
             }
 
