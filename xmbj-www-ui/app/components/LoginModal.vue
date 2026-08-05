@@ -21,7 +21,7 @@ const countdown = ref(0)
 const isCodeSent = ref(false)
 const loading = ref(false)
 
-const dyLoginUrl = `https://open.douyin.com/platform/oauth/connect?client_key=awwln96o098l1hik&redirect_uri=https://www.xiaomabiji.com/douyin/callback&scope=user_info&state=t${Date.now().getTime()}`
+const dyLoginUrl = `https://open.douyin.com/platform/oauth/connect?client_key=awwln96o098l1hik&redirect_uri=https://www.xiaomabiji.com/douyin/callback&scope=user_info&state=t${new Date().getTime()}`
 
 const isRegisterButtonActive = computed(() => {
     return phoneNumber.value.trim() !== '' && agreeTerms.value && verificationCode.value.trim() !== ''

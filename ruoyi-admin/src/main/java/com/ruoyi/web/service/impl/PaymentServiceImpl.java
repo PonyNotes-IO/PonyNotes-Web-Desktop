@@ -17,7 +17,6 @@ import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.domain.SysPaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentOrderVo;
 import com.ruoyi.system.service.ISysPaymentService;
@@ -74,9 +73,6 @@ import java.util.*;
 public class PaymentServiceImpl implements PaymentService {
     private static final Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
-    private static final String REDIS_KEY_JSAPI_TICKET = "wx_jsapi_ticket";
-    private static final Object TICKET_EXPIRE_SEC = 5000;
-
     @Value("${ruoyi.payment-debug:Y}")
     private String paymentDebug;
 
@@ -94,9 +90,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private RestTemplateConfig restTemplateConfig;
-
-    @Autowired
-    private TokenService tokenService;
 
     @Autowired
     private PonynotesService ponynotesService;
@@ -134,7 +127,7 @@ public class PaymentServiceImpl implements PaymentService {
         // 1. 生成唯一订单号orderNoGenerator
         // String orderNo = generateOrderNo(paymentType);
         String orderNo = OrderNoGenerator.generate(paymentType);
-        String payInfo = "";
+        String payInfo;
 
         // 2. 根据支付方式调用对应SDK生成二维码
         if ("wechat".equals(paymentType)) {
@@ -834,39 +827,4 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentService.myPaymentList(subject);
     }
 
-
-    // /**
-    // * 获取 jsapi_ticket（复用之前实现的逻辑，缓存优先）
-    // */
-    // private String getJsApiTicket() {
-    // // 先查缓存
-    //// String ticket = redisTemplate.opsForValue().get(REDIS_KEY_JSAPI_TICKET);
-    //// if (ticket != null) {
-    //// return ticket;
-    //// }
-    //
-    // // 缓存失效，先获取 access_token（复用之前实现的 getAccessToken 方法）
-    // String accessToken = getAccessToken();
-    //
-    // // 调用微信接口获取 jsapi_ticket
-    // String ticketUrl = String.format(
-    // "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi",
-    // accessToken
-    // );
-    // String response = new RestTemplate().getForObject(ticketUrl, String.class);
-    // com.alibaba.fastjson.JSONObject result =
-    // com.alibaba.fastjson.JSONObject.parseObject(response);
-    //
-    // if (result.getIntValue("errcode") != 0) {
-    // throw new RuntimeException("获取 jsapi_ticket 失败：" +
-    // result.getString("errmsg"));
-    // }
-    //
-    // // 缓存 ticket
-    // ticket = result.getString("ticket");
-    // redisTemplate.opsForValue().set(REDIS_KEY_JSAPI_TICKET, ticket,
-    // TICKET_EXPIRE_SEC, TimeUnit.SECONDS);
-    //
-    // return ticket;
-    // }
 }

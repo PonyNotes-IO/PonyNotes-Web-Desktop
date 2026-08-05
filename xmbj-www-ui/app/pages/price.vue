@@ -262,34 +262,36 @@ onMounted(() => {
                             class="w-full py-2.5 rounded-xl font-bold mb-6 border-none shadow-none text-[14px] transition-colors duration-300">立即体验</button>
                         <ul v-if="plan.planCode === 'standard'" :class="[selectedPlan === 2 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                             class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
-                            <li>面向内容创作者</li>
-                            <li>与高效工作者的智能笔记</li>
-                            <li>空间丰富AI+10GB云同步</li>
-                            <li>助你随时记录、随处创作</li>
-                            <li>一站整合写作、整理、归档</li>
+                            <li>学生与职场人的智能知识助手</li>
+                            <li>适合学习、工作与日常效率提升</li>
+                            <li>AI 智能笔记，高效整理信息</li>
+                            <li>10GB 云同步空间，多端随时访问</li>
+                            <li>快速记录、搜索与管理个人知识让每一次记录，都成为未来的价值</li>
                         </ul>
                         <ul v-if="plan.planCode === 'profersor'" :class="[selectedPlan === 2 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                             class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
-                            <li>面向内容创作者</li>
-                            <li>与高效工作者的智能笔记</li>
-                            <li>空间丰富AI+10GB云同步</li>
-                            <li>助你随时记录、随处创作</li>
-                            <li>一站整合写作、整理、归档</li>
+                            <li>内容创作者的 AI 创作工作台</li>
+                            <li>适合OPC、创作者与知识工作者</li>
+                            <li>无限灵感记录，承载大量内容创作</li>
+                            <li>50GB 云同步空间，随时随地创作</li>
+                            <li>写作、整理、归档一站完成从灵感捕捉到内容发布，让创作更高效</li>
                         </ul>
                         <ul v-if="plan.planCode === 'mfb'" :class="[selectedPlan === 0 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                             class="space-y-2.5 text-[13px] px-1 transition-colors duration-300">
-                            <li>本地免费使用</li>
-                            <li>你的随身知识库系统</li>
-                            <li>AI图文生成 + 云存储</li>
-                            <li>开启智能学习体验</li>
+                            <li>开启你的 AI 智能笔记之旅</li>
+                            <li>适合个人体验与轻量记录</li>
+                            <li>本地免费使用，数据掌握在自己手中</li>
+                            <li>AI 图文生成，快速记录灵感</li>
+                            <li>基础知识库管理，构建个人信息中心随时记录，让知识开始沉淀</li>
                         </ul>
                         <ul v-if="plan.planCode === 'hiclass'" :class="[selectedPlan === 3 ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                         class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
-                            <li>团队协作不止是共享</li>
-                            <li>更是高效共创</li>
-                            <li>专属权限+共享工作区</li>
-                            <li>大容量云空间轻松协同办公</li>
-                            <li>配套AI能力为团队注入内容</li>
+                            <li>团队协作的智能知识空间</li>
+                            <li>适合团队、工作室与企业使用</li>
+                            <li>专属权限管理，保障团队知识安全</li>
+                            <li>共享工作区，高效协同创作</li>
+                            <li>大容量云空间，统一沉淀团队资产</li>
+                            <li>AI 能力赋能团队内容生产不只是共享文件，更是共同构建团队智慧</li>
                         </ul>
                         <ul :class="[selectedPlan === index ? 'text-gray-950 font-bold' : 'text-gray-400 font-medium']"
                             class="space-y-2.5 text-[13px] px-1 transition-colors duration-300">
@@ -624,7 +626,13 @@ onMounted(() => {
                         <div class="space-y-3" data-aos="fade-up">
                             <h4 class="text-[18px] font-bold text-white">1、我需要更多的云存储空间怎么办？</h4>
                             <div class="text-[15px] text-white/70 leading-relaxed font-medium">
-                                <p>你可以随时通过「账户设置 → 存储扩容」购买额外空间。我们提供：5GB ¥5/月、20GB ¥15/月、50GB ¥35/月。空间立即生效，叠加原有容量，无需等待。
+                                <p>如果当前套餐空间不足，可以通过升级会员套餐获得更多云存储空间。<br/>
+                                    不同会员套餐提供不同容量：<br/>
+                                    免费版：300MB<br/>
+                                    标准版：10GB<br/>
+                                    专业版：50GB<br/>
+                                    高级版：150GB<br/>
+                                    升级后，新的存储空间和会员权益会立即生效。
                                 </p>
                             </div>
                         </div>
@@ -632,49 +640,77 @@ onMounted(() => {
                         <div class="space-y-3" data-aos="fade-up">
                             <h4 class="text-[18px] font-bold text-white">2、AI 对话/图片额度用完了怎么办？</h4>
                             <div class="text-[15px] text-white/70 leading-relaxed font-medium">
-                                <p>你可以购买 AI 增值包扩容，额度实时到账，不限使用期限。我们提供多种不同规格的额度包以供选择。</p>
+                                <p>当前套餐内 AI 使用额度达到上限后，可以升级到更高版本会员，获得更多 AI 使用额度和更强的创作能力。<br>
+不同套餐提供不同 AI 使用权益：<br/>
+免费版：体验基础 AI 功能<br/>
+标准版：满足日常学习与工作需求<br/>
+专业版：适合高频创作和知识整理<br/>
+高级版：满足团队协作和更高强度使用场景</p>
                             </div>
                         </div>
                         <!-- 3 -->
                         <div class="space-y-3" data-aos="fade-up">
                             <h4 class="text-[18px] font-bold text-white">3、可以随时升级或降级套餐吗？</h4>
                             <div class="text-[15px] text-white/70 leading-relaxed font-medium">
-                                <p>您可以随时升级套餐，系统将按比例扣除剩余费用，补差价即可完成升级。但当前暂不支持主动降级，以保障数据完整性。</p>
+                                <p>支持随时升级会员套餐。<br/>
+升级时系统会根据当前套餐剩余时间自动计算费用，补充差额后即可完成升级。<br/>
+目前暂不支持主动降级套餐，以保障数据空间和已有权益的稳定使用。</p>
                             </div>
                         </div>
                         <!-- 4 -->
                         <div class="space-y-3" data-aos="fade-up">
-                            <h4 class="text-[18px] font-bold text-white">4、学生版只有学生可以买吗？</h4>
+                            <h4 class="text-[18px] font-bold text-white">4、不同套餐之间有什么区别？</h4>
                             <div class="text-[15px] text-white/70 leading-relaxed font-medium">
-                                <p>不是的，所有用户都可以购买学生版，无需学生认证。初衷是提供低门槛入门体验，帮助更多人尝试 AI 驱动的笔记。</p>
+                                <p>不同套餐主要区别在于：<br/>
+云存储空间大小  <br/>
+AI 使用额度<br/>
+多端同步能力<br/>
+协作工作区数量<br/>
+团队协作能力<br/>
+你可以根据个人记录、内容创作或团队协作需求选择适合的套餐。</p>
                             </div>
                         </div>
                         <!-- 5 -->
                         <div class="space-y-3" data-aos="fade-up">
                             <h4 class="text-[18px] font-bold text-white">5、我的数据会因未续费而丢失吗？</h4>
                             <div class="text-[15px] text-white/70 leading-relaxed font-medium">
-                                <p>即使取消订阅，数据仍保留在本地。云同步和 AI 等功能将暂停。超过 30 天未续费的账号，云端数据可能会被清理，请务必提前备份。</p>
+                                <p>停止续费后，你的本地数据仍会保留。<br/>
+云同步、AI 等会员功能将暂停使用。<br/>
+为了保障数据安全，请及时续费或提前备份重要内容。</p>
                             </div>
                         </div>
                         <!-- 6 -->
                         <div class="space-y-3" data-aos="fade-up">
                             <h4 class="text-[18px] font-bold text-white">6、付费订阅后是否支持退款？</h4>
                             <div class="text-[15px] text-white/70 leading-relaxed font-medium">
-                                <p>目前暂不支持退款，请在购买前了解产品。AI 额度和存储空间启用即产生成本。</p>
+                                <p>目前暂不支持退款。<br/>
+购买前请确认套餐内容是否符合需求。会员权益开通后会立即生效，请谨慎选择适合自己的套餐。</p>
                             </div>
                         </div>
                         <!-- 7 -->
                         <div class="space-y-3" data-aos="fade-up">
                             <h4 class="text-[18px] font-bold text-white">7、可以通过第三方工具同步或备份数据吗？</h4>
                             <div class="text-[15px] text-white/70 leading-relaxed font-medium">
-                                <p>不建议。这类工具非为笔记实时文件设计，可能导致数据损坏或锁定异常。推荐使用软件内置的加密云同步功能。</p>
+                                <p>不建议使用未经官方支持的第三方同步工具。<br/>
+第三方工具可能导致数据冲突、同步异常或内容损坏。<br/>
+建议使用小马笔记提供的同步功能管理数据，保障笔记安全。</p>
                             </div>
                         </div>
                         <!-- 8 -->
                         <div class="space-y-3" data-aos="fade-up">
-                            <h4 class="text-[18px] font-bold text-white">8、我在电脑端购买了订阅，如何在 iPad 上恢复使用？</h4>
+                            <h4 class="text-[18px] font-bold text-white">8、我在电脑端购买订阅，如何在 iPad 上恢复使用？</h4>
                             <div class="text-[15px] text-white/70 leading-relaxed font-medium">
-                                <p>使用相同账号登录，系统将自动同步权益。Apple 内购用户如果未自动恢复，可点击「恢复购买」按钮进行手动同步。</p>
+                                <p>使用同一个账号登录小马笔记，系统会自动同步你的会员权益。<br/>
+如果使用 Apple 内购后未自动恢复，可以点击 「恢复购买」 按钮进行手动同步。</p>
+                            </div>
+                        </div>
+
+                        <!-- 8 -->
+                        <div class="space-y-3" data-aos="fade-up">
+                            <h4 class="text-[18px] font-bold text-white">9、免费版和会员版有什么区别？</h4>
+                            <div class="text-[15px] text-white/70 leading-relaxed font-medium">
+                                <p>免费版可以体验小马笔记的核心功能，适合个人轻量记录。<br/>
+升级会员后，可以获得更大的云存储空间、更高的 AI 使用额度、多端同步以及更多协作能力，更适合长期知识积累和高频使用。</p>
                             </div>
                         </div>
                     </div>

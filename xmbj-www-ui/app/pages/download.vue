@@ -16,6 +16,26 @@ const platforms = [
     { name: 'iPhone/iPad', icon: '/images/download/pcios@2x.png' }
 ]
 
+const macArchLinks = [
+    {
+        label: 'Intel 芯片版 (x86)',
+        desc: '适用于 Intel 处理器的 Mac',
+        url: 'https://example.com/downloads/PonyNotes-1.0.0-intel-x86.dmg'
+    },
+    {
+        label: 'Apple 芯片版 (ARM)',
+        desc: '适用于 M1/M2/M3 等芯片的 Mac',
+        url: 'https://example.com/downloads/PonyNotes-1.0.0-apple-arm64.dmg'
+    }
+]
+
+const handleMacDownload = (arch) => {
+    if (!arch.url || arch.url === '#') {
+        return
+    }
+    window.open(arch.url, '_blank')
+}
+
 onMounted(() => {
     AOS.init({
         duration: 800,
@@ -91,12 +111,26 @@ onMounted(() => {
                             {{ item.name }}
                         </h3>
 
-                        <div class="h-14 flex items-center justify-center">
+                        <!-- macOS: 区分 Intel (x86) / Apple (ARM) 芯片架构 -->
+                        <div v-if="item.name === 'macOS'" class="w-full flex flex-col gap-3 mt-2">
+                            <button 
+                                v-for="arch in macArchLinks" 
+                                :key="arch.label"
+                                @click.stop="handleMacDownload(arch)"
+                                class="w-full bg-[#FF4D00] text-white px-6 py-2.5 rounded-[14px] text-[15px] font-bold hover:bg-[#E64500] transition-colors flex flex-col items-center gap-0.5"
+                            >
+                                <span>{{ arch.label }}</span>
+                                <span class="text-[11px] font-normal opacity-80">{{ arch.desc }}</span>
+                            </button>
+                        </div>
+
+                        <!-- 其他平台 -->
+                        <div v-else class="h-14 flex items-center justify-center">
                             <button 
                                 class="font-bold border-none transition-none"
                                 :class="activePlatform === item.name 
-                                    ? 'bg-[#FF4D00] text-white px-12 py-3 rounded-[18px] text-[18px]' 
-                                    : 'bg-transparent text-[#FF4D00] text-[20px] hover:underline p-0'"
+                                        ? 'bg-[#FF4D00] text-white px-12 py-3 rounded-[18px] text-[18px]' 
+                                        : 'bg-transparent text-[#FF4D00] text-[20px] hover:underline p-0'"
                             >
                                 {{ ['Android/Pad', 'iPhone/iPad'].includes(item.name) ? '敬请期待' : '立即下载' }}
                             </button>
