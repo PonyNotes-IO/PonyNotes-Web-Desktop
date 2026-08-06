@@ -1,7 +1,8 @@
-<script setup>
-import { ref, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import { downloadApi, type DownloadLinkItem } from '~/api/download'
 
 useSeoMeta({
     title: '下载 - 小马笔记',
@@ -16,34 +17,97 @@ const platforms = [
     { name: 'iPhone/iPad', icon: '/images/download/pcios@2x.png' }
 ]
 
-const macArchLinks = [
-    {
-        label: 'Intel 芯片版 (x86)',
-        desc: '适用于 Intel 处理器的 Mac',
-        url: 'https://example.com/downloads/PonyNotes-1.0.0-intel-x86.dmg'
-    },
-    {
-        label: 'Apple 芯片版 (ARM)',
-        desc: '适用于 M1/M2/M3 等芯片的 Mac',
-        url: 'https://example.com/downloads/PonyNotes-1.0.0-apple-arm64.dmg'
-    }
-]
+// 后端返回的全部启用链接
+const downloadLinks = ref<DownloadLinkItem[]>([])
 
-const handleMacDownload = (arch) => {
-    if (!arch.url || arch.url === '#') {
+// 加载状态
+const loading = ref(true)
+
+// 按平台分组：macOS 可能有多个架构，其他平台取第一条
+const macArchLinks = computed(() => {
+    return downloadLinks.value
+        .filter(item => item.platform === 'macOS')
+        .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+})
+
+const platformLinkMap = computed<Record<string, DownloadLinkItem | undefined>>(() => {
+    const map: Record<string, DownloadLinkItem | undefined> = {}
+    for (const item of downloadLinks.value) {
+        // 非 macOS 平台只取排序最前的一条
+        if (item.platform !== 'macOS' && !map[item.platform]) {
+            map[item.platform] = item
+        }
+    }
+    return map
+})
+
+/** 获取某个非 macOS 平台的下载链接 */
+const getPlatformLink = (platformName: string): DownloadLinkItem | undefined => {
+    return platformLinkMap.value[platformName]
+}
+
+/** 是否有可用下载链接 */
+const hasPlatformLink = (platformName: string): boolean => {
+    if (platformName === 'macOS') {
+        return macArchLinks.value.length > 0
+    }
+    const link = getPlatformLink(platformName)
+    return !!link && !!link.downloadUrl && link.downloadUrl !== '#'
+}
+
+/** macOS 下载 */
+const handleMacDownload = (arch: DownloadLinkItem) => {
+    if (!arch.downloadUrl || arch.downloadUrl === '#') {
         return
     }
-    window.open(arch.url, '_blank')
+    window.open(arch.downloadUrl, '_blank')
+}
+
+/** 其他平台下载 */
+const handlePlatformDownload = (platformName: string) => {
+    const link = getPlatformLink(platformName)
+    if (!link || !link.downloadUrl || link.downloadUrl === '#') {
+        return
+    }
+    window.open(link.downloadUrl, '_blank')
+}
+
+/** 加载下载链接 */
+const loadDownloadLinks = async () => {
+    loading.value = true
+    try {
+        const res = await downloadApi.list()
+        if (res && res.code === 200 && Array.isArray(res.data)) {
+            downloadLinks.value = res.data
+        }
+    } catch (error) {
+        console.error('加载下载链接失败:', error)
+    } finally {
+        loading.value = false
+    }
+}
+
+/** 判断平台按钮文案 */
+const getPlatformButtonText = (platformName: string): string => {
+    if (['Android/Pad', 'iPhone/iPad'].includes(platformName)) {
+        // 若后端配置了真实链接，则显示立即下载
+        if (hasPlatformLink(platformName)) {
+            return '立即下载'
+        }
+        return '敬请期待'
+    }
+    return '立即下载'
 }
 
 onMounted(() => {
     AOS.init({
         duration: 800,
-        easing: 'ease-out-quint',
+        easing: 'ease-out-quart',
         once: true,
         offset: 50,
         anchorPlacement: 'top-bottom',
     })
+    loadDownloadLinks()
 })
 </script>
 
@@ -113,26 +177,34 @@ onMounted(() => {
 
                         <!-- macOS: 区分 Intel (x86) / Apple (ARM) 芯片架构 -->
                         <div v-if="item.name === 'macOS'" class="w-full flex flex-col gap-3 mt-2">
-                            <button 
-                                v-for="arch in macArchLinks" 
-                                :key="arch.label"
-                                @click.stop="handleMacDownload(arch)"
-                                class="w-full bg-[#FF4D00] text-white px-6 py-2.5 rounded-[14px] text-[15px] font-bold hover:bg-[#E64500] transition-colors flex flex-col items-center gap-0.5"
-                            >
-                                <span>{{ arch.label }}</span>
-                                <span class="text-[11px] font-normal opacity-80">{{ arch.desc }}</span>
-                            </button>
+                            <template v-if="macArchLinks.length > 0">
+                                <button 
+                                    v-for="arch in macArchLinks" 
+                                    :key="arch.id"
+                                    @click.stop="handleMacDownload(arch)"
+                                    class="w-full bg-[#FF4D00] text-white px-6 py-2.5 rounded-[14px] text-[15px] font-bold hover:bg-[#E64500] transition-colors flex flex-col items-center gap-0.5"
+                                >
+                                    <span>{{ arch.archLabel || `版本 ${arch.version || ''}` }}</span>
+                                    <span v-if="arch.archDesc" class="text-[11px] font-normal opacity-80">{{ arch.archDesc }}</span>
+                                </button>
+                            </template>
+                            <template v-else>
+                                <div class="h-14 flex items-center justify-center text-gray-400 text-sm">
+                                    暂未提供下载
+                                </div>
+                            </template>
                         </div>
 
                         <!-- 其他平台 -->
                         <div v-else class="h-14 flex items-center justify-center">
                             <button 
+                                @click.stop="handlePlatformDownload(item.name)"
                                 class="font-bold border-none transition-none"
                                 :class="activePlatform === item.name 
                                         ? 'bg-[#FF4D00] text-white px-12 py-3 rounded-[18px] text-[18px]' 
                                         : 'bg-transparent text-[#FF4D00] text-[20px] hover:underline p-0'"
                             >
-                                {{ ['Android/Pad', 'iPhone/iPad'].includes(item.name) ? '敬请期待' : '立即下载' }}
+                                {{ getPlatformButtonText(item.name) }}
                             </button>
                         </div>
                     </div>

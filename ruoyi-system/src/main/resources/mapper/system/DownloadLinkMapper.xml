@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DownloadLinkMapper">
+
+    <resultMap type="DownloadLink" id="DownloadLinkResult">
+        <result property="id"           column="id"            />
+        <result property="platform"     column="platform"      />
+        <result property="archLabel"    column="arch_label"    />
+        <result property="archDesc"     column="arch_desc"     />
+        <result property="version"      column="version"       />
+        <result property="downloadUrl"  column="download_url"  />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="status"       column="status"        />
+        <result property="createdTime"  column="created_time"  />
+        <result property="operator"     column="operator"      />
+        <result property="delFlag"      column="del_flag"      />
+        <result property="remark"       column="remark"        />
+        <result property="operatorName" column="operator_name" />
+    </resultMap>
+
+    <sql id="selectDownloadLinkVo">
+        select dl.id, dl.platform, dl.arch_label, dl.arch_desc, dl.version, dl.download_url,
+               dl.sort_order, dl.status, dl.created_time, dl.operator, dl.del_flag, dl.remark,
+               u.user_name as operator_name
+        from download_link dl
+        left join sys_user u on dl.operator = u.user_id
+    </sql>
+
+    <select id="selectDownloadLinkList" parameterType="DownloadLink" resultMap="DownloadLinkResult">
+        <include refid="selectDownloadLinkVo"/>
+        <where>
+            dl.del_flag = 0
+            <if test="platform != null  and platform != ''"> and dl.platform = #{platform}</if>
+            <if test="version != null  and version != ''"> and dl.version like concat('%', #{version}, '%')</if>
+            <if test="status != null "> and dl.status = #{status}</if>
+            <if test="operator != null  and operator != ''"> and dl.operator = #{operator}</if>
+        </where>
+        order by dl.sort_order asc, dl.id asc
+    </select>
+
+    <select id="selectDownloadLinkById" parameterType="Long" resultMap="DownloadLinkResult">
+        <include refid="selectDownloadLinkVo"/>
+        where dl.id = #{id}
+    </select>
+
+    <insert id="insertDownloadLink" parameterType="DownloadLink" useGeneratedKeys="true" keyProperty="id">
+        insert into download_link
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            platform,
+            arch_label,
+            arch_desc,
+            version,
+            download_url,
+            sort_order,
+            status,
+            created_time,
+            operator,
+            del_flag,
+            remark
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{platform},
+            #{archLabel},
+            #{archDesc},
+            #{version},
+            #{downloadUrl},
+            #{sortOrder},
+            #{status},
+            #{createdTime},
+            #{operator},
+            #{delFlag},
+            #{remark}
+        </trim>
+    </insert>
+
+    <update id="updateDownloadLink" parameterType="DownloadLink">
+        update download_link
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="platform != null and platform != ''">platform = #{platform},</if>
+            <if test="archLabel != null">arch_label = #{archLabel},</if>
+            <if test="archDesc != null">arch_desc = #{archDesc},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="downloadUrl != null and downloadUrl != ''">download_url = #{downloadUrl},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="operator != null">operator = #{operator},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDownloadLinkById" parameterType="Long">
+        delete from download_link where id = #{id}
+    </delete>
+
+    <delete id="deleteDownloadLinkByIds" parameterType="String">
+        delete from download_link where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
