@@ -116,7 +116,7 @@ onUnmounted(() => {
             <div class="flex-1 relative w-full max-w-[650px]" data-aos="fade-left" data-aos-duration="1200"
               data-aos-delay="500">
               <div class="relative animate-float-slow">
-                <img src="/images/index_right.png" class="w-full h-auto block border-none shadow-none"
+                <img src="/images/index_right2.png" class="w-full h-auto block border-none shadow-none"
                   alt="Hero Preview" />
               </div>
             </div>
@@ -178,7 +178,7 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="flex justify-center" data-aos="fade-up">
-          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
+          <img src="/images/index/main/index_main2.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
         </div>
       </div>
     </section>
@@ -197,7 +197,7 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="flex justify-center" data-aos="fade-up">
-          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
+          <img src="/images/index/main/index_main3.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
         </div>
       </div>
     </section>
@@ -215,7 +215,7 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="flex justify-center md:justify-start w-full" data-aos="fade-up">
-          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
+          <img src="/images/index/main/index_main4.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
         </div>
       </div>
     </section>
@@ -251,7 +251,7 @@ onUnmounted(() => {
           <p class="text-[16px] md:text-[20px] text-gray-900 font-bold leading-tight">支持流畅书写与自然笔迹回放，打破键盘限制，模拟纸笔体验</p>
         </div>
         <div class="flex justify-center" data-aos="zoom-in">
-          <img src="/images/intro1.png" class="w-full max-w-[640px] h-auto block rounded-xl border-none shadow-none" />
+          <img src="/images/index/main/index_main5.png" class="w-full max-w-[640px] h-auto block rounded-xl border-none shadow-none" />
         </div>
       </div>
     </section>
@@ -282,7 +282,7 @@ onUnmounted(() => {
             <div class="text-[16px] md:text-[22px] text-white/90 font-medium mb-10 max-w-2xl" data-aos="fade-right">
               <p>支持手绘直线、箭头、图形，自动矫正为标准图形，适合绘制流程图、思维导图、界面草图</p>
             </div>
-            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl border-none shadow-none"
+            <img src="/images/index/main/index_main6.png" class="w-full h-auto block rounded-xl border-none shadow-none"
               data-aos="fade-up" />
           </div>
           <!-- 子项 2 -->
@@ -293,7 +293,7 @@ onUnmounted(() => {
             <div class="text-[16px] md:text-[22px] text-white/90 font-medium mb-10 max-w-xl" data-aos="fade-right">
               <p>兼容 Apple Pencil 和各类手写笔，支持压感与笔迹粗细调节，体验接近真实书写</p>
             </div>
-            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl border-none shadow-none"
+            <img src="/images/index/main/index_main5.png" class="w-full h-auto block rounded-xl border-none shadow-none"
               data-aos="fade-up" />
           </div>
           <!-- 子项 3 -->
@@ -304,7 +304,7 @@ onUnmounted(() => {
             <div class="text-[16px] md:text-[22px] text-white/90 font-medium mb-10 max-w-xl" data-aos="fade-left">
               <p>插入文本框，支持富文本格式搭配手绘内容轻松表达逻辑</p>
             </div>
-            <img src="/images/intro1.png" class="w-full h-auto block rounded-xl border-none shadow-none"
+            <img src="/images/index/main/index_main8.png" class="w-full h-auto block rounded-xl border-none shadow-none"
               data-aos="fade-up" />
           </div>
         </div>
@@ -326,11 +326,11 @@ onUnmounted(() => {
             <h3 class="text-[26px] md:text-[36px] font-bold text-[#3B82F6] mb-6">自由选择大模型</h3>
             <p class="text-[15px] md:text-[18px] text-gray-900 font-bold leading-relaxed">小马笔记支持多种主流大语言模型，按需切换，满足不同场景需求</p>
           </div>
-          <div data-aos="fade-left"><img src="/images/intro1.png" class="w-full rounded-xl border-none shadow-none" />
+          <div data-aos="fade-left"><img src="/images/index/main/index_main7.png" class="w-full rounded-xl border-none shadow-none" />
           </div>
         </div>
         <div class="grid md:grid-cols-2 gap-20 items-center mb-32">
-          <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/intro1.png"
+          <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/index/main/index_main1.png"
               class="w-full h-auto block rounded-xl border-none shadow-none" /></div>
           <div class="order-1 md:order-2 text-right" data-aos="fade-left">
             <h3 class="text-[26px] md:text-[36px] font-bold text-[#4ADE80] mb-6">AI总结与问答</h3>
@@ -372,11 +372,11 @@ onUnmounted(() => {
                 <p class="text-[15px] md:text-[18px] text-white/70 font-medium leading-relaxed">默认本地保存，用户完全掌控数据存储位置，无需依赖云端即可使用全部核心功能
                 </p>
               </div>
-              <div data-aos="fade-left"><img src="/images/intro1.png"
+              <div data-aos="fade-left"><img src="/images/index/main/index_main9.png"
                   class="w-full h-auto block rounded-xl border-none shadow-none" /></div>
             </div>
             <div class="grid md:grid-cols-2 gap-16 items-center">
-              <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/intro1.png"
+              <div class="order-2 md:order-1" data-aos="fade-right"><img src="/images/index/main/index_main9.png"
                   class="w-full h-auto block rounded-xl border-none shadow-none" /></div>
               <div class="order-1 md:order-2 text-right">
                 <h3 data-aos="fade-left" class="text-[26px] md:text-[36px] font-bold mb-6 text-white">全程加密传输</h3>
@@ -390,7 +390,7 @@ onUnmounted(() => {
     </section>
 
     <!-- ================= API联动 ================= -->
-    <section class="py-24 bg-white w-full overflow-hidden">
+    <!-- <section class="py-24 bg-white w-full overflow-hidden">
       <div class="max-w-[1100px] mx-auto px-6">
         <div class="text-center mb-16" data-aos="fade-up">
           <h2 class="text-[36px] md:text-[56px] font-bold text-[#FF4D00] tracking-tight">利用API让笔记进行联动</h2>
@@ -400,7 +400,7 @@ onUnmounted(() => {
             alt="API Linkage" />
         </div>
       </div>
-    </section>
+    </section> -->
 
   </div>
 </template>
