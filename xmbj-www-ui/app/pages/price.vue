@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, watch } from 'vue'
 // 引入 AOS 动画库
 import AOS from 'aos'
 import Toast from '../utils/toast'
@@ -12,7 +12,7 @@ const api = useApi()
 const router = useRouter()
 const route = useRoute()
 // 计费周期切换：0为月付，1为年付
-const billingCycle = ref(1)
+const billingCycle = ref(0)
 const alipayFormContainer = ref(null);
 const loading = ref(false);
 const loadingText = ref('订单生成中...');
@@ -63,18 +63,21 @@ const proccessResult = res => {
         alipayHtml.value = res.data.payUrl;
         // 使用nextTick确保DOM更新后再获取表单
         nextTick(() => {
-            const form = alipayFormContainer.value.querySelector("form");
-            
+            const form = alipayFormContainer.value?.querySelector("form");
+
             if (form) {
                 loadingText.value = '即将跳转支付页面...';
                 setTimeout(() => {
                     form.submit(); // 自动提交表单
                 }, 500);
             } else {
-                console.error("未找到支付宝返回的表单");
+                console.error("未找到支付宝返回的表单", res.data?.payUrl);
+                Toast.error('支付页面生成失败，请联系客服');
             }
         });
         // router.push(res.data.paymentUrl)
+    } else {
+        Toast.error(res.msg || '创建订单失败，请稍后重试');
     }
 }
 
@@ -127,15 +130,19 @@ const isValidBillingType = (val) => {
     return !isNaN(num) && (num === 0 || num === 1);
 };
 
+let paymentInited = false;
 const handleCreatePayment = () => {
+    if (paymentInited) return false;
     const query = route.query;
     const planId = Number(query.planId);
     const billingType = Number(query.billingType);
     const userInfo = query.userInfo;
 
+    // query 尚未就绪（hydration 早期），静默跳过，等待 watch 触发
     if (!planId || isNaN(planId) || !isValidBillingType(billingType) || !userInfo) {
         return false;
     }
+    paymentInited = true;
 
     loading.value = true;
     api.payment.createPayment({
@@ -148,6 +155,7 @@ const handleCreatePayment = () => {
         proccessResult(res);
     }).catch(err => {
         console.error('创建支付订单失败:', err);
+        paymentInited = false;
         Toast.error('创建订单失败，请稍后重试');
     }).finally(() => {
         loading.value = false;
@@ -155,7 +163,9 @@ const handleCreatePayment = () => {
     return true;
 };
 
+let paymentResultInited = false;
 const handlePaymentResult = () => {
+    if (paymentResultInited) return false;
     const query = route.query;
     const orderNo = query.orderNo;
     const paymentType = query.paymentType;
@@ -164,6 +174,7 @@ const handlePaymentResult = () => {
     if (!orderNo || !paymentType || !status) {
         return false;
     }
+    paymentResultInited = true;
 
     loadingText.value = '查询订单支付结果中...';
     loading.value = true;
@@ -191,6 +202,17 @@ onMounted(() => {
     handlePaymentResult();
     handleCreatePayment();
     initPlans();
+
+    // 静态站点 hydration 时，route.query 可能在 onMounted 之后才被解析，
+    // 这里监听 query 变化，确保参数就绪后能触发下单。
+    watch(
+        () => route.query,
+        () => {
+            handlePaymentResult();
+            handleCreatePayment();
+        },
+        { deep: true }
+    );
 })
 </script>
 

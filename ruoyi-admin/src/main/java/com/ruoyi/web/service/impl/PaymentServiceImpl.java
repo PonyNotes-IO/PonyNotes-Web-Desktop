@@ -6,11 +6,14 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayConfig;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradePrecreateModel;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.domain.ExtendParams;
 import com.alipay.api.internal.util.file.IOUtils;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
@@ -151,6 +154,9 @@ public class PaymentServiceImpl implements PaymentService {
             payInfo = createWechatQrCode(orderNo, amount,httpServletRequest);
         } else if ("alipay".equals(paymentType)) {
             payInfo = createAlipayPagePayUrl(orderNo, amount,clientUser,plan);
+        } else if ("alipay_app".equals(paymentType)) {
+            // 支付宝 App 支付：返回签名后的 orderInfo 字符串，供 App 端 SDK 调起支付宝客户端
+            payInfo = createAlipayAppPayInfo(orderNo, amount, clientUser, plan);
         } else if ("alipay_qr".equals(paymentType)) {
             payInfo = createAlipayQrCodePayUrl(orderNo, amount,clientUser.getUuid());
         } else {
@@ -391,6 +397,42 @@ public class PaymentServiceImpl implements PaymentService {
         } catch (AlipayApiException e) {
             log.error("支付宝接口调用异常", e);
             throw new RuntimeException("支付宝支付创建失败");
+        }
+    }
+
+
+    /**
+     * 支付宝 App 支付：生成 App 端调起所需的 orderInfo（签名后的参数串）
+     * App 端拿到该字符串后，调用支付宝 SDK 的 payV2(Android)/payOrder(iOS) 完成支付。
+     * 与电脑网站支付的区别：使用 AlipayTradeAppPayRequest + sdkExecute（本地签名，不联网），
+     * 返回的是 orderInfo 字符串，而非自提交表单 HTML。
+     */
+    public String createAlipayAppPayInfo(String orderNo, BigDecimal amount, ClientUser clientUser, AfSubscriptionPlans plan) {
+        // 1. 构建请求，设置异步回调地址（App 支付无同步回跳，依赖前端轮询 /status 确认结果）
+        AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+        request.setNotifyUrl(alipayConfig.getNotifyUrl());
+
+        // 2. 业务参数
+        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+        model.setBody("小马笔记-" + plan.getPlanNameCn());
+        model.setSubject("小马笔记-" + plan.getPlanNameCn());
+        model.setOutTradeNo(orderNo);
+        model.setTimeoutExpress("15m");
+        model.setTotalAmount(amount.setScale(2).toString());
+        model.setProductCode("QUICK_MSECURITY_PAY"); // App 支付专属产品码
+        request.setBizModel(model);
+
+        // 3. sdkExecute：本地组装并签名，返回 orderInfo 字符串
+        try {
+            AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+            if (response.isSuccess()) {
+                return response.getBody(); // orderInfo，App 端透传给支付宝 SDK
+            } else {
+                throw new RuntimeException("支付宝 App 支付创建失败：" + response.getMsg());
+            }
+        } catch (AlipayApiException e) {
+            log.error("支付宝 App 支付接口调用异常", e);
+            throw new RuntimeException("支付宝 App 支付创建失败");
         }
     }
 
