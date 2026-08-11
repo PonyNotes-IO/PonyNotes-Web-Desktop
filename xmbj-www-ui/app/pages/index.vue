@@ -49,7 +49,7 @@ onMounted(() => {
               </h1>
               <p class="text-[#4E403B] text-[16px] leading-relaxed max-w-md mx-auto lg:mx-0 font-medium"
                 data-aos="fade-up" data-aos-delay="600">
-                开源、本地优先、自由云同步，多模态记录融合 AI，高效搭建个人与团队知识系统
+                开源、本地优先、自由云同步，多模态记录融合 AI，高效搭建个人与团队知识系统免费下载使用
               </p>
               <div class="pt-4" data-aos="zoom-in-up" data-aos-delay="800">
                 <NuxtLink to="/download"
@@ -131,14 +131,17 @@ onMounted(() => {
         <div class="mb-10 text-left md:text-right w-full md:w-auto" data-aos="fade-left">
           <img src="/images/index/knowledge.png" alt="知识站点" class="h-[38px] md:h-[52px] w-auto mb-6 ml-0 md:ml-auto md:mr-0" />
           <div class="space-y-1 font-medium leading-snug text-left md:text-right">
+            <p class="text-[16px] md:text-[20px] text-gray-400 mb-2">多人实时协同</p>
             <p class="text-[16px] md:text-[20px] text-gray-400 mb-2">将笔记一键发布为静态网站打造专属知识库或</p>
-            <p class="text-[26px] text-white font-bold hidden md:block">项目主页，支持自定义域名和样式</p>
+            <p class="text-[26px] text-white font-bold hidden md:block">权限共享体系，支持笔记、多维表格一键分发
+多人实时在线协同编辑，团队共建专属知识库。</p>
             <!-- 移动端专用的紧凑换行排版 -->
-            <p class="text-[18px] text-white font-bold md:hidden leading-tight">项目主页，支持自定义域名和样式</p>
+            <p class="text-[18px] text-white font-bold md:hidden leading-tight">权限共享体系，支持笔记、多维表格一键分发
+多人实时在线协同编辑，团队共建专属知识库。</p>
           </div>
         </div>
         <div class="flex justify-center md:justify-start w-full" data-aos="fade-up">
-          <img src="/images/intro1.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
+          <img src="/images/index/main/index_knowledge.png" class="w-full max-w-[720px] h-auto block rounded-xl border-none shadow-none" />
         </div>
       </div>
     </section>
