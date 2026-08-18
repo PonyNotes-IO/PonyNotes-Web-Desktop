@@ -164,8 +164,8 @@ xss:
 # 阿里云短信服务配置
 aliyun:
   sms:
-    access-key-id: 1      
-    access-key-secret: 1  
+    access-key-id: 1
+    access-key-secret: 1
     sign-name: '北京爱欧爱科技'          # 短信签名（需审核通过）
     template-code: SMS_321490942 # 短信模板ID（如：SMS_123456789）
     expire-minutes: 5                     # 验证码过期时间（分钟）
@@ -200,7 +200,7 @@ payment:
     app-secret: 8520bed9d7932527310bb358e8c0c495  # 新增：关联的小程序/服务号的appsecret（若接口需要）
     sub-mchid: 1900000109
     notify-url: http://www.xiaomabiji.com/api/payment/callback/wechat  # 微信支付回调地址（需公网可访问）
-    
+
 
   # 支付宝配置
   alipay:
@@ -218,7 +218,17 @@ payment:
     read-timeout: 30000
 #    http://your-domain.com/api/payment/callback/alipay  # 支付宝回调地址（需公网可访问）
 # xiaomabiji@1521503155920564.onaliyun.com
-
+    # App 支付专用配置（appid B，独立移动应用/独立密钥对）
+    # 留空时 appAlipayClient 自动回退复用网页支付 alipayClient，不影响现有功能
+    # 等 App 支付应用审核通过后，把下面三项替换为 appid B 的真实值即可启用
+    app:
+      app-id: 2021006174666048      # App 支付应用 APPID（如 2021005xxxxxxxxx）
+      # App 支付应用商户私钥（与 app-id 配套，独立于网页支付密钥）
+      private-key: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCCypnBJAj8uzbwuLYUGThR3PV8Wrzt/Pm3r+9Gjws20Hn09/AV78c5C9Av+GwfwR9UXxLP7yIr0cdUYtvQAG8AgUEfDTKCFVhhzCyA0I4PuRRVkk74S11AAK0z9VO+57Kr8Kcuy0a2bqUAUU7jhWWnOPB/ehxNvf1gBjsCPdJuNg0PgaOa1x2fxr532TbLeaZAniETW4u9C7mQtAyEpn2VVhFN08Gemu4O9ycwHwB+u0F/7xUt2WgDEWlM6AHyH9QIJR0zWs/636toxnYxxY7t36gQrQHsCw0kuE3lJNMExE2CBrRjIuw/Ys1QMzX9ieINuwhJBwX0C4lZuGhtgJFlAgMBAAECggEAZweGOzlRwxUPYG2BMS/0x7gRwZYRAkCnzmVPTfvcz59GkwzFGeK6w1tk8oT1V8ZgEaybOyWbe31TUkxV7/KHfpRTYkyZHxQFfXTDEe44GnanaAlLIBjuKj7eMfHtuJL4kq2OZTRITem3HRrv1Bb/Ts1x1lmw9iTV9dCypz9gBuR35qqf1vtI7t2fgvASaecghsg26hbnl3TUZ4lqtLtLHLrT3hkfk1nvrhnvRK55UHd5WWY6CBxM5gywmbXCE6qq+gFnU46gQilQm9ENCiG8uqL2LfjeE0SxRupJ/aQGqpcUU7E3ysHksVe3QDgZX0n8tvBu8xb+TIMs/umofjQEwQKBgQDHZ2Z7DwKq6Sc/5rgS/F+PDT+rneqw9EvvA0ahxsfdhF41wA6Y4zIstUR1qIVsXNKVEp5Y7s+KrK/sDN3fCSAoTNvDSDpl1Hk5QnO0Lp9gKROpE0hr/oNaiJfBRSGC9Xm5aPayLykfL+KgaHyjaRmX6Gso/euOV6+8upCnn1WuSQKBgQCn6diy5aWeQBivJl6r0Uav+t2K/348IeU16ErS1bifSugL09eY6pG6rPypQ+8oGL3AaAqXgBNj6nsLG5xj+0rzhVp2U8k7IJc00wSiM3kjXydzd02n/KaCNF9hyrKc1nw4i7iHb0OZiHjdABLgak/1Z/tG0wle8ENa6tUVfc26PQKBgEIlfs1bkVr4tNhxxKYnqdteXbykSfIhV/8VaxzHQA2vl0DlUPJOi5phFzCgkoH72K8y2exOa/JojoMTUZZnBI/ZzxzcnOKitQPVk2Q2AxB3D9qKVv/cEd66aPzn3dH/dD2ZIBzDoDSEQf1MK+xZNPA7XTDf6n/xfo5wpQO1y0phAoGAM5KmhSP1v2pOapVtZHZtsKVroEKi4hNDFFCZkrIj94EJToCtaoE5a02weMitzvHybgNGpYun6Pte+WVsnmTTe4JM66UGXIvBBW9+r9cBcPTL6DIPfvYhqkItvZqFS5ixJKj9b1OkPqblAHQCWD0u++AJFJLDAQ7okScpdWVjZ70CgYA/U5ZG+TPoTBeyr8Q8ScsnvXiv+UeNlZfMTlGBI58bioKegmn6pqnOBGxWLECJzh87fzaUCHhRU6Xqoh8GBKEoBrhxpJFkEr7pl1JZjBsuZPH6u9Z9FM9499MIkv3K5Kx7DUh51zORzB1GL1zlxitau5YCJMuclhxDBGbL8X5lQw==
+      # App 支付应用对应的支付宝公钥（用于回调验签）
+      public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlw6mERajnAfXHAtPs7BE2mKVhp7JS6B5iGmU+3K+H2gTKem3kSbqw/1cmwPGOfFUazihMLE10X7Tx2PSeBXtVIvPC8945a6V/HmfbfyvRL5z6Fbh9IM1Sq+q4VWpKthRd1HjdZkena0gXqxXdyMIe5dH97pqI3zhgYWQ39o2qSr5/kzRXRAtGOwcgl4CtMMUeYGIwttAwkd575EtNekMu4JJS34BYRkg4k6LmD6ccEkyGp3ed+/eIg1Wb4LQC5NzpbixMiXX/7apVVBItR56uMt1nyIF42BrKBt91RGR0TMmLb3C8GNuw0ZV6Z619QvLp2PK1jhgc7y3ouIlSUgs7QIDAQAB
+      notify-url: https://www.xiaomabiji.com/prod-api/api/payment/callback/alipay
+      return-url: https://www.xiaomabiji.com/prod-api/api/payment/return/alipay
 
 # 七牛云配置
 qiniu:

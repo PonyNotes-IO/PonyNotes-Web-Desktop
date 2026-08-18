@@ -17,8 +17,27 @@ const platforms = [
     { name: 'iPhone/iPad', icon: '/images/download/pcios@2x.png' }
 ]
 
-// 后端返回的全部启用链接
-const downloadLinks = ref<DownloadLinkItem[]>([])
+const defaultDownloadLinks: DownloadLinkItem[] = [
+    {
+        id: 1,
+        platform: 'macOS',
+        archLabel: 'Intel 芯片版 (x86)',
+        archDesc: '适用于 Intel 处理器的 Mac',
+        downloadUrl: '#',
+        sortOrder: 1
+    },
+    {
+        id: 2,
+        platform: 'macOS',
+        archLabel: 'Apple 芯片版 (ARM)',
+        archDesc: '适用于 Apple M系列芯片的 Mac',
+        downloadUrl: '#',
+        sortOrder: 2
+    }
+]
+
+// 后端返回的全部启用链接（默认预设 macOS 架构项，避免页面初次加载时出现“暂未提供下载”闪烁）
+const downloadLinks = ref<DownloadLinkItem[]>(defaultDownloadLinks)
 
 // 加载状态
 const loading = ref(true)
@@ -166,29 +185,32 @@ onMounted(() => {
                         v-for="item in platforms" 
                         :key="item.name"
                         @mouseenter="activePlatform = item.name"
-                        class="bg-[#F8F9FA] rounded-[28px] py-10 px-8 text-center border-[1.5px] flex flex-col items-center cursor-pointer select-none"
+                        class="bg-[#F8F9FA] rounded-[28px] py-10 px-8 text-center border-[1.5px] flex flex-col items-center justify-center min-h-[260px] cursor-pointer select-none"
                         :class="activePlatform === item.name ? 'border-[#FF4D00]' : 'border-transparent'"
                         style="transition: border-color 0.2s ease;"
                     >
-                        <img :src="item.icon" :alt="item.name" class="h-14 mb-4 object-contain" />
-                        <h3 class="text-[26px] font-semibold text-gray-900 mb-3 tracking-tight">
-                            {{ item.name }}
-                        </h3>
+                        <!-- 图标和标题（macOS 在鼠标选中/经过时隐藏） -->
+                        <template v-if="!(activePlatform === 'macOS' && item.name === 'macOS')">
+                            <img :src="item.icon" :alt="item.name" class="h-14 mb-4 object-contain" />
+                            <h3 class="text-[26px] font-semibold text-gray-900 mb-3 tracking-tight">
+                                {{ item.name }}
+                            </h3>
+                        </template>
 
                         <!-- macOS: 区分 Intel (x86) / Apple (ARM) 芯片架构 -->
-                        <div v-if="item.name === 'macOS'" class="w-full flex flex-col gap-3 mt-2">
-                            <template v-if="macArchLinks.length > 0">
+                        <div v-if="item.name === 'macOS'" class="w-full flex flex-col gap-3" :class="activePlatform === 'macOS' ? 'my-auto' : 'mt-2'">
+                            <template v-if="macArchLinks.length > 0 && activePlatform === 'macOS'">
                                 <button 
                                     v-for="arch in macArchLinks" 
                                     :key="arch.id"
                                     @click.stop="handleMacDownload(arch)"
-                                    class="w-full bg-[#FF4D00] text-white px-6 py-2.5 rounded-[14px] text-[15px] font-bold hover:bg-[#E64500] transition-colors flex flex-col items-center gap-0.5"
+                                    class="w-full bg-white px-6 py-3.5 rounded-[20px] transition-colors flex flex-col items-center gap-1 group shadow-sm border border-gray-100/60 cursor-pointer"
                                 >
-                                    <span>{{ arch.archLabel || `版本 ${arch.version || ''}` }}</span>
-                                    <span v-if="arch.archDesc" class="text-[11px] font-normal opacity-80">{{ arch.archDesc }}</span>
+                                    <span class="text-[20px] font-bold text-gray-900 group-hover:text-[#FF4D00] transition-colors">{{ arch.archLabel || `版本 ${arch.version || ''}` }}</span>
+                                    <span v-if="arch.archDesc" class="text-[13px] font-normal text-gray-400">{{ arch.archDesc }}</span>
                                 </button>
                             </template>
-                            <template v-else>
+                            <template v-else-if="!loading && macArchLinks.length === 0 && activePlatform === 'macOS'">
                                 <div class="h-14 flex items-center justify-center text-gray-400 text-sm">
                                     暂未提供下载
                                 </div>

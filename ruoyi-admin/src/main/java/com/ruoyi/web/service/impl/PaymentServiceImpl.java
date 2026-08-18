@@ -84,7 +84,10 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private WechatPayConfig wechatPayConfig; // 微信支付配置
     @Autowired
-    private AlipayClient alipayClient; // 支付宝客户端
+    private AlipayClient alipayClient; // 支付宝客户端（网页支付，appid A）
+    @Autowired
+    @org.springframework.beans.factory.annotation.Qualifier("appAlipayClient")
+    private AlipayClient appAlipayClient; // 支付宝客户端（App 支付，appid B）
     @Autowired
     private XmAlipayConfig alipayConfig; // 支付宝配置
 
@@ -423,8 +426,9 @@ public class PaymentServiceImpl implements PaymentService {
         request.setBizModel(model);
 
         // 3. sdkExecute：本地组装并签名，返回 orderInfo 字符串
+        // 注意：App 支付使用独立的 appAlipayClient（appid B + 密钥B）
         try {
-            AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+            AlipayTradeAppPayResponse response = appAlipayClient.sdkExecute(request);
             if (response.isSuccess()) {
                 return response.getBody(); // orderInfo，App 端透传给支付宝 SDK
             } else {
@@ -707,9 +711,9 @@ public class PaymentServiceImpl implements PaymentService {
     public boolean verifySign(String paymentType, String orderNo, Map<String, String> sign) {
         Boolean verifySuccess = false;
         try {
-            // 1. 支付宝验签
+            // 1. 支付宝验签（双 appid：根据回调参数中的 app_id 自动选择对应公钥）
             if ("alipay".equals(paymentType)) {
-                verifySuccess = alipayConfig.verifySign(sign);
+                verifySuccess = alipayConfig.verifySignByAppId(sign);
             }
             // 2. 微信支付验签（微信回调参数为XML，需先解析）
             else if ("wechat".equals(paymentType)) {

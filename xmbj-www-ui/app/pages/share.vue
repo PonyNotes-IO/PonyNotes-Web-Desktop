@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
@@ -26,10 +26,18 @@ const toast = (message, duration = 3000) => {
     }, duration);
 };
 
-const openApp = (workspaceId, viewId, type)=> {
+const buildAppUrl = (params) => {
+    const query = Object.keys(params)
+        .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+        .join('&');
+    return `ponynotes://note?${query}`;
+};
+
+const openApp = (params) => {
 
     var iframe = document.createElement('iframe');
-    const appUrl = `ponynotes://note?workspaceId=${workspaceId}&viewId=${viewId}&type=${type}`;
+    const appUrl = buildAppUrl(params);
     iframe.style.display = 'none';
     iframe.src = appUrl;
     document.body.appendChild(iframe);
@@ -53,6 +61,14 @@ const openApp = (workspaceId, viewId, type)=> {
     };
 };
 
+let appOpened = false;
+const tryOpenApp = (query) => {
+    if (appOpened) return;
+    if (!query.workspaceId || !query.viewId || !query.type) return;
+    appOpened = true;
+    openApp(query);
+};
+
 onMounted(() => {
     AOS.init({
         duration: 800,
@@ -61,9 +77,15 @@ onMounted(() => {
         offset: 50,
         anchorPlacement: 'top-bottom',
     })
-    if(route.query.workspaceId && route.query.viewId && route.query.type) {
-        openApp(route.query.workspaceId, route.query.viewId, route.query.type);
-    }
+    // 静态站点 hydration 时，route.query 可能在 onMounted 之后才被解析，
+    // 这里监听 query 变化并立即执行一次，确保参数就绪后能触发唤起。
+    watch(
+        () => route.query,
+        (query) => {
+            tryOpenApp(query);
+        },
+        { deep: true, immediate: true }
+    );
 })
 </script>
 

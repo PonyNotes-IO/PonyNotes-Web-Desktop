@@ -4,21 +4,21 @@
         <div class="max-w-[1100px] mx-auto px-6">
 
             <!-- 主布局：在移动端纵向排列，桌面端横向分布 -->
-            <div class="flex flex-col md:flex-row justify-between items-start">
+            <div class="flex flex-col md:flex-row justify-between items-center">
 
-                <!-- 左侧：品牌展示 (Logo + ICP) -->
+                <!-- 左侧：品牌展示 (Logo + ICP + 公司信息) -->
                 <div class="mb-8 md:mb-0 w-full md:w-auto text-left">
-                    <div class="flex items-center gap-3 mb-1">
-                        <img src="/images/foot_ico.png" class="w-10 h-10 object-contain shadow-none border-none"
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="/images/foot_ico.png" class="w-10 h-10 md:w-11 md:h-11 object-contain shadow-none border-none"
                             alt="小马笔记 Logo" />
-                        <span class="text-[26px] font-bold tracking-tight">小马笔记</span>
+                        <span class="text-[28px] md:text-[34px] font-bold tracking-tight text-white leading-none">小马笔记</span>
                     </div>
-                    <p class="text-gray-600 text-[13px] tracking-wide ml-1 mb-6">
+                    <p class="text-gray-400 text-[13.5px] tracking-wide ml-1">
                         京ICP备2025131868号
                     </p>
-                    <div class="flex items-center gap-2 ml-1">
-                        <img src="/images/ioi.png" class="w-5 h-auto object-contain opacity-80" alt="Company Logo" />
-                        <span class="text-gray-500 text-[14px] font-medium">北京爱欧爱科技有限公司</span>
+                    <div class="mt-2 ml-1 flex items-center gap-2">
+                        <img src="/images/ioi.png" class="h-[16px] w-auto object-contain" alt="IOI Logo" />
+                        <span class="text-gray-400 text-[13.5px] tracking-wide">北京爱欧爱科技有限公司</span>
                     </div>
                 </div>
 
@@ -60,12 +60,12 @@
                 </div>
             </div>
 
-            <!-- 底部版权声明 -->
-            <div class="border-t border-white/5 mt-8 pt-6 text-center">
+            <!-- 底部版权声明 (已注释) -->
+            <!-- <div class="border-t border-white/5 mt-8 pt-6 text-center">
                 <p class="text-gray-600 text-[12px] tracking-wide">
                     © 2026 小马笔记 PonyNotes. 让记录更简单。
                 </p>
-            </div>
+            </div> -->
 
         </div>
     </footer>
@@ -79,8 +79,6 @@
 footer {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
-    /* 禁止页面底部的橡皮筋回弹效果 */
-    overscroll-behavior-y: none;
 }
 
 /* 使用背景填充技术，防止滚动到底部时看到白色背景 */

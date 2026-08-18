@@ -23,3 +23,5 @@ logs
 .env.*
 !.env.example
 DEVELOPMENT_GUIDE.md
+网站图片2/
+package-lock.json

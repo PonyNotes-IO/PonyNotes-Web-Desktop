@@ -20,6 +20,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     <plugins>
         <!-- <plugin interceptor="com.ruoyi.framework.datasource.DynamicDataSourceInterceptor" /> -->
         <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 多数据源（master=mysql, slave=postgresql）下按 JDBC URL 自动识别方言，避免跨库分页语法错误 -->
+            <property name="helperDialect" value="mysql" />
+            <property name="autoRuntimeDialect" value="true" />
             <property name="reasonable" value="true" />
             <property name="supportMethodsArguments" value="true" />
             <property name="params" value="count=countSql" />

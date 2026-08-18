@@ -58,14 +58,14 @@ const handleLogoClick = (e) => {
         class="w-full h-20 fixed top-0 z-[100] transition-all duration-300 bg-white"
         :class="[isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-white']"
     >
-        <div class="max-w-[1140px] mx-auto px-6 h-full flex items-center justify-between">
+        <div class="max-w-[1100px] mx-auto px-6 h-full flex items-center justify-between">
 
             <!-- 左侧 Logo 区域：点击回首页 -->
             <NuxtLink to="/" class="flex items-center gap-2 group cursor-pointer" @click="handleLogoClick">
                 <img src="/images/ico.png"
                     class="w-8 h-8 object-contain transition-transform duration-1000 group-hover:rotate-[360deg] border-none shadow-none"
                     alt="小马笔记 Logo" />
-                <span class="text-xl font-bold tracking-tight text-[#FF3800]">小马笔记</span>
+                <span class="text-xl font-bold tracking-tight text-gray-900">小马笔记</span>
             </NuxtLink>
 
             <!-- 右侧 导航链接与按钮 -->
