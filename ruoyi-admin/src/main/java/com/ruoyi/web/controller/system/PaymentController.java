@@ -15,6 +15,7 @@ import com.ruoyi.system.domain.PaymentOrder;
 import com.ruoyi.system.domain.SysPaymentOrder;
 import com.ruoyi.system.domain.vo.PaymentResult;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.web.service.AppleIapService;
 import com.ruoyi.web.service.PaymentService;
 
 import com.ruoyi.xmbj.api.service.XmbjAuthService;
@@ -48,6 +49,9 @@ public class PaymentController extends BaseController {
 
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private AppleIapService appleIapService;
 
     @Value("${frontend.domain}")
     private String frontendDomain;
@@ -282,6 +286,61 @@ public class PaymentController extends BaseController {
             log.error("微信支付回调处理异常", e);
             return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[系统异常]]></return_msg></xml>";
         }
+    }
+
+    /**
+     * 苹果内购：验证客户端支付成功后提交的签名交易（StoreKit 2 jwsRepresentation）并开通订阅。
+     * 客户端务必在 verify 成功后才调用 transaction.finish()，失败可重试。
+     * 建议客户端购买时把 appAccountToken 设为客户端用户 uuid，用于服务器通知兜底识别用户。
+     */
+    @PostMapping("/apple/verify")
+    @ApiOperation("苹果内购交易验证")
+    @Anonymous
+    public AjaxResult appleVerify(@RequestParam String userInfo,
+                                  @RequestParam String transaction) {
+        try {
+            return AjaxResult.success(appleIapService.verifyTransaction(transaction, userInfo));
+        } catch (IllegalArgumentException e) {
+            return AjaxResult.error(e.getMessage());
+        } catch (Exception e) {
+            log.error("苹果内购验证失败", e);
+            return AjaxResult.error("苹果内购验证失败");
+        }
+    }
+
+    /**
+     * 苹果内购：恢复购买（客户端拉取历史交易后批量提交验证）
+     */
+    @PostMapping("/apple/restore")
+    @ApiOperation("苹果内购恢复购买")
+    @Anonymous
+    public AjaxResult appleRestore(@RequestParam String userInfo,
+                                   @RequestBody java.util.List<String> transactions) {
+        try {
+            return AjaxResult.success(appleIapService.restoreTransactions(transactions, userInfo));
+        } catch (IllegalArgumentException e) {
+            return AjaxResult.error(e.getMessage());
+        } catch (Exception e) {
+            log.error("苹果内购恢复购买失败", e);
+            return AjaxResult.error("苹果内购恢复购买失败");
+        }
+    }
+
+    /**
+     * App Store Server Notifications V2 回调。
+     * 通知体为 JSON：{"signedPayload": "..."}，需在 App Store Connect 配置本地址。
+     */
+    @PostMapping("/callback/apple")
+    @Anonymous
+    public org.springframework.http.ResponseEntity<String> appleCallback(@RequestBody Map<String, String> body) {
+        String signedPayload = body == null ? null : body.get("signedPayload");
+        if (StringUtils.isEmpty(signedPayload)) {
+            return org.springframework.http.ResponseEntity.badRequest().body("{\"status\":400}");
+        }
+        boolean ok = appleIapService.handleNotification(signedPayload);
+        // 苹果要求处理成功返回 2xx，失败返回 5xx 触发其重试
+        return ok ? org.springframework.http.ResponseEntity.ok("{\"status\":200}")
+                : org.springframework.http.ResponseEntity.status(500).body("{\"status\":500}");
     }
 
     /**

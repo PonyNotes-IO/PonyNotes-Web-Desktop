@@ -103,4 +103,14 @@ public interface SysPaymentOrderMapper
     int deleteSysPaymentOrderByIds(Long[] ids);
 
     List<PaymentListDTO> myPaymentList(String userInfo);
+
+    /**
+     * 根据苹果内购交易ID查询订单（幂等判断用）
+     */
+    public SysPaymentOrder selectByAppleTransactionId(String transactionId);
+
+    /**
+     * 根据苹果原始交易ID查询订单列表（退款/续费通知用）
+     */
+    public List<SysPaymentOrder> selectByOriginalTransactionId(String transactionId);
 }

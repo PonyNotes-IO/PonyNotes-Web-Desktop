@@ -69,4 +69,9 @@ public interface IAfSubscriptionPlansService
     public int countUserSubscriptionsByPlanId(Long id);
 
     BigDecimal getAmountByIdAndBliingType(String planId, String billingType);
+
+    /**
+     * 按套餐编码查询套餐（plan_code 唯一；苹果内购商品ID反查映射用）
+     */
+    AfSubscriptionPlans selectByPlanCode(String planCode);
 }

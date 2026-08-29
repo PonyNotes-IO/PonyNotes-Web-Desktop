@@ -85,7 +85,41 @@ public class SysPaymentOrder extends BaseEntity
     private String clientUserAddonId;
     private String clientSubscriptionId;
 
+    /** 苹果内购：本次交易ID（幂等键） */
+    private String appleTransactionId;
+
+    /** 苹果内购：原始交易ID（同一订阅续费/恢复购买保持不变） */
+    private String originalTransactionId;
+
+    /** 苹果内购：App Store Connect 商品ID */
+    private String appleProductId;
+
     private Date memberExpireTime;
+
+    public String getAppleTransactionId() {
+        return appleTransactionId;
+    }
+
+    public void setAppleTransactionId(String appleTransactionId) {
+        this.appleTransactionId = appleTransactionId;
+    }
+
+    public String getOriginalTransactionId() {
+        return originalTransactionId;
+    }
+
+    public void setOriginalTransactionId(String originalTransactionId) {
+        this.originalTransactionId = originalTransactionId;
+    }
+
+    public String getAppleProductId() {
+        return appleProductId;
+    }
+
+    public void setAppleProductId(String appleProductId) {
+        this.appleProductId = appleProductId;
+    }
+
 
     public Date getMemberExpireTime() {
         return memberExpireTime;

@@ -78,6 +78,16 @@
                     <span class="price-value">¥{{ plan.yearlyPriceYuan }}/年</span>
                   </td>
                 </tr>
+                <tr>
+                  <td class="feature-name">苹果内购商品</td>
+                  <td v-for="plan in plansList" :key="'apple-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
+                    <div v-if="plan.planCode && plan.monthlyPriceYuan > 0" class="apple-product-cell">
+                      <div>com.ponynotes.monthly.{{ plan.planCode }}</div>
+                      <div>com.ponynotes.yearly.{{ plan.planCode }}</div>
+                    </div>
+                    <span v-else>-</span>
+                  </td>
+                </tr>
                 <tr class="category-row">
                   <td colspan="100%" class="category-header">一、基础</td>
                 </tr>
@@ -651,6 +661,13 @@ export default {
   font-size: 18px;
   font-weight: bold;
   color: #667eea;
+}
+
+.apple-product-cell {
+  font-size: 12px;
+  color: #606266;
+  line-height: 1.6;
+  word-break: break-all;
 }
 
 .category-row td {

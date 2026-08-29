@@ -230,6 +230,25 @@ payment:
       notify-url: https://www.xiaomabiji.com/prod-api/api/payment/callback/alipay
       return-url: https://www.xiaomabiji.com/prod-api/api/payment/return/alipay
 
+  # ==================== Apple 应用内购买（IAP / StoreKit 2）配置 ====================
+  # 启用前需在 App Store Connect 完成准备：
+  #   1. 签署付费应用协议
+  #   2. 将通知 URL 填到 App Store Connect -> App -> App Store 服务器通知（V2）：
+  #      https://www.xiaomabiji.com/prod-api/api/payment/callback/apple
+  #   3. 生成 In-App Purchase 密钥（.p8），放到 resources/cert/ 下
+  # 商品映射规则（无需数据库配置）：商品ID = product-prefix + 计费周期 + "." + 套餐编码(plan_code)
+  # 如套餐编码 standard -> com.ponynotes.monthly.standard / com.ponynotes.yearly.standard
+  # App Store Connect 中创建的商品ID必须与该规则一致；套餐停用后对应商品自动失效
+  apple:
+    enabled: true                    # 沙箱联调通过后改 PRODUCTION 时一并复核
+    bundle-id: com.xiaomabiji.app.note     # App 的 Bundle ID
+    environment: SANDBOX              # SANDBOX 沙箱 / PRODUCTION 生产
+    product-prefix: com.ponynotes.    # 商品ID固定前缀（商品ID=前缀+monthly/yearly+套餐编码）
+    issuer-id: 5cb821d7-ac67-45c3-91ca-a90e5a5bd41e                     # App Store Connect 集成密钥 Issuer ID
+    key-id: U32JY45G9W                        # App Store Connect 集成密钥 Key ID
+    private-key-path: cert/SubscriptionKey_9M6TSG8GQA.p8  # .p8 私钥文件（classpath 路径，勿提交到公开仓库）
+    notify-url: https://www.xiaomabiji.com/prod-api/api/payment/callback/apple
+
 # 七牛云配置
 qiniu:
   enabled: true

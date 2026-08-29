@@ -24,6 +24,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="quantity"    column="quantity"    />
         <result property="clientUserAddonId"    column="client_user_addon_id"    />
         <result property="clientSubscriptionId"    column="client_subscription_id"    />
+        <result property="appleTransactionId"    column="apple_transaction_id"    />
+        <result property="originalTransactionId"    column="original_transaction_id"    />
+        <result property="appleProductId"    column="apple_product_id"    />
     </resultMap>
 
 
@@ -46,6 +49,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="quantity != null">quantity,</if>
         <if test="clientUserAddonId != null">client_user_addon_id,</if>
         <if test="clientSubscriptionId != null">client_subscription_id,</if>
+        <if test="appleTransactionId != null and appleTransactionId != ''">apple_transaction_id,</if>
+        <if test="originalTransactionId != null and originalTransactionId != ''">original_transaction_id,</if>
+        <if test="appleProductId != null and appleProductId != ''">apple_product_id,</if>
         update_time
         ) values (
         <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
@@ -64,6 +70,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="quantity != null">#{quantity},</if>
         <if test="clientUserAddonId != null">#{clientUserAddonId},</if>
         <if test="clientSubscriptionId != null">#{clientSubscriptionId},</if>
+        <if test="appleTransactionId != null and appleTransactionId != ''">#{appleTransactionId},</if>
+        <if test="originalTransactionId != null and originalTransactionId != ''">#{originalTransactionId},</if>
+        <if test="appleProductId != null and appleProductId != ''">#{appleProductId},</if>
         sysdate()
         )
     </insert>
@@ -72,7 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectSysPaymentOrderVo">
         select id, order_no, amount, payment_type, qr_code_url, status, create_time, update_time, pay_time,addon_id,
         plan_id,user_id,client_user_id,billing_type,quantity,client_user_addon_id,client_subscription_id,
-        product_name, user_info from sys_payment_order
+        product_name, user_info, apple_transaction_id, original_transaction_id, apple_product_id from sys_payment_order
     </sql>
 
     <select id="selectSysPaymentOrderList" parameterType="SysPaymentOrder" resultMap="SysPaymentOrderResult">
@@ -99,6 +108,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysPaymentOrderById" parameterType="Long" resultMap="SysPaymentOrderResult">
         <include refid="selectSysPaymentOrderVo"/>
         where id = #{id}
+    </select>
+
+    <select id="selectByAppleTransactionId" parameterType="String" resultMap="SysPaymentOrderResult">
+        <include refid="selectSysPaymentOrderVo"/>
+        where apple_transaction_id = #{transactionId} limit 1
+    </select>
+
+    <select id="selectByOriginalTransactionId" parameterType="String" resultMap="SysPaymentOrderResult">
+        <include refid="selectSysPaymentOrderVo"/>
+        where original_transaction_id = #{transactionId} order by id desc
     </select>
 
     <select id="selectExpiredOrders" resultMap="SysPaymentOrderResult">
@@ -137,8 +156,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quantity != null">quantity,</if>
             <if test="clientUserAddonId != null">client_user_addon_id,</if>
             <if test="clientSubscriptionId != null">client_subscription_id,</if>
+            <if test="appleTransactionId != null and appleTransactionId != ''">apple_transaction_id,</if>
+            <if test="originalTransactionId != null and originalTransactionId != ''">original_transaction_id,</if>
+            <if test="appleProductId != null and appleProductId != ''">apple_product_id,</if>
          </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
             <if test="amount != null">#{amount},</if>
             <if test="paymentType != null and paymentType != ''">#{paymentType},</if>
@@ -157,6 +179,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quantity != null">#{quantity},</if>
             <if test="clientUserAddonId != null">#{clientUserAddonId},</if>
             <if test="clientSubscriptionId != null">#{clientSubscriptionId},</if>
+            <if test="appleTransactionId != null and appleTransactionId != ''">#{appleTransactionId},</if>
+            <if test="originalTransactionId != null and originalTransactionId != ''">#{originalTransactionId},</if>
+            <if test="appleProductId != null and appleProductId != ''">#{appleProductId},</if>
          </trim>
     </insert>
 
@@ -181,6 +206,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quantity != null">quantity = #{quantity},</if>
             <if test="clientUserAddonId != null">client_user_addon_id = #{clientUserAddonId},</if>
             <if test="clientSubscriptionId != null">client_subscription_id = #{clientSubscriptionId},</if>
+            <if test="appleTransactionId != null and appleTransactionId != ''">apple_transaction_id = #{appleTransactionId},</if>
+            <if test="originalTransactionId != null and originalTransactionId != ''">original_transaction_id = #{originalTransactionId},</if>
+            <if test="appleProductId != null and appleProductId != ''">apple_product_id = #{appleProductId},</if>
         </trim>
         where 1=1
         <if test="id != null and id != ''">and id = #{id}</if>

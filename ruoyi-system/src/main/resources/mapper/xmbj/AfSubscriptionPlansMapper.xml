@@ -194,4 +194,9 @@
     <select id="countUserSubscriptionsByPlanId" parameterType="Long" resultType="int">
         select count(*) from af_user_subscriptions where plan_id = #{id}
     </select>
+
+    <select id="selectByPlanCode" parameterType="String" resultMap="AfSubscriptionPlansResult">
+        <include refid="selectAfSubscriptionPlansVo"/>
+        where plan_code = #{planCode} limit 1
+    </select>
 </mapper>

@@ -31,8 +31,8 @@
                         <ul class="space-y-2 text-gray-400 font-medium text-[14px]">
                             <li><a href="#" class="hover:text-[#FF4D00] transition-colors duration-300">桌面端</a></li>
                             <li><a href="#" class="hover:text-[#FF4D00] transition-colors duration-300">手机端</a></li>
-                            <li><a href="#" class="hover:text-[#FF4D00] transition-colors duration-300">隐私协议</a></li>
-                            <li><a href="#" class="hover:text-[#FF4D00] transition-colors duration-300">用户协议</a></li>
+                            <li><NuxtLink to="/privacy" class="hover:text-[#FF4D00] transition-colors duration-300">隐私协议</NuxtLink></li>
+                            <li><NuxtLink to="/agreement" class="hover:text-[#FF4D00] transition-colors duration-300">用户协议</NuxtLink></li>
                         </ul>
                     </div>
 

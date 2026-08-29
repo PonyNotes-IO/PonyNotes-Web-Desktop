@@ -55,4 +55,14 @@ public class SysPaymentServiceImpl  implements ISysPaymentService {
     public List<PaymentListDTO> myPaymentList(String subject) {
         return sysPaymentOrderMapper.myPaymentList(subject);
     }
+
+    @Override
+    public SysPaymentOrder selectByAppleTransactionId(String transactionId) {
+        return sysPaymentOrderMapper.selectByAppleTransactionId(transactionId);
+    }
+
+    @Override
+    public List<SysPaymentOrder> selectByOriginalTransactionId(String transactionId) {
+        return sysPaymentOrderMapper.selectByOriginalTransactionId(transactionId);
+    }
 }

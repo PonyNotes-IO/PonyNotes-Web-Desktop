@@ -26,4 +26,8 @@ public interface ISysPaymentService {
     List<PaymentOrderVo> userPaymentOrders(PaymentOrderVo paymentOrderVo);
 
     List<PaymentListDTO> myPaymentList(String subject);
+
+    SysPaymentOrder selectByAppleTransactionId(String transactionId);
+
+    List<SysPaymentOrder> selectByOriginalTransactionId(String transactionId);
 }

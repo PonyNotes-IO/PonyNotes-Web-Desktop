@@ -9,7 +9,8 @@ import java.util.Arrays;
 public enum PaymentTypeEnum {
 
     WECHAT("wechat", "微信支付"),
-    ALIPAY("alipay", "支付宝支付");
+    ALIPAY("alipay", "支付宝支付"),
+    APPLE_IAP("apple", "Apple内购");
 
     /**
      * 支付类型标识（与前端交互的关键字）

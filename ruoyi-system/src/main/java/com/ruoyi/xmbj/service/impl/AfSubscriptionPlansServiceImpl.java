@@ -122,4 +122,10 @@ public class AfSubscriptionPlansServiceImpl implements IAfSubscriptionPlansServi
 
         return "0".equals(billingType) ? plan.getMonthlyPriceYuan(): plan.getYearlyPriceYuan();// null;
     }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public AfSubscriptionPlans selectByPlanCode(String planCode) {
+        return afSubscriptionPlansMapper.selectByPlanCode(planCode);
+    }
 }
