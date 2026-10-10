@@ -28,7 +28,7 @@ public class AppleIapConfig {
     private String environment = "SANDBOX";
 
     /** 苹果商品ID固定前缀（商品ID = 前缀 + monthly/yearly + 套餐编码） */
-    private String productPrefix = "com.ponynotes.";
+    private String productPrefix = "ponynotes.";
 
     /** App Store Connect 集成密钥：Issuer ID */
     private String issuerId;
