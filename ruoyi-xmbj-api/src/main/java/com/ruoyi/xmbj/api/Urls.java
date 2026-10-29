@@ -2,5 +2,5 @@ package com.ruoyi.xmbj.api;
 
 public interface Urls {
 
-    String API_HOST = "https://api.xiaomabiji.com";
+    String API_HOST = "${ponynotes.cloud-url:https://api.xiaomabiji.com}";
 }
