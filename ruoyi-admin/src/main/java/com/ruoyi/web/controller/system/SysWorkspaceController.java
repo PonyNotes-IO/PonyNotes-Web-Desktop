@@ -58,7 +58,7 @@ public class SysWorkspaceController extends BaseController
      * 新增工作空间
      */
     @PreAuthorize("@ss.hasPermi('system:workspace:add')")
-    @Log(title = "工作空间", businessType = BusinessType.INSERT)
+    @Log(title = "空间", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysWorkspace sysWorkspace)
     {
@@ -69,7 +69,7 @@ public class SysWorkspaceController extends BaseController
      * 修改工作空间
      */
     @PreAuthorize("@ss.hasPermi('system:workspace:edit')")
-    @Log(title = "工作空间", businessType = BusinessType.UPDATE)
+    @Log(title = "空间", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysWorkspace sysWorkspace)
     {
@@ -80,7 +80,7 @@ public class SysWorkspaceController extends BaseController
      * 删除工作空间
      */
     @PreAuthorize("@ss.hasPermi('system:workspace:remove')")
-    @Log(title = "工作空间", businessType = BusinessType.DELETE)
+    @Log(title = "空间", businessType = BusinessType.DELETE)
     @DeleteMapping("/{workspaceId}")
     public AjaxResult remove(@PathVariable String workspaceId)
     {
@@ -91,7 +91,7 @@ public class SysWorkspaceController extends BaseController
      * 批量删除工作空间
      */
     @PreAuthorize("@ss.hasPermi('system:workspace:remove')")
-    @Log(title = "工作空间", businessType = BusinessType.DELETE)
+    @Log(title = "空间", businessType = BusinessType.DELETE)
     @DeleteMapping("/batch")
     public AjaxResult removeBatch(@RequestBody String[] workspaceIds)
     {

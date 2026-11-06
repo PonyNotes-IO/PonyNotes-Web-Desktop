@@ -139,7 +139,7 @@
           <span class="paragraph_6">
             团队协作不止是共享，更是高效共创
             <br />
-            专属权限+共享工作区+大容量云空间
+            专属权限+共享空间+大容量云空间
             <br />
             轻松协同办公，配套AI能力为团队注入
             <br />
@@ -553,7 +553,7 @@ export default {
           lanhutext7: '无限制发布',
           lanhuimage5:
             './assets/img/SketchPng911352fc2ce533d840f24703c286864a9e66b89caa736d6df569061751ec921e.png',
-          lanhutext8: '无限制协作工作区',
+          lanhutext8: '无限制协作空间',
           lanhuimage6:
             './assets/img/SketchPng911352fc2ce533d840f24703c286864a9e66b89caa736d6df569061751ec921e.png',
           lanhutext9: '无限制空间成员管理',
@@ -583,7 +583,7 @@ export default {
           lanhutext7: '无限制发布',
           lanhuimage5:
             './assets/img/SketchPng911352fc2ce533d840f24703c286864a9e66b89caa736d6df569061751ec921e.png',
-          lanhutext8: '无限制协作工作区',
+          lanhutext8: '无限制协作空间',
           lanhuimage6:
             './assets/img/SketchPng911352fc2ce533d840f24703c286864a9e66b89caa736d6df569061751ec921e.png',
           lanhutext9: '无限制空间成员管理',

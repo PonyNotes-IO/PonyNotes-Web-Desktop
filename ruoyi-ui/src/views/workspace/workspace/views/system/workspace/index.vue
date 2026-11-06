@@ -9,10 +9,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工作空间所有者用户ID" prop="ownerUid">
+      <el-form-item label="空间所有者用户ID" prop="ownerUid">
         <el-input
           v-model="queryParams.ownerUid"
-          placeholder="请输入工作空间所有者用户ID"
+          placeholder="请输入空间所有者用户ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -33,10 +33,10 @@
           placeholder="请选择软删除时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="工作空间名称" prop="workspaceName">
+      <el-form-item label="空间名称" prop="workspaceName">
         <el-input
           v-model="queryParams.workspaceName"
-          placeholder="请输入工作空间名称"
+          placeholder="请输入空间名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -111,23 +111,23 @@
 
     <el-table v-loading="loading" :data="workspaceList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="工作空间ID" align="center" prop="workspaceId" />
+      <el-table-column label="空间ID" align="center" prop="workspaceId" />
       <el-table-column label="数据库存储ID" align="center" prop="databaseStorageId" />
-      <el-table-column label="工作空间所有者用户ID" align="center" prop="ownerUid" />
+      <el-table-column label="空间所有者用户ID" align="center" prop="ownerUid" />
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工作空间类型" align="center" prop="workspaceType" />
+      <el-table-column label="空间类型" align="center" prop="workspaceType" />
       <el-table-column label="软删除时间" align="center" prop="deletedAt" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.deletedAt, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工作空间名称" align="center" prop="workspaceName" />
-      <el-table-column label="工作空间图标" align="center" prop="icon" />
-      <el-table-column label="工作空间配置" align="center" prop="settings" />
+      <el-table-column label="空间名称" align="center" prop="workspaceName" />
+      <el-table-column label="空间图标" align="center" prop="icon" />
+      <el-table-column label="空间配置" align="center" prop="settings" />
       <el-table-column label="是否已初始化" align="center" prop="isInitialized" />
       <el-table-column label="默认发布视图ID" align="center" prop="defaultPublishedViewId" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -164,8 +164,8 @@
         <el-form-item label="数据库存储ID" prop="databaseStorageId">
           <el-input v-model="form.databaseStorageId" placeholder="请输入数据库存储ID" />
         </el-form-item>
-        <el-form-item label="工作空间所有者用户ID" prop="ownerUid">
-          <el-input v-model="form.ownerUid" placeholder="请输入工作空间所有者用户ID" />
+        <el-form-item label="空间所有者用户ID" prop="ownerUid">
+          <el-input v-model="form.ownerUid" placeholder="请输入空间所有者用户ID" />
         </el-form-item>
         <el-form-item label="创建时间" prop="createdAt">
           <el-date-picker clearable
@@ -183,13 +183,13 @@
             placeholder="请选择软删除时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="工作空间名称" prop="workspaceName">
-          <el-input v-model="form.workspaceName" placeholder="请输入工作空间名称" />
+        <el-form-item label="空间名称" prop="workspaceName">
+          <el-input v-model="form.workspaceName" placeholder="请输入空间名称" />
         </el-form-item>
-        <el-form-item label="工作空间图标" prop="icon">
+        <el-form-item label="空间图标" prop="icon">
           <el-input v-model="form.icon" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="工作空间配置" prop="settings">
+        <el-form-item label="空间配置" prop="settings">
           <el-input v-model="form.settings" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="是否已初始化" prop="isInitialized">
@@ -255,13 +255,13 @@ export default {
           { required: true, message: "数据库存储ID不能为空", trigger: "blur" }
         ],
         ownerUid: [
-          { required: true, message: "工作空间所有者用户ID不能为空", trigger: "blur" }
+          { required: true, message: "空间所有者用户ID不能为空", trigger: "blur" }
         ],
         workspaceType: [
-          { required: true, message: "工作空间类型不能为空", trigger: "change" }
+          { required: true, message: "空间类型不能为空", trigger: "change" }
         ],
         icon: [
-          { required: true, message: "工作空间图标不能为空", trigger: "blur" }
+          { required: true, message: "空间图标不能为空", trigger: "blur" }
         ],
       }
     }
@@ -321,7 +321,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加工作空间"
+      this.title = "添加空间"
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -330,7 +330,7 @@ export default {
       getWorkspace(workspaceId).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改工作空间"
+        this.title = "修改空间"
       })
     },
     /** 提交按钮 */
@@ -356,7 +356,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const workspaceIds = row.workspaceId || this.ids
-      this.$modal.confirm('是否确认删除工作空间编号为"' + workspaceIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除空间编号为"' + workspaceIds + '"的数据项？').then(function() {
         return delWorkspace(workspaceIds)
       }).then(() => {
         this.getList()

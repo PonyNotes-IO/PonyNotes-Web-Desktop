@@ -25,7 +25,7 @@ public class AfQuickNote extends BaseEntity
     private Long uid;
 
     /** 工作空间ID */
-    @Excel(name = "工作空间ID")
+    @Excel(name = "空间ID")
     private String workspaceId;
 
     /** 笔记内容 */

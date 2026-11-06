@@ -113,18 +113,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工作空间成员上限" prop="workspaceMemberLimit">
+      <el-form-item label="空间成员上限" prop="workspaceMemberLimit">
         <el-input
           v-model="queryParams.workspaceMemberLimit"
-          placeholder="请输入工作空间成员上限"
+          placeholder="请输入空间成员上限"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="协作工作空间上限" prop="collaborativeWorkspaceLimit">
+      <el-form-item label="协作空间上限" prop="collaborativeWorkspaceLimit">
         <el-input
           v-model="queryParams.collaborativeWorkspaceLimit"
-          placeholder="请输入协作工作空间上限"
+          placeholder="请输入协作空间上限"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -246,8 +246,8 @@
       <el-table-column label="每月AI生成图片次数" align="center" prop="aiImageGenerationPerMonth" />
       <el-table-column label="是否支持分享链接" align="center" prop="hasShareLink" />
       <el-table-column label="是否支持发布" align="center" prop="hasPublish" />
-      <el-table-column label="工作空间成员上限" align="center" prop="workspaceMemberLimit" />
-      <el-table-column label="协作工作空间上限" align="center" prop="collaborativeWorkspaceLimit" />
+      <el-table-column label="空间成员上限" align="center" prop="workspaceMemberLimit" />
+      <el-table-column label="协作空间上限" align="center" prop="collaborativeWorkspaceLimit" />
       <el-table-column label="页面权限访客编辑者上限" align="center" prop="pagePermissionGuestEditors" />
       <el-table-column label="是否支持空间成员管理" align="center" prop="hasSpaceMemberManagement" />
       <el-table-column label="是否支持空间成员分组" align="center" prop="hasSpaceMemberGrouping" />
@@ -335,11 +335,11 @@
         <el-form-item label="是否支持发布" prop="hasPublish">
           <el-input v-model="form.hasPublish" placeholder="请输入是否支持发布" />
         </el-form-item>
-        <el-form-item label="工作空间成员上限" prop="workspaceMemberLimit">
-          <el-input v-model="form.workspaceMemberLimit" placeholder="请输入工作空间成员上限" />
+        <el-form-item label="空间成员上限" prop="workspaceMemberLimit">
+          <el-input v-model="form.workspaceMemberLimit" placeholder="请输入空间成员上限" />
         </el-form-item>
-        <el-form-item label="协作工作空间上限" prop="collaborativeWorkspaceLimit">
-          <el-input v-model="form.collaborativeWorkspaceLimit" placeholder="请输入协作工作空间上限" />
+        <el-form-item label="协作空间上限" prop="collaborativeWorkspaceLimit">
+          <el-input v-model="form.collaborativeWorkspaceLimit" placeholder="请输入协作空间上限" />
         </el-form-item>
         <el-form-item label="页面权限访客编辑者上限" prop="pagePermissionGuestEditors">
           <el-input v-model="form.pagePermissionGuestEditors" placeholder="请输入页面权限访客编辑者上限" />

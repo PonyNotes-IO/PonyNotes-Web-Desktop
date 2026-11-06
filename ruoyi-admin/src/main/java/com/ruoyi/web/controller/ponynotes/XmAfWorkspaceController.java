@@ -52,12 +52,12 @@ public class XmAfWorkspaceController extends BaseController {
      * 导出工作区列表
      */
     @PreAuthorize("@ss.hasPermi('system:workspace:export')")
-    @Log(title = "工作区", businessType = BusinessType.EXPORT)
+    @Log(title = "空间", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(AfWorkspace afWorkspace) {
         List<AfWorkspace> list = afWorkspaceService.selectAfWorkspaceList(afWorkspace);
         ExcelUtil<AfWorkspace> util = new ExcelUtil<AfWorkspace>(AfWorkspace.class);
-        return util.exportExcel(list, "工作区数据");
+        return util.exportExcel(list, "空间数据");
     }
 
     /**
@@ -73,7 +73,7 @@ public class XmAfWorkspaceController extends BaseController {
      * 新增工作区
      */
     @PreAuthorize("@ss.hasPermi('system:workspace:add')")
-    @Log(title = "工作区", businessType = BusinessType.INSERT)
+    @Log(title = "空间", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody AfWorkspace afWorkspace) {
         return toAjax(afWorkspaceService.insertAfWorkspace(afWorkspace));
@@ -83,7 +83,7 @@ public class XmAfWorkspaceController extends BaseController {
      * 修改工作区
      */
     @PreAuthorize("@ss.hasPermi('system:workspace:edit')")
-    @Log(title = "工作区", businessType = BusinessType.UPDATE)
+    @Log(title = "空间", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody AfWorkspace afWorkspace) {
         return toAjax(afWorkspaceService.updateAfWorkspace(afWorkspace));
@@ -93,7 +93,7 @@ public class XmAfWorkspaceController extends BaseController {
      * 删除工作区
      */
     @PreAuthorize("@ss.hasPermi('system:workspace:remove')")
-    @Log(title = "工作区", businessType = BusinessType.DELETE)
+    @Log(title = "空间", businessType = BusinessType.DELETE)
     @DeleteMapping("/{workspaceIds}")
     public AjaxResult remove(@PathVariable String[] workspaceIds) {
         return toAjax(afWorkspaceService.deleteAfWorkspaceByWorkspaceIds(workspaceIds));

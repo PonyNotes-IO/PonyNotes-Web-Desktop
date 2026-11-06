@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="工作区名称" prop="workspaceName">
+      <el-form-item label="空间名称" prop="workspaceName">
         <el-input
           v-model="queryParams.workspaceName"
-          placeholder="请输入工作区名称"
+          placeholder="请输入空间名称"
           clearable
           style="width: 240px"
           @keyup.enter.native="handleQuery"
@@ -63,8 +63,8 @@
 
     <el-table v-loading="loading" :data="afWorkspaceList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="工作区ID" align="center" prop="workspaceId" />
-      <el-table-column label="工作区名称" align="center" prop="workspaceName" />
+      <el-table-column label="空间ID" align="center" prop="workspaceId" />
+      <el-table-column label="空间名称" align="center" prop="workspaceName" />
       <el-table-column label="是否已初始化" align="center" prop="isInitialized">
         <template slot-scope="scope">
           <span>{{ scope.row.isInitialized ? '是' : '否' }}</span>
@@ -104,8 +104,8 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
         <el-col :span="24">
-            <el-form-item label="工作区名称" prop="workspaceName">
-              <el-input v-model="form.workspaceName" placeholder="请输入工作区名称" />
+            <el-form-item label="空间名称" prop="workspaceName">
+              <el-input v-model="form.workspaceName" placeholder="请输入空间名称" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -168,7 +168,7 @@ export default {
       // 表单校验
       rules: {
         workspaceName: [
-          { required: true, message: "工作区名称不能为空", trigger: "blur" }
+          { required: true, message: "空间名称不能为空", trigger: "blur" }
         ]
       }
     };
@@ -221,7 +221,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加工作区信息";
+      this.title = "添加空间信息";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -230,7 +230,7 @@ export default {
       getAfWorkspace(workspaceId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改工作区信息";
+        this.title = "修改空间信息";
       });
     },
     /** 提交按钮 */
@@ -256,7 +256,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.workspaceId || this.ids;
-      this.$modal.confirm('是否确认删除工作区信息编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除空间信息编号为"' + ids + '"的数据项？').then(function() {
         return delAfWorkspace(ids);
       }).then(() => {
         this.getList();

@@ -403,11 +403,11 @@ export default {
               Bg0: require('./assets/img/price_type_bg.png'),
               price_title_month: '团队版',   // 月付标题
               price_subtitle_month:'每月10G存储空间', // 月付副标题（突出存储权益）
-              price_content_month: '团队协作不止是共享，更是高效共创专属权限+共享工作区+大容量云空间轻松协同办公，配套AI能力为团队注入内容生产与决策的智能引擎', // 月付内容
+              price_content_month: '团队协作不止是共享，更是高效共创专属权限+共享空间+大容量云空间轻松协同办公，配套AI能力为团队注入内容生产与决策的智能引擎', // 月付内容
               price_value_month: '180元/月/人', // 月付价格
               price_title_year: '团队版',    // 年付标题
               price_subtitle_year: '每月10G存储空间',       // 年付副标题（无则空）
-              price_content_year: '团队协作不止是共享，更是高效共创专属权限+共享工作区+大容量云空间轻松协同办公，配套AI能力为团队注入内容生产与决策的智能引擎', // 年付内容
+              price_content_year: '团队协作不止是共享，更是高效共创专属权限+共享空间+大容量云空间轻松协同办公，配套AI能力为团队注入内容生产与决策的智能引擎', // 年付内容
               price_value_year: '180元/年/人',  // 年付价格
               slot1: 4,
               slot2: 4,
@@ -484,7 +484,7 @@ export default {
                 "bg": "./assets/img/icon_feature.png"
               },
               {
-                "content": "无限制协作工作区", // 标准版特有功能
+                "content": "无限制协作空间", // 标准版特有功能
                 "bg": "./assets/img/icon_feature.png"
               },
               {
@@ -521,7 +521,7 @@ export default {
                 "bg": "./assets/img/icon_feature.png"
               },
               {
-                "content": "无限制协作工作区", // 标准版特有功能
+                "content": "无限制协作空间", // 标准版特有功能
                 "bg": "./assets/img/icon_feature.png"
               },
               {

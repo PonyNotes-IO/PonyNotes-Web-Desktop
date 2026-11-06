@@ -77,11 +77,11 @@ public class SysPlans extends BaseEntity
     private Integer hasPublish;
 
     /** 工作区成员限制(0:无限制) */
-    @Excel(name = "工作区成员限制", cellType = ColumnType.NUMERIC)
+    @Excel(name = "空间成员限制", cellType = ColumnType.NUMERIC)
     private Integer workspaceMemberLimit;
 
     /** 协作工作区限制(0:无限制) */
-    @Excel(name = "协作工作区限制", cellType = ColumnType.NUMERIC)
+    @Excel(name = "协作空间限制", cellType = ColumnType.NUMERIC)
     private Integer collaborativeWorkspaceLimit;
 
     /** 是否支持空间成员管理(0:不支持,1:支持) */

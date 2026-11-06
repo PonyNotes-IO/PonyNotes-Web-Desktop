@@ -78,11 +78,11 @@ public class AfSubscriptionPlans extends BaseEntity
     private Integer hasPublish;
 
     /** 工作空间成员上限 */
-    @Excel(name = "工作空间成员上限")
+    @Excel(name = "空间成员上限")
     private Long workspaceMemberLimit;
 
     /** 协作工作空间上限 */
-    @Excel(name = "协作工作空间上限")
+    @Excel(name = "协作空间上限")
     private Long collaborativeWorkspaceLimit;
 
     /** 页面权限访客编辑者上限 */

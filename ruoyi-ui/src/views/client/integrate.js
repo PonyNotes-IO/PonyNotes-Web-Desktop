@@ -63,7 +63,7 @@ const clientRoutes = {
       path: 'workspace',
       component: () => import('./WorkspaceManagement.vue'),
       name: 'WorkspaceManagement',
-      meta: { title: '工作区管理', icon: 'workspace' }
+      meta: { title: '空间管理', icon: 'workspace' }
     },
     {
       path: 'addon',

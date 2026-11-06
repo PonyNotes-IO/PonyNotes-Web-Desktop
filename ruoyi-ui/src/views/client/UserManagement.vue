@@ -85,7 +85,7 @@
           <el-button size="mini" type="success" @click="handleEdit(scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row.uid)">删除</el-button>
           <el-button size="mini" type="warning" @click="handleStop(scope.row.uid)">停用</el-button>
-          <el-button size="mini" type="info" @click="handleAllSpace(scope.row.uid)">查看工作区</el-button>
+          <el-button size="mini" type="info" @click="handleAllSpace(scope.row.uid)">查看空间</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -328,9 +328,9 @@ export default {
     // 13. 查看用户工作区
     handleAllSpace(uid) {
       afuserApi.getAfUserWorkSpace(uid).then(response => {
-        this.msg.info('已获取用户工作区信息')
+        this.msg.info('已获取用户空间信息')
         // 可弹窗展示工作区详情
-        console.log('用户工作区信息：', response.data)
+        console.log('用户空间信息：', response.data)
       })
     }
   }

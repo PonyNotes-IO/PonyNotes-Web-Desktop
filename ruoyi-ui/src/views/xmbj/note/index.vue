@@ -9,10 +9,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工作空间ID" prop="workspaceId">
+      <el-form-item label="空间ID" prop="workspaceId">
         <el-input
           v-model="queryParams.workspaceId"
-          placeholder="请输入工作空间ID"
+          placeholder="请输入空间ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -73,7 +73,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="笔记ID" align="center" prop="id" />
       <el-table-column label="用户ID" align="center" prop="uid" />
-      <el-table-column label="工作空间ID" align="center" prop="workspaceId" />
+      <el-table-column label="空间ID" align="center" prop="workspaceId" />
       <el-table-column label="笔记内容" align="center" prop="content" />
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
         <template slot-scope="scope">
@@ -119,8 +119,8 @@
         <el-form-item label="用户ID" prop="uid">
           <el-input v-model="form.uid" placeholder="请输入用户ID" />
         </el-form-item>
-        <el-form-item label="工作空间ID" prop="workspaceId">
-          <el-input v-model="form.workspaceId" placeholder="请输入工作空间ID" />
+        <el-form-item label="空间ID" prop="workspaceId">
+          <el-input v-model="form.workspaceId" placeholder="请输入空间ID" />
         </el-form-item>
         <el-form-item label="笔记内容">
           <editor v-model="form.content" :min-height="192"/>
@@ -192,7 +192,7 @@ export default {
           { required: true, message: "用户ID不能为空", trigger: "blur" }
         ],
         workspaceId: [
-          { required: true, message: "工作空间ID不能为空", trigger: "blur" }
+          { required: true, message: "空间ID不能为空", trigger: "blur" }
         ],
         content: [
           { required: true, message: "笔记内容不能为空", trigger: "blur" }

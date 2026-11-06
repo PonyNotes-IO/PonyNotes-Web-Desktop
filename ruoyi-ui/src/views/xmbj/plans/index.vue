@@ -157,14 +157,14 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="feature-name">工作区成员</td>
+                  <td class="feature-name">空间成员</td>
                   <td v-for="plan in plansList" :key="'member-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
                     <i :class="plan.workspaceMemberLimit > 0 ? 'el-icon-check' : 'el-icon-minus'" 
                        :style="{color: plan.workspaceMemberLimit > 0 ? '#67C23A' : '#909399'}"></i>
                   </td>
                 </tr>
                 <tr>
-                  <td class="feature-name">协作工作区</td>
+                  <td class="feature-name">协作空间</td>
                   <td v-for="plan in plansList" :key="'collab-' + plan.id" :class="{'highlight-column': plan.isActive === 1}">
                     {{ plan.collaborativeWorkspaceLimit ? plan.collaborativeWorkspaceLimit + '个' : '-' }}
                   </td>
@@ -271,11 +271,11 @@
         <el-form-item label="是否支持发布" prop="hasPublish">
           <el-switch v-model="form.hasPublish" :active-value="1" :inactive-value="0"></el-switch>
         </el-form-item>
-        <el-form-item label="工作空间成员上限" prop="workspaceMemberLimit">
-          <el-input v-model="form.workspaceMemberLimit" placeholder="请输入工作空间成员上限" />
+        <el-form-item label="空间成员上限" prop="workspaceMemberLimit">
+          <el-input v-model="form.workspaceMemberLimit" placeholder="请输入空间成员上限" />
         </el-form-item>
-        <el-form-item label="协作工作空间上限" prop="collaborativeWorkspaceLimit">
-          <el-input v-model="form.collaborativeWorkspaceLimit" placeholder="请输入协作工作空间上限" />
+        <el-form-item label="协作空间上限" prop="collaborativeWorkspaceLimit">
+          <el-input v-model="form.collaborativeWorkspaceLimit" placeholder="请输入协作空间上限" />
         </el-form-item>
         <el-form-item label="页面权限访客编辑者上限" prop="pagePermissionGuestEditors">
           <el-input v-model="form.pagePermissionGuestEditors" placeholder="请输入页面权限访客编辑者上限" />

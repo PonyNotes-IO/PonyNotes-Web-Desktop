@@ -350,7 +350,7 @@ onMounted(() => {
                                 </div>
                                 <ul :class="[selectedPlan === index ? 'text-gray-700' : 'text-gray-400']" class="space-y-2 text-[12.5px] leading-snug">
                                     <li>• 专属权限管理，保障团队知识安全</li>
-                                    <li>• 共享工作区，高效协同创作</li>
+                                    <li>• 共享空间，高效协同创作</li>
                                     <li>• 大容量云空间，统一沉淀团队资产</li>
                                     <li>• AI 能力赋能团队内容生产</li>
                                 </ul>
@@ -451,7 +451,7 @@ onMounted(() => {
                         class="space-y-2.5 text-[13px] px-1 leading-snug transition-colors duration-300">
                         <li>团队协作不止是共享</li>
                         <li>更是高效共创</li>
-                        <li>专属权限+共享工作区</li>
+                        <li>专属权限+共享空间</li>
                         <li>大容量云空间轻松协同办公</li>
                         <li>配套AI能力为团队注入内容</li>
                     </ul>
@@ -641,7 +641,7 @@ onMounted(() => {
                     <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
-                    <div class="text-gray-900 font-medium">工作区成员</div>
+                    <div class="text-gray-900 font-medium">空间成员</div>
                     <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
                     <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
                     <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
@@ -655,7 +655,7 @@ onMounted(() => {
                     <div class="flex justify-center"><img src="/images/check.png" class="w-4 h-4" /></div>
                 </div>
                 <div class="grid grid-cols-5 bg-[#F5F5F7] py-3.5 px-6 rounded-2xl items-center text-[14.5px]">
-                    <div class="text-gray-900 font-medium">协作工作区</div>
+                    <div class="text-gray-900 font-medium">协作空间</div>
                     <div class="text-center text-gray-900">2</div>
                     <div class="text-center text-gray-900">5</div>
                     <div class="text-center text-gray-900">10</div>
@@ -723,7 +723,7 @@ onMounted(() => {
 云存储空间大小  <br/>
 AI 使用额度<br/>
 多端同步能力<br/>
-协作工作区数量<br/>
+协作空间数量<br/>
 团队协作能力<br/>
 你可以根据个人记录、内容创作或团队协作需求选择适合的套餐。</p>
                             </div>
@@ -782,7 +782,6 @@ AI 使用额度<br/>
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
 h1,
 h2,

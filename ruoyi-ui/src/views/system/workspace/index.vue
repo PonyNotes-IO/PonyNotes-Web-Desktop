@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="工作空间名称" prop="workspaceName">
+      <el-form-item label="空间名称" prop="workspaceName">
         <el-input
           v-model="queryParams.workspaceName"
-          placeholder="请输入工作空间名称"
+          placeholder="请输入空间名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工作空间类型" prop="workspaceType">
-        <el-select v-model="queryParams.workspaceType" placeholder="请选择工作空间类型" clearable>
+      <el-form-item label="空间类型" prop="workspaceType">
+        <el-select v-model="queryParams.workspaceType" placeholder="请选择空间类型" clearable>
           <el-option label="个人空间" value="0" />
           <el-option label="团队空间" value="1" />
         </el-select>
@@ -58,9 +58,9 @@
 
     <el-table v-loading="loading" :data="workspaceList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="工作空间ID" align="center" prop="workspaceId" width="180" />
-      <el-table-column label="工作空间名称" align="center" prop="workspaceName" width="180" :show-overflow-tooltip="true" />
-      <el-table-column label="工作空间类型" align="center" prop="workspaceType" width="100">
+      <el-table-column label="空间ID" align="center" prop="workspaceId" width="180" />
+      <el-table-column label="空间名称" align="center" prop="workspaceName" width="180" :show-overflow-tooltip="true" />
+      <el-table-column label="空间类型" align="center" prop="workspaceType" width="100">
         <template slot-scope="scope">
           <el-tag :type="scope.row.workspaceType === 0 ? 'primary' : 'success'" size="small">
             {{ scope.row.workspaceType === 0 ? '个人空间' : '团队空间' }}
@@ -100,14 +100,14 @@
     <!-- 添加或修改工作空间对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="工作空间ID" prop="workspaceId">
-          <el-input v-model="form.workspaceId" placeholder="请输入工作空间ID" />
+        <el-form-item label="空间ID" prop="workspaceId">
+          <el-input v-model="form.workspaceId" placeholder="请输入空间ID" />
         </el-form-item>
-        <el-form-item label="工作空间名称" prop="workspaceName">
-          <el-input v-model="form.workspaceName" placeholder="请输入工作空间名称" />
+        <el-form-item label="空间名称" prop="workspaceName">
+          <el-input v-model="form.workspaceName" placeholder="请输入空间名称" />
         </el-form-item>
-        <el-form-item label="工作空间类型" prop="workspaceType">
-          <el-select v-model="form.workspaceType" placeholder="请选择工作空间类型">
+        <el-form-item label="空间类型" prop="workspaceType">
+          <el-select v-model="form.workspaceType" placeholder="请选择空间类型">
             <el-option label="个人空间" value="0" />
             <el-option label="团队空间" value="1" />
           </el-select>
@@ -118,8 +118,8 @@
         <el-form-item label="数据库存储ID" prop="databaseStorageId">
           <el-input v-model="form.databaseStorageId" placeholder="请输入数据库存储ID" />
         </el-form-item>
-        <el-form-item label="工作空间图标" prop="icon">
-          <el-input v-model="form.icon" placeholder="请输入工作空间图标" />
+        <el-form-item label="空间图标" prop="icon">
+          <el-input v-model="form.icon" placeholder="请输入空间图标" />
         </el-form-item>
         <el-form-item label="是否初始化" prop="isInitialized">
           <el-select v-model="form.isInitialized" placeholder="请选择是否初始化">
@@ -173,13 +173,13 @@ export default {
       // 表单校验
       rules: {
         workspaceId: [
-          { required: true, message: '工作空间ID不能为空', trigger: 'blur' }
+          { required: true, message: '空间ID不能为空', trigger: 'blur' }
         ],
         workspaceName: [
-          { required: true, message: '工作空间名称不能为空', trigger: 'blur' }
+          { required: true, message: '空间名称不能为空', trigger: 'blur' }
         ],
         workspaceType: [
-          { required: true, message: '工作空间类型不能为空', trigger: 'blur' }
+          { required: true, message: '空间类型不能为空', trigger: 'blur' }
         ],
         ownerUid: [
           { required: true, message: '所有者ID不能为空', trigger: 'blur' }
@@ -237,7 +237,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = '添加工作空间'
+      this.title = '添加空间'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -246,7 +246,7 @@ export default {
       getWorkspace(workspaceId).then(response => {
         this.form = response.data
         this.open = true
-        this.title = '修改工作空间'
+        this.title = '修改空间'
       })
     },
     /** 提交按钮 */
@@ -272,7 +272,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const workspaceIds = row.workspaceId || this.ids
-      this.$modal.confirm('是否确认删除工作空间编号为"' + workspaceIds + '"的数据项?').then(function() {
+      this.$modal.confirm('是否确认删除空间编号为"' + workspaceIds + '"的数据项?').then(function() {
         return delWorkspace(workspaceIds)
       }).then(() => {
         this.getList()

@@ -16,27 +16,27 @@ public class AfWorkspace extends BaseEntity
     @Excel(name = "数据库存储ID")
     private String databaseStorageId;
 
-    @Excel(name = "工作空间所有者用户ID")
+    @Excel(name = "空间所有者用户ID")
     private Long ownerUid;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
 
-    @Excel(name = "工作空间类型", readConverterExp = "0=个人空间,1=团队空间")
+    @Excel(name = "空间类型", readConverterExp = "0=个人空间,1=团队空间")
     private Integer workspaceType;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "软删除时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date deletedAt;
 
-    @Excel(name = "工作空间名称")
+    @Excel(name = "空间名称")
     private String workspaceName;
 
-    @Excel(name = "工作空间图标")
+    @Excel(name = "空间图标")
     private String icon;
 
-    @Excel(name = "工作空间配置")
+    @Excel(name = "空间配置")
     private String settings;
 
     @Excel(name = "是否已初始化", readConverterExp = "0=未初始化,1=已初始化")
@@ -45,7 +45,7 @@ public class AfWorkspace extends BaseEntity
     @Excel(name = "默认发布视图ID")
     private String defaultPublishedViewId;
 
-    @Excel(name = "工作空间所有者")
+    @Excel(name = "空间所有者")
     private String ownerName;
 
     public void setWorkspaceId(String workspaceId) 

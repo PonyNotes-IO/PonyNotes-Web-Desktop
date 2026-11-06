@@ -51,13 +51,13 @@ public class AfWorkspaceController extends BaseController
     }
 
     @PreAuthorize("@ss.hasPermi('xmbj:workspace:export')")
-    @Log(title = "工作空间", businessType = BusinessType.EXPORT)
+    @Log(title = "空间", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, AfWorkspace afWorkspace)
     {
         List<AfWorkspace> list = afWorkspaceService.selectAfWorkspaceList(afWorkspace);
         ExcelUtil<AfWorkspace> util = new ExcelUtil<AfWorkspace>(AfWorkspace.class);
-        util.exportExcel(response, list, "工作空间数据");
+        util.exportExcel(response, list, "空间数据");
     }
 
     @PreAuthorize("@ss.hasPermi('xmbj:workspace:query')")
@@ -68,7 +68,7 @@ public class AfWorkspaceController extends BaseController
     }
 
     @PreAuthorize("@ss.hasPermi('xmbj:workspace:add')")
-    @Log(title = "工作空间", businessType = BusinessType.INSERT)
+    @Log(title = "空间", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody AfWorkspace afWorkspace)
     {
@@ -76,7 +76,7 @@ public class AfWorkspaceController extends BaseController
     }
 
     @PreAuthorize("@ss.hasPermi('xmbj:workspace:edit')")
-    @Log(title = "工作空间", businessType = BusinessType.UPDATE)
+    @Log(title = "空间", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody AfWorkspace afWorkspace)
     {
@@ -84,7 +84,7 @@ public class AfWorkspaceController extends BaseController
     }
 
     @PreAuthorize("@ss.hasPermi('xmbj:workspace:remove')")
-    @Log(title = "工作空间", businessType = BusinessType.DELETE)
+    @Log(title = "空间", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{workspaceIds}")
     public AjaxResult remove(@PathVariable String[] workspaceIds)
     {
