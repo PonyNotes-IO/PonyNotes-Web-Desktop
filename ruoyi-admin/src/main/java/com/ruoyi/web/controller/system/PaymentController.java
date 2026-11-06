@@ -17,6 +17,7 @@ import com.ruoyi.system.domain.vo.PaymentResult;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.web.service.AppleIapService;
 import com.ruoyi.web.service.PaymentService;
+import com.ruoyi.web.service.WechatAppPaymentService;
 
 import com.ruoyi.xmbj.api.service.XmbjAuthService;
 import com.ruoyi.xmbj.domain.ClientUser;
@@ -29,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -52,6 +54,34 @@ public class PaymentController extends BaseController {
 
     @Autowired
     private AppleIapService appleIapService;
+
+    @Autowired
+    private WechatAppPaymentService wechatAppPaymentService;
+
+    @Anonymous
+    @PostMapping("/callback/wechat/app")
+    public ResponseEntity<?> wechatAppCallback(
+            @RequestBody String body,
+            @RequestHeader("Wechatpay-Serial") String serial,
+            @RequestHeader("Wechatpay-Timestamp") String timestamp,
+            @RequestHeader("Wechatpay-Nonce") String nonce,
+            @RequestHeader("Wechatpay-Signature") String signature,
+            @RequestHeader(value = "Wechatpay-Signature-Type", required = false) String signType) {
+        try {
+            com.wechat.pay.java.core.notification.RequestParam request =
+                    new com.wechat.pay.java.core.notification.RequestParam.Builder()
+                            .serialNumber(serial).timestamp(timestamp).nonce(nonce)
+                            .signature(signature).signType(signType).body(body).build();
+            wechatAppPaymentService.handleNotification(request);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            log.error("微信App支付通知处理失败", e);
+            Map<String, String> error = new HashMap<>();
+            error.put("code", "FAIL");
+            error.put("message", "支付通知处理失败");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
 
     @Value("${frontend.domain}")
     private String frontendDomain;

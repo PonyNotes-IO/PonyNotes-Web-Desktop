@@ -29,6 +29,7 @@ import com.ruoyi.web.config.WechatPayConfig;
 import com.ruoyi.web.config.XmAlipayConfig;
 import com.ruoyi.system.domain.vo.PaymentListDTO;
 import com.ruoyi.web.service.PaymentService;
+import com.ruoyi.web.service.WechatAppPaymentService;
 import com.ruoyi.web.util.OrderNoGenerator;
 import com.ruoyi.xmbj.XmJwtUtil;
 import com.ruoyi.xmbj.api.protocol.subscription.PurchaseAddonRequest;
@@ -109,6 +110,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private IAfSubscriptionPlansService iAfSubscriptionPlansService;
 
+    @Autowired
+    private WechatAppPaymentService wechatAppPaymentService;
+
 
     /**
      * 创建支付订单并生成二维码（微信/支付宝真实调用）
@@ -132,7 +136,17 @@ public class PaymentServiceImpl implements PaymentService {
 //        }
         // 1. 生成唯一订单号orderNoGenerator
         // String orderNo = generateOrderNo(paymentType);
-        String orderNo = OrderNoGenerator.generate(paymentType);
+        if ("wechat_app".equals(paymentType)) {
+            if (!"0".equals(billingType) && !"1".equals(billingType)) {
+                throw new IllegalArgumentException("App支付计费周期必须为0（月付）或1（年付）");
+            }
+            if (StringUtils.isNotEmpty(addonId)) {
+                throw new IllegalArgumentException("微信App支付暂仅支持会员套餐");
+            }
+        }
+        // 微信商户订单号最多32字符；保留其他支付方式的订单号规则。
+        String orderNo = "wechat_app".equals(paymentType)
+                ? UUID.randomUUID().toString().replace("-", "") : OrderNoGenerator.generate(paymentType);
         String payInfo;
 
         // 2. 根据支付方式调用对应SDK生成二维码
@@ -155,6 +169,8 @@ public class PaymentServiceImpl implements PaymentService {
                 throw new IllegalArgumentException("JSAPI支付需要用户openid");
             }
             payInfo = createWechatQrCode(orderNo, amount,httpServletRequest);
+        } else if ("wechat_app".equals(paymentType)) {
+            payInfo = wechatAppPaymentService.createPayInfo(orderNo, amount);
         } else if ("alipay".equals(paymentType)) {
             payInfo = createAlipayPagePayUrl(orderNo, amount,clientUser,plan);
         } else if ("alipay_app".equals(paymentType)) {
@@ -517,6 +533,10 @@ public class PaymentServiceImpl implements PaymentService {
             return "invalid"; // 订单不存在
         }
 
+        if ("wechat_app".equals(order.getPaymentType())) {
+            return wechatAppPaymentService.checkStatus(order);
+        }
+
         // 2. 已支付状态直接返回
         if ("success".equals(order.getStatus())) {
             return "success";
@@ -664,6 +684,8 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public boolean handlePaymentCallback(String orderNo, String paymentType) {
         SysPaymentOrder order = paymentService.selectOne(orderNo);
+        // App订单只能通过独立的APIv3验签、金额校验路径开通。
+        if (order != null && "wechat_app".equals(order.getPaymentType())) return false;
         if (order == null || !"pending".equals(order.getStatus())) {
             return false;
         }
