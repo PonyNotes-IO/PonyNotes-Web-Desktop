@@ -3,18 +3,28 @@ import { ref, computed, onMounted } from 'vue'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { downloadApi, type DownloadLinkItem } from '~/api/download'
+import { mobileDownloadPlatform } from '~/utils/mobileDownloadPlatform'
 
 useSeoMeta({
     title: '下载 - 小马笔记',
 })
 
 const activePlatform = ref('Windows')
+const mobilePlatform = ref<ReturnType<typeof mobileDownloadPlatform>>(null)
 
 const platforms = [
     { name: 'Windows', icon: '/images/download/pcwin.png' },
     { name: 'macOS', icon: '/images/download/pcmacOS@2x.png' },
-    { name: 'Android/Pad', icon: '/images/download/pcandroid.png' },
-    { name: 'iPhone/iPad', icon: '/images/download/pcios@2x.png' }
+    {
+        name: 'Android/Pad',
+        icon: '/images/download/pcandroid.png',
+        storeUrl: 'market://details?id=com.xiaomabiji.app.note',
+        storeLabel: '前往安卓应用商店',
+        previewUrl: import.meta.dev
+            ? 'https://oss.xiaomabiji.com/releases/1.2.13/PonyNotes-1.2.13-android-universal.apk'
+            : undefined
+    },
+    { name: 'iPhone/iPad', icon: '/images/download/pcios@2x.png', storeUrl: 'https://apps.apple.com/cn/app/id6748944870', storeLabel: '前往 App Store' }
 ]
 
 const defaultDownloadLinks: DownloadLinkItem[] = [
@@ -60,19 +70,15 @@ const platformLinkMap = computed<Record<string, DownloadLinkItem | undefined>>((
     return map
 })
 
-/** 获取某个非 macOS 平台的下载链接 */
-const getPlatformLink = (platformName: string): DownloadLinkItem | undefined => {
-    return platformLinkMap.value[platformName]
-}
-
-/** 是否有可用下载链接 */
-const hasPlatformLink = (platformName: string): boolean => {
-    if (platformName === 'macOS') {
-        return macArchLinks.value.length > 0
-    }
-    const link = getPlatformLink(platformName)
-    return !!link && !!link.downloadUrl && link.downloadUrl !== '#'
-}
+const visiblePlatforms = computed(() => platforms
+    .filter(item => !mobilePlatform.value || item.name === mobilePlatform.value)
+    .map(item => {
+        if (mobilePlatform.value || item.name === 'iPhone/iPad') {
+            return { ...item, href: item.storeUrl, label: item.storeLabel }
+        }
+        const fileUrl = platformLinkMap.value[item.name]?.downloadUrl ?? (!loading.value ? item.previewUrl : undefined)
+        return { ...item, href: fileUrl && fileUrl !== '#' ? fileUrl : undefined, label: '立即下载' }
+    }))
 
 /** macOS 下载 */
 const handleMacDownload = (arch: DownloadLinkItem) => {
@@ -80,15 +86,6 @@ const handleMacDownload = (arch: DownloadLinkItem) => {
         return
     }
     window.open(arch.downloadUrl, '_blank')
-}
-
-/** 其他平台下载 */
-const handlePlatformDownload = (platformName: string) => {
-    const link = getPlatformLink(platformName)
-    if (!link || !link.downloadUrl || link.downloadUrl === '#') {
-        return
-    }
-    window.open(link.downloadUrl, '_blank')
 }
 
 /** 加载下载链接 */
@@ -106,19 +103,8 @@ const loadDownloadLinks = async () => {
     }
 }
 
-/** 判断平台按钮文案 */
-const getPlatformButtonText = (platformName: string): string => {
-    if (['Android/Pad', 'iPhone/iPad'].includes(platformName)) {
-        // 若后端配置了真实链接，则显示立即下载
-        if (hasPlatformLink(platformName)) {
-            return '立即下载'
-        }
-        return '敬请期待'
-    }
-    return '立即下载'
-}
-
 onMounted(() => {
+    mobilePlatform.value = mobileDownloadPlatform(navigator)
     AOS.init({
         duration: 800,
         easing: 'ease-out-quart',
@@ -126,7 +112,11 @@ onMounted(() => {
         offset: 50,
         anchorPlacement: 'top-bottom',
     })
-    loadDownloadLinks()
+    if (mobilePlatform.value) {
+        activePlatform.value = mobilePlatform.value
+    } else {
+        loadDownloadLinks()
+    }
 })
 </script>
 
@@ -179,10 +169,10 @@ onMounted(() => {
         ========================================================= -->
         <section class="w-full bg-white relative z-30 pt-10 pb-20">
             <div class="max-w-[880px] mx-auto px-6 -mt-[690px]" data-aos="zoom-in">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 gap-8" :class="mobilePlatform ? 'max-w-md mx-auto' : 'md:grid-cols-2'">
                     
                     <div 
-                        v-for="item in platforms" 
+                        v-for="item in visiblePlatforms"
                         :key="item.name"
                         @mouseenter="activePlatform = item.name"
                         class="bg-[#F8F9FA] rounded-[28px] py-10 px-8 text-center border-[1.5px] flex flex-col items-center justify-center min-h-[260px] cursor-pointer select-none"
@@ -219,14 +209,19 @@ onMounted(() => {
 
                         <!-- 其他平台 -->
                         <div v-else class="h-14 flex items-center justify-center">
-                            <button 
-                                @click.stop="handlePlatformDownload(item.name)"
+                            <a v-if="item.href"
+                                :href="item.href"
+                                :target="mobilePlatform ? undefined : '_blank'"
+                                rel="noopener"
                                 class="font-bold border-none transition-none"
                                 :class="activePlatform === item.name 
                                         ? 'bg-[#FF4D00] text-white px-12 py-3 rounded-[18px] text-[18px]' 
                                         : 'bg-transparent text-[#FF4D00] text-[20px] hover:underline p-0'"
                             >
-                                {{ getPlatformButtonText(item.name) }}
+                                {{ item.label }}
+                            </a>
+                            <button v-else type="button" disabled class="font-bold text-gray-500">
+                                {{ loading ? '加载中…' : '敬请期待' }}
                             </button>
                         </div>
                     </div>
